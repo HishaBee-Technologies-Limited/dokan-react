@@ -76,6 +76,40 @@
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
   }
+
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 0.2rem;
+    scroll-behavior: smooth;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent !important;
+    border-radius: 0.6rem;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #999999;
+    border-radius: 2rem;
+  }
+
+  /* Firefox scrollbar style  */
+  * {
+    scrollbar-width: 0.2rem;
+    scrollbar-color: #999999 transparent;
+  }
+
+  .scroll_hidden::-webkit-scrollbar {
+    width: 0;
+    scroll-behavior: smooth;
+  }
+
+  input:-webkit-autofill {
+    background: transparent !important;
+  }
 }
 
 @layer base {
@@ -87,3 +121,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* @tailwind components */
+/* @layer components {
+  .aside__nav__link {
+    @apply block h-[4rem] lg:h-[5.2rem] w-full rounded relative after:absolute after:w-1 after:h-1 hover:after:h-[3.6rem] lg:hover:after:h-[4.6rem] after:duration-300 after:rounded-[1rem] after:-left-2 after:top-1/2 after:transform after:-translate-y-1/2 after:invisible hover:after:visible after:bg-primary-500;
+  }
+
+  .active__link {
+    @apply after:h-[3.6rem] lg:after:h-[4.6rem] after:bg-primary-500 after:visible;
+  }
+} */
