@@ -1,5 +1,5 @@
-import { themes } from "@/themes"
 import type { Config } from "tailwindcss"
+import { appConfig } from "./app.config"
 
 const config = {
   darkMode: ["class"],
@@ -60,9 +60,9 @@ const config = {
       },
     },
     extend: {
-      colors: themes.colors,
-      spacing: themes.spacing,
-      borderRadius: themes.borderRadius,
+      colors: appConfig.themes.colors,
+      spacing: appConfig.themes.spacing,
+      borderRadius: appConfig.themes.borderRadius,
 
       keyframes: {
         "accordion-down": {

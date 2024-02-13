@@ -34,12 +34,12 @@ const BreadCum = () => {
   }, [pathName]);
 
   return (
-    <div className=" bg-white px-space16 h-[2.8rem] py-1 hidden lg:block">
+    <div className="bg-white dark:bg-primary-90 px-space16 h-[2.8rem] py-1 hidden lg:block">
       <ol className="flex items-center space-x-1">
         {breadCrumbs.map((page, index) => (
           <li
             key={page.title}
-            className="text-black hover:text-blue-600 text-sm"
+            className="text-primary-90 dark:text-primary-40 dark:hover:text-action-100 hover:text-action-100 text-sm"
           >
             <div className="flex items-center">
               <Link href={page.link} className="mr-1">

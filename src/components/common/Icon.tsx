@@ -13,9 +13,10 @@ type IIconProps = {
   color?: string;
   icon: string | IconifyIcon;
   rotate?: number;
+  className?: string
 };
 
-const Icon = ({ height, width, color, icon, rotate }: IIconProps) => {
+const Icon = ({ height, width, color, icon, rotate, className }: IIconProps) => {
   return (
     <Iconify
       icon={icon}
@@ -23,6 +24,7 @@ const Icon = ({ height, width, color, icon, rotate }: IIconProps) => {
       height={height}
       color={color}
       rotate={rotate}
+      className={className}
     />
   );
 };
