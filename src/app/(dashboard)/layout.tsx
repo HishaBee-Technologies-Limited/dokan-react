@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Dashboard from "@/components/layouts/dashboard";
+import Dashboard from "@/components/layouts/Dashboard";
 
 import "@/styles/globals.css";
 

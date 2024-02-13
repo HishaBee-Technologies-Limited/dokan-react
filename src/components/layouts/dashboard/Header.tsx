@@ -1,22 +1,22 @@
 import React from 'react'
-import { IMenuOpenProps } from '.'
-import AppSearch from './AppSearch'
 import { Icon } from '@iconify/react'
 import { Button } from '@/components/ui/button'
-
+import FallBackImage from '@/components/common/FallBackImage'
+import BreadCum from '@/components/layouts/dashboard/BreadCum'
+import { IMenuOpenProps } from '@/components/layouts/Dashboard'
+import AppSearch from '@/components/layouts/dashboard/AppSearch'
 import {
     DropdownMenu,
-    DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import FallBackImage from '@/components/common/FallBackImage'
 
 const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
     return (
-        <header className='sticky top-0 bg-white '>
+        <header className='sticky top-0 bg-white shadow-md '>
             <nav className="h-[7.2rem] flex justify-between items-center gap-2 border-b border-info py-space12 px-space16">
                 <div className="w-6/12 flex gap-space12 items-center">
                     <Button
@@ -64,7 +64,7 @@ const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
                 </div>
             </nav>
 
-            <div className="bg-white px-space16 h-[2.8rem] py-1 text-sm hidden lg:block">BreadCamp</div>
+            <BreadCum />
         </header>
     )
 }

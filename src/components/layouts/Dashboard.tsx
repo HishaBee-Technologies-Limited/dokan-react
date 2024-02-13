@@ -1,8 +1,8 @@
 'use client'
 
-import Header from './Header'
-import AsideBar from './AsideBar'
 import React, { useState } from 'react'
+import Header from '@/components/layouts/dashboard/Header'
+import AsideBar from '@/components/layouts/dashboard/AsideBar'
 
 export interface IMenuOpenProps {
     menuOpen: boolean;
