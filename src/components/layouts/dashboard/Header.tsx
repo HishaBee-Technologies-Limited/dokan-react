@@ -1,5 +1,6 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
+import { ModeToggle } from '@/themes'
 import { Button } from '@/components/ui/button'
 import FallBackImage from '@/components/common/FallBackImage'
 import BreadCum from '@/components/layouts/dashboard/BreadCum'
@@ -16,7 +17,7 @@ import {
 
 const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
     return (
-        <header className='sticky top-0 bg-white shadow-md '>
+        <header className='sticky top-0 bg-white shadow-sm'>
             <nav className="h-[7.2rem] flex justify-between items-center gap-2 border-b border-info py-space12 px-space16">
                 <div className="w-6/12 flex gap-space12 items-center">
                     <Button
@@ -30,6 +31,7 @@ const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
 
                 {/* right side */}
                 <div className="w-6/12 h-full flex justify-end items-center gap-space16 ">
+                    <ModeToggle />
                     <Button className="text-black bg-transparent hover:bg-transparent">
                         <Icon
                             icon="material-symbols:help-outline"

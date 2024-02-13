@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/themes";
 import { Inter } from "next/font/google";
 import Dashboard from "@/components/layouts/Dashboard";
 
@@ -19,9 +20,16 @@ export default function DashboardLayout({
     return (
         <html lang="en" >
             <body className={inter.className} suppressHydrationWarning>
-                <Dashboard>
-                    {children}
-                </Dashboard>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <Dashboard>
+                        {children}
+                    </Dashboard>
+                </ThemeProvider>
             </body>
         </html>
     );

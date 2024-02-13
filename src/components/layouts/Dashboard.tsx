@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState } from 'react'
 import Header from '@/components/layouts/dashboard/Header'
 import AsideBar from '@/components/layouts/dashboard/AsideBar'
@@ -17,11 +16,13 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
             <AsideBar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
             <div className={`hidden xl:block ${menuOpen ? 'w-[34.4rem] left-0' : 'left-0 w-[8rem]'} duration-500`}></div>
 
-            <main className={`bg-gray-50 min-h-screen ${menuOpen ? 'w-full xl:w-[calc(100%-34.4rem)]' : 'w-full xl:w-[calc(100%-8rem)]'} duration-500 `}>
+            <main className={`bg-gray-50 h-screen ${menuOpen ? 'w-full xl:w-[calc(100%-34.4rem)]' : 'w-full xl:w-[calc(100%-8rem)]'} duration-500 `}>
                 <Header setMenuOpen={setMenuOpen} menuOpen={menuOpen} />
 
-                <div className='min-h-[calc(100vh-7.2rem)] lg:min-h-[calc(100vh-10rem)] bg-blue-300'>
-                    {children}
+                <div className='h-[calc(100vh-7.2rem)] lg:h-[calc(100vh-10rem)] overflow-y-scroll'>
+                    <div className="h-full p-space10 bg-gray-100 text-justify">
+                        {children}
+                    </div>
                 </div>
             </main>
         </section>)
