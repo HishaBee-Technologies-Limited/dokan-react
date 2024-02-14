@@ -19,8 +19,8 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
             <main className={`h-screen ${menuOpen ? 'w-full xl:w-[calc(100%-34.4rem)]' : 'w-full xl:w-[calc(100%-8rem)]'} duration-500 `}>
                 <Header setMenuOpen={setMenuOpen} menuOpen={menuOpen} />
 
-                <div className='h-[calc(100vh-7.2rem)] lg:h-[calc(100vh-10rem)] overflow-y-scroll'>
-                    <div className="h-full p-space10 bg-primary-10 dark:bg-primary-80 text-justify">
+                <div className='h-[calc(100vh-7.2rem)] lg:h-[calc(100vh-10rem)] overflow-y-scroll bg-primary-10 dark:bg-[#171717]'>
+                    <div className="h-full p-space24 text-justify">
                         {children}
                     </div>
                 </div>

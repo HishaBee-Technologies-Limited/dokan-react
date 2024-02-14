@@ -42,6 +42,9 @@ export const appConfig = {
         //   Colors themes --------------------
         colors: {
             white: '#FFFFFF',
+            text500: '#445164',
+            text400: '#697483',
+            text300: '#8F97A2',
             primary: {
                 100: '#090909',
                 90: '#222222',

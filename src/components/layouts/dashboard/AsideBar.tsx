@@ -25,24 +25,23 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                     />
                 </Link>
 
-                <Button onClick={() => setMenuOpen(prv => !prv)} className='xl:hidden bg-transparent hover:bg-transparent p-0 text-black'>
+                <Button onClick={() => setMenuOpen(prv => !prv)} size={'icon'} className='xl:hidden'>
                     <CancelIcon width={24} height={24} />
                 </Button>
             </div>
 
             <nav className={`h-[calc(100vh-7.2rem)] overflow-y-scroll scroll_hidden px-space12 pt-space24 `}>
-                <ul>
+                <ul className='space-y-space8'>
                     {SidebarLinks.map((menu) => {
 
                         const menuLinkItem = (menu: IAsideBarMenuItem, subMenu: boolean) => (
                             <Link
                                 href={`${menu.link}`}
                                 onClick={() => setActive(subMenu ? active : active === menu.id ? null : menu.id)}
-                                className={`flex items-center p-space8 w-full hover:bg-primary-20 dark:hover:bg-primary-100 duration-300 rounded relative after:absolute after:w-[.4rem] hover:after:h-full after:duration-300 after:rounded-[1rem] after:-left-3 after:top-1/2 after:transform after:-translate-y-1/2 after:bg-primary-100 dark:after:bg-white ${pathname.includes(menu.link) ? 'after:h-full bg-primary-20 dark:bg-primary-100' : 'after:h-0'}`}>
+                                className={`flex items-center p-space8 w-full hover:bg-primary-10 dark:hover:bg-[#171717] duration-300 rounded-md relative after:absolute after:w-[.4rem] hover:after:h-full after:duration-300 after:rounded-[1rem] after:-left-3 after:top-1/2 after:transform after:-translate-y-1/2 after:bg-primary-100 dark:after:bg-primary-60 ${pathname.includes(menu.link) ? 'after:h-full bg-primary-10 dark:bg-[#171717]' : 'after:h-0'}`}>
 
-                                <div className="h-[3.4rem] w-[3.6rem] bg-gray-300 relative z-20">im</div>
-                                {/* <span className={`block ${menuOpen ? 'xl:text-lg xl:left-[5.4rem] duration-500' : 'xl:-left-[34rem] xl:opacity-0'} xl:absolute z-10`}>{menu.title}</span> */}
-                                <span className={`block text-primary-90 dark:text-primary-40 transition-all duration-700 ${menuOpen ? 'ml-space10' : 'w-0 h-0 overflow-hidden'}`}>{menu.title}</span>
+                                <div className="h-[3.4rem] w-[3.6rem] relative z-20 bg-primary-50">img</div>
+                                <span className={`block text-text500 font-medium dark:text-text300 transition-all duration-700 ${menuOpen ? 'ml-space10' : 'w-0 h-0 overflow-hidden'}`}>{menu.title}</span>
 
                                 {menu.children && (
                                     <div className={`absolute right-space12 top-1/2 transform -translate-y-1/2 duration-300 ${active === menu.id ? 'rotate-180' : ''} ${menuOpen ? '' : 'xl:hidden'}  `}>
