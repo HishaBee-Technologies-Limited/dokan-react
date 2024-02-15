@@ -62,6 +62,7 @@ export function Select({ data, onChange, searchable = false, placeholder = "Sele
                             </CommandItem>
                         ))}
                     </CommandGroup>
+                    {/* <Button className="w-full">Add Button</Button> */}
                 </Command>
             </PopoverContent>
         </Popover>

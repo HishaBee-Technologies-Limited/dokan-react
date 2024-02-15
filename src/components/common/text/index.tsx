@@ -15,24 +15,25 @@ const PageSubTitle = (props: HTMLProps<HTMLParagraphElement>) => {
     )
 }
 
-const Text = (props: HTMLProps<HTMLParagraphElement> & { type: 'primary' | 'secondary' | 'muted' | 'error' | 'success' | 'warning' }) => {
+const Text = ({ variant = 'primary', ...props }: HTMLProps<HTMLParagraphElement> & { variant?: 'primary' | 'secondary' | 'muted' | 'error' | 'success' | 'warning', classes?: string }) => {
     const textColorTheme = () => {
-        if (props.type === 'primary') {
+        if (variant === 'primary') {
             return 'text-text500 dark:text-primary-40'
-        } else if (props.type === 'secondary') {
+        } else if (variant === 'secondary') {
             return 'text-text400 dark:text-primary-60'
-        } else if (props.type === 'muted') {
+        } else if (variant === 'muted') {
             return 'text-text300 dark:text-primary-70'
-        } else if (props.type === 'error') {
+        } else if (variant === 'error') {
             return 'text-error-100'
-        } else if (props.type === 'success') {
+        } else if (variant === 'success') {
             return 'text-success-100'
-        } else if (props.type === 'warning') {
+        } else if (variant === 'warning') {
             return 'text-warning-100'
         }
     }
+    const classes = `text-sm ${textColorTheme()} ${props.classes}`
     return (
-        <p className={`text-sm  ${textColorTheme()} ${props.className}`} {...props}>
+        <p className={classes} {...props}>
             {props.children || props.title}
         </p>
     )
