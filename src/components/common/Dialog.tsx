@@ -17,12 +17,12 @@ export function Dialog({ children, header, onClose, open }: IDialogProps) {
     return (
         <>
             <DialogComponent open={open} onOpenChange={onClose}>
-                <DialogContent className="sm:max-w-[625px] min-h-[20rem] pb-space16">
-                    <DialogHeader className="p-0 h-[5.6rem] px-space16 py-space12">
-                        {(typeof header === 'string') ? <Text variant="success" classes="text-lg md:text-xl font-bold">{header}</Text> : header}
+                <DialogContent className="sm:max-w-[64rem] min-h-[20rem] pb-space16">
+                    <DialogHeader className="h-[5.6rem] px-space16 py-space12">
+                        {(typeof header === 'string') ? <Text classes="text-lg md:text-xl font-bold">{header}</Text> : header}
                     </DialogHeader>
 
-                    <div className="px-space16">
+                    <div className="overflow-y-scroll max-h-[80vh]">
                         {children}
                     </div>
                 </DialogContent>
@@ -33,11 +33,8 @@ export function Dialog({ children, header, onClose, open }: IDialogProps) {
 
 export const Footer = ({ children }: { children: React.ReactNode }) => {
     return (
-        <>
-            <div className="h-[5rem]"></div>
-            <DialogFooter className={`px-space16 py-space12 absolute bottom-space16 left-0 w-full border-t border-primary-20 dark:border-primary-80 `}>
-                {children}
-            </DialogFooter>
-        </>
+        <DialogFooter className={`px-space16 py-space12 sticky -bottom-1 left-0 w-full border-t border-primary-20 dark:border-primary-80 dark:bg-primary-90 bg-white`}>
+            {children}
+        </DialogFooter>
     )
 }
