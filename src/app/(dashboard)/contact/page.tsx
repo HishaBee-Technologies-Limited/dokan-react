@@ -17,7 +17,6 @@ const ContactPage = () => {
                     <AddIcon />
                     <span>Add new member</span>
                 </Button>
-
             </div>
 
             <Card className='space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]'>
