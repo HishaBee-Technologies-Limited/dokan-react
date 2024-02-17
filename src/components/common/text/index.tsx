@@ -1,21 +1,22 @@
+'use client'
 import React, { HTMLProps } from 'react';
 
-const PageTitle = (props: HTMLProps<HTMLParagraphElement>) => {
+const PageTitle = ({ className, ...props }: HTMLProps<HTMLParagraphElement>) => {
     return (
-        <p className={`text-xl font-bold text-text500 dark:text-primary-40 ${props.className}`} {...props}>
+        <p className={`text-xl font-bold text-text500 dark:text-primary-40 ${className}`} {...props}>
             {props.children || props.title}
         </p>
     )
 }
-const PageSubTitle = (props: HTMLProps<HTMLParagraphElement>) => {
+const PageSubTitle = ({ className, ...props }: HTMLProps<HTMLParagraphElement>) => {
     return (
-        <p className={`text-lg font-bold text-text400 dark:text-primary-60 ${props.className}`} {...props}>
+        <p className={`text-lg font-bold text-text400 dark:text-primary-60 ${className}`} {...props}>
             {props.children || props.title}
         </p>
     )
 }
 
-const Text = ({ variant = 'primary', ...props }: HTMLProps<HTMLParagraphElement> & { variant?: 'primary' | 'secondary' | 'muted' | 'error' | 'success' | 'warning', classes?: string }) => {
+const Text = ({ variant = 'primary', className, ...props }: HTMLProps<HTMLParagraphElement> & { variant?: 'primary' | 'secondary' | 'muted' | 'error' | 'success' | 'warning', classes?: string }) => {
     const textColorTheme = () => {
         if (variant === 'primary') {
             return 'text-text500 dark:text-primary-40'
@@ -31,7 +32,7 @@ const Text = ({ variant = 'primary', ...props }: HTMLProps<HTMLParagraphElement>
             return 'text-warning-100'
         }
     }
-    const classes = `text-sm ${textColorTheme()} ${props.classes}`
+    const classes = `text-sm ${textColorTheme()} ${className}`
     return (
         <p className={classes} {...props}>
             {props.children || props.title}

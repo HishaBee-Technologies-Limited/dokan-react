@@ -56,6 +56,7 @@ export const appConfig = {
                 30: '#B5B5B5',
                 20: '#CECECE',
                 10: '#E6E6E6',
+                5: '#F5F5F5',
             },
             secondary: {
                 100: '#FFCB05',

@@ -19,7 +19,7 @@ export function Dialog({ children, header, onClose, open }: IDialogProps) {
             <DialogComponent open={open} onOpenChange={onClose}>
                 <DialogContent className="sm:max-w-[64rem] min-h-[20rem] pb-space16">
                     <DialogHeader className="h-[5.6rem] px-space16 py-space12">
-                        {(typeof header === 'string') ? <Text classes="text-lg md:text-xl font-bold">{header}</Text> : header}
+                        {(typeof header === 'string') ? <Text className="text-lg md:text-xl font-bold">{header}</Text> : header}
                     </DialogHeader>
 
                     <div className="overflow-y-scroll max-h-[80vh]">

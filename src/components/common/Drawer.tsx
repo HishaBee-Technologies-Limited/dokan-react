@@ -23,7 +23,7 @@ export function Drawer({ children, header, onClose, open }: IDrawerProps) {
             <Sheet open={open} onOpenChange={onClose}>
                 <SheetContent side={desktopView ? 'right' : 'bottom'} className="dark:bg-primary-90 dark:border-none">
                     <SheetHeader>
-                        {(typeof header === 'string') ? <Text variant="success" classes="text-lg md:text-xl font-bold">{header}</Text> : header}
+                        {(typeof header === 'string') ? <Text variant="success" className="text-lg md:text-xl font-bold">{header}</Text> : header}
                     </SheetHeader>
 
                     <div
