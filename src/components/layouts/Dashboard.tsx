@@ -20,7 +20,7 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
                 <Header setMenuOpen={setMenuOpen} menuOpen={menuOpen} />
 
                 <div className='h-[calc(100vh-7.2rem)] lg:h-[calc(100vh-10rem)] overflow-y-scroll bg-primary-5 dark:bg-[#171717]'>
-                    <div className="h-full px-space24 pt-space16 text-justify">
+                    <div className="h-full px-space8 sm:px-space24 pt-space16 text-justify">
                         {children}
                     </div>
                 </div>

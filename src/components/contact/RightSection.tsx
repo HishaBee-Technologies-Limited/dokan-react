@@ -5,7 +5,7 @@ import FallBackImage from '@/components/common/FallBackImage'
 
 export const RightSection = () => {
     return (
-        <Card className='h-full lg:w-8/12 bg-green-100'>
+        <Card className='h-full lg:w-8/12'>
             <div className="px-space16 my-space8">
                 <div className="border-b border-primary-20 dark:border-primary-80 py-space8">
                     <div className="flex items-center gap-space8">
