@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/themes";
-import { Inter } from "next/font/google";
+import { Anek_Bangla } from "next/font/google";
 import Dashboard from "@/components/layouts/Dashboard";
 
 import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const anek_bangla = Anek_Bangla({
+    subsets: ["latin", "latin-ext", "bengali"],
+    weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
     title: "Dashboard",
@@ -19,7 +22,7 @@ export default function DashboardLayout({
 }>) {
     return (
         <html lang="en" >
-            <body className={inter.className} suppressHydrationWarning>
+            <body className={anek_bangla.className} suppressHydrationWarning>
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="system"

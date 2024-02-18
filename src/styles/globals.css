@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@300;400;500;600&family=Poppins:wght@300;400&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&display=swap'); */
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,7 @@
 
 @layer base {
   html {
-    font-family: 'Anek Bangla', sans-serif;
+    font-family: 'Anek Bangla';
     font-size: 62.5%;
   }
 
@@ -46,5 +46,24 @@
 
   input:-webkit-autofill {
     background: transparent !important;
+  }
+
+  /* Hide the up and down arrows */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+
+@layer components {
+  .nth_child_even_odd {
+    @apply [&>*:nth-child(even)]:bg-white [&>*:nth-child(even)]:dark:bg-primary-100 [&>*:nth-child(odd)]:bg-primary-5 [&>*:nth-child(odd)]:dark:bg-[#171717];
   }
 }

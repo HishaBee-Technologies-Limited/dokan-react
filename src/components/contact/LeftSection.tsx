@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import Card from '@/components/common/Card'
 import { Input } from '@/components/ui/input'
 import CustomTab from '@/components/common/Tab'
@@ -8,7 +8,6 @@ import { Text } from '@/components/common/text'
 import { useContactStore } from '@/stores/useContactStore'
 import FallBackImage from '@/components/common/FallBackImage'
 import WrapperOddList from '@/components/common/WrapperOddList'
-import { Drawer, DrawerFooter } from '@/components/common/Drawer'
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator'
 
 const tabData = [

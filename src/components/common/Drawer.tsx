@@ -15,8 +15,8 @@ type IDrawerProps = {
 }
 
 export function Drawer({ children, header, onClose, open }: IDrawerProps) {
-    const footerHeight = 9.6
     const desktopView = useMediaQuery('(min-width: 768px)')
+    const calcHeight = desktopView ? `calc(100vh - 5.6rem)` : `calc(100vh - 10rem)`
 
     return (
         <>
@@ -27,7 +27,7 @@ export function Drawer({ children, header, onClose, open }: IDrawerProps) {
                     </SheetHeader>
 
                     <div
-                        style={{ height: `calc(100vh - 5.6rem - ${footerHeight}rem)` }}
+                        style={{ height: calcHeight }}
                         className="px-space16 py-space10 md:px-space32 md:py-space16 overflow-y-scroll"
                     >
                         {children}
@@ -38,10 +38,13 @@ export function Drawer({ children, header, onClose, open }: IDrawerProps) {
     )
 }
 
-export const DrawerFooter = ({ children }: { children: React.ReactNode }) => {
+export const DrawerFooter = ({ children, height = "9.6rem" }: { children: React.ReactNode, height?: string }) => {
     return (
-        <SheetFooter className={`absolute bottom-0 left-0 w-full px-space16 pb-space16 pt-space10 md:px-space32 md:pt-space16 md:pb-space24 border-t border-primary-20 dark:border-primary-80`}>
-            {children}
-        </SheetFooter>
+        <>
+            <div style={{ height: height }}></div>
+            <SheetFooter className={`absolute bottom-0 left-0 w-full px-space16 pb-space16 pt-space10 md:px-space32 md:pt-space16 md:pb-space24 border-t border-primary-20 dark:border-primary-80`}>
+                {children}
+            </SheetFooter>
+        </>
     )
 }
