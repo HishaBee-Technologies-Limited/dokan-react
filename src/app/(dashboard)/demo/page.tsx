@@ -1,5 +1,6 @@
 'use client'
 import Card from '@/components/common/Card'
+import DatePicker from '@/components/common/DatePicker'
 import { Dialog, Footer } from '@/components/common/Dialog'
 import { Drawer, DrawerFooter } from '@/components/common/Drawer'
 import Tooltip from '@/components/common/Tooltip'
@@ -76,6 +77,8 @@ const DemoPage = () => {
                     <label htmlFor="airplane-mode">Switch</label>
                 </div>
                 <Select data={frameworks} onChange={(value) => setValue(value)} searchable />
+                <DatePicker onChange={(date) => console.log(date)} />
+
 
                 <Button variant="outline" onClick={() => setOpenDialog(!openDialog)}> Dialog Open</Button>
                 <Dialog header="Modal" open={openDialog} onClose={(open) => setOpenDialog(open)}>

@@ -32,7 +32,7 @@ const Text = ({ variant = 'primary', className, ...props }: HTMLProps<HTMLParagr
             return 'text-warning-100'
         }
     }
-    const classes = `text-sm ${textColorTheme()} ${className}`
+    const classes = `${textColorTheme()} ${className}`
     return (
         <p className={classes} {...props}>
             {props.children || props.title}
