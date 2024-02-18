@@ -1,12 +1,20 @@
 import React from 'react'
-import { PageTitle, Text } from '@/components/common/text'
+import ExpenseDrawers from '@/components/expense/drawers'
+import ExpenseChart from '@/components/expense/ExpenseChart'
+import ExpenseHeader from '@/components/expense/ExpenseHeader'
 
 const ExpansePage = () => {
-    return (
-        <div>
-            <PageTitle title='খরচের রিপোর্ট' />
 
-        </div>
+    return (
+        <>
+            <div className='space-y-space16 h-full'>
+                <ExpenseHeader />
+                <ExpenseChart />
+
+            </div>
+
+            <ExpenseDrawers />
+        </>
     )
 }
 

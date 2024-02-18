@@ -17,10 +17,10 @@ const SidebarLinks: IAsideBarMenuItem[] = [
     children: [
       {
         id: 201,
-        title: 'Stock Dashboard',
+        title: 'Expense',
         bn_title: 'স্টক ড্যাশবোর্ড',
         image: '/images/menu/home.svg',
-        link: '/#',
+        link: '/expense',
       },
       {
         id: 202,

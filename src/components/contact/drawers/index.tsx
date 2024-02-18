@@ -10,7 +10,8 @@ import AddEmployee from '@/components/contact/drawers/AddEmployee'
 import AddNewMember from '@/components/contact/drawers/AddNewMember'
 
 const ContactDrawers = () => {
-    const { contactDrawerState, setContactDrawerState } = useContactStore((state) => state)
+    const drawerState = useContactStore((state) => state.contactDrawerState)
+    const handleClose = useContactStore((state) => state.setContactDrawerState)
 
     const renderedDrawers = (activeDrawer: string | undefined) => {
         if (ContactEnum.ADD_NEW_MEMBER === activeDrawer) {
@@ -26,11 +27,11 @@ const ContactDrawers = () => {
 
     return (
         <Drawer
-            open={contactDrawerState.open}
-            header={contactDrawerState.header}
-            onClose={(open) => setContactDrawerState({ open })}
+            open={drawerState.open}
+            header={drawerState.header}
+            onClose={(open) => handleClose({ open })}
         >
-            {renderedDrawers(contactDrawerState.header)}
+            {renderedDrawers(drawerState.header)}
         </Drawer>
     )
 }

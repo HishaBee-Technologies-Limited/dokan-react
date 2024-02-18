@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import Card from '@/components/common/Card'
+import { ContactEnum } from '@/enum/contact'
 import { Button } from '@/components/ui/button'
 import { AddIcon } from '@/components/common/icons'
 import { PageTitle } from '@/components/common/text'
@@ -20,7 +21,7 @@ const ContactPage = () => {
                     <PageTitle title="Contact List" />
 
                     <Button
-                        onClick={() => handleDrawerOpen({ open: true, header: `Add new member` })}
+                        onClick={() => handleDrawerOpen({ open: true, header: ContactEnum.ADD_NEW_MEMBER })}
                     >
                         <AddIcon />
                         <span>Add new member</span>
