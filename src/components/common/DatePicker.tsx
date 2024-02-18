@@ -36,7 +36,7 @@ export const DatePicker = ({ onChange, presets, triggerClasses, defaultDate = ne
             <PopoverTrigger asChild>
                 <Button
                     size={'sm'}
-                    variant={"outline"}
+                    variant={"secondary"}
                     className={cn(
                         "min-w-[16rem] justify-start text-left font-normal sm:px-space8",
                         !date && "text-muted-foreground",

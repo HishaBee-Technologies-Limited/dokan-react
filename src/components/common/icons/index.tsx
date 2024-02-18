@@ -9,6 +9,8 @@ import { MoreVertIcon } from './MoreVertIcon';
 import { ExpandMoreIcon } from './ExpandMoreIcon';
 import { ArrowForwardIcon } from './ArrowForwardIcon';
 import { RestoreIcon } from './RestoreIcon';
+import { SortIcon } from './SortIcon';
+import { FilterIcon } from './FilterIcon';
 
 export {
   EditIcon,
@@ -22,4 +24,6 @@ export {
   ArrowForwardIcon,
   ErrorIcon,
   RestoreIcon,
+  SortIcon,
+  FilterIcon
 };
