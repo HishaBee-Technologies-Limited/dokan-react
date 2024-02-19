@@ -40,13 +40,13 @@ const ExpenseQueries = () => {
                     data={frameworks}
                     triggerIcon={<SortIcon />}
                     onChange={(value) => setValue(value)}
-                    placeholder={<Text title="Sort By" variant='muted' />}
+                    placeholder={<Text title="Sort By" />}
                 />
                 <Select
                     data={frameworks}
                     triggerIcon={<FilterIcon />}
                     onChange={(value) => setValue(value)}
-                    placeholder={<Text title="Select" variant='muted' />}
+                    placeholder={<Text title="Select" />}
                 />
                 <DatePicker onChange={(date) => console.log(date)} />
             </div>

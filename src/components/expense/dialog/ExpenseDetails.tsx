@@ -12,6 +12,11 @@ const ExpenseDetails = () => {
     const setExpenseDialog = useExpenseStore((state) => state.setExpenseDialogState)
     const setExpenseDrawer = useExpenseStore((state) => state.setExpenseDrawerState)
 
+    const handleEdit = () => {
+        setExpenseDialog({ open: false })
+        setExpenseDrawer({ open: true, header: ExpenseEnum.EDIT_EXPENSE })
+    }
+
     return (
         <div className='relative'>
             <div className="px-space16 py-space16">
@@ -83,9 +88,7 @@ const ExpenseDetails = () => {
                     <DeleteIcon color='#fff' />
                     Delete
                 </Button>
-                <Button
-                    onClick={() => setExpenseDrawer({ open: true, header: ExpenseEnum.EDIT_EXPENSE })}
-                >
+                <Button onClick={handleEdit}>
                     <EditIcon />
                     Edit
                 </Button>

@@ -33,7 +33,7 @@ export function Select({ data, onChange, searchable = false, placeholder = "Sele
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    size={'default'}
+                    size={'sm'}
                     role="combobox"
                     variant="secondary"
                     aria-expanded={open}
