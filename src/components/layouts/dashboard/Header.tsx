@@ -55,7 +55,7 @@ const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
                             <FallBackImage src='' fallback='MM' className='h-[3.8rem] w-[3.8rem] text-sm' />
                             <span className='hidden lg:block text-primary-90 dark:text-primary-40'>MD Maruf Hossain</span>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className='w-[20rem] bg-white dark:bg-primary-80 dark:border-none'>
+                        <DropdownMenuContent align="end" className='w-[20rem]'>
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Profile</DropdownMenuItem>

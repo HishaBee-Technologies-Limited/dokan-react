@@ -17,6 +17,7 @@ const ExpenseHeader = () => {
             <div className="flex gap-space16">
                 <Button
                     variant={'secondary'}
+                    onClick={() => handleDrawerOpen({ open: true, header: ExpenseEnum.ALL_EXPENSE_CATEGORIES })}
                 >
                     <Icon icon="f7:menu" height={20} width={20} />
                     <span>খরচের খাতসমূহ</span>

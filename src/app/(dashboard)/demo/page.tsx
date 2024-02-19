@@ -1,7 +1,7 @@
 'use client'
 import Card from '@/components/common/Card'
 import DatePicker from '@/components/common/DatePicker'
-import { Dialog, Footer } from '@/components/common/Dialog'
+import { Dialog, DialogFooter } from '@/components/common/Dialog'
 import { Drawer, DrawerFooter } from '@/components/common/Drawer'
 import Tooltip from '@/components/common/Tooltip'
 import { RadioGroupForm } from '@/components/common/forms/RadioGroupDemo'
@@ -90,11 +90,11 @@ const DemoPage = () => {
                             </p>
                         </div>
                     </div>
-                    <Footer>
+                    <DialogFooter>
                         <Button variant="outline" onClick={() => setOpenDialog(!openDialog)}> Dialog Open</Button>
                         <Button variant="outline" onClick={() => setOpenDialog(!openDialog)}> Dialog Open</Button>
 
-                    </Footer>
+                    </DialogFooter>
                 </Dialog>
 
                 <Button variant="outline" onClick={() => setOpen(!open)}> drawer Open</Button>

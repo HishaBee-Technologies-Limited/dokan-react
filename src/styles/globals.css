@@ -67,7 +67,11 @@
     @apply [&>*:nth-child(even)]:bg-white [&>*:nth-child(even)]:dark:bg-primary-100 [&>*:nth-child(odd)]:bg-primary-5 [&>*:nth-child(odd)]:dark:bg-[#171717];
   }
 
-  .border_color {
+  .border-color {
     @apply border-primary-20 dark:border-primary-80
+  }
+
+  .background {
+    @apply bg-white dark:bg-primary-90
   }
 }

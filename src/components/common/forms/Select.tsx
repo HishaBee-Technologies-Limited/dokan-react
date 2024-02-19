@@ -33,7 +33,7 @@ export function Select({ data, onChange, searchable = false, placeholder = "Sele
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    size={'sm'}
+                    size={'default'}
                     role="combobox"
                     variant="secondary"
                     aria-expanded={open}
@@ -44,20 +44,20 @@ export function Select({ data, onChange, searchable = false, placeholder = "Sele
                     <span className={`${open ? 'rotate-180' : ''} duration-300`}><ExpandMoreIcon /></span>
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className={`w-[20rem] p-0 ${className}`}>
-                <Command>
+            <PopoverContent className={`p-0 w-[30rem] ${className}`}>
+                <Command className="w-full">
                     {searchable && (<>
                         <CommandInput placeholder="Search framework..." className="h-[3.6rem]" />
                         <CommandEmpty>Result Not found.</CommandEmpty>
                     </>)}
-                    <CommandGroup className="max-h-[22rem] overflow-y-scroll">
+                    <CommandGroup className="max-h-[22rem] overflow-y-scroll w-full">
                         {data?.map((item) => (
                             <CommandItem
                                 key={item.value}
                                 value={item.value}
                                 onSelect={(currentValue) => {
                                     setValue(currentValue === value ? "" : currentValue)
-                                    onChange(currentValue)
+                                    onChange(currentValue === value ? "" : currentValue)
                                     setOpen(false)
                                 }}
                                 className={`${value === item.value ? 'bg-primary-10' : ''}`}

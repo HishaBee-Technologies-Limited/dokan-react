@@ -1,8 +1,9 @@
 import React from 'react'
+import ExpenseDialogs from '@/components/expense/dialog'
 import ExpenseDrawers from '@/components/expense/drawers'
 import ExpenseChart from '@/components/expense/ExpenseChart'
-import ExpenseHeader from '@/components/expense/ExpenseHeader'
 import ExpenseTable from '@/components/expense/ExpenseTable'
+import ExpenseHeader from '@/components/expense/ExpenseHeader'
 import ExpenseQueries from '@/components/expense/ExpenseQueries'
 
 const ExpansePage = () => {
@@ -17,6 +18,7 @@ const ExpansePage = () => {
             </div>
 
             <ExpenseDrawers />
+            <ExpenseDialogs />
         </>
     )
 }

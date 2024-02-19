@@ -1,9 +1,13 @@
-
+'use client'
 import React from 'react'
+import { ExpenseEnum } from '@/enum/expense'
+import { Button } from '@/components/ui/button'
+import { useExpenseStore } from '@/stores/useExpenseStore'
+import { DeleteIcon, EditIcon, MoreVertIcon } from '@/components/common/icons'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableFooter,
     TableHead,
@@ -13,92 +17,134 @@ import {
 
 const invoices = [
     {
-        invoice: "#123456",
-        time: "Aug 12, 2020 08:45 PM",
-        details: "Name or number",
-        items: "2 items",
-        transactType: 'QUICK SELL',
-        amount: " ৳ 2,000"
+        category: "গাড়ি/ভ্যান ভাড়া",
+        amount: "৳200",
+        date: "Dec 30, 09:42 PM",
+        note: "this is demo notes",
     },
     {
-        invoice: "#123d56",
-        time: "Aug 12, 2020 08:45 PM",
-        details: "Name or number",
-        items: "2 items",
-        transactType: 'DUE',
-        amount: " ৳ 2,000"
+        category: "সকালের নাস্তা",
+        amount: "৳2000000",
+        date: "Dec 30, 09:42 PM",
+        note: "this is demo notes",
     },
     {
-        invoice: "#121456",
-        time: "Aug 12, 2020 08:45 PM",
-        details: "",
-        items: "2 items",
-        transactType: 'PURCHASE',
-        amount: " ৳ 2,000"
+        category: "গাড়ি/ভ্যান ভাড়া",
+        amount: "৳2000000",
+        date: "Dec 30, 09:42 PM",
+        note: "this is demo notes",
     },
     {
-        invoice: "#123455",
-        time: "Aug 12, 2020 08:45 PM",
-        details: "Name or number",
-        items: "2 items",
-        transactType: 'QUICK SELL',
-        amount: " ৳ 2,000"
+        category: "সকালের নাস্তা",
+        amount: "৳2000000",
+        date: "Dec 30, 09:42 PM",
     },
     {
-        invoice: "#123p56",
-        time: "Aug 12, 2020 08:45 PM",
-        details: "Name or number",
-        items: "2 items",
-        transactType: 'DUE',
-        amount: " ৳ 2,000"
+        category: "গাড়ি/ভ্যান ভাড়া",
+        amount: "৳2000000",
+        date: "Dec 30, 09:42 PM",
+        note: "this is demo notes",
     },
     {
-        invoice: "#12m456",
-        time: "Aug 12, 2020 08:45 PM",
-        details: "",
-        items: "2 items",
-        transactType: 'PURCHASE',
-        amount: " ৳ 2,000"
+        category: "সকালের নাস্তা",
+        amount: "৳2000000",
+        date: "Dec 30, 09:42 PM",
+        note: "this is demo notes",
     },
 ]
 
 const ExpenseTable = () => {
+    const setExpenseDialog = useExpenseStore((state) => state.setExpenseDialogState)
+    const setExpenseDrawer = useExpenseStore((state) => state.setExpenseDrawerState)
+
+
+    const handleRowClick = () => {
+        setExpenseDialog({ open: true, header: ExpenseEnum.EXPENSE_DETAILS })
+    }
 
     return (
         <div className="pb-space16 w-full relative overflow-x-scroll">
-            <div className="rounded-md border border_color min-w-[80rem]">
+            <div className="rounded-md border border-color min-w-[80rem]">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[100px]">Transaction</TableHead>
-                            <TableHead>TIME</TableHead>
-                            <TableHead>Details</TableHead>
-                            <TableHead>Items</TableHead>
-                            <TableHead>Transact type</TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
+                            <TableHead className="">Transaction Type</TableHead>
+                            <TableHead>Amount</TableHead>
+                            <TableHead>Date & Time</TableHead>
+                            <TableHead>Notes</TableHead>
+                            <TableHead className="text-right">Action</TableHead>
                         </TableRow>
                     </TableHeader>
+
                     <TableBody>
-                        {invoices.map((invoice) => (
-                            <TableRow key={invoice.invoice}>
-                                <TableCell>{invoice.invoice}</TableCell>
-                                <TableCell>{invoice.time}</TableCell>
-                                <TableCell>{invoice.details}</TableCell>
-                                <TableCell>{invoice.items}</TableCell>
-                                <TableCell className={`${invoice.transactType === 'DUE' ? 'text-error-100' : ''}`}>{invoice.transactType}</TableCell>
-                                <TableCell className={`${invoice.transactType === 'DUE' ? 'text-error-100' : ''} text-right`}>{invoice.amount}</TableCell>
+                        {invoices.map((invoice, i) => (
+                            <TableRow key={i} onClick={() => handleRowClick()}>
+                                <TableCell>
+                                    <div className="max-w-max py-space4 pl-space4 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
+                                        <div className="w-space24 h-space24 bg-primary-40 rounded-full mr-space8"></div>
+                                        <span>{invoice.category}</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>{invoice.amount}</TableCell>
+                                <TableCell>{invoice.date}</TableCell>
+                                <TableCell>{invoice.note}</TableCell>
+                                <TableCell className={`text-right`}>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                size={'icon'}
+                                                variant={'transparent'}
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                }} >
+                                                <MoreVertIcon />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+
+                                        <DropdownMenuContent align='end' side='bottom' className="w-56 ">
+                                            <DropdownMenuItem asChild >
+                                                <Button
+                                                    size={'sm'}
+                                                    variant={'transparent'}
+                                                    className='w-full justify-start'
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setExpenseDrawer({ open: true, header: ExpenseEnum.EDIT_EXPENSE })
+                                                    }}
+                                                >
+                                                    <EditIcon />
+                                                    Edit
+                                                </Button>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild >
+                                                <Button
+                                                    size={'sm'}
+                                                    variant={'transparent'}
+                                                    className='w-full justify-start text-error-100'
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setExpenseDialog({ open: true, header: ExpenseEnum.DELETE_TRANSACTION })
+                                                    }}
+                                                >
+                                                    <DeleteIcon />
+                                                    Delete
+                                                </Button>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
 
                     <TableFooter>
                         <TableRow>
-                            <TableCell colSpan={6}>Total</TableCell>
+                            <TableCell colSpan={6} className='text-center'>Showing 10 of 100 Transactions</TableCell>
                         </TableRow>
                     </TableFooter>
                 </Table>
             </div>
-        </div>
+        </div >
     )
 }
 

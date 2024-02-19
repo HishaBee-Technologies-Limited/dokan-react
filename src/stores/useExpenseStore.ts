@@ -7,6 +7,10 @@ type ContactState = {
         open: boolean;
         header?: string;
     };
+    expenseDialogState: {
+        open: boolean;
+        header?: string;
+    };
 }
 
 type ContactActions = {
@@ -14,11 +18,19 @@ type ContactActions = {
         open: boolean;
         header?: string | undefined;
     }) => void;
+    setExpenseDialogState: (params: {
+        open: boolean;
+        header?: string | undefined;
+    }) => void;
 }
 
 export const useExpenseStore = create<ContactState & ContactActions>()(immer((set) => ({
     expenseDrawerState: { open: false, header: undefined },
+    expenseDialogState: { open: false, header: undefined },
+
 
     // Update state-------------------------------------
-    setExpenseDrawerState: (params) => set({ expenseDrawerState: params })
+    setExpenseDrawerState: (params) => set({ expenseDrawerState: params }),
+    setExpenseDialogState: (params) => set({ expenseDialogState: params })
+
 })))
