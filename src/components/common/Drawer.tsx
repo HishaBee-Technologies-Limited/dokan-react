@@ -38,11 +38,11 @@ export function Drawer({ children, header, onClose, open }: IDrawerProps) {
     )
 }
 
-export const DrawerFooter = ({ children, height = "9.6rem" }: { children: React.ReactNode, height?: string }) => {
+export const DrawerFooter = ({ children, height = "9.6rem", className = "" }: { children: React.ReactNode, height?: string, className?: string }) => {
     return (
         <>
             <div style={{ height: height }}></div>
-            <SheetFooter className={`absolute bottom-0 left-0 w-full px-space16 pb-space16 pt-space10 md:px-space32 md:pt-space16 md:pb-space24 border-t border-primary-20 dark:border-primary-80 background flex justify-end gap-space16`}>
+            <SheetFooter className={`absolute bottom-0 left-0 w-full px-space16 pb-space16 pt-space10 md:px-space32 md:pt-space16 md:pb-space24 border-t border-primary-20 dark:border-primary-80 background flex justify-end gap-space16 ${className}`}>
                 {children}
             </SheetFooter>
         </>

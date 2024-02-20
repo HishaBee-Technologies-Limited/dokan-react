@@ -3,6 +3,7 @@ import SellDrawers from '@/components/sell/drawers'
 import SellHeader from '@/components/sell/SellHeader'
 import { LeftSection } from '@/components/sell/LeftSection'
 import { RightSection } from '@/components/sell/RightSection'
+import SellDialogs from '@/components/sell/dialogs'
 
 const SellPage = () => {
     return (
@@ -17,6 +18,7 @@ const SellPage = () => {
             </div>
 
             <SellDrawers />
+            <SellDialogs />
         </>
     )
 }
