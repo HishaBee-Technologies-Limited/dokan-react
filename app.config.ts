@@ -129,7 +129,8 @@ export const appConfig = {
             xl: '1rem',
         },
         spacing: {
-            space4: '.6rem',
+            space4: '.4rem',
+            space6: '.6rem',
             space8: '.8rem',
             space10: '1.0rem',
             space12: '1.2rem',

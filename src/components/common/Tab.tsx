@@ -37,7 +37,7 @@ const CustomTab = ({
                         : 'after:h-0 after:w-0 cursor-pointer'
                         } ${itemClasses} relative after:absolute after:bg-primary-100 dark:after:bg-primary-40 after:left-0 after:bottom-0 after:duration-300 group`}
                 >
-                    <Text title={item.label} className={`${active === item.value && 'font-bold'} text-md p-space4 text-center`} />
+                    <Text title={item.label} className={`${active === item.value && 'font-bold'} text-md p-space6 text-center`} />
                 </li>
             ))}
         </ul>

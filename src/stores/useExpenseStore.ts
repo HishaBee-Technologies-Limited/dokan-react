@@ -2,7 +2,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-type ContactState = {
+type ExpenseState = {
     expenseDrawerState: {
         open: boolean;
         header?: string;
@@ -13,7 +13,7 @@ type ContactState = {
     };
 }
 
-type ContactActions = {
+type ExpenseActions = {
     setExpenseDrawerState: (params: {
         open: boolean;
         header?: string | undefined;
@@ -24,7 +24,7 @@ type ContactActions = {
     }) => void;
 }
 
-export const useExpenseStore = create<ContactState & ContactActions>()(immer((set) => ({
+export const useExpenseStore = create<ExpenseState & ExpenseActions>()(immer((set) => ({
     expenseDrawerState: { open: false, header: undefined },
     expenseDialogState: { open: false, header: undefined },
 

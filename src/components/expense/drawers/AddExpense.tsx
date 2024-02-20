@@ -82,7 +82,7 @@ const AddExpense = () => {
                                     <Button
                                         variant={'secondary'}
                                         onClick={() => handleAddNewCategory({ open: true, header: ExpenseEnum.ADD_NEW_CATEGORY })}
-                                        className="border-x-0 border-b-0 rounded-none w-full sticky -bottom-space4" >
+                                        className="border-x-0 border-b-0 rounded-none w-full sticky -bottom-space6" >
                                         Add Category
                                     </Button>
                                 </SelectContent>

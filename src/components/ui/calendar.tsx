@@ -36,7 +36,7 @@ function Calendar({
         head_row: "grid grid-cols-7",
         head_cell:
           "text-neutral-500 rounded-md font-normal text-xs dark:text-neutral-400 text-center",
-        row: "grid grid-cols-7 w-full mt-space4",
+        row: "grid grid-cols-7 w-full mt-space6",
         cell: "flex justify-center w-full text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-transparent [&:has([aria-selected])]:bg-transparent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 dark:[&:has([aria-selected].day-outside)]:bg-transparent dark:[&:has([aria-selected])]:bg-transparent",
         day: cn(
           buttonVariants({ variant: "transparent", size: "icon" }),

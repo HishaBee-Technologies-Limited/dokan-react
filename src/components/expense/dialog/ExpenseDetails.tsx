@@ -22,7 +22,7 @@ const ExpenseDetails = () => {
             <div className="px-space16 py-space16">
                 <ul className="space-y-space12">
 
-                    <li className="space-y-space4">
+                    <li className="space-y-space6">
                         <Text title='Category' variant='secondary' className='text-sm' />
                         <div className="flex gap-space8">
                             <Image
@@ -36,12 +36,12 @@ const ExpenseDetails = () => {
                         </div>
                     </li>
 
-                    <li className="space-y-space4">
+                    <li className="space-y-space6">
                         <Text title='Amount' variant='secondary' className='text-sm' />
                         <Text title='৳ 1200' />
                     </li>
 
-                    <li className="space-y-space4">
+                    <li className="space-y-space6">
                         <Text title='Employee' variant='secondary' className='text-sm' />
                         <div className="flex gap-space8">
                             <Image
@@ -55,16 +55,16 @@ const ExpenseDetails = () => {
                         </div>
                     </li>
 
-                    <li className="space-y-space4">
+                    <li className="space-y-space6">
                         <Text title='Date and Time' variant='secondary' className='text-sm' />
                         <Text title='Dec 30, 09:42 PM' />
                     </li>
-                    <li className="space-y-space4">
+                    <li className="space-y-space6">
                         <Text title='Notes' variant='secondary' className='text-sm' />
                         <Text title='This is a sample note for sample things' />
                     </li>
 
-                    <li className="space-y-space4">
+                    <li className="space-y-space6">
                         <Text title='Images' variant='secondary' className='text-sm' />
                         <div className="flex gap-4">
                             <div className="shadow-md bg-primary-5 rounded-md h-[6.4rem] w-[6.4rem]">

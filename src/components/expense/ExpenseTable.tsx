@@ -80,7 +80,7 @@ const ExpenseTable = () => {
                         {invoices.map((invoice, i) => (
                             <TableRow key={i} onClick={() => handleRowClick()}>
                                 <TableCell>
-                                    <div className="max-w-max py-space4 pl-space4 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
+                                    <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
                                         <div className="w-space24 h-space24 bg-primary-40 rounded-full mr-space8"></div>
                                         <span>{invoice.category}</span>
                                     </div>

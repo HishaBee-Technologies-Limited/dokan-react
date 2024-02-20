@@ -13,8 +13,8 @@ const AllExpenseCategories = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center gap-space12 flex-wrap py-space12 px-space4 border-b border-color mb-space16">
-                <article className="spacey-space4">
+            <div className="flex justify-between items-center gap-space12 flex-wrap py-space12 px-space6 border-b border-color mb-space16">
+                <article className="spacey-space6">
                     <Text title='Total Expense Categories' variant='secondary' className='font-medium' />
                     <Text title='04' className='font-semibold text-xl' />
                 </article>

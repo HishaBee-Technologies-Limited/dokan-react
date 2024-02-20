@@ -17,7 +17,7 @@ import {
 
 const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
     return (
-        <header className='sticky top-0 bg-white dark:bg-primary-90 shadow-sm'>
+        <header className='sticky top-0 bg-white dark:bg-primary-90 shadow-sm z-40'>
             <nav className="h-[7.2rem] flex justify-between items-center gap-2 border-b border-primary-10 dark:border-primary-80 py-space12 px-space16">
                 <div className="w-6/12 flex gap-space12 items-center">
                     <Button

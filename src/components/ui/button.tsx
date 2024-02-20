@@ -12,13 +12,13 @@ const buttonVariants = cva(
         default: "bg-primary-90 dark:bg-primary-100 text-white dark:text-text300 hover:bg-primary-100 shadow-sm hover:shadow-lg",
         transparent: "bg-transparent text-text500 dark:text-text300 hover:bg-transparent",
         danger: "bg-error-90 dark:bg-error-100 text-white hover:bg-error-100 shadow-sm shadow-error-100 hover:shadow-md",
-        secondary: "bg-white dark:bg-primary-90 dark:text-text400 text-text500 hover:bg-white border border-primary-30 dark:border-primary-80 shadow-sm hover:shadow-md",
-        outline: "border border-primary-30 dark:border-primary-80 bg-transparent hover:bg-white dark:hover:bg-primary-90 text-text500 dark:text-text400 shadow-sm hover:shadow-md",
+        secondary: "bg-white dark:bg-primary-90 dark:text-text400 text-text500 hover:bg-white border border-color shadow-sm hover:shadow-md",
+        outline: "border border-color bg-transparent hover:bg-white dark:hover:bg-primary-90 text-text500 dark:text-text400 shadow-sm hover:shadow-md",
       },
       size: {
         default: "h-[4.8rem] px-space12 sm:px-space24 py-space8",
         icon: "rounded-full",
-        sm: "h-[3.6rem] px-space8 sm:px-space16 py-space4",
+        sm: "h-[3.6rem] px-space8 sm:px-space16 py-space6",
       },
     },
     defaultVariants: {
