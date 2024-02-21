@@ -10,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowForwardIcon } from "@/components/common/icons"
 import ProductFiledRow from '@/components/sell/ProductFiledRow'
 import ProductSellCalculation from "@/components/sell/ProductSellCalculation"
+import { useSellStore } from "@/stores/useSellStore"
+import { SellEnum } from "@/enum/sell"
 
 const formSchema = z.object({
     quantity: z.string().min(1, {
@@ -25,6 +27,10 @@ const formSchema = z.object({
 })
 
 export const RightSection = () => {
+    const handleSellDialog = useSellStore((state) => state.setSellDialogState)
+    const handleSellDrawer = useSellStore((state) => state.setSellDrawerState)
+
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -65,9 +71,30 @@ export const RightSection = () => {
                         <Text title="মূল্য পরিশোধ পদ্ধতি" className="text-sm" />
 
                         <div className="flex gap-space8 sm:gap-space16">
-                            <Button type="submit" size="sm" className="w-full" >নগদ টাকা <ArrowForwardIcon /></Button>
-                            <Button type="submit" size="sm" className="w-full" >বাকি <ArrowForwardIcon /></Button>
-                            <Button type="submit" size="sm" className="w-full" >নিজস্ব QR কোড <ArrowForwardIcon /></Button>
+                            <Button
+                                size="sm"
+                                type="submit"
+                                className="w-full"
+                                onClick={() => handleSellDrawer({ open: true, header: SellEnum.CONFIRM_PAYMENT })}
+                            >
+                                নগদ টাকা <ArrowForwardIcon />
+                            </Button>
+                            <Button
+                                size="sm"
+                                type="submit"
+                                className="w-full"
+                                onClick={() => handleSellDrawer({ open: true, header: SellEnum.MONEY_GIVEN_ENTRY })}
+                            >
+                                বাকি <ArrowForwardIcon />
+                            </Button>
+                            <Button
+                                size="sm"
+                                type="submit"
+                                className="w-full"
+                                onClick={() => handleSellDialog({ open: true, header: SellEnum.QR_CODE })}
+                            >
+                                নিজস্ব QR কোড <ArrowForwardIcon />
+                            </Button>
                         </div>
                     </Card>
                 </div>

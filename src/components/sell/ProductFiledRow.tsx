@@ -26,7 +26,7 @@ const ProductFiledRow = (props: IProps) => {
                     <Image src='' alt="" height={40} width={40} wrapperClasses='border border-color rounded-md p-space4' />
                     <article>
                         <Text title='কোকাকোলা ৪০০ মিলি' className='font-medium' />
-                        <Text title='Current Stock 500' className='text-xs bg-action-40 rounded-full px-space10 py-space4 max-w-max ' />
+                        <Text title='Current Stock 500' className='text-xs bg-action-40 dark:bg-primary-80 rounded-full px-space10 py-space4 max-w-max ' />
                     </article>
                 </div>
 

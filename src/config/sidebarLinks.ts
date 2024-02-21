@@ -31,13 +31,27 @@ const SidebarLinks: IAsideBarMenuItem[] = [
       },
       {
         id: 203,
+        title: 'Sell History',
+        bn_title: 'স্টক ইতিহাস',
+        image: '/images/menu/home.svg',
+        link: '/sell/history',
+      },
+      {
+        id: 204,
         title: 'Purchase',
         bn_title: 'স্টক ইতিহাস',
         image: '/images/menu/home.svg',
         link: '/purchase',
       },
       {
-        id: 204,
+        id: 205,
+        title: 'Purchase History',
+        bn_title: 'স্টক ইতিহাস',
+        image: '/images/menu/home.svg',
+        link: '/purchase/history',
+      },
+      {
+        id: 206,
         title: 'Due',
         bn_title: 'স্টক ইতিহাস',
         image: '/images/menu/home.svg',

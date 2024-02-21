@@ -25,7 +25,7 @@ const ProductSellCalculation = (props: IProps) => {
                 <div className="flex justify-between items-center gap-space8 py-space4">
                     <Text title='Discount' className='text-sm' />
 
-                    <Card className="flex justify-between border border-color w-[20rem] gap-space4">
+                    <Card className="flex justify-between border border-color w-[20rem] gap-space4 dark:!bg-primary-100">
 
                         <FormField
                             control={form.control}
