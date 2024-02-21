@@ -1,15 +1,18 @@
 import { z } from "zod"
-import React from 'react'
+import { SellEnum } from "@/enum/sell"
+import React, { useEffect, useMemo } from 'react'
 import { useForm } from "react-hook-form"
 import Icon from "@/components/common/Icon"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
 import { Text } from "@/components/common/text"
+import { Switch } from "@/components/ui/switch"
 import { useSellStore } from "@/stores/useSellStore"
 import { zodResolver } from "@hookform/resolvers/zod"
-import DatePicker from "@/components/common/DatePicker"
 import { DrawerFooter } from '@/components/common/Drawer'
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   Form,
@@ -19,10 +22,6 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { SellEnum } from "@/enum/sell"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const partyList = ["customer", "supplier", "employee"]
 
@@ -49,7 +48,7 @@ const formSchema = z.object({
 })
 
 const MoneyGiveReceived = () => {
-  const closeDrawer = useSellStore((state) => state.setSellDrawerState)
+  const handleSellDrawer = useSellStore((state) => state.setSellDrawerState)
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -65,10 +64,32 @@ const MoneyGiveReceived = () => {
   })
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    closeDrawer({ open: false })
+    handleSellDrawer({ open: false })
     openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL })
     console.log("data------------", data)
   }
+
+  const activeCashColor = (active: string): string => {
+    if (form.watch('cash_type') === 'given' && form.watch('cash_type') === active) {
+      return 'border-error-100 dark:border-primary-80'
+
+    } else if (form.watch('cash_type') === 'received' && form.watch('cash_type') === active) {
+      return 'border-success-100 dark:border-primary-80'
+    } else {
+      return 'border-color'
+    }
+  }
+
+  useEffect(() => {
+    if (!form.watch('cash_type')) {
+      form.setValue('cash_type', 'given')
+    }
+    if (form.watch('cash_type') === 'given') {
+      handleSellDrawer({ open: true, header: SellEnum.MONEY_GIVEN_ENTRY })
+    } else {
+      handleSellDrawer({ open: true, header: SellEnum.MONEY_RECEIVED_ENTRY })
+    }
+  }, [form.watch('cash_type')])
 
   return (
     <div className="space-y-space12">
@@ -101,11 +122,14 @@ const MoneyGiveReceived = () => {
                     className="flex gap-space8"
                   >
                     {cashType.map((item) => (
-                      <FormItem key={item.value} className={`flex rounded-md border border-color py-space8 px-space12 gap-space8 w-full ${form.watch('cash_type') === item.value ? ' border-primary-100 dark:border-primary-80' : ' '}`}>
+                      <FormItem
+                        key={item.value}
+                        className={`flex rounded-md border-2 py-space8 px-space12 gap-space8 w-full ${activeCashColor(item.value)}`}
+                      >
                         <FormControl>
                           <RadioGroupItem value={item.value} />
                         </FormControl>
-                        <FormLabel className="font-normal w-full">
+                        <FormLabel className="font-normal w-full space-y-space8">
                           <Text title={item.label} className="font-medium" />
                           <Text title={item.dis} variant="secondary" />
                         </FormLabel>
@@ -150,13 +174,6 @@ const MoneyGiveReceived = () => {
                       <SelectItem value="m@google.com">m@google.com</SelectItem>
                       <SelectItem value="m@support.com">m@support.com</SelectItem>
                     </div>
-
-                    {/* <Button
-                                        variant={'secondary'}
-                                        onClick={() => handleAddNewCategory({ open: true, header: ExpenseEnum.ADD_NEW_CATEGORY })}
-                                        className="border-x-0 border-b-0 rounded-none w-full sticky -bottom-space6" >
-                                        Add Customer
-                                    </Button> */}
                   </SelectContent>
                 </Select>
                 <FormMessage />
