@@ -4,7 +4,7 @@ import Icon from '@/components/common/Icon'
 import { Text } from '@/components/common/text'
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/common/Image'
-import { DrawerFooter } from '@/components/common/Drawer'
+import { DialogFooter } from '@/components/common/Dialog'
 
 const Successful = () => {
     return (
@@ -49,9 +49,9 @@ const Successful = () => {
                 </div>
             </div>
 
-            <DrawerFooter>
+            <DialogFooter>
                 <Button className="w-full" variant={'secondary'}>Close</Button>
-            </DrawerFooter>
+            </DialogFooter>
         </>
     )
 }

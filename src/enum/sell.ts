@@ -8,4 +8,7 @@ export enum SellEnum {
     MONEY_GIVEN_ENTRY = 'Money Given Entry',
     MONEY_RECEIVED_ENTRY = 'Money Received Entry',
     TRANSACTION_DETAILS = 'Transaction Details',
+    TRANSACTION_EDIT = 'Transaction Edit',
+    QUICK_SELL_EDIT = 'Quick Sell Edit',
+    TRANSACTION_DELETE = 'Transaction Delete',
 }

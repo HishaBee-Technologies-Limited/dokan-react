@@ -6,6 +6,7 @@ import { Dialog } from '@/components/common/Dialog'
 import { useSellStore } from '@/stores/useSellStore'
 import QRCode from '@/components/sell/dialogs/QRCode'
 import Successful from '@/components/sell/dialogs/Successful'
+import TransactionDelete from '@/components/sell/dialogs/TransactionDelete'
 
 const SellDialogs = () => {
     const dialogState = useSellStore((state) => state.sellDialogState)
@@ -16,6 +17,8 @@ const SellDialogs = () => {
             return <QRCode />
         } else if (SellEnum.SUCCESSFUL === activeDialog) {
             return <Successful />
+        } else if (SellEnum.TRANSACTION_DELETE === activeDialog) {
+            return <TransactionDelete />
         }
     }
 
