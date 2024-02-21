@@ -40,7 +40,7 @@ const formSchema = z.object({
     cash_type: z.string()
 })
 
-const QuickSell = () => {
+const QuickSellEdit = () => {
     const closeDrawer = useSellStore((state) => state.setSellDrawerState)
     const openSuccessDialog = useSellStore((state) => state.setSellDialogState)
 
@@ -196,4 +196,4 @@ const QuickSell = () => {
     )
 }
 
-export default QuickSell
+export default QuickSellEdit

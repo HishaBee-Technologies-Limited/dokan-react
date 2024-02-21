@@ -74,4 +74,8 @@
   .background {
     @apply bg-white dark:bg-primary-90
   }
+
+  .bg-secondary {
+    @apply bg-primary-5 dark:bg-primary-80
+  }
 }

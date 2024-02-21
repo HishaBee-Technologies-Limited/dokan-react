@@ -56,9 +56,12 @@ const AddExpense = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
-                <div className="flex justify-between gap-space12">
-                    <DatePicker onChange={() => { }} presets />
-                </div>
+                <DatePicker
+                    presets
+                    onChange={() => { }}
+                    contentAlign={'center'}
+                    triggerClasses={'w-full justify-center'}
+                />
 
                 <FormField
                     control={form.control}
