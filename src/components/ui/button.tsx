@@ -16,7 +16,7 @@ const buttonVariants = cva(
         outline: "border border-color bg-transparent hover:bg-white dark:hover:bg-primary-90 text-text500 dark:text-text400 shadow-sm hover:shadow-md",
       },
       size: {
-        default: "h-[4.8rem] px-space12 sm:px-space24 py-space8",
+        default: "h-[4.8rem] px-space12 sm:px-space24 py-space8 font-medium",
         icon: "rounded-full",
         sm: "h-[3.6rem] px-space8 sm:px-space16 py-space6",
       },

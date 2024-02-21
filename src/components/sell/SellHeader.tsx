@@ -1,10 +1,10 @@
 'use client'
 import React from 'react'
-import { Button } from '../ui/button'
-import { PageTitle } from '../common/text'
-import { useSellStore } from '@/stores/useSellStore'
-import { SellEnum } from '@/enum/sell'
 import Image from 'next/image'
+import { SellEnum } from '@/enum/sell'
+import { Button } from '@/components/ui/button'
+import { PageTitle } from '@/components/common/text'
+import { useSellStore } from '@/stores/useSellStore'
 
 const SellHeader = () => {
     const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState)
