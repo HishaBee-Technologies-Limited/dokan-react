@@ -11,7 +11,7 @@ const ProductListQueries = () => {
 
     return (
         <div className="space-y-space8 w-full p-space8 border-b border-color">
-            <Text title='Select Products to Purchase' className='font-semibold' />
+            <Text title='Select Products to Sell' className='font-semibold' />
 
             <div className="flex gap-space12">
                 <Search onChange={(e: React.ChangeEvent<HTMLInputElement>) => { }} />
