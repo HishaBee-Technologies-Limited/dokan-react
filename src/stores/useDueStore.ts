@@ -2,9 +2,10 @@
 import { create } from 'zustand'
 import { ContactEnum } from '@/enum/contact';
 import { immer } from 'zustand/middleware/immer'
+import { DueEnum } from '@/enum/due';
 
 type DueState = {
-    activeTab: string;
+    activePageTab: string;
     activeUserItem: number;
     drawerState: {
         open: boolean;
@@ -17,7 +18,7 @@ type DueState = {
 }
 
 type DueActions = {
-    setActiveTab: (tab: string) => void;
+    setActivePageTab: (tab: string) => void;
     setActiveUserItem: (index: number) => void;
     setDrawerState: (params: {
         open: boolean;
@@ -31,12 +32,12 @@ type DueActions = {
 
 export const useDueStore = create<DueState & DueActions>()(immer((set) => ({
     activeUserItem: 0,
-    activeTab: ContactEnum.ACTIVE_TAB,
+    activePageTab: DueEnum.CUSTOMER,
     drawerState: { open: false, header: undefined },
     dialogState: { open: false, header: undefined },
 
     // Update state-------------------------------------
-    setActiveTab: (tab) => set({ activeTab: tab }),
+    setActivePageTab: (tab) => set({ activePageTab: tab }),
     setActiveUserItem: (index) => set({ activeUserItem: index }),
     setDrawerState: (params) => set({ drawerState: params }),
     setDialogState: (params) => set({ dialogState: params })

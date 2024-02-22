@@ -1,20 +1,36 @@
 'use client'
 import React from 'react'
-import { PageTitle } from '../common/text'
-import { Button } from '../ui/button'
-import { AddIcon } from '../common/icons'
+import Link from 'next/link'
+import { DueEnum } from '@/enum/due'
+import { Button } from '@/components/ui/button'
+import { useDueStore } from '@/stores/useDueStore'
+import { AddIcon } from '@/components/common/icons'
+import { PageTitle } from '@/components/common/text'
+import { HistoryIcon } from '@/components/common/icons/HistoryIcon'
 
 const DueHeader = () => {
+    const handleDialogOpen = useDueStore((state) => state.setDialogState)
+
     return (
         <div className="flex flex-wrap gap-space16 justify-between items-center">
-            <PageTitle title="Contact List" />
+            <PageTitle title="Due List" />
 
-            <Button
-            // onClick={() => handleDrawerOpen({ open: true, header: ContactEnum.ADD_NEW_MEMBER })}
-            >
-                <AddIcon />
-                <span>Add new member</span>
-            </Button>
+            <div className="flex gap-space12 grow-[1] sm:grow-0">
+                <Link href="/due/history">
+                    <Button variant={'secondary'}>
+                        <HistoryIcon />
+                        <span>Due History</span>
+                    </Button>
+                </Link>
+
+                <Button
+                    className='grow'
+                    onClick={() => handleDialogOpen({ open: true, header: DueEnum.SELECT_THE_DUE_TYPE })}
+                >
+                    <AddIcon />
+                    <span>New Due</span>
+                </Button>
+            </div>
         </div>
     )
 }

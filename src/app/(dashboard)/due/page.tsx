@@ -1,10 +1,10 @@
-'use client'
 import React from 'react'
 import Card from '@/components/common/Card'
+import DueDialogs from '@/components/due/dialogs'
+import DueDrawers from '@/components/due/drawers'
 import DueHeader from '@/components/due/DueHeader'
-import ContactDrawers from '@/components/contact/drawers'
-import { LeftSection } from '@/components/contact/LeftSection'
-import { RightSection } from '@/components/contact/RightSection'
+import { LeftSection } from '@/components/due/LeftSection'
+import { RightSection } from '@/components/due/RightSection'
 
 const DuePage = () => {
 
@@ -19,7 +19,8 @@ const DuePage = () => {
                 </Card>
             </div>
 
-            <ContactDrawers />
+            <DueDialogs />
+            <DueDrawers />
         </>
     )
 }
