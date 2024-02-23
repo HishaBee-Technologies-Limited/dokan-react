@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { Text } from '@/components/common/text'
 import { settingLinks } from '@/config/settingLinks'
 import { ExpandMoreIcon } from '@/components/common/icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -9,8 +10,7 @@ const MenuLink = () => {
         <div className="w-full md:hidden">
             <DropdownMenu>
                 <DropdownMenuTrigger className='flex gap-space12 justify-between items-center text-lg focus:outline-none background w-full py-space12 px-space12 rounded-lg'>
-                    Setting Links
-
+                    <Text title='Setting Links' />
                     <ExpandMoreIcon />
                 </DropdownMenuTrigger>
 
