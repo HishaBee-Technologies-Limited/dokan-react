@@ -25,13 +25,13 @@ const ContactUSPage = () => {
                     </Link>
                 </div>
 
-                <div className="bg-success-20 py-space12 px-space16 sm:px-space24 rounded-lg">
+                <div className="bg-success-20 dark:bg-primary-90 py-space12 px-space16 sm:px-space24 rounded-lg">
                     <Text title='যেকোনো প্রয়োজনে কল করুন' className='font-medium' />
 
                     <div className="flex items-center gap-space8 mt-space8">
                         <Image src="/images/social/call.svg" alt='' height={20} width={20} />
                         <article className="flex items-center gap-space8 text-lg font-semibold">
-                            <Text title='12345' />
+                            <Text title='12345' variant='success' />
                             <Text title='নম্বরে' />
                         </article>
                     </div>
