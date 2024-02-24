@@ -61,7 +61,7 @@ const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
-                                <Link href='/settings' className='w-full cursor-pointer'>Settings</Link>
+                                <Link href='/settings/lang' className='w-full cursor-pointer'>Settings</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>Billing</DropdownMenuItem>
                             <DropdownMenuItem>Team</DropdownMenuItem>

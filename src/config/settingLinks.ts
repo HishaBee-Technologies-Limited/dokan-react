@@ -1,7 +1,7 @@
 export const settingLinks = [
     {
         title: 'Language',
-        link: '/settings'
+        link: '/settings/lang'
     },
     {
         title: 'Personal QR Code',
@@ -9,7 +9,7 @@ export const settingLinks = [
     },
     {
         title: 'Switch Shop',
-        link: '/settings/switch-shop'
+        link: '/settings/shop'
     },
     {
         title: 'Contact Us',

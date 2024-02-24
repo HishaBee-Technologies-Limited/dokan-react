@@ -10,12 +10,14 @@ type IProps = Omit<ImageProps, 'src'> & {
     src: string | StaticImport | null | undefined;
     fallback?: string;
     debug?: string;
+    icon?: string;
     wrapperClasses?: string;
 };
 
 const Image = ({
     src,
     alt,
+    icon = "mdi:image-outline",
     wrapperClasses = '',
     ...props
 }: IProps): JSX.Element => {
@@ -43,7 +45,7 @@ const Image = ({
                 />
             ) : (
                 <Icon
-                    icon="mdi:image-outline"
+                    icon={icon}
                     width={props.width}
                     height={props.height}
                     color="#616161"
