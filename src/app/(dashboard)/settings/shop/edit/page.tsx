@@ -63,7 +63,7 @@ const EditShopPage = () => {
 
     return (
         <div className='space-y-space16 pb-space16'>
-            <PageSubTitle title='Create new shop' />
+            <PageSubTitle title='Edit Shop' />
 
             <div className="max-w-[53rem]">
                 <Form {...form}>
