@@ -12,7 +12,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
-const ProductTable = () => {
+export const StockTable = () => {
 
     return (
         <div className="pb-space16 w-full relative overflow-x-scroll">
@@ -54,5 +54,3 @@ const ProductTable = () => {
         </div >
     )
 }
-
-export default ProductTable

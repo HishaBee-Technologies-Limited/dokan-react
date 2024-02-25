@@ -5,7 +5,7 @@ import Search from '@/components/common/forms/Search'
 import { FilterIcon } from '@/components/common/icons'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
-export const ProductQueries = () => {
+export const StockQueries = () => {
     return (
         <div className="flex flex-wrap justify-between items-center gap-space16">
             <div className="flex gap-space12 order-2 lg:order-1 grow">
