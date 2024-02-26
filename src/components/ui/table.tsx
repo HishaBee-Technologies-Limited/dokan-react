@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils"
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-hidden min-w-[70rem]">
+  React.HTMLAttributes<HTMLTableElement> & { wrapperClass?: string }
+>(({ className, wrapperClass, ...props }, ref) => (
+  <div className={`relative w-full overflow-hidden min-w-[70rem] ${wrapperClass} `}>
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}
