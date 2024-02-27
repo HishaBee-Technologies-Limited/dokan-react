@@ -68,17 +68,24 @@ const SidebarLinks: IAsideBarMenuItem[] = [
     children: [
       {
         id: 301,
-        title: 'Stock Dashboard',
+        title: 'Product List',
         bn_title: 'স্টক ড্যাশবোর্ড',
         image: '/images/menu/home.svg',
-        link: '/#',
+        link: '/product',
       },
       {
         id: 302,
-        title: 'Stock History',
+        title: 'Stock Management',
         bn_title: 'স্টক ইতিহাস',
         image: '/images/menu/home.svg',
-        link: '/#',
+        link: '/stock',
+      },
+      {
+        id: 303,
+        title: 'Printer',
+        bn_title: 'স্টক ইতিহাস',
+        image: '/images/menu/home.svg',
+        link: '/printer',
       },
     ],
   },

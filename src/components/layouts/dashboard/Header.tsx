@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { Icon } from '@iconify/react'
 import { ModeToggle } from '@/themes'
 import { Button } from '@/components/ui/button'
@@ -55,10 +56,13 @@ const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
                             <FallBackImage src='' fallback='MM' className='h-[3.8rem] w-[3.8rem] text-sm' />
                             <span className='hidden lg:block text-primary-90 dark:text-primary-40'>MD Maruf Hossain</span>
                         </DropdownMenuTrigger>
+
                         <DropdownMenuContent align="end" className='w-[20rem]'>
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Profile</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href='/settings/lang' className='w-full cursor-pointer'>Settings</Link>
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Billing</DropdownMenuItem>
                             <DropdownMenuItem>Team</DropdownMenuItem>
                             <DropdownMenuItem>Subscription</DropdownMenuItem>

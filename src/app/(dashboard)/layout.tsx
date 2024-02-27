@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/themes";
 import { Anek_Bangla } from "next/font/google";
-import Dashboard from "@/components/layouts/Dashboard";
+import Dashboard from "@/components/layouts/dashboard";
 
 import "@/styles/globals.css";
 

@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { IMenuOpenProps } from '.'
 import React, { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import SidebarLinks from '@/config/sidebarLinks'
 import { IAsideBarMenuItem } from '@/types/SidebarLinks'
-import { IMenuOpenProps } from '@/components/layouts/Dashboard'
 import { CancelIcon, ExpandMoreIcon } from '@/components/common/icons'
 
 const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
