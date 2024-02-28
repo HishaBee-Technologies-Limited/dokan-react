@@ -4,7 +4,8 @@ import React from 'react'
 import { ProductEnum } from '@/enum/product'
 import { Drawer } from '@/components/common/Drawer'
 import { useProductStore } from '@/stores/useProductStore'
-import AddProduct from '@/components/product/drawers/AddProduct'
+import { AddProduct } from '@/components/product/drawers/AddProduct'
+import { EditProduct } from '@/components/product/drawers/EditProduct'
 
 export const ProductDrawers = () => {
     const drawerState = useProductStore((state) => state.drawerState)
@@ -13,6 +14,8 @@ export const ProductDrawers = () => {
     const renderedDrawers = (activeDrawer: string | undefined) => {
         if (ProductEnum.ADD_PRODUCT === activeDrawer) {
             return <AddProduct />
+        } else if (ProductEnum.EDIT_PRODUCT === activeDrawer) {
+            return <EditProduct />
         }
     }
 

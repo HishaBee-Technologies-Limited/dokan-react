@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Image } from '@/components/common/Image'
 import { ArrowForwardIcon } from '@/components/common/icons'
 
-const ShareProduct = () => {
+export const ShareProduct = () => {
     return (
         <div className='py-space16 px-space16 pb-space32 space-y-space16'>
             <Text title='Share the Product Link' className='font-medium text-center' />
@@ -69,5 +69,3 @@ const ShareProduct = () => {
         </div>
     )
 }
-
-export default ShareProduct

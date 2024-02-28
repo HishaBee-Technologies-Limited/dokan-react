@@ -1,7 +1,9 @@
 'use client'
 import React from 'react'
+import { ProductEnum } from '@/enum/product'
 import { Text } from '@/components/common/text'
 import { Image } from '@/components/common/Image'
+import { useProductStore } from '@/stores/useProductStore'
 import {
     Table,
     TableBody,
@@ -13,6 +15,12 @@ import {
 } from "@/components/ui/table"
 
 export const StockTable = () => {
+    const handleDialogOpen = useProductStore((state) => state.setDialogState)
+
+
+    const handleRowClick = () => {
+        handleDialogOpen({ open: true, header: ProductEnum.PRODUCT_DETAILS })
+    }
 
     return (
         <div className="pb-space16 w-full relative overflow-x-scroll">
@@ -29,7 +37,7 @@ export const StockTable = () => {
 
                     <TableBody>
                         {Array(10).fill(0).map((item, i) => (
-                            <TableRow key={item.number}>
+                            <TableRow key={item.number} onClick={() => handleRowClick()}>
                                 <TableCell>
                                     <div className="flex items-center gap-space8">
                                         <Image src='' alt='' height={40} width={40} />

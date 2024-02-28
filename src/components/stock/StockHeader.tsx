@@ -3,12 +3,16 @@
 import React from 'react'
 import Link from 'next/link'
 import Icon from '@/components/common/Icon'
+import { ProductEnum } from '@/enum/product'
 import { Button } from '@/components/ui/button'
 import { AddIcon } from '@/components/common/icons'
 import { PageTitle } from '@/components/common/text'
+import { useProductStore } from '@/stores/useProductStore'
 import { HistoryIcon } from '@/components/common/icons/HistoryIcon'
 
 export const StockHeader = () => {
+    const handleDrawerOpen = useProductStore((state) => state.setDrawerState)
+
     return (
         <div className="flex flex-wrap gap-space16 justify-between items-center">
             <PageTitle title="Product List" />
@@ -29,6 +33,7 @@ export const StockHeader = () => {
 
                 <Button
                     className='grow'
+                    onClick={() => handleDrawerOpen({ open: true, header: ProductEnum.ADD_PRODUCT })}
                 >
                     <AddIcon />
                     <span>Add new product</span>

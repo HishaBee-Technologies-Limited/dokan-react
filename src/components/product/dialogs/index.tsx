@@ -4,9 +4,10 @@ import React from 'react'
 import { ProductEnum } from '@/enum/product'
 import { Dialog } from '@/components/common/Dialog'
 import { useProductStore } from '@/stores/useProductStore'
-import ShareProduct from '@/components/product/dialogs/ShareProduct'
 import { UpdateStock } from '@/components/product/dialogs/UpdateStock'
-import ProductDetails from '@/components/product/dialogs/ProductDetails'
+import { ShareProduct } from '@/components/product/dialogs/ShareProduct'
+import { DeleteProduct } from '@/components/product/dialogs/DeleteProduct'
+import { ProductDetails } from '@/components/product/dialogs/ProductDetails'
 import { ProductHistory } from '@/components/product/dialogs/ProductHistory'
 
 export const ProductDialogs = () => {
@@ -22,6 +23,8 @@ export const ProductDialogs = () => {
             return <ProductDetails />
         } else if (ProductEnum.PRODUCT_HISTORY === activeDialog) {
             return <ProductHistory />
+        } else if (ProductEnum.DELETE_PRODUCT === activeDialog) {
+            return <DeleteProduct />
         }
     }
 

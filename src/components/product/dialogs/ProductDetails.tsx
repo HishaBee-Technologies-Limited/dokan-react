@@ -10,13 +10,13 @@ import { HistoryIcon } from '@/components/common/icons/HistoryIcon'
 import { AddIcon, DeleteIcon, EditIcon, MoreVertIcon } from '@/components/common/icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-const ProductDetails = () => {
+export const ProductDetails = () => {
     const handleDialogOpen = useProductStore((state) => state.setDialogState)
     const handleDrawerOpen = useProductStore((state) => state.setDrawerState)
 
 
     return (
-        <div className=''>
+        <div >
             <div className="px-space16 space-y-space16 py-space16">
                 <div className="border-b border-color pb-space16 flex justify-between gap-space16">
                     <div className="flex items-center gap-space8">
@@ -112,7 +112,7 @@ const ProductDetails = () => {
                 <Text variant='secondary' className='text-sm' title={`Parachute SkinPure Orange Brightening Facewash is enriched with Orange. It is rich in vitamins, minerals, natural cleansers, and free of harmful chemicals like paraben and sulphate. Use it regularly for a spotless and pimple free face with every wash.`} />
             </div>
 
-            <DialogFooter className='flex flex-col gap-space16'>
+            <DialogFooter className='flex flex-col gap-space16 rounded-b-lg'>
                 <Button
                     className='w-full'
                     onClick={() => handleDialogOpen({ open: true, header: ProductEnum.UPDATE_STOCK })}
@@ -143,5 +143,3 @@ const ProductDetails = () => {
         </div>
     )
 }
-
-export default ProductDetails

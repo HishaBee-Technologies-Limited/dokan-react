@@ -51,7 +51,7 @@ const formSchema = z.object({
     bulk_sell_check: z.boolean(),
 })
 
-export const AddProduct = () => {
+export const EditProduct = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
