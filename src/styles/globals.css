@@ -79,3 +79,109 @@
     @apply bg-primary-5 dark:bg-primary-80
   }
 }
+
+
+@layer utilities {
+
+  /* Toggle Button Styles Start */
+  .switch {
+    position: relative;
+    display: inline-block;
+  }
+
+  .switch>span {
+    position: absolute;
+    top: 2px;
+    pointer-events: none;
+    font-weight: bold;
+    font-size: 12px;
+    width: 50%;
+    text-align: center;
+  }
+
+  input.check-toggle-round-flat:checked~.off {
+    color: #000;
+  }
+
+  input.check-toggle-round-flat:checked~.on {
+    color: #fff;
+  }
+
+  .switch>span.on {
+    left: 0;
+    padding-left: 2px;
+    color: #000;
+  }
+
+  .switch>span.off {
+    right: 0;
+    padding-right: 3.5px;
+    color: #fff;
+  }
+
+  .check-toggle {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+  }
+
+  .check-toggle+label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+  }
+
+  input.check-toggle-round-flat+label {
+    padding: 2px;
+    width: 64px;
+    height: 24px;
+    background-color: #000000;
+    border-radius: 4px;
+  }
+
+  input.check-toggle-round-flat+label:before,
+  input.check-toggle-round-flat+label:after {
+    display: block;
+    position: absolute;
+    content: '';
+  }
+
+  input.check-toggle-round-flat+label:before {
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    right: 2px;
+    background-color: #000000;
+    border-radius: 4px;
+  }
+
+  input.check-toggle-round-flat+label:after {
+    top: 3px;
+    left: 3.5px;
+    bottom: 3.5px;
+    width: 30px;
+    border-radius: 2px;
+    background-color: #fff;
+    /* -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px; */
+    -webkit-transition: margin 0.2s;
+    -moz-transition: margin 0.2s;
+    -o-transition: margin 0.2s;
+    transition: margin 0.2s;
+  }
+
+  input.check-toggle-round-flat:checked+label:after {
+    margin-left: 27px;
+  }
+
+  /* Toggle Button Styles End  */
+
+
+  .slick-active .__active {
+    opacity: 100;
+  }
+}
