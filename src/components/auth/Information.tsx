@@ -50,7 +50,7 @@ const Information = () => {
             <Text title='Tell us about your business' variant='secondary' className='mb-space32 font-semibold' />
 
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space16">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
 
                     <FormField
                         control={form.control}
@@ -121,7 +121,7 @@ const Information = () => {
                         name="address"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Address <span className="text-error-100">*</span></FormLabel>
+                                <FormLabel>Address</FormLabel>
                                 <FormControl>
                                     <Input type='number' placeholder="Address" {...field} />
                                 </FormControl>
