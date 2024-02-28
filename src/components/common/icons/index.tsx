@@ -11,6 +11,7 @@ import { ArrowForwardIcon } from './ArrowForwardIcon';
 import { RestoreIcon } from './RestoreIcon';
 import { SortIcon } from './SortIcon';
 import { FilterIcon } from './FilterIcon';
+import { SaveIcon } from './SaveIcon';
 
 export {
   EditIcon,
@@ -25,5 +26,6 @@ export {
   ErrorIcon,
   RestoreIcon,
   SortIcon,
-  FilterIcon
+  FilterIcon,
+  SaveIcon,
 };
