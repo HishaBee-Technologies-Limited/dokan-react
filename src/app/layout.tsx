@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/themes";
 import { Anek_Bangla } from "next/font/google";
 import "@/styles/globals.css";
 
@@ -19,7 +20,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={anek_bangla.className} suppressHydrationWarning>{children}</body>
+      <body className={`${anek_bangla.className} bg-primary-10`} suppressHydrationWarning>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="2xl:w-[144rem] mx-auto">
+            {children}
+          </div>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

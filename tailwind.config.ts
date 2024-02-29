@@ -59,6 +59,7 @@ const config = {
         "2xl": "1400px",
       },
     },
+
     extend: {
       colors: appConfig.themes.colors,
       spacing: appConfig.themes.spacing,

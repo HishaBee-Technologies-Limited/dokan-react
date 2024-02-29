@@ -5,6 +5,7 @@ export const ArrowForwardIcon = ({
   height = '20',
   width = '20',
   color = '',
+  rotate = 0,
 }: IconProps) => {
   return (
     <Icon
@@ -12,6 +13,7 @@ export const ArrowForwardIcon = ({
       width={width}
       height={height}
       color={color}
+      rotate={rotate}
     />
   );
 };

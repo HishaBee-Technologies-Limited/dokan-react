@@ -85,7 +85,7 @@ const SidebarLinks: IAsideBarMenuItem[] = [
         title: 'Printer',
         bn_title: 'স্টক ইতিহাস',
         image: '/images/menu/home.svg',
-        link: '/printer',
+        link: '/printer/guide',
       },
     ],
   },
