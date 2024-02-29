@@ -20,14 +20,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={anek_bangla.className} suppressHydrationWarning>
+      <body className={`${anek_bangla.className} bg-primary-10`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="2xl:w-[144rem] mx-auto">
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>

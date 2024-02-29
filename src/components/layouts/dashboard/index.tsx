@@ -14,7 +14,7 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
     return (
         <section className='flex pb-space16 lg:pb-0 bg-primary-5 dark:bg-[#171717]'>
             <AsideBar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-            <div className={`hidden xl:block ${menuOpen ? 'w-[34.4rem] left-0' : 'left-0 w-[8rem]'} duration-500`}></div>
+            <div className={`hidden xl:block 2xl:hidden ${menuOpen ? 'w-[34.4rem] left-0' : 'left-0 w-[8rem]'} duration-500`}></div>
 
             <main className={`h-screen ${menuOpen ? 'w-full xl:w-[calc(100%-34.4rem)]' : 'w-full xl:w-[calc(100%-8rem)]'} duration-500`}>
                 <Header setMenuOpen={setMenuOpen} menuOpen={menuOpen} />
@@ -25,7 +25,8 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
                     </div>
                 </div>
             </main>
-        </section>)
+        </section>
+    )
 }
 
 export default Dashboard

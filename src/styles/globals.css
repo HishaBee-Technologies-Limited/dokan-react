@@ -29,14 +29,14 @@
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #999999;
+    background: #d1d0d0;
     border-radius: 2rem;
   }
 
   /* Firefox scrollbar style  */
   * {
     scrollbar-width: 0.2rem;
-    scrollbar-color: #999999 transparent;
+    scrollbar-color: #aaa9a9 transparent;
   }
 
   .scroll_hidden::-webkit-scrollbar {
