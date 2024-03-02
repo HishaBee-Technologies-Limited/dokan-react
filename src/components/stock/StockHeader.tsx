@@ -15,7 +15,7 @@ export const StockHeader = () => {
 
     return (
         <div className="flex flex-wrap gap-space16 justify-between items-center">
-            <PageTitle title="Product List" />
+            <PageTitle title="Stock Management" />
 
             <div className="flex gap-space12 grow-[1] sm:grow-0">
                 <Link href="/stock/history">

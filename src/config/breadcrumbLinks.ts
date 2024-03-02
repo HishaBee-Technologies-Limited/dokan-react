@@ -1,3 +1,4 @@
+import { Label } from '@/components/ui/label';
 const breadCrumbLinks = [
   // Dashboard
   {
@@ -69,6 +70,45 @@ const breadCrumbLinks = [
     label: 'Feedback',
     link: '/settings/feedback',
   },
+
+  // Product 
+  {
+    label: 'Product List',
+    link: '/product'
+  },
+  // Stock 
+  {
+    label: 'Stock Management',
+    link: '/stock'
+  },
+  {
+    label: 'Stock History',
+    link: '/stock/history'
+  },
+  {
+    label: 'Stock Update',
+    link: '/stock/update'
+  },
+  // Printer 
+  {
+    label: 'Printer',
+    link: '/printer/guide'
+  },
+  {
+    label: 'Configuration',
+    link: '/printer/configuration'
+  },
+
+  // SMS Marketing 
+  {
+    label: 'SMS Marketing',
+    link: '/sms'
+  },
+  {
+    label: 'Packages',
+    link: '/sms/packages'
+  }
+
 ] as const;
 
 export default breadCrumbLinks;
