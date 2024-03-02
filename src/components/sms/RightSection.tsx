@@ -1,20 +1,17 @@
 'use client'
 import { z } from "zod"
 import React from 'react'
-import { SellEnum } from "@/enum/sell"
+import Link from "next/link"
 import { useForm } from "react-hook-form"
 import Card from '@/components/common/Card'
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import Icon from "@/components/common/Icon"
+import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
+import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { usePurchaseStore } from "@/stores/usePurchase"
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { AddIcon, ArrowForwardIcon, CancelIcon } from "@/components/common/icons"
-import ProductFiledRow from '@/components/sell/ProductFiledRow'
-import ProductSellCalculation from "@/components/sell/ProductSellCalculation"
-import { Input } from "../ui/input"
-import Icon from "../common/Icon"
-import { Textarea } from "../ui/textarea"
 
 const formSchema = z.object({
     number: z.string().max(11).min(11, {
@@ -23,9 +20,6 @@ const formSchema = z.object({
 })
 
 export const RightSection = () => {
-    const handleDialogOpen = usePurchaseStore((state) => state.setDialogState)
-    const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState)
-
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -70,7 +64,9 @@ export const RightSection = () => {
                             <Icon icon="material-symbols:sms" />
                             SMS Balance 27
                         </Text>
-                        <Button variant={'secondary'} size={'sm'}>Buy sms <ArrowForwardIcon /></Button>
+                        <Link href="/sms/packages">
+                            <Button variant={'secondary'} size={'sm'}>Buy sms <ArrowForwardIcon /></Button>
+                        </Link>
                     </div>
                 </div>
 
