@@ -1,6 +1,7 @@
 'use client';
 import Slider from 'react-slick';
 import { Image } from '@/components/common/Image';
+import { onboardBanners } from '@/config/onboardBanners';
 import { PageTitle, Text } from '@/components/common/text';
 import {
     JSXElementConstructor,
@@ -40,29 +41,32 @@ const Carousel = () => {
 
     return (
         <Slider {...settings}>
-            {Array(4).fill(0).map((_, i) => (
-                <div key={'carousel' + 1} className="space-y-space40">
+            {onboardBanners.map((item) => (
+                <div key={item.id} className="space-y-space40">
                     <Image
                         alt={''}
-                        src={''}
+                        src={item.image}
                         width={374}
                         height={374}
-                        wrapperClasses='w-full rounded-lg bg-white overflow-hidden '
+                        wrapperClasses='w-full rounded-lg '
                     />
 
                     <article className="space-y-space32">
-                        <PageTitle title='ব্যবসার সম্পুর্ন হিসাব রাখুন ডিজিটালি' />
+                        <PageTitle title={item.title} />
 
                         <div className="flex gap-space24 flex-wrap">
-                            <div className="flex items-center gap-space12 max-w-max">
-                                <Image
-                                    alt={''}
-                                    src={''}
-                                    width={28}
-                                    height={28}
-                                />
-                                <Text title='নির্ভুল হিসাব' />
-                            </div>
+                            {item.features.map((feature) => (
+                                <div key={feature.title} className="flex items-center gap-space12 max-w-max">
+                                    <Image
+                                        alt={''}
+                                        width={28}
+                                        height={28}
+                                        src={feature.image}
+                                    />
+                                    <Text title={feature.title} />
+                                </div>
+
+                            ))}
                         </div>
                     </article>
                 </div>
