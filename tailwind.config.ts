@@ -1,54 +1,54 @@
-import type { Config } from "tailwindcss"
-import { appConfig } from "./app.config"
+import type { Config } from "tailwindcss";
+import { appConfig } from "./app.config";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
     fontFamily: {
-      anek: ['Anek Bangla', 'sans-serif'],
-      poppins: ['Poppins', 'sans-serif'],
+      anek: ["Anek Bangla", "sans-serif"],
+      poppins: ["Poppins", "sans-serif"],
     },
     fontSize: {
       xl: [
-        '2.4rem',
+        "2.4rem",
         {
-          lineHeight: '2.8rem',
-          fontWeight: '600',
+          lineHeight: "2.8rem",
+          fontWeight: "600",
         },
       ],
       lg: [
-        '2rem',
+        "2rem",
         {
-          lineHeight: '2.8rem',
-          fontWeight: '400',
+          lineHeight: "2.8rem",
+          fontWeight: "400",
         },
       ],
       md: [
-        '1.6rem',
+        "1.6rem",
         {
-          lineHeight: '2.4rem',
-          fontWeight: '400',
+          lineHeight: "2.4rem",
+          fontWeight: "400",
         },
       ],
       sm: [
-        '1.4rem',
+        "1.4rem",
         {
-          lineHeight: '2rem',
-          fontWeight: '400',
+          lineHeight: "2rem",
+          fontWeight: "400",
         },
       ],
       xs: [
-        '1.2rem',
+        "1.2rem",
         {
-          lineHeight: '1.6rem',
-          fontWeight: '400',
+          lineHeight: "1.6rem",
+          fontWeight: "400",
         },
       ],
     },
@@ -81,7 +81,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
+} satisfies Config;
 
-export default config
+export default config;
