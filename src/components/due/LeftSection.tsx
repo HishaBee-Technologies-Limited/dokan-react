@@ -6,6 +6,7 @@ import CustomTab from '@/components/common/Tab'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
 import { useDueStore } from '@/stores/useDueStore'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import FallBackImage from '@/components/common/FallBackImage'
 import WrapperOddList from '@/components/common/WrapperOddList'
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator'
@@ -58,7 +59,7 @@ export const LeftSection = () => {
                 </div>
             </div>
 
-            <div className="h-[calc(100%-20.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
+            <ScrollArea className="h-[calc(100%-20.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
                 <WrapperOddList>
                     {Array(40).fill(0).map((_, index) => (
                         <CardWithSideIndicator
@@ -84,7 +85,7 @@ export const LeftSection = () => {
                         </CardWithSideIndicator>
                     ))}
                 </WrapperOddList>
-            </div>
+            </ScrollArea>
 
             <div className="p-space12 sm:p-space16 border-t border-primary-20 dark:border-primary-80">
                 <Button

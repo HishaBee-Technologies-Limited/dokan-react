@@ -36,8 +36,7 @@ const invoices = [
 
 export const ContactTable = () => {
     return (
-        <Table>
-            {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+        <Table wrapperClass='min-w-[60rem]'>
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">Transaction</TableHead>

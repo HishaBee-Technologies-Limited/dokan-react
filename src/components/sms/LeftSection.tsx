@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
 import CustomTab from '@/components/common/Tab'
 import Search from '@/components/common/forms/Search'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import FallBackImage from '@/components/common/FallBackImage'
 
 const tabData = [
@@ -40,7 +41,7 @@ export const LeftSection = () => {
                     <Search onChange={(e: React.ChangeEvent<HTMLInputElement>) => { }} />
                 </div>
 
-                <div className="h-[calc(100%-12rem)] overflow-y-scroll px-space8">
+                <ScrollArea className="h-[calc(100%-12rem)] px-space8">
                     {Array(40).fill(0).map((_, index) => (
                         <div
                             key={index}
@@ -56,7 +57,7 @@ export const LeftSection = () => {
                             <Button size={'sm'}>Add</Button>
                         </div>
                     ))}
-                </div>
+                </ScrollArea>
             </Card>
         </div>
     )

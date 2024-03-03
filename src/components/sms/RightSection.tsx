@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
 import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { AddIcon, ArrowForwardIcon, CancelIcon } from "@/components/common/icons"
 
@@ -70,7 +71,7 @@ export const RightSection = () => {
                     </div>
                 </div>
 
-                <div className="h-full overflow-y-scroll space-y-space16">
+                <ScrollArea className="h-full">
                     <div className="space-y-space8">
                         <Text title="SMS Sending to" className="font-semibold" />
 
@@ -86,7 +87,7 @@ export const RightSection = () => {
                     </div>
 
 
-                    <div className="space-y-space8">
+                    <div className="space-y-space8 mt-space16">
                         <Card className="px-space12 py-space12 space-y-space8 shadow-sm">
                             <Text title="Write your message" className="font-semibold" />
 
@@ -97,7 +98,7 @@ export const RightSection = () => {
                         </Card>
                         <Text title="0 Character  | 1 SMS (160 Character/SMS)" variant="secondary" />
                     </div>
-                </div>
+                </ScrollArea>
             </div>
             <Card className="p-space8 py-space12 rounded-none space-y-space8">
                 <Button

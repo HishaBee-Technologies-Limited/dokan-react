@@ -33,8 +33,7 @@ const invoices = [
 
 export const DueTable = () => {
     return (
-        <Table>
-            {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+        <Table wrapperClass="!min-w-[60rem]">
             <TableHeader>
                 <TableRow>
                     <TableHead>Entries</TableHead>

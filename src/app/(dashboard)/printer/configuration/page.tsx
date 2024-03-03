@@ -18,6 +18,7 @@ import {
 // import { Image } from "@/components/common/Image"
 import { Switch } from "@/components/ui/switch"
 import Image from "next/image"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 
 const formSchema = z.object({
@@ -47,7 +48,7 @@ const ConfigurationPage = () => {
 
     return (
         <div className="md:flex items-start gap-space16 w-full h-full">
-            <div className='space-y-space24 max-w-[54rem] w-full h-full overflow-y-scroll pr-space16 mx-auto'>
+            <ScrollArea className='space-y-space24 max-w-[54rem] w-full h-full overflow-y-scroll pr-space16 mx-auto'>
                 <PageSubTitle title='Printer Configuration' />
 
                 <Form {...form}>
@@ -181,7 +182,7 @@ const ConfigurationPage = () => {
 
                     </form>
                 </Form>
-            </div>
+            </ScrollArea>
 
 
             <div className="w-full md:w-1/2 h-auto xl:h-[90%]">

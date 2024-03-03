@@ -3,6 +3,7 @@ import React from 'react'
 import { ExpenseEnum } from '@/enum/expense'
 import { Button } from '@/components/ui/button'
 import { useExpenseStore } from '@/stores/useExpenseStore'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { DeleteIcon, EditIcon, MoreVertIcon } from '@/components/common/icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import {
@@ -63,88 +64,88 @@ const ExpenseTable = () => {
     }
 
     return (
-        <div className="pb-space16 w-full relative overflow-x-scroll">
-            <div className="rounded-md border border-color min-w-[80rem]">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="">Transaction Type</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Date & Time</TableHead>
-                            <TableHead>Notes</TableHead>
-                            <TableHead className="text-right">Action</TableHead>
-                        </TableRow>
-                    </TableHeader>
+        <ScrollArea className="pb-space8">
+            <Table wrapperClass='rounded-md border border-color'>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="">Transaction Type</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Date & Time</TableHead>
+                        <TableHead>Notes</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                </TableHeader>
 
-                    <TableBody>
-                        {invoices.map((invoice, i) => (
-                            <TableRow key={i} onClick={() => handleRowClick()}>
-                                <TableCell>
-                                    <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
-                                        <div className="w-space24 h-space24 bg-primary-40 rounded-full mr-space8"></div>
-                                        <span>{invoice.category}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>{invoice.amount}</TableCell>
-                                <TableCell>{invoice.date}</TableCell>
-                                <TableCell>{invoice.note}</TableCell>
-                                <TableCell className={`text-right`}>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
+                <TableBody>
+                    {invoices.map((invoice, i) => (
+                        <TableRow key={i} onClick={() => handleRowClick()}>
+                            <TableCell>
+                                <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
+                                    <div className="w-space24 h-space24 bg-primary-40 rounded-full mr-space8"></div>
+                                    <span>{invoice.category}</span>
+                                </div>
+                            </TableCell>
+                            <TableCell>{invoice.amount}</TableCell>
+                            <TableCell>{invoice.date}</TableCell>
+                            <TableCell>{invoice.note}</TableCell>
+                            <TableCell className={`text-right`}>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            size={'icon'}
+                                            variant={'transparent'}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                            }} >
+                                            <MoreVertIcon />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+
+                                    <DropdownMenuContent align='end' side='bottom' className="w-56 ">
+                                        <DropdownMenuItem asChild >
                                             <Button
-                                                size={'icon'}
+                                                size={'sm'}
                                                 variant={'transparent'}
+                                                className='w-full justify-start'
                                                 onClick={(e) => {
                                                     e.stopPropagation()
-                                                }} >
-                                                <MoreVertIcon />
+                                                    setExpenseDrawer({ open: true, header: ExpenseEnum.EDIT_EXPENSE })
+                                                }}
+                                            >
+                                                <EditIcon />
+                                                Edit
                                             </Button>
-                                        </DropdownMenuTrigger>
-
-                                        <DropdownMenuContent align='end' side='bottom' className="w-56 ">
-                                            <DropdownMenuItem asChild >
-                                                <Button
-                                                    size={'sm'}
-                                                    variant={'transparent'}
-                                                    className='w-full justify-start'
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setExpenseDrawer({ open: true, header: ExpenseEnum.EDIT_EXPENSE })
-                                                    }}
-                                                >
-                                                    <EditIcon />
-                                                    Edit
-                                                </Button>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem asChild >
-                                                <Button
-                                                    size={'sm'}
-                                                    variant={'transparent'}
-                                                    className='w-full justify-start text-error-100'
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setExpenseDialog({ open: true, header: ExpenseEnum.DELETE_TRANSACTION })
-                                                    }}
-                                                >
-                                                    <DeleteIcon />
-                                                    Delete
-                                                </Button>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-
-                    <TableFooter>
-                        <TableRow>
-                            <TableCell colSpan={6} className='text-center'>Showing 10 of 100 Transactions</TableCell>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem asChild >
+                                            <Button
+                                                size={'sm'}
+                                                variant={'transparent'}
+                                                className='w-full justify-start text-error-100'
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setExpenseDialog({ open: true, header: ExpenseEnum.DELETE_TRANSACTION })
+                                                }}
+                                            >
+                                                <DeleteIcon />
+                                                Delete
+                                            </Button>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </TableCell>
                         </TableRow>
-                    </TableFooter>
-                </Table>
-            </div>
-        </div >
+                    ))}
+                </TableBody>
+
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={6} className='text-center'>Showing 10 of 100 Transactions</TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+
+            <ScrollBar orientation="horizontal" />
+        </ScrollArea>
     )
 }
 

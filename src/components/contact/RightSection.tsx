@@ -5,6 +5,7 @@ import { Text } from '@/components/common/text'
 import { useContactStore } from '@/stores/useContactStore'
 import FallBackImage from '@/components/common/FallBackImage'
 import { ContactTable } from '@/components/contact/ContactTable'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
 export const RightSection = () => {
     const { activeTab, setContactDrawerState } = useContactStore((state) => state)
@@ -31,22 +32,11 @@ export const RightSection = () => {
                 </div>
             </div>
 
-            <div className="h-[calc(100%-9rem)] overflow-y-scroll pb-space16 px-space16">
-                <ContactTable />
-                <ContactTable />
-
+            <ScrollArea className="h-[calc(100%-9rem)] pb-space16 px-space16">
                 <ContactTable />
 
-                <ContactTable />
-
-                <ContactTable />
-
-                <ContactTable />
-
-                <ContactTable />
-
-                <ContactTable />
-            </div>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
         </Card>
     )
 }
