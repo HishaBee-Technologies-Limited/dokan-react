@@ -188,10 +188,10 @@ const ConfigurationPage = () => {
 
                 <Image
                     alt=""
-                    width={200}
-                    height={300}
+                    width={300}
+                    height={500}
                     sizes="100vw"
-                    src={'/images/a4.svg'}
+                    src={form.watch('page_size') === 'A4' ? '/images/a4.svg' : '/images/small.svg'}
                     className="w-full h-full object-contain"
                 />
 
