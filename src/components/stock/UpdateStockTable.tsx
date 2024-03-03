@@ -4,6 +4,7 @@ import { Text } from '@/components/common/text'
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/common/Image'
 import { CloseIcon, SaveIcon } from '@/components/common/icons'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
     Table,
     TableBody,
@@ -18,7 +19,7 @@ const UpdateStockTable = () => {
     const [stockValue, setStockValue] = useState<number>(0)
 
     return (
-        <div className="pb-space16 w-full relative overflow-x-scroll space-y-space8">
+        <div className="w-full relative space-y-space8">
             <div className="flex justify-end gap-space16">
                 <Button
                     variant={'secondary'}
@@ -34,8 +35,8 @@ const UpdateStockTable = () => {
                 </Button>
             </div>
 
-            <div className="rounded-md border border-color min-w-[80rem]">
-                <Table>
+            <ScrollArea className="pb-space8">
+                <Table wrapperClass='rounded-md border border-color min-w-[80rem]'>
                     <TableHeader>
                         <TableRow>
                             <TableHead className="">Product name</TableHead>
@@ -89,7 +90,8 @@ const UpdateStockTable = () => {
                         </TableRow>
                     </TableFooter>
                 </Table>
-            </div>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
         </div>
     )
 }

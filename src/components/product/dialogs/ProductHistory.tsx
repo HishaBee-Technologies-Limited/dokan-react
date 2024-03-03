@@ -2,6 +2,7 @@ import React from 'react'
 import { Text } from '@/components/common/text'
 import { Image } from '@/components/common/Image'
 import DatePicker from '@/components/common/DatePicker'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 export const ProductHistory = () => {
@@ -21,35 +22,34 @@ export const ProductHistory = () => {
             <DatePicker onChange={() => { }} triggerClasses="w-full justify-center" contentAlign='center' presets />
 
 
-            <div className="pb-space16 w-full relative overflow-x-scroll">
-                <div className="rounded-md border border-color min-w-[60.4rem]">
-                    <Table wrapperClass="min-w-[60rem]">
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="">Entries</TableHead>
-                                <TableHead>stock price</TableHead>
-                                <TableHead>pre. stock</TableHead>
-                                <TableHead>stock adjustment</TableHead>
-                                <TableHead className='text-end' >Stock</TableHead>
-                            </TableRow>
-                        </TableHeader>
+            <ScrollArea className="pb-space8">
+                <Table wrapperClass='rounded-md border border-color min-w-[53rem]'>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="">Entries</TableHead>
+                            <TableHead>stock price</TableHead>
+                            <TableHead>pre. stock</TableHead>
+                            <TableHead>stock adjustment</TableHead>
+                            <TableHead className='text-end' >Stock</TableHead>
+                        </TableRow>
+                    </TableHeader>
 
-                        <TableBody>
-                            {Array(3).fill(0).map((item, i) => (
-                                <TableRow key={item.number}>
-                                    <TableCell>Aug 09, 2020 08:45 PM</TableCell>
-                                    <TableCell> ৳ 1,000</TableCell>
-                                    <TableCell>37</TableCell>
-                                    <TableCell>
-                                        <Text title='+20' variant='success' />
-                                    </TableCell>
-                                    <TableCell className='text-end'>20</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
+                    <TableBody>
+                        {Array(3).fill(0).map((item, i) => (
+                            <TableRow key={item.number}>
+                                <TableCell>Aug 09, 2020 08:45 PM</TableCell>
+                                <TableCell> ৳ 1,000</TableCell>
+                                <TableCell>37</TableCell>
+                                <TableCell>
+                                    <Text title='+20' variant='success' />
+                                </TableCell>
+                                <TableCell className='text-end'>20</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
         </div>
     )
 }
