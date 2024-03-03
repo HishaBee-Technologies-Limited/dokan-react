@@ -4,6 +4,7 @@ import { SellEnum } from '@/enum/sell'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
 import { useSellStore } from '@/stores/useSellStore'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { DeleteIcon, EditIcon, MoreVertIcon } from '@/components/common/icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import {
@@ -81,95 +82,94 @@ const HistoryTable = () => {
     }
 
     return (
-        <div className="pb-space16 w-full relative overflow-x-scroll">
-            <div className="rounded-md border border-color min-w-[80rem]">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="">#</TableHead>
-                            <TableHead>Items</TableHead>
-                            <TableHead>Contact</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Transaction Type</TableHead>
-                            <TableHead className="text-right">Action</TableHead>
-                        </TableRow>
-                    </TableHeader>
+        <ScrollArea className="pb-space8">
+            <Table wrapperClass='rounded-md border border-color'>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="">#</TableHead>
+                        <TableHead>Items</TableHead>
+                        <TableHead>Contact</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Transaction Type</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                </TableHeader>
 
-                    <TableBody>
-                        {invoices.map((item, i) => (
-                            <TableRow key={item.id} onClick={() => handleRowClick(item)}>
-                                <TableCell>{item.id}</TableCell>
-                                <TableCell>{item.item}</TableCell>
-                                <TableCell>{item.contact}</TableCell>
-                                <TableCell>{item.amount}</TableCell>
-                                <TableCell>{item.date}</TableCell>
-                                <TableCell>
-                                    <Text
-                                        title={item.transactionType}
-                                        variant={transactionTypeTextVariant(item.transactionType)}
-                                        className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(item.transactionType)}`}
+                <TableBody>
+                    {invoices.map((item, i) => (
+                        <TableRow key={item.id} onClick={() => handleRowClick(item)}>
+                            <TableCell>{item.id}</TableCell>
+                            <TableCell>{item.item}</TableCell>
+                            <TableCell>{item.contact}</TableCell>
+                            <TableCell>{item.amount}</TableCell>
+                            <TableCell>{item.date}</TableCell>
+                            <TableCell>
+                                <Text
+                                    title={item.transactionType}
+                                    variant={transactionTypeTextVariant(item.transactionType)}
+                                    className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(item.transactionType)}`}
 
-                                    />
+                                />
 
-                                </TableCell>
-                                <TableCell className={`text-right`}>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
+                            </TableCell>
+                            <TableCell className={`text-right`}>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            size={'icon'}
+                                            variant={'transparent'}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                            }} >
+                                            <MoreVertIcon />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+
+                                    <DropdownMenuContent align='end' side='bottom' className="w-56 ">
+                                        <DropdownMenuItem asChild >
                                             <Button
-                                                size={'icon'}
+                                                size={'sm'}
                                                 variant={'transparent'}
+                                                className='w-full justify-start'
                                                 onClick={(e) => {
                                                     e.stopPropagation()
-                                                }} >
-                                                <MoreVertIcon />
+                                                    handleEditClick(item)
+                                                }}
+                                            >
+                                                <EditIcon />
+                                                Edit
                                             </Button>
-                                        </DropdownMenuTrigger>
-
-                                        <DropdownMenuContent align='end' side='bottom' className="w-56 ">
-                                            <DropdownMenuItem asChild >
-                                                <Button
-                                                    size={'sm'}
-                                                    variant={'transparent'}
-                                                    className='w-full justify-start'
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        handleEditClick(item)
-                                                    }}
-                                                >
-                                                    <EditIcon />
-                                                    Edit
-                                                </Button>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem asChild >
-                                                <Button
-                                                    size={'sm'}
-                                                    variant={'transparent'}
-                                                    className='w-full justify-start text-error-100'
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        handleDialogOpen({ open: true, header: SellEnum.TRANSACTION_DELETE })
-                                                    }}
-                                                >
-                                                    <DeleteIcon />
-                                                    Delete
-                                                </Button>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-
-                    <TableFooter>
-                        <TableRow>
-                            <TableCell colSpan={7} className='text-center'>Showing 10 of 100 Transactions</TableCell>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem asChild >
+                                            <Button
+                                                size={'sm'}
+                                                variant={'transparent'}
+                                                className='w-full justify-start text-error-100'
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    handleDialogOpen({ open: true, header: SellEnum.TRANSACTION_DELETE })
+                                                }}
+                                            >
+                                                <DeleteIcon />
+                                                Delete
+                                            </Button>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </TableCell>
                         </TableRow>
-                    </TableFooter>
-                </Table>
-            </div>
-        </div >
+                    ))}
+                </TableBody>
+
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={7} className='text-center'>Showing 10 of 100 Transactions</TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+            <ScrollBar orientation="horizontal" />
+        </ScrollArea>
     )
 }
 

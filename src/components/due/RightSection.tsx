@@ -8,6 +8,7 @@ import { Text } from '@/components/common/text'
 import { useDueStore } from '@/stores/useDueStore'
 import { DueTable } from '@/components/due/DueTable'
 import FallBackImage from '@/components/common/FallBackImage'
+import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 
 export const RightSection = () => {
     const activePageTab = useDueStore((state) => state.activePageTab)
@@ -62,11 +63,12 @@ export const RightSection = () => {
                 </div>
             </div>
 
-            <div className="h-[calc(100%-9rem)] overflow-y-scroll pb-space16 px-space16">
+            <ScrollArea className="h-[calc(100%-9rem)] pb-space16 px-space16">
                 <DueTable />
                 <DueTable />
                 <DueTable />
-            </div>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
 
             <div className="p-space12 sm:p-space16 border-t border-primary-20 dark:border-primary-80">
                 <article className="sm:px-space12 flex justify-between gap-space8 pb-space8">

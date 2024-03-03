@@ -12,6 +12,7 @@ import { usePurchaseStore } from "@/stores/usePurchase"
 import { ArrowForwardIcon } from "@/components/common/icons"
 import ProductFiledRow from '@/components/sell/ProductFiledRow'
 import ProductSellCalculation from "@/components/sell/ProductSellCalculation"
+import { ScrollArea } from "../ui/scroll-area"
 
 const formSchema = z.object({
     quantity: z.string().min(1, {
@@ -50,7 +51,7 @@ export const RightSection = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="lg:pl-space12 lg:border-l border-color h-full lg:w-8/12 space-y-space16">
-                <Card className='w-full h-[calc(100%-30rem)] overflow-y-scroll shadow p-space8 pt-0 relative'>
+                <ScrollArea className='w-full h-[calc(100%-30rem)] overflow-y-scroll shadow p-space8 pt-0 relative rounded-md background'>
                     <Text title='Products Added for Purchase' className='font-semibold sticky top-0 z-20 background pt-space8' />
 
                     <div className="space-y-space12">
@@ -61,7 +62,7 @@ export const RightSection = () => {
                         <ProductFiledRow form={form} />
                         <ProductFiledRow form={form} />
                     </div>
-                </Card>
+                </ScrollArea>
 
                 <div className="space-y-space8">
                     <ProductSellCalculation form={form} />
