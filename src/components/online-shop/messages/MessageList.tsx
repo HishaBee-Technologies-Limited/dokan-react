@@ -16,9 +16,6 @@ const MessageList = () => {
     const setActiveUserItem = useOnlineShopStore(state => state.setActiveUserItem)
 
 
-    console.log('activeUserItem', activeUserItem)
-
-
     return (
         <Card className={`h-full w-full flex flex-col gap-space4 ${activeUserItem ? 'flex' : 'hidden sm:flex md:hidden lg:flex'}`}>
             <div className="w-full flex items-center gap-space8 px-space12 py-space8 border-b border-color">
