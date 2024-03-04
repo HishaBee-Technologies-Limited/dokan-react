@@ -12,7 +12,7 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
     const [menuOpen, setMenuOpen] = useState<boolean>(true)
 
     return (
-        <section className='flex pb-space16 lg:pb-0 bg-primary-5 dark:bg-[#171717]'>
+        <section className='flex pb-space16 lg:pb-0 bg-primary-5 dark:bg-[#171717] relative overflow-hidden'>
             <AsideBar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
             <div className={`hidden xl:block 2xl:hidden ${menuOpen ? 'w-[34.4rem] left-0' : 'left-0 w-[8rem]'} duration-500`}></div>
 

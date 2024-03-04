@@ -1,7 +1,7 @@
 export const printerLinks = [
     {
         title: 'Guide',
-        link: '/printer/guide'
+        link: '/printer'
     },
     {
         title: 'Configuration',

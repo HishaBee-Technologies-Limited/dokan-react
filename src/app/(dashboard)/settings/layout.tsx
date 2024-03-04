@@ -1,11 +1,12 @@
 import React from 'react'
-import SettingLayout from '@/components/layouts/setting';
+import { settingLinks } from '@/config/settingLinks';
+import CommonLayout from '@/components/layouts/common';
 
 const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <SettingLayout>
+        <CommonLayout menuLinks={settingLinks} pageTitle='Settings' >
             {children}
-        </SettingLayout>
+        </CommonLayout>
     )
 }
 
