@@ -9,7 +9,7 @@ export const onlineShopLinks = [
     },
     {
         title: 'Online products',
-        link: '/online-shop/products'
+        link: '/online-shop/product'
     },
     {
         title: 'Online message',

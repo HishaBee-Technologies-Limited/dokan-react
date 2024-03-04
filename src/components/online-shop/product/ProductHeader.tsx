@@ -3,7 +3,7 @@ import React from 'react'
 import { ProductEnum } from '@/enum/product'
 import { Button } from '@/components/ui/button'
 import { AddIcon } from '@/components/common/icons'
-import { PageTitle } from '@/components/common/text'
+import { PageSubTitle } from '@/components/common/text'
 import { useProductStore } from '@/stores/useProductStore'
 
 export const ProductHeader = () => {
@@ -11,7 +11,7 @@ export const ProductHeader = () => {
 
     return (
         <div className="flex flex-wrap gap-space16 justify-between items-center">
-            <PageTitle title="Product List" />
+            <PageSubTitle title="Product List" />
 
             <Button onClick={() => handleDrawerOpen({ open: true, header: ProductEnum.ADD_PRODUCT })}>
                 <AddIcon />
