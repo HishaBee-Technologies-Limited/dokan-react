@@ -1,9 +1,10 @@
 'use client'
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { Text } from '@/components/common/text'
-import { Image } from '@/components/common/Image'
 import { useOnlineShopStore } from '@/stores/useOnlineShopStore'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { orderTypeWiseStyled } from '@/components/online-shop/orders/orderTypeWiseStyled'
 import {
     Table,
     TableBody,
@@ -22,48 +23,9 @@ const tableData = [
 ]
 
 export const OrderTable = () => {
+    const router = useRouter()
+
     const orderFilterTab = useOnlineShopStore(state => state.orderFilterTab)
-
-    const dynamicVariant = (type: string): "blue" | "warning" | "success" | "error" | undefined => {
-        if (type === 'new') {
-            return 'blue'
-        } else if (type === 'pending') {
-            return 'warning'
-        } else if (type === 'complete') {
-            return 'success'
-        } else if (type === 'cancelled') {
-            return 'error'
-        } else {
-            return undefined
-        }
-    }
-    const dynamicBG = (type: string) => {
-        if (type === 'new') {
-            return 'bg-blue-100'
-        } else if (type === 'pending') {
-            return 'bg-warning-10'
-        } else if (type === 'complete') {
-            return 'bg-success-20'
-        } else if (type === 'cancelled') {
-            return 'bg-error-10'
-        } else {
-            return undefined
-        }
-    }
-    const dynamicText = (type: string) => {
-        if (type === 'new') {
-            return 'New Order'
-        } else if (type === 'pending') {
-            return 'Pending'
-        } else if (type === 'complete') {
-            return 'Complete'
-        } else if (type === 'cancelled') {
-            return 'Cancelled'
-        } else {
-            return undefined
-        }
-    }
-
 
     const filteringData = orderFilterTab === 'all' ? tableData : tableData.filter(item => item.type === orderFilterTab)
 
@@ -83,7 +45,7 @@ export const OrderTable = () => {
 
                 <TableBody>
                     {filteringData.map((row) => (
-                        <TableRow key={row.id}>
+                        <TableRow key={row.id} onClick={() => router.push(`/online-shop/orders/${row.type}`)}>
                             <TableCell>{'#12546549'}</TableCell>
                             <TableCell>{'23 May 2023'}</TableCell>
                             <TableCell>{'Md. Ariful Islam'}</TableCell>
@@ -91,9 +53,10 @@ export const OrderTable = () => {
                             <TableCell>{'2 Items'}</TableCell>
                             <TableCell>
                                 <Text
-                                    title={dynamicText(row.type)}
-                                    variant={dynamicVariant(row.type)}
-                                    className={`text-xs font-medium rounded-md px-space8 py-space4 max-w-max ${dynamicBG(row.type)}`}
+                                    title={orderTypeWiseStyled(row.type).title()}
+                                    variant={orderTypeWiseStyled(row.type).textVariant()}
+                                    className={`text-xs font-medium rounded-md px-space8 py-space4 max-w-max 
+                                    ${orderTypeWiseStyled(row.type).textBackground()}`}
                                 />
                             </TableCell>
                         </TableRow>
