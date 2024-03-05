@@ -2,9 +2,9 @@
 import React from 'react'
 import Card from '@/components/common/Card'
 import Icon from '@/components/common/Icon'
-import { Text } from '@/components/common/text'
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/common/Image'
+import { PageTitle, Text } from '@/components/common/text'
 
 const overview = [
     {
@@ -49,17 +49,24 @@ const overviewOther = [
 const OverviewPage = () => {
     return (
         <div className='w-full h-full flex flex-col gap-space16'>
+            <div className="flex items-center justify-between gap-space16 flex-wrap">
+                <article className="space-y-space4">
+                    <PageTitle title='আমিরা এন্টার প্রাইজ' />
+                    <Text title='ফার্মগেট, গ্রীন রোড - ১৪৫/২, ঢাকা - ১২১২' className='text-sm' variant='secondary' />
+                </article>
 
-            <div className="flex justify-center sm:justify-end gap-space16">
-                <Button variant={'transparent'} className='bg-primary-10' >
-                    Copy shop Link
-                    <Icon icon="ic:baseline-content-copy" />
-                </Button>
-                <Button variant={'transparent'} className='bg-primary-10' >
-                    Visit online shop
-                    <Icon icon="material-symbols:link" />
-                </Button>
+                <div className="flex justify-center sm:justify-end gap-space16">
+                    <Button variant={'transparent'} className='bg-primary-10' >
+                        Copy shop Link
+                        <Icon icon="ic:baseline-content-copy" />
+                    </Button>
+                    <Button variant={'transparent'} className='bg-primary-10' >
+                        Visit online shop
+                        <Icon icon="ci:external-link" />
+                    </Button>
+                </div>
             </div>
+
 
             <div className="flex justify-center flex-wrap gap-space12">
                 {overview.map(item => (
