@@ -1,9 +1,10 @@
 import React from 'react'
-import PrinterLayout from '@/components/layouts/printer'
+import { printerLinks } from '@/config/printerLinks'
+import CommonLayout from '@/components/layouts/common'
 
 const PrinterLayouts = ({ children }: { children: React.ReactNode }) => {
     return (
-        <PrinterLayout>{children}</PrinterLayout>
+        <CommonLayout menuLinks={printerLinks} pageTitle='Printer Setup'>{children}</CommonLayout>
     )
 }
 
