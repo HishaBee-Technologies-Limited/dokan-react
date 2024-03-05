@@ -1,18 +1,18 @@
-import type { NextAuthConfig } from 'next-auth';
+import type { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
   pages: {
-    signIn: '/',
+    signIn: "/",
   },
   providers: [
-    // added later in auth.ts 
+    // added later in auth.ts
     // while this file is also used in non-Node.js environments
   ],
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      console.log("----isLoggedIn----", isLoggedIn)
-      const isOnDashboard = nextUrl.pathname.startsWith('/contact');
+      console.log("----isLoggedIn----", auth?.user);
+      const isOnDashboard = nextUrl.pathname.startsWith("/contact");
       if (isOnDashboard) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
