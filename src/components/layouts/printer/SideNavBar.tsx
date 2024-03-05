@@ -1,8 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Text } from '@/components/common/text'
-import { printerLinks } from '@/config/printerLinks'
+import { Text } from '../../common/text'
+import { printerLinks } from '../../../config/printerLinks'
 
 const SideNavBar = () => {
     const pathname = usePathname();

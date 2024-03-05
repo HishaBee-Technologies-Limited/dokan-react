@@ -2,15 +2,15 @@
 
 import React, { useState } from "react"
 import { ExpandMoreIcon } from "../icons"
-import { Button } from "@/components/ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Button } from "../../ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover"
 import {
     Command,
     CommandEmpty,
     CommandGroup,
     CommandInput,
     CommandItem,
-} from "@/components/ui/command"
+} from "../../ui/command"
 
 type ISelectProps = {
     data: {

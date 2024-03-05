@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import breadCrumbLinks from '@/config/breadcrumbLinks';
+import breadCrumbLinks from '../../../config/breadcrumbLinks';
 
 type IBreadCrumb = {
   title: string;

@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useEffect } from "react";
 import OtpInput from "react-otp-input";
 import { useCountdown } from "usehooks-ts";
-import { Text } from "@/components/common/text";
-import { verifyOTP } from "@/actions/OTPVerify";
+import { Text } from "../common/text";
+import { verifyOTP } from "../../actions/OTPVerify";
 import { useRouter } from "next/navigation";
-import { resendOTP } from "@/actions/resendOTP";
+import { resendOTP } from "../../actions/resendOTP";
 
 const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
   const [otp, setOtp] = useState<string>("");

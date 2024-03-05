@@ -1,9 +1,9 @@
 import React from 'react'
 import Link from 'next/link'
-import { Text } from '@/components/common/text'
-import { settingLinks } from '@/config/settingLinks'
-import { ExpandMoreIcon } from '@/components/common/icons'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Text } from '../../common/text'
+import { settingLinks } from '../../../config/settingLinks'
+import { ExpandMoreIcon } from '../../common/icons'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../../ui/dropdown-menu'
 
 const MenuLink = () => {
     return (

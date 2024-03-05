@@ -1,12 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { ModeToggle } from "@/themes";
-import { Button } from "@/components/ui/button";
-import FallBackImage from "@/components/common/FallBackImage";
-import BreadCum from "@/components/layouts/dashboard/BreadCum";
-import { IMenuOpenProps } from "@/components/layouts/dashboard";
-import AppSearch from "@/components/layouts/dashboard/AppSearch";
+import { ModeToggle } from "../../../themes";
+import { Button } from "../../ui/button";
+import FallBackImage from "../../common/FallBackImage";
+import BreadCum from "./BreadCum";
+import { IMenuOpenProps } from ".";
+import AppSearch from "./AppSearch";
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -14,8 +14,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { logout } from "@/actions/logout";
+} from "../../ui/dropdown-menu";
+import { logout } from "../../../actions/logout";
 
 const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
   return (

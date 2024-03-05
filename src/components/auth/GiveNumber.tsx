@@ -2,9 +2,9 @@
 import { z } from "zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/common/text";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Text } from "../common/text";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -13,8 +13,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { checkNumber } from "@/actions/checkNumber";
+} from "../ui/form";
+import { checkNumber } from "../../actions/checkNumber";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({

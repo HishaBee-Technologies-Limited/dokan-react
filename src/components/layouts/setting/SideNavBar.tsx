@@ -1,8 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Text } from '@/components/common/text'
-import { settingLinks } from '@/config/settingLinks'
+import { Text } from '../../common/text'
+import { settingLinks } from '../../../config/settingLinks'
 
 const SideNavBar = () => {
     const pathname = usePathname();

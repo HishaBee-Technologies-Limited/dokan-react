@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import { CopyRight } from '@/components/layouts/auth/CopyRight'
-import BrandingLogo from '@/components/layouts/auth/BrandingLogo'
-import TranslateToggle from '@/components/layouts/auth/TranslationToggle'
+import { CopyRight } from '../auth/CopyRight'
+import BrandingLogo from '../auth/BrandingLogo'
+import TranslateToggle from '../auth/TranslationToggle'
 
 const ShopLayout = ({ children }: { children: React.ReactNode }) => {
     return (

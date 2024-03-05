@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-import Icon from "@/components/common/Icon";
-import { Text } from "@/components/common/text";
-import { Button } from "@/components/ui/button";
+import Icon from "../common/Icon";
+import { Text } from "../common/text";
+import { Button } from "../ui/button";
 import { StatefulPinInput } from "react-input-pin-code";
-import { authenticate } from "@/actions/auth";
-import { signIn } from "@/auth";
+import { authenticate } from "../../actions/auth";
+import { signIn } from "../../auth";
 import { useRouter } from "next/navigation";
 
 const GivePin = ({ mobile_number }: { mobile_number: string }) => {

@@ -1,9 +1,9 @@
 'use client'
 import React from 'react'
-import BannerPart from '@/components/layouts/auth/BannerPart'
-import { CopyRight } from '@/components/layouts/auth/CopyRight'
-import BrandingLogo from '@/components/layouts/auth/BrandingLogo'
-import TranslateToggle from '@/components/layouts/auth/TranslationToggle'
+import BannerPart from './BannerPart'
+import { CopyRight } from './CopyRight'
+import BrandingLogo from './BrandingLogo'
+import TranslateToggle from './TranslationToggle'
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     return (

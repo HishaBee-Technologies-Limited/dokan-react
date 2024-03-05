@@ -1,5 +1,5 @@
 import React from 'react'
-import Carousel from '@/components/layouts/auth/Carousel'
+import Carousel from './Carousel'
 
 const BannerPart = () => {
     return (

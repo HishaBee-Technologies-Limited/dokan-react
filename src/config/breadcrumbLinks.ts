@@ -1,114 +1,113 @@
-import { Label } from '@/components/ui/label';
+import { Label } from "../components/ui/label";
 const breadCrumbLinks = [
   // Dashboard
   {
-    label: 'Home',
-    link: '/home',
+    label: "Home",
+    link: "/home",
   },
   // Expense
   {
-    label: 'Expense Khata',
-    link: '/expense',
+    label: "Expense Khata",
+    link: "/expense",
   },
   // Sell
   {
-    label: 'Sell',
-    link: '/sell',
+    label: "Sell",
+    link: "/sell",
   },
   {
-    label: 'Sell History',
-    link: '/sell/history',
+    label: "Sell History",
+    link: "/sell/history",
   },
   // Purchase
   {
-    label: 'Purchase',
-    link: '/purchase',
+    label: "Purchase",
+    link: "/purchase",
   },
   {
-    label: 'Purchase History',
-    link: '/purchase/history',
+    label: "Purchase History",
+    link: "/purchase/history",
   },
   // Due
   {
-    label: 'Due',
-    link: '/due',
+    label: "Due",
+    link: "/due",
   },
   {
-    label: 'Due History',
-    link: '/due/history',
+    label: "Due History",
+    link: "/due/history",
   },
   // Settings
   {
-    label: 'Settings',
-    link: '/settings',
+    label: "Settings",
+    link: "/settings",
   },
   {
-    label: 'Language',
-    link: '/settings/lang',
+    label: "Language",
+    link: "/settings/lang",
   },
   {
-    label: 'Personal QR Code',
-    link: '/settings/qr-code',
+    label: "Personal QR Code",
+    link: "/settings/qr-code",
   },
   {
-    label: 'Switch Shop',
-    link: '/settings/shop',
+    label: "Switch Shop",
+    link: "/settings/shop",
   },
   {
-    label: 'Add Shop',
-    link: '/settings/shop/add',
+    label: "Add Shop",
+    link: "/settings/shop/add",
   },
   {
-    label: 'Edit Shop',
-    link: '/settings/shop/edit',
+    label: "Edit Shop",
+    link: "/settings/shop/edit",
   },
   {
-    label: 'Contact Us',
-    link: '/settings/contact-us',
+    label: "Contact Us",
+    link: "/settings/contact-us",
   },
   {
-    label: 'Feedback',
-    link: '/settings/feedback',
-  },
-
-  // Product 
-  {
-    label: 'Product List',
-    link: '/product'
-  },
-  // Stock 
-  {
-    label: 'Stock Management',
-    link: '/stock'
-  },
-  {
-    label: 'Stock History',
-    link: '/stock/history'
-  },
-  {
-    label: 'Stock Update',
-    link: '/stock/update'
-  },
-  // Printer 
-  {
-    label: 'Printer',
-    link: '/printer/guide'
-  },
-  {
-    label: 'Configuration',
-    link: '/printer/configuration'
+    label: "Feedback",
+    link: "/settings/feedback",
   },
 
-  // SMS Marketing 
+  // Product
   {
-    label: 'SMS Marketing',
-    link: '/sms'
+    label: "Product List",
+    link: "/product",
+  },
+  // Stock
+  {
+    label: "Stock Management",
+    link: "/stock",
   },
   {
-    label: 'Packages',
-    link: '/sms/packages'
-  }
+    label: "Stock History",
+    link: "/stock/history",
+  },
+  {
+    label: "Stock Update",
+    link: "/stock/update",
+  },
+  // Printer
+  {
+    label: "Printer",
+    link: "/printer/guide",
+  },
+  {
+    label: "Configuration",
+    link: "/printer/configuration",
+  },
 
+  // SMS Marketing
+  {
+    label: "SMS Marketing",
+    link: "/sms",
+  },
+  {
+    label: "Packages",
+    link: "/sms/packages",
+  },
 ] as const;
 
 export default breadCrumbLinks;

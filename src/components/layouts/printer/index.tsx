@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import { PageTitle } from '@/components/common/text'
-import MenuLink from '@/components/layouts/printer/MenuLink'
-import SideNavBar from '@/components/layouts/printer/SideNavBar'
+import { PageTitle } from '../../common/text'
+import MenuLink from './MenuLink'
+import SideNavBar from './SideNavBar'
 
 const PrinterLayout = ({ children }: { children: React.ReactNode }) => {
     return (

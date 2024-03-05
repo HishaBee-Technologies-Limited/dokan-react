@@ -1,69 +1,75 @@
-'use client'
-import React from 'react'
-import { ProductEnum } from '@/enum/product'
-import { Text } from '@/components/common/text'
-import { Image } from '@/components/common/Image'
-import { useProductStore } from '@/stores/useProductStore'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { TableDropdownAction } from '@/components/product/TableDropdownAction'
+"use client";
+import React from "react";
+import { ProductEnum } from "../../enum/product";
+import { Text } from "../common/text";
+import { Image } from "../common/Image";
+import { useProductStore } from "../../stores/useProductStore";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { TableDropdownAction } from "./TableDropdownAction";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export const ProductTable = () => {
-    const handleDialogOpen = useProductStore((state) => state.setDialogState)
+  const handleDialogOpen = useProductStore((state) => state.setDialogState);
 
+  const handleRowClick = () => {
+    handleDialogOpen({ open: true, header: ProductEnum.PRODUCT_DETAILS });
+  };
 
-    const handleRowClick = () => {
-        handleDialogOpen({ open: true, header: ProductEnum.PRODUCT_DETAILS })
-    }
+  return (
+    <ScrollArea className="pb-space8">
+      <Table wrapperClass="rounded-md border border-color">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Product Name</TableHead>
+            <TableHead>Current Stock</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Action</TableHead>
+          </TableRow>
+        </TableHeader>
 
-    return (
-        <ScrollArea className="pb-space8">
-            <Table wrapperClass='rounded-md border border-color'>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Product Name</TableHead>
-                        <TableHead>Current Stock</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
-                    </TableRow>
-                </TableHeader>
+        <TableBody>
+          {Array(6)
+            .fill(0)
+            .map((row, i) => (
+              <TableRow key={i} onClick={() => handleRowClick()}>
+                <TableCell>
+                  <div className="flex items-center gap-space8">
+                    <Image src="" alt="" height={40} width={40} />
 
-                <TableBody>
-                    {Array(6).fill(0).map((row, i) => (
-                        <TableRow key={i} onClick={() => handleRowClick()}>
-                            <TableCell>
-                                <div className="flex items-center gap-space8">
-                                    <Image src='' alt='' height={40} width={40} />
+                    <Text
+                      title={`Nestle Nescafe Classic Instant`}
+                      className="text-sm"
+                    />
+                  </div>
+                </TableCell>
+                <TableCell>{51}</TableCell>
+                <TableCell>{"৳200"}</TableCell>
+                <TableCell>{"Generic Names"}</TableCell>
+                <TableCell className={`text-right`}>
+                  <TableDropdownAction data={row} />
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
 
-                                    <Text title={`Nestle Nescafe Classic Instant`} className='text-sm' />
-                                </div>
-                            </TableCell>
-                            <TableCell>{51}</TableCell>
-                            <TableCell>{'৳200'}</TableCell>
-                            <TableCell>{'Generic Names'}</TableCell>
-                            <TableCell className={`text-right`}>
-                                <TableDropdownAction data={row} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-
-                <TableFooter>
-                    <TableRow>
-                        <TableCell colSpan={5} className='text-center'>Showing 10 of 100 Transactions</TableCell>
-                    </TableRow>
-                </TableFooter>
-            </Table>
-            <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-    )
-}
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={5} className="text-center">
+              Showing 10 of 100 Transactions
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
+  );
+};

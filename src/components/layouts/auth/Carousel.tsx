@@ -1,8 +1,8 @@
 'use client';
 import Slider from 'react-slick';
-import { Image } from '@/components/common/Image';
-import { onboardBanners } from '@/config/onboardBanners';
-import { PageTitle, Text } from '@/components/common/text';
+import { Image } from '../../common/Image';
+import { onboardBanners } from '../../../config/onboardBanners';
+import { PageTitle, Text } from '../../common/text';
 import {
     JSXElementConstructor,
     ReactElement,
