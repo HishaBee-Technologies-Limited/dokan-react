@@ -52,7 +52,7 @@ export const ProductTable = () => {
                             <TableCell>{'৳200'}</TableCell>
                             <TableCell>{'Generic Names'}</TableCell>
                             <TableCell>
-                                <Text title='Published' variant='white' className='text-xs rounded-full px-space12 bg-success-100 max-w-max' />
+                                <Text title='Published' variant='white' className='text-xs rounded-full px-space12 bg-success-100 dark:bg-primary-80 max-w-max' />
                             </TableCell>
                             <TableCell className={`text-right`}>
                                 <TableDropdownAction data={row} />

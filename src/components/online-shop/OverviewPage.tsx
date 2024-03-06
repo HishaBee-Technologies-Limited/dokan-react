@@ -56,11 +56,11 @@ const OverviewPage = () => {
                 </article>
 
                 <div className="flex justify-center sm:justify-end gap-space16">
-                    <Button variant={'transparent'} className='bg-primary-10' >
+                    <Button variant={'transparent'} className='bg-primary-10 dark:bg-primary-80' >
                         Copy shop Link
                         <Icon icon="ic:baseline-content-copy" />
                     </Button>
-                    <Button variant={'transparent'} className='bg-primary-10' >
+                    <Button variant={'transparent'} className='bg-primary-10 dark:bg-primary-80' >
                         Visit online shop
                         <Icon icon="ci:external-link" />
                     </Button>

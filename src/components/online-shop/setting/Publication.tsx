@@ -37,7 +37,7 @@ const Publication = () => {
                     control={form.control}
                     name="publication"
                     render={({ field }) => (
-                        <FormItem className="flex items-center justify-between rounded-lg border p-space12 shadow-sm background">
+                        <FormItem className="flex items-center justify-between rounded-lg border p-space12 shadow-sm background border-color">
                             <div className="space-y-0.5">
                                 <FormLabel>Shop Publication</FormLabel>
                                 <FormDescription>
