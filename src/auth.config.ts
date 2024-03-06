@@ -11,7 +11,7 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      console.log("----isLoggedIn----", auth?.user);
+      // console.log("----isLoggedIn----", auth?.user);
       const isOnDashboard = nextUrl.pathname.startsWith("/contact");
       if (isOnDashboard) {
         if (isLoggedIn) return true;

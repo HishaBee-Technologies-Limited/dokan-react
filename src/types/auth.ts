@@ -4,5 +4,5 @@ export interface IRegisterPayload {
   pin_confirmation: string;
   brand_name: string;
   address: string;
-  use_intent: string;
+  user_intent: string;
 }

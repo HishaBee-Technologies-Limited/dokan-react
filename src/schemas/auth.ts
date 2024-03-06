@@ -10,5 +10,11 @@ export const RegisterSchema = z.object({
   }),
   brand_name: z.string(),
   address: z.string(),
-  use_intent: z.string(),
+  user_intent: z.string(),
 });
+
+export type RegisterSchemaDef = z.infer<typeof RegisterSchema>;
+export type SignupCookieStringDef = Omit<
+  RegisterSchemaDef,
+  "pin" | "pin_confirmation" | "mobile_number"
+>;

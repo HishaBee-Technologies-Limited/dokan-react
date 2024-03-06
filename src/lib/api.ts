@@ -6,7 +6,8 @@ export const fetchAPI = (
   url: string,
   method: string,
   payload: any,
-  tags?: string[]
+  tags?: string[],
+  cache?: boolean
 ) => {
   return fetch(`${BaseURL}${url}`, {
     method,

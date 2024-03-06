@@ -80,7 +80,7 @@ export const {
           pin_confirmation,
           brand_name,
           address,
-          use_intent,
+          user_intent,
         } = validatedFields.data;
         const response = await signup({
           mobile_number,
@@ -88,7 +88,7 @@ export const {
           pin_confirmation,
           brand_name,
           address,
-          use_intent,
+          user_intent,
         });
         const user = await response?.data;
         console.log("user-signup------------", response);

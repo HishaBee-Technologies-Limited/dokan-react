@@ -8,6 +8,7 @@ import { StatefulPinInput } from "react-input-pin-code";
 import { authenticate, authenticateSignUp } from "@/actions/auth";
 import { signIn } from "@/auth";
 import { useRouter } from "next/navigation";
+import { getCookie } from "cookies-next";
 
 const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
   const router = useRouter();
@@ -16,6 +17,11 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
   const [showConfirmPin, setShowConfirmPin] = useState<boolean>(false);
   const [pin, setPin] = useState<string>("");
   const [pinError, setError] = useState<string>("");
+  const cookie = getCookie("signup");
+  console.log("ccccc", JSON.parse(cookie ? cookie : ""));
+
+  const signUpString = JSON.parse(cookie ? cookie : "");
+  const { address, brand_name, user_intent } = signUpString;
 
   useEffect(() => {
     if (confirmPin.length === 5) {
@@ -29,12 +35,12 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
 
   const signup = async () => {
     await authenticateSignUp(undefined, {
-      mobile_number: mobile_number,
-      pin: pin,
+      mobile_number,
+      pin,
       pin_confirmation: confirmPin,
-      use_intent: "signup",
-      brand_name: "test",
-      address: "test",
+      user_intent,
+      brand_name,
+      address,
     });
   };
 
@@ -42,7 +48,7 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
     <div>
       <Text
         title="Set up a PIN"
-        className="text-[2.8rem] font-semibold mb-space16"
+        className="mb-space16 text-[2.8rem] font-semibold"
       />
       <Text
         title="Set up a 5 digit PIN number to keep your account secure."
@@ -77,7 +83,7 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
           <button
             type="button"
             onClick={() => setShowPin(!showPin)}
-            className="absolute transform -translate-y-1/2 cursor-pointer right-3 top-1/2 text-primary-400"
+            className="text-primary-400 absolute right-3 top-1/2 -translate-y-1/2 transform cursor-pointer"
           >
             {showPin ? (
               <Icon icon="streamline:visible" width={29} height={30} />
@@ -118,7 +124,7 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
           <button
             type="button"
             onClick={() => setShowConfirmPin(!showConfirmPin)}
-            className="absolute transform -translate-y-1/2 cursor-pointer right-3 top-1/2 text-primary-400"
+            className="text-primary-400 absolute right-3 top-1/2 -translate-y-1/2 transform cursor-pointer"
           >
             {showConfirmPin ? (
               <Icon icon="streamline:visible" width={29} height={30} />
