@@ -27,7 +27,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="2xl:w-[144rem] mx-auto">
+          <div className="hd:w-[2024px] mx-auto">
             {children}
           </div>
         </ThemeProvider>

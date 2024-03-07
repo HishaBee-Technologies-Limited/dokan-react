@@ -64,6 +64,9 @@ const config = {
       colors: appConfig.themes.colors,
       spacing: appConfig.themes.spacing,
       borderRadius: appConfig.themes.borderRadius,
+      screens: {
+        "hd": "2024px",
+      },
 
       keyframes: {
         "accordion-down": {
