@@ -5,7 +5,7 @@ const SidebarLinks: IAsideBarMenuItem[] = [
     id: 1,
     title: 'Home',
     bn_title: 'হোম',
-    image: '/images/menu/home.svg',
+    image: '/images/features/home.svg',
     link: '/home',
   },
   {
