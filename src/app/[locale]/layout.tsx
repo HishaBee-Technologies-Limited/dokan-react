@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "../../themes";
+import { ThemeProvider } from "@/themes";
 import { Anek_Bangla } from "next/font/google";
 
 const anek_bangla = Anek_Bangla({
@@ -33,7 +33,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="2xl:w-[144rem] mx-auto">{children}</div>
+          <div className="hd:w-[2024px] mx-auto">{children}</div>
         </ThemeProvider>
       </body>
     </html>
