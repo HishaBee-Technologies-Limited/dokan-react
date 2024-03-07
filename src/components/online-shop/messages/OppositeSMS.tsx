@@ -17,7 +17,7 @@ const OppositeSMS = () => {
 
 
       <article className='max-w-[22rem]'>
-        <Text className='text-sm bg-primary-5 rounded-md px-space8 py-space4'>
+        <Text className='text-sm bg-primary-5 dark:bg-primary-80 rounded-md px-space8 py-space4'>
           আজই অনলাইন শপ খুলে আপনার আজই অনলাইন শপ
         </Text>
 

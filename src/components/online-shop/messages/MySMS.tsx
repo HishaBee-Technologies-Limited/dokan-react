@@ -14,7 +14,7 @@ const MySMS = () => {
                 wrapperClasses='bg-primary-30 rounded-full h-space24 w-space24 flex items-center justify-center'
             />
             <article className='max-w-[22rem]'>
-                <Text variant='white' className='text-sm bg-blue-500 rounded-md px-space8 py-space4'>
+                <Text variant='white' className='text-sm bg-blue-500 dark:bg-blue-700 rounded-md px-space8 py-space4'>
                     আজই অনলাইন শপ খুলে আপনার আজই অনলাইন শপ
                 </Text>
 

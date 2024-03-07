@@ -1,7 +1,7 @@
 export const onlineShopLinks = [
     {
         title: 'Overview',
-        link: '/online-shop'
+        link: '/online-shop/overview'
     },
     {
         title: 'Order list',

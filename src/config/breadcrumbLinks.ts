@@ -107,7 +107,32 @@ const breadCrumbLinks = [
   {
     label: 'Packages',
     link: '/sms/packages'
-  }
+  },
+  // Online Shop
+  {
+    label: 'Online-shop',
+    link: '/online-shop'
+  },
+  {
+    label: 'Online Message',
+    link: '/online-shop/messages'
+  },
+  {
+    label: 'Order List',
+    link: '/online-shop/orders'
+  },
+  {
+    label: 'Online Products',
+    link: '/online-shop/product'
+  },
+  {
+    label: 'Store Settings',
+    link: '/online-shop/settings'
+  },
+  {
+    label: 'Themes',
+    link: '/online-shop/themes'
+  },
 
 ] as const;
 
