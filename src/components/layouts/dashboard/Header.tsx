@@ -26,7 +26,7 @@ const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
             size={"icon"}
             variant={"transparent"}
             onClick={() => setMenuOpen((prv) => !prv)}
-            className="2xl:hidden"
+            className="hd:hidden"
           >
             <Icon
               icon="ic:round-menu-open"

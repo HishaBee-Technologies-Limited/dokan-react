@@ -38,6 +38,7 @@
 
 import "@/styles/globals.css";
 
+
 // This is the RootLayout component: A wrapper for the app.
 // Navigate to "app/[locale]/layout.tsx" for the main layout file.
 
