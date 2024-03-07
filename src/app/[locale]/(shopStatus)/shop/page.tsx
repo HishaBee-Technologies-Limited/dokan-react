@@ -8,6 +8,8 @@ import { Image } from "@/components/common/Image";
 import { PageSubTitle, Text } from "@/components/common/text";
 import { useRouter } from "next/navigation";
 import { getAllShops } from "@/actions/getAllShops";
+import { IShopResponse } from "@/types/shop";
+import { useShopId } from "@/stores/useShopId";
 
 const shopData = [
   {
@@ -36,16 +38,27 @@ const shopData = [
 const SwitchShopPage = () => {
   const router = useRouter();
   const [selectShop, setSelectShop] = useState<number | null>(null);
+  const [shops, setShops] = useState<IShopResponse[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const saveShopId = useShopId((state) => state.saveShopId);
 
   const handleEditClick = (shop: any) => {};
 
   const handleContinue = () => {
+    console.log(selectShop);
+    saveShopId(selectShop);
     router.push("/contact");
   };
 
   useEffect(() => {
     const getShops = async () => {
-      await getAllShops();
+      const shops = await getAllShops();
+      console.log(shops);
+      if (shops?.success) {
+        setShops(shops?.data as IShopResponse[]);
+      } else {
+        setError(shops?.error as string);
+      }
     };
     getShops();
   }, []);
@@ -55,26 +68,21 @@ const SwitchShopPage = () => {
       <PageSubTitle title="Switch your Shop" />
 
       <div className="gap-space16 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
-        {shopData.map((shop) => (
+        {shops?.map((shop) => (
           <Card
             key={shop.id + "shop"}
-            onClick={() =>
-              setSelectShop((prv) => (shop.active ? prv : shop.id))
-            }
-            className={`p-space16 border-color relative flex w-full flex-col items-center shadow-sm
-                        ${shop.active ? "!bg-primary-5 border-[.2rem] dark:!bg-transparent" : "cursor-pointer"}
+            onClick={() => setSelectShop(shop.id)}
+            className={`p-space16 border-color relative flex w-full flex-col items-center shadow-sm cursor-pointer
                         ${selectShop === shop.id ? "border-[.3rem]" : "border"}
                         `}
           >
-            {shop.active && (
-              <article className="gap-space8 top-space16 left-space24 absolute flex items-center">
-                <div className="h-space10 w-space10 bg-success-100 rounded-full"></div>
-                <Text title="Active shop" className="text-xs font-semibold" />
-              </article>
-            )}
-
             <div className="mt-space32 gap-space12 flex flex-col items-center">
-              <Image src={shop.img} alt="" height={84} width={84} />
+              <Image
+                src={`/images/shop_view.svg`}
+                alt=""
+                height={84}
+                width={84}
+              />
 
               <Text title={shop.name} className="font-semibold" />
               <Text
