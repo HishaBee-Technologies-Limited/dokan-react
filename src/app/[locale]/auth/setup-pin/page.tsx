@@ -1,4 +1,4 @@
-import GivePin from "@/components/auth/GivePin";
+import SetupPin from "@/components/auth/SetupPin";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,7 +10,7 @@ export default function Pin() {
   }
   return (
     <main>
-      <GivePin mobile_number={cookie?.value} />
+      <SetupPin mobile_number={cookie?.value} />
     </main>
   );
 }
