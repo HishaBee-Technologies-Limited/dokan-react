@@ -33,7 +33,7 @@ export const {
           label: "Address",
           type: "text",
         },
-        use_intent: {
+        user_intent: {
           label: "Intent",
           type: "text",
         },

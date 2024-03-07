@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 
 export async function authenticate(
   prevState: string | undefined,
-  formData: { mobile_number: string; pin: string },
+  formData: { mobile_number: string; pin: string }
 ) {
   try {
     await signIn("credentials", formData);
@@ -27,7 +27,7 @@ export async function authenticate(
 
 export async function authenticateSignUp(
   prevState: string | undefined,
-  formData: z.infer<typeof RegisterSchema>,
+  formData: z.infer<typeof RegisterSchema>
 ) {
   try {
     await signIn("signup", formData);
@@ -47,7 +47,7 @@ export async function authenticateSignUp(
 export const login = async (payload: any) => {
   const res = await api.post(
     `/login?mobile_number=${payload?.mobile_number}&pin=${payload?.pin}`,
-    payload,
+    payload
   );
   const data = await res.json();
   console.log(data);
@@ -62,7 +62,7 @@ export const login = async (payload: any) => {
 
 export const signup = async (payload: z.infer<typeof RegisterSchema>) => {
   const res = await api.post(
-    `/register?brand_name=${payload?.brand_name}&address=${payload?.address}&pin=${payload?.pin}&pin_confirmation=${payload?.pin_confirmation}&mobile_number=${payload?.mobile_number}&use_intent=${payload?.use_intent}`,
+    `/register?brand_name=${payload?.brand_name}&address=${payload?.address}&pin=${payload?.pin}&pin_confirmation=${payload?.pin_confirmation}&mobile_number=${payload?.mobile_number}&user_intent=${payload?.user_intent}`
   );
 
   const data = await res.json();
