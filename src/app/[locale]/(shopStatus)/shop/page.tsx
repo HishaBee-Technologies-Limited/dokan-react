@@ -11,30 +11,6 @@ import { getAllShops } from "@/actions/getAllShops";
 import { IShopResponse } from "@/types/shop";
 import { useShopId } from "@/stores/useShopId";
 
-const shopData = [
-  {
-    id: 1,
-    active: true,
-    name: "আমিরা স্টোর",
-    img: "/images/shop_view.svg",
-    address: "মোহাম্মদপুর, ঢাকা - ১২০০",
-  },
-  {
-    id: 2,
-    active: false,
-    name: "আমিরা স্টোর",
-    img: "/images/shop_view.svg",
-    address: "মোহাম্মদপুর, ঢাকা - ১২০০",
-  },
-  {
-    id: 3,
-    active: false,
-    name: "আমিরা স্টোর",
-    img: "/images/shop_view.svg",
-    address: "মোহাম্মদপুর, ঢাকা - ১২০০",
-  },
-];
-
 const SwitchShopPage = () => {
   const router = useRouter();
   const [selectShop, setSelectShop] = useState<number | null>(null);
@@ -72,7 +48,7 @@ const SwitchShopPage = () => {
           <Card
             key={shop.id + "shop"}
             onClick={() => setSelectShop(shop.id)}
-            className={`p-space16 border-color relative flex w-full flex-col items-center shadow-sm cursor-pointer
+            className={`p-space16 border-color relative flex w-full cursor-pointer flex-col items-center shadow-sm
                         ${selectShop === shop.id ? "border-[.3rem]" : "border"}
                         `}
           >
