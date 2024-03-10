@@ -28,13 +28,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Form,
   FormItem,
   FormLabel,
@@ -42,54 +35,57 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { getAreas } from "@/actions/getArea";
+import { getAreasAndTypes } from "@/actions/shop/getAreaAndTypes";
 import { IAllArea } from "@/types/shop";
-
-const cashType = [
-  { value: "yes", label: "Yes" },
-  { value: "no", label: "No" },
-];
-
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "this field is required.",
-  }),
-  shop_type: z.string().min(1, {
-    message: "this field is required.",
-  }),
-  shop_image: z.string(),
-  area: z.number(),
-  address: z.string(),
-  sell_type: z.string(),
-});
+import { cashType } from "@/lib/constants/shop";
+import { createShops } from "@/actions/shop/createShop";
+import { useRouter } from "next/navigation";
+import { ShopSchema } from "@/schemas/shop";
 
 const AddShopPage = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof ShopSchema>>({
+    resolver: zodResolver(ShopSchema),
     defaultValues: {
       name: "",
-      shop_type: "",
-      shop_image: "",
       address: "",
       sell_type: "",
     },
   });
   const [divisions, setDivisions] = useState<IAllArea[]>();
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [divisionValue, setDivisionValue] = React.useState("");
+
   const [openDistrict, setOpenDistrict] = React.useState(false);
   const [districtValue, setDistrictValue] = React.useState("");
+  const [types, setTypes] = useState<any[]>([]);
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log("data------------", data);
+  const router = useRouter();
+
+  async function onSubmit({
+    name,
+    address,
+    area,
+    shop_type,
+    sell_type,
+  }: z.infer<typeof ShopSchema>) {
+    const res = await createShops({
+      name,
+      address,
+      area,
+      type: shop_type,
+      publicData: Number(sell_type),
+    });
+    if (res?.success) {
+      router.push("/shop");
+      router.refresh();
+    }
   }
 
   useEffect(() => {
     const getAllAreas = async () => {
-      const res = await getAreas();
-      console.log(res);
-
-      setDivisions(res?.data);
+      const res = await getAreasAndTypes();
+      setDivisions(res?.data?.areaData);
+      setTypes(res?.data?.typesData);
     };
     getAllAreas();
   }, []);
@@ -127,33 +123,53 @@ const AddShopPage = () => {
               name="shop_type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Shop Type <span className="text-error-100">*</span>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="">
-                        <SelectValue placeholder="Shop type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <div className="max-h-[24rem] overflow-y-scroll">
-                        <SelectItem value="m@example.com">
-                          m@example.com
-                        </SelectItem>
-                        <SelectItem value="m@google.com">
-                          m@google.com
-                        </SelectItem>
-                        <SelectItem value="m@support.com">
-                          m@support.com
-                        </SelectItem>
-                      </div>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "h-16 w-full justify-between bg-white",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? types?.find((type) => type.id === field.value)?.name
+                          : "Select type..."}
+                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[600px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search type..."
+                          className="h-12"
+                        />
+                        <CommandEmpty>No type found.</CommandEmpty>
+                        <CommandGroup className="max-h-80 overflow-scroll">
+                          {types?.map((type) => (
+                            <CommandItem
+                              key={type.id}
+                              value={String(type.id)}
+                              onSelect={() => {
+                                form.setValue("shop_type", type.id);
+                              }}
+                            >
+                              {type.name}
+                              <CheckIcon
+                                className={cn(
+                                  "ml-auto h-4 w-4",
+                                  field.value === type.id
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </FormItem>
               )}
             />
@@ -167,9 +183,9 @@ const AddShopPage = () => {
                     aria-expanded={open}
                     className="w-[350px] justify-between"
                   >
-                    {value
+                    {divisionValue
                       ? divisions?.find(
-                          (division) => String(division.id) === value,
+                          (division) => String(division.id) === divisionValue
                         )?.name
                       : "Select Divisions..."}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -188,10 +204,10 @@ const AddShopPage = () => {
                           key={division.id}
                           value={String(division.id)}
                           onSelect={(currentValue) => {
-                            setValue(
-                              currentValue === String(value)
+                            setDivisionValue(
+                              currentValue === String(divisionValue)
                                 ? ""
-                                : currentValue,
+                                : currentValue
                             );
                             setOpen(false);
                           }}
@@ -200,9 +216,9 @@ const AddShopPage = () => {
                           <CheckIcon
                             className={cn(
                               "ml-auto h-4 w-4",
-                              value === String(division.id)
+                              divisionValue === String(division.id)
                                 ? "opacity-100"
-                                : "opacity-0",
+                                : "opacity-0"
                             )}
                           />
                         </CommandItem>
@@ -221,9 +237,11 @@ const AddShopPage = () => {
                   >
                     {districtValue
                       ? divisions
-                          ?.find((division) => String(division.id) === value)
+                          ?.find(
+                            (division) => String(division.id) === divisionValue
+                          )
                           ?.districts.find(
-                            (district) => String(district.id) === districtValue,
+                            (district) => String(district.id) === districtValue
                           )?.name
                       : "Select Districts..."}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -238,7 +256,9 @@ const AddShopPage = () => {
                     <CommandEmpty>No framework found.</CommandEmpty>
                     <CommandGroup>
                       {divisions
-                        ?.find((division) => String(division.id) === value)
+                        ?.find(
+                          (division) => String(division.id) === divisionValue
+                        )
                         ?.districts.map((district) => (
                           <CommandItem
                             key={district.id}
@@ -247,7 +267,7 @@ const AddShopPage = () => {
                               setDistrictValue(
                                 currentValue === String(districtValue)
                                   ? ""
-                                  : currentValue,
+                                  : currentValue
                               );
                               setOpenDistrict(false);
                             }}
@@ -258,7 +278,7 @@ const AddShopPage = () => {
                                 "ml-auto h-4 w-4",
                                 districtValue === String(district.id)
                                   ? "opacity-100"
-                                  : "opacity-0",
+                                  : "opacity-0"
                               )}
                             />
                           </CommandItem>
@@ -282,17 +302,18 @@ const AddShopPage = () => {
                         aria-expanded={openDistrict}
                         className={cn(
                           "h-16 w-full justify-between bg-white",
-                          !field.value && "text-muted-foreground",
+                          !field.value && "text-muted-foreground"
                         )}
                       >
                         {field.value
                           ? divisions
                               ?.find(
-                                (division) => String(division.id) === value,
+                                (division) =>
+                                  String(division.id) === divisionValue
                               )
                               ?.districts.find(
                                 (district) =>
-                                  String(district.id) === districtValue,
+                                  String(district.id) === districtValue
                               )
                               ?.areas?.find((area) => area.id === field.value)
                               ?.name
@@ -309,10 +330,13 @@ const AddShopPage = () => {
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup className="max-h-80 overflow-scroll">
                           {divisions
-                            ?.find((division) => String(division.id) === value)
+                            ?.find(
+                              (division) =>
+                                String(division.id) === divisionValue
+                            )
                             ?.districts.find(
                               (district) =>
-                                String(district.id) === districtValue,
+                                String(district.id) === districtValue
                             )
                             ?.areas?.map((area) => (
                               <CommandItem
@@ -328,7 +352,7 @@ const AddShopPage = () => {
                                     "ml-auto h-4 w-4",
                                     field.value === area.id
                                       ? "opacity-100"
-                                      : "opacity-0",
+                                      : "opacity-0"
                                   )}
                                 />
                               </CommandItem>

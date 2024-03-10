@@ -24,3 +24,19 @@ export interface IAllArea {
   id: number;
   districts: IDistrcits[];
 }
+
+export interface IShopTypes {
+  id: number;
+  name: string;
+  bn_name: string;
+}
+
+export interface shopPayload {
+  name: string;
+  type: number;
+  address: string;
+  area: number;
+  publicData?: number;
+  shopId?: number;
+  number?: string;
+}

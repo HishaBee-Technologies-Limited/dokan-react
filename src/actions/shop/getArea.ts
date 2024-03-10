@@ -2,9 +2,9 @@
 
 import { authApi } from "@/lib/api";
 
-export const getAreas = async () => {
+export const getAreaInfo = async (areaId: string) => {
   try {
-    const res = await authApi.get("/area/all");
+    const res = await authApi.get(`/area/${areaId}`);
     const data = await res.json();
 
     if (res?.ok) {
