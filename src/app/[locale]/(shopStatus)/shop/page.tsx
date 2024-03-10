@@ -1,39 +1,15 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Card from "@/components/common/Card";
 import Icon from "@/components/common/Icon";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/common/Image";
 import { PageSubTitle, Text } from "@/components/common/text";
-import { useRouter } from "next/navigation";
-import { getAllShops } from "@/actions/getAllShops";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { getAllShops } from "@/actions/shop/getAllShops";
 import { IShopResponse } from "@/types/shop";
 import { useShopId } from "@/stores/useShopId";
-
-const shopData = [
-  {
-    id: 1,
-    active: true,
-    name: "আমিরা স্টোর",
-    img: "/images/shop_view.svg",
-    address: "মোহাম্মদপুর, ঢাকা - ১২০০",
-  },
-  {
-    id: 2,
-    active: false,
-    name: "আমিরা স্টোর",
-    img: "/images/shop_view.svg",
-    address: "মোহাম্মদপুর, ঢাকা - ১২০০",
-  },
-  {
-    id: 3,
-    active: false,
-    name: "আমিরা স্টোর",
-    img: "/images/shop_view.svg",
-    address: "মোহাম্মদপুর, ঢাকা - ১২০০",
-  },
-];
 
 const SwitchShopPage = () => {
   const router = useRouter();
@@ -42,7 +18,26 @@ const SwitchShopPage = () => {
   const [error, setError] = useState<string | null>(null);
   const saveShopId = useShopId((state) => state.saveShopId);
 
-  const handleEditClick = (shop: any) => {};
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Get a new searchParams string by merging the current
+  // searchParams with a provided key/value pair
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const handleEditClick = (shop: IShopResponse) => {
+    router.push(
+      `${pathname}/edit?${createQueryString("shopId", shop.id.toString())}`
+    );
+  };
 
   const handleContinue = () => {
     console.log(selectShop);
@@ -72,7 +67,7 @@ const SwitchShopPage = () => {
           <Card
             key={shop.id + "shop"}
             onClick={() => setSelectShop(shop.id)}
-            className={`p-space16 border-color relative flex w-full flex-col items-center shadow-sm cursor-pointer
+            className={`p-space16 border-color relative flex w-full cursor-pointer flex-col items-center shadow-sm
                         ${selectShop === shop.id ? "border-[.3rem]" : "border"}
                         `}
           >
@@ -91,17 +86,17 @@ const SwitchShopPage = () => {
                 className="text-sm"
               />
 
-              <Link href={"/shop/edit"}>
-                <Button
-                  size={"sm"}
-                  variant="secondary"
-                  className="sm:px-space32"
-                  onClick={() => handleEditClick(shop)}
-                >
-                  <Icon icon="mdi:store-edit-outline" height={24} width={24} />
-                  <Text title="Edit Shop" className="text-sm font-semibold" />
-                </Button>
-              </Link>
+              {/* <Link href={"/shop/edit"}> */}
+              <Button
+                size={"sm"}
+                variant="secondary"
+                className="sm:px-space32"
+                onClick={() => handleEditClick(shop)}
+              >
+                <Icon icon="mdi:store-edit-outline" height={24} width={24} />
+                <Text title="Edit Shop" className="text-sm font-semibold" />
+              </Button>
+              {/* </Link> */}
             </div>
           </Card>
         ))}

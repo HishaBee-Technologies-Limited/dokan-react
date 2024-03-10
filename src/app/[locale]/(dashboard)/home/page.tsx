@@ -1,14 +1,15 @@
-'use client'
-import React from 'react'
-import { PageSubTitle, PageTitle, Text } from '@/components/common/text'
+"use client";
+import React from "react";
+import { PageSubTitle, PageTitle, Text } from "@/components/common/text";
+import { useShopId } from "@/stores/useShopId";
 
 const HomePage = () => {
-    return (
-        <div className=''>
-            <PageTitle title='Dashboard' />
+  const shopId = useShopId((state) => state.shopId);
+  return (
+    <div className="">
+      <PageTitle title="Dashboard" />
+    </div>
+  );
+};
 
-        </div>
-    )
-}
-
-export default HomePage
+export default HomePage;
