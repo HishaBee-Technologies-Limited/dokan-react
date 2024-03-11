@@ -40,7 +40,7 @@ const Image = ({
                     {...props}
                     src={onErrorSrc || src}
                     alt={'Image' || alt}
-                    onLoadingComplete={() => !props.debug && setLoading(false)}
+                    onLoad={() => !props.debug && setLoading(false)}
                     onError={handleOnError}
                 />
             ) : (
