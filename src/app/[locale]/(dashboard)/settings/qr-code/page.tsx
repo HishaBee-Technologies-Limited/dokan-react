@@ -22,15 +22,17 @@ const QRCode = () => {
                         </TabsList>
                     </div>
 
-                    {QRCodeTabs.map((tab) => (
-                        <TabsContent key={tab} value={tab} className='flex flex-col gap-space12 items-center mt-space8 text-center'>
-                            <div className="h-[30rem] w-[30rem] border border-color rounded-md background flex items-center justify-center">
-                                <Image src={`/images/empty_qr.svg`} height={236} width={236} alt='qr' />
-                            </div>
-                            <input id={tab} type="file" className='hidden' />
-                            <label htmlFor={tab} className='font-semibold text-action-100'>Add/Change QR Code</label>
-                        </TabsContent>
-                    ))}
+                    <div className="mt-space8">
+                        {QRCodeTabs.map((tab) => (
+                          <TabsContent key={tab} value={tab} className='flex flex-col gap-space12 items-center text-center'>
+                              <div className="h-[30rem] w-[30rem] border border-color rounded-md background flex items-center justify-center">
+                                  <Image src={`/images/empty_qr.svg`} height={236} width={236} alt='qr' />
+                              </div>
+                              <input id={tab} type="file" className='hidden' />
+                              <label htmlFor={tab} className='font-semibold text-action-100'>Add/Change QR Code</label>
+                          </TabsContent>
+                        ))}
+                    </div>
                 </Tabs>
 
 
