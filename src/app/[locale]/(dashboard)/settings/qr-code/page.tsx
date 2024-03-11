@@ -9,6 +9,24 @@ import { InitialQRCodeTabs } from "@/config/tabWithQRCode";
 
 const QRCode = () => {
     const [qRCodeData, setQRCodeData] = useState<QRCodeDataType[]>(InitialQRCodeTabs)
+
+    const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, files } = event.target;
+
+        if (files) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.result) {
+                    setQRCodeData(prevState => prevState.map(item =>
+                      item.tabNav === name ? { ...item, qr_code: reader.result as string } : item
+                    ));
+                }
+            };
+
+            reader.readAsDataURL(files[0]);
+        }
+    };
+
     return (
         <div className='space-y-space16'>
             <PageSubTitle title='Setup your payment QR Code' />
@@ -26,14 +44,15 @@ const QRCode = () => {
                     <div className="mt-space8">
                         {qRCodeData.map((tab) => (
                           <TabsContent key={tab.id} value={tab.tabNav} >
-                              <label htmlFor={tab.tabNav} className='flex flex-col gap-space12 items-center text-center'>
+                              <label htmlFor={tab.tabNav} className='flex flex-col gap-space12 items-center text-center h-[30rem] w-[30rem] mx-auto'>
                                   <div
-                                    className="h-[30rem] w-[30rem] border border-color rounded-md background flex items-center justify-center">
-                                      <Image src={!!tab.qr_code? tab.qr_code : '/images/empty_qr.svg'} height={236} width={236} alt={tab.tabNav} />
+                                    className="relative w-full h-full overflow-hidden p-10 border border-color rounded-md background flex items-center justify-center">
+                                      <Image className="rounded-md w-full h-full" wrapperClasses="w-full h-full" src={tab.qr_code ? tab.qr_code : "/images/empty_qr.svg"} height={236} width={236} alt={tab.tabNav} />
                                   </div>
 
-                                  <input id={tab.tabNav} type="file" className='hidden' />
-                                  <div className='font-semibold text-action-100'>Add/Change QR Code</div>
+                                  <input type="file" id={tab.tabNav} name={tab.tabNav} onChange={handleFile}
+                                         className="hidden" accept="image/png, image/jpeg" />
+                                  <div className="font-semibold text-action-100">Add/Change QR Code</div>
                               </label>
                           </TabsContent>
                         ))}
