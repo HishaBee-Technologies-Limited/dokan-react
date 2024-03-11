@@ -1,35 +1,40 @@
 'use client'
-import React from 'react'
+import React, { useState } from "react";
 import { PageSubTitle } from '@/components/common/text'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Image } from '@/components/common/Image'
 import { Button } from '@/components/ui/button'
-
-const QRCodeTabs = ["bkash", "nagad", "rocket", "other"]
+import { QRCodeDataType } from "@/types/TabWithQRCode";
+import { InitialQRCodeTabs } from "@/config/tabWithQRCode";
 
 const QRCode = () => {
+    const [qRCodeData, setQRCodeData] = useState<QRCodeDataType[]>(InitialQRCodeTabs)
     return (
         <div className='space-y-space16'>
             <PageSubTitle title='Setup your payment QR Code' />
 
             <div className="max-w-[53rem]">
-                <Tabs defaultValue={QRCodeTabs[0]}>
+                <Tabs defaultValue={qRCodeData[0].tabNav}>
                     <div className="border-b border-color py-space16 px-space16">
                         <TabsList className='grid grid-cols-4'>
-                            {QRCodeTabs.map((tab) => (
-                                <TabsTrigger key={tab} value={tab} className="uppercase">{tab}</TabsTrigger>
+                            {qRCodeData.map((tab) => (
+                                <TabsTrigger key={tab.id} value={tab.tabNav} className="uppercase">{tab.tabNav}</TabsTrigger>
                             ))}
                         </TabsList>
                     </div>
 
                     <div className="mt-space8">
-                        {QRCodeTabs.map((tab) => (
-                          <TabsContent key={tab} value={tab} className='flex flex-col gap-space12 items-center text-center'>
-                              <div className="h-[30rem] w-[30rem] border border-color rounded-md background flex items-center justify-center">
-                                  <Image src={`/images/empty_qr.svg`} height={236} width={236} alt='qr' />
-                              </div>
-                              <input id={tab} type="file" className='hidden' />
-                              <label htmlFor={tab} className='font-semibold text-action-100'>Add/Change QR Code</label>
+                        {qRCodeData.map((tab) => (
+                          <TabsContent key={tab.id} value={tab.tabNav} >
+                              <label htmlFor={tab.tabNav} className='flex flex-col gap-space12 items-center text-center'>
+                                  <div
+                                    className="h-[30rem] w-[30rem] border border-color rounded-md background flex items-center justify-center">
+                                      <Image src={!!tab.qr_code? tab.qr_code : '/images/empty_qr.svg'} height={236} width={236} alt={tab.tabNav} />
+                                  </div>
+
+                                  <input id={tab.tabNav} type="file" className='hidden' />
+                                  <div className='font-semibold text-action-100'>Add/Change QR Code</div>
+                              </label>
                           </TabsContent>
                         ))}
                     </div>
