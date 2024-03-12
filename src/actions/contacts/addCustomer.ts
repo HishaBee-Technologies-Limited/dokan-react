@@ -1,9 +1,9 @@
 "use server";
 
 import { authApi } from "@/lib/api";
-import { IPartyRequest } from "@/types/contact/partyRequest";
+import { IUserRequest } from "@/types/contact/partyRequest";
 
-export const addCustomer = async (payload: IPartyRequest) => {
+export const addCustomer = async (payload: IUserRequest) => {
     const {
         name,
         mobile,
@@ -21,7 +21,7 @@ export const addCustomer = async (payload: IPartyRequest) => {
             return {
                 success: true,
                 status: data?.code,
-                data: data as IPartyRequest,
+                data: data as IUserRequest,
             };
         }
         if (!res.ok) {

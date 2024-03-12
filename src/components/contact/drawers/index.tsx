@@ -4,8 +4,8 @@ import React from 'react'
 import { ContactEnum } from '@/enum/contact'
 import { Drawer } from '@/components/common/Drawer'
 import { useContactStore } from '@/stores/useContactStore'
-import EditParty from '@/components/contact/drawers/EditParty'
-import AddNewParty from '@/components/contact/drawers/AddNewParty'
+import EditUser from '@/components/contact/drawers/EditUser'
+import AddNewUser from '@/components/contact/drawers/AddNewUser'
 import AddNewMember from '@/components/contact/drawers/AddNewMember'
 
 const ContactDrawers = () => {
@@ -16,9 +16,9 @@ const ContactDrawers = () => {
         if (ContactEnum.ADD_NEW_MEMBER === activeDrawer) {
             return <AddNewMember />
         } else if (ContactEnum.ADD_CUSTOMER === activeDrawer || ContactEnum.ADD_SUPPLIER === activeDrawer || ContactEnum.ADD_EMPLOYEE === activeDrawer) {
-            return <AddNewParty />
+            return <AddNewUser />
         } else if (ContactEnum.EDIT_CUSTOMER === activeDrawer || ContactEnum.EDIT_SUPPLIER === activeDrawer || ContactEnum.EDIT_EMPLOYEE === activeDrawer) {
-            return <EditParty />
+            return <EditUser />
         }
     }
 

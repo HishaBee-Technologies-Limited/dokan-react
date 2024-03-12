@@ -1,9 +1,9 @@
 "use server";
 
 import { authApi } from "@/lib/api";
-import { IPartyRequest } from "@/types/contact/partyRequest";
+import { IUserRequest } from "@/types/contact/partyRequest";
 
-export const editEmployee = async (payload: IPartyRequest) => {
+export const editEmployee = async (payload: IUserRequest) => {
     const {
         id,
         name,
@@ -23,7 +23,7 @@ export const editEmployee = async (payload: IPartyRequest) => {
             return {
                 success: true,
                 status: data?.code,
-                data: data as IPartyRequest,
+                data: data as IUserRequest,
             };
         }
         if (!res.ok) {

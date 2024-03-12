@@ -1,7 +1,7 @@
 "use server";
 
 import { authApi } from "@/lib/api";
-import { IPartyResponse } from "@/types/contact/partyResponse";
+import { IUserResponse } from "@/types/contact/partyResponse";
 
 export const getAllEmployee = async (shopId: number) => {
     try {
@@ -12,7 +12,7 @@ export const getAllEmployee = async (shopId: number) => {
             return {
                 success: true,
                 status: data?.code,
-                data: data as IPartyResponse[],
+                data: data as IUserResponse[],
             };
         }
         if (!res.ok) {

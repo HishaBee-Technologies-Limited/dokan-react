@@ -1,23 +1,18 @@
 'use client'
+import React, { useEffect } from "react";
 import Card from '@/components/common/Card'
 import { Input } from '@/components/ui/input'
 import CustomTab from '@/components/common/Tab'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
-import React, { useEffect, useState } from "react";
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { usePathname, useRouter } from "next/navigation";
 import { useContactStore } from '@/stores/useContactStore'
 import FallBackImage from '@/components/common/FallBackImage'
 import WrapperOddList from '@/components/common/WrapperOddList'
-import CardWithSideIndicator from '@/components/common/CardWithSideIndicator'
-
-import { useShopId } from "@/stores/useShopId";
-import { usePathname, useRouter } from "next/navigation";
-import { IPartyResponse } from "@/types/contact/partyResponse";
-import { getAllCustomer } from "@/actions/contacts/getAllCustomer";
-import { getAllSupplier } from "@/actions/contacts/getAllSupplier";
-import { getAllEmployee } from "@/actions/contacts/getAllEmployee";
+import { IUserResponse } from "@/types/contact/partyResponse";
 import { useCreateQueryString } from "@/hooks/useCreateQueryString";
+import CardWithSideIndicator from '@/components/common/CardWithSideIndicator'
 
 const tabData = [
     {
@@ -34,52 +29,19 @@ const tabData = [
     },
 ]
 
-export const LeftSection = () => {
+export const LeftSection = ({ data }: { data: IUserResponse[] | undefined }) => {
     const router = useRouter();
     const pathname = usePathname();
-    const { getQueryString, setQueryString, removeQueryParam } = useCreateQueryString()
+    const { getQueryString, setQueryString } = useCreateQueryString()
 
     const activeTab = getQueryString('tab') ?? '';
-    const activeParty = getQueryString('active_party') ?? '';
+    const activeUser = getQueryString('active_user') ?? '';
 
-    const shopId = useShopId((state) => state.shopId);
-    const [error, setError] = useState<string | null>(null);
-    const [party, setParty] = useState<IPartyResponse[]>([]);
     const { setContactDrawerState } = useContactStore((state) => state);
 
     useEffect(() => {
-        // removeQueryParam('active_party')
-
         router.push(`${pathname}?${setQueryString('tab', activeTab ? activeTab : 'Customer')}`)
-
-        if (!shopId) return;
-
-        const getParty = async () => {
-            if (activeTab === 'Customer') {
-                const customers = await getAllCustomer(shopId);
-                if (customers?.success) {
-                    setParty(customers?.data as IPartyResponse[]);
-                } else {
-                    setError(customers?.error as string);
-                }
-            } else if (activeTab === 'Supplier') {
-                const suppliers = await getAllSupplier(shopId);
-                if (suppliers?.success) {
-                    setParty(suppliers?.data as IPartyResponse[]);
-                } else {
-                    setError(suppliers?.error as string);
-                }
-            } else if (activeTab === 'Employee') {
-                const employees = await getAllEmployee(shopId);
-                if (employees?.success) {
-                    setParty(employees?.data as IPartyResponse[]);
-                } else {
-                    setError(employees?.error as string);
-                }
-            }
-        };
-        getParty();
-    }, [shopId, activeTab]);
+    }, [activeTab]);
 
 
     return (
@@ -100,11 +62,11 @@ export const LeftSection = () => {
 
             <ScrollArea className="h-[calc(100%-20.6rem)] px-space16">
                 <WrapperOddList>
-                    {party.map((item, index) => (
+                    {data?.map((item, index) => (
                         <CardWithSideIndicator
                             key={item.id}
-                            active={item.id.toString() === activeParty}
-                            onClick={() => router.push(`${pathname}?${setQueryString('active_party', item.id)}`)}
+                            active={item.id.toString() === activeUser}
+                            onClick={() => router.push(`${pathname}?${setQueryString('active_user', item.id)}`)}
                         >
                             <div className="flex items-center gap-space8">
                                 <FallBackImage src={item.image_src ?? ''} fallback={item.name.charAt(0)} />

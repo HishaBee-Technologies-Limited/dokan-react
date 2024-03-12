@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
@@ -15,32 +15,36 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { addCustomer } from '@/actions/contacts/addCustomer'
 import { useShopId } from '@/stores/useShopId'
 import { contactSchema } from '@/schemas/contacts'
 import { filesUpload } from '@/actions/upload'
 import { useCreateQueryString } from '@/hooks/useCreateQueryString'
-import { addSupplier } from '@/actions/contacts/addSupplier'
-import { addEmployee } from '@/actions/contacts/addEmployee'
+import { editCustomer } from '@/actions/contacts/editCustomer'
+import { editSupplier } from '@/actions/contacts/editSupplier'
+import { editEmployee } from '@/actions/contacts/editEmployee'
+import { useRouter } from 'next/navigation'
 
 
-const AddNewParty = () => {
+const EditUser = () => {
+    const router = useRouter()
     const { getQueryString } = useCreateQueryString()
 
     const activeTab = getQueryString('tab') ?? '';
-    const shopId = useShopId((state) => state.shopId);
+    const userID = getQueryString('active_user') ?? '';
 
+    const shopId = useShopId((state) => state.shopId);
+    const { party } = useContactStore((state) => state)
     const closeDrawer = useContactStore((state) => state.setContactDrawerState)
 
 
     const form = useForm<z.infer<typeof contactSchema>>({
         resolver: zodResolver(contactSchema),
         defaultValues: {
-            name: "",
-            number: '',
-            address: '',
-            email: '',
-            salary: undefined
+            name: party?.name as string,
+            number: party?.mobile as string,
+            address: party?.address as string,
+            email: party?.email as string,
+            salary: party?.salary as string
         },
     })
 
@@ -52,37 +56,50 @@ const AddNewParty = () => {
             email: data.email as string,
             address: data.address as string,
             shop_id: shopId,
+            id: userID
         }
 
-        const createNewParty = () => {
+        const updateParty = () => {
             if (activeTab === 'Customer') {
-                return addCustomer(payload)
+                return editCustomer(payload)
             } else if (activeTab === 'Supplier') {
-                return addSupplier(payload)
+                return editSupplier(payload)
             } else if (activeTab === 'Employee') {
-                return addEmployee({ ...payload, salary: data.salary })
+                return editEmployee({ ...payload, salary: Number(data.salary) })
             }
         }
 
-        const addNewParty = async () => {
-            const response = await createNewParty()
+        const updatedParty = async () => {
+            const response = await updateParty()
             if (response?.success) {
+                router.refresh()
                 closeDrawer({ open: false })
-                console.log("response true")
-
+                console.log("response true", response)
             } else {
                 console.log("error", response?.error)
             }
             console.log("response", response)
         }
 
-        addNewParty()
+        updatedParty()
     }
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         // filesUpload()
         console.log(e.target.files)
     }
+
+
+    // useEffect(() => {
+    //     form.setValue('name', party?.name as string)
+    //     form.setValue('number', party?.mobile as string)
+    //     form.setValue('address', party?.address as string)
+    //     form.setValue('email', party?.email as string)
+    //     if (activeTab === 'Employee') {
+    //         form.setValue('salary', party?.salary)
+    //     }
+
+    // }, [activeTab])
 
 
 
@@ -108,9 +125,9 @@ const AddNewParty = () => {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Customer Name <span className="text-error-100">*</span> </FormLabel>
+                            <FormLabel>{activeTab} Name <span className="text-error-100">*</span> </FormLabel>
                             <FormControl>
-                                <Input placeholder="Customer Name" {...field} />
+                                <Input placeholder={`${activeTab} Name`} {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -181,4 +198,4 @@ const AddNewParty = () => {
     )
 }
 
-export default AddNewParty
+export default EditUser

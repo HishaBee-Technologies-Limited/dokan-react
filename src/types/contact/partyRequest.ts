@@ -1,4 +1,4 @@
-export type IPartyRequest = {
+export type IUserRequest = {
     id?: string | null;
     shop_id: number | null;
     user_id?: number;

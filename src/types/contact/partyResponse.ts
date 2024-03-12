@@ -1,4 +1,4 @@
-export interface IPartyResponse {
+export interface IUserResponse {
     id: number;
     user_id: number;
     shop_id: number;

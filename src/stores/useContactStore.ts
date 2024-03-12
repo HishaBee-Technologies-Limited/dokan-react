@@ -2,7 +2,7 @@
 import { create } from 'zustand'
 import { ContactEnum } from '@/enum/contact';
 import { immer } from 'zustand/middleware/immer'
-import { IPartyResponse } from '@/types/contact/partyResponse';
+import { IUserResponse } from '@/types/contact/partyResponse';
 
 type ContactState = {
     activeTab: string;
@@ -11,7 +11,7 @@ type ContactState = {
         open: boolean;
         header?: string;
     };
-    party: IPartyResponse | undefined;
+    party: IUserResponse | undefined;
 }
 
 type ContactActions = {
@@ -21,7 +21,7 @@ type ContactActions = {
         open: boolean;
         header?: string | undefined;
     }) => void;
-    setParty: (party: IPartyResponse) => void;
+    setParty: (party: IUserResponse) => void;
 }
 
 export const useContactStore = create<ContactState & ContactActions>()((set) => ({
