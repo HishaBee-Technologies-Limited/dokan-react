@@ -9,14 +9,13 @@ import { PageSubTitle, Text } from "@/components/common/text";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getAllShops } from "@/actions/shop/getAllShops";
 import { IShopResponse } from "@/types/shop";
-import { useShopId } from "@/stores/useShopId";
+import { setCookie } from "cookies-next";
 
 const SwitchShopPage = () => {
   const router = useRouter();
   const [selectShop, setSelectShop] = useState<number | null>(null);
   const [shops, setShops] = useState<IShopResponse[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const saveShopId = useShopId((state) => state.saveShopId);
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -41,7 +40,7 @@ const SwitchShopPage = () => {
 
   const handleContinue = () => {
     console.log(selectShop);
-    saveShopId(selectShop);
+    setCookie("shopId", selectShop);
     router.push("/contact");
   };
 

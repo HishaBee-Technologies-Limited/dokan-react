@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface ShopIdState {
   shopId: number | null;
@@ -15,6 +15,7 @@ export const useShopId = create<ShopIdState & ShopIdActions>()(
     }),
     {
       name: "shop-id",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
