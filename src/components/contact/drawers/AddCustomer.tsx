@@ -15,23 +15,22 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { addCustomer } from '@/actions/contacts/addCustomer'
+import { useShopId } from '@/stores/useShopId'
+import { contactSchema } from '@/schemas/contacts'
+import { filesUpload } from '@/actions/upload'
+import { useCreateQueryString } from '@/hooks/useCreateQueryString'
 
-const formSchema = z.object({
-    name: z.string().min(2, {
-        message: "Name must be at least 2 characters.",
-    }),
-    number: z.string().max(11).min(11, {
-        message: "Number must be 11 characters.",
-    }),
-    address: z.string(),
-    email: z.string(),
-})
 
 const AddCustomer = () => {
+    const { getQueryString } = useCreateQueryString()
+    const shopId = useShopId((state) => state.shopId);
+
     const closeDrawer = useContactStore((state) => state.setContactDrawerState)
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+
+    const form = useForm<z.infer<typeof contactSchema>>({
+        resolver: zodResolver(contactSchema),
         defaultValues: {
             name: "",
             number: '',
@@ -40,10 +39,36 @@ const AddCustomer = () => {
         },
     })
 
-    function onSubmit(data: z.infer<typeof formSchema>) {
-        // closeDrawer({ open: false })
-        console.log("data------------", data)
+    function onSubmit(data: z.infer<typeof contactSchema>) {
+
+        const payload = {
+            name: data.name,
+            mobile: data.number,
+            email: data.email as string,
+            address: data.address as string,
+            shop_id: shopId,
+        }
+
+        const addNewCustomer = async () => {
+            const response = await addCustomer(payload)
+            if (response?.success) {
+                closeDrawer({ open: false })
+
+            } else {
+                console.log("error", response?.error)
+            }
+            console.log("response", response)
+        }
+
+        addNewCustomer()
     }
+
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // filesUpload()
+        console.log(e.target.files)
+    }
+
+
 
     return (
         <Form {...form}>
@@ -51,7 +76,11 @@ const AddCustomer = () => {
 
                 <div className="flex flex-col items-center justify-center gap-space16 py-space8">
                     <label className="space-y-space12 cursor-pointer">
-                        <input type="file" className="hidden" />
+                        <input
+                            type="file"
+                            className="hidden"
+                            onChange={(e) => handleFileUpload(e)}
+                        />
                         <Image src={`/images/add_user.svg`} alt='' height={100} width={100} />
 
                         <p className="text-blue-600 font-medium text-center">Add Photo</p>
