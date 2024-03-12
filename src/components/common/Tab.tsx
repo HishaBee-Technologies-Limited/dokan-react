@@ -21,7 +21,6 @@ const CustomTab = ({
     className,
     itemClasses,
     handleChange,
-    disabled = false,
 }: IProps) => {
 
     return (
@@ -29,9 +28,7 @@ const CustomTab = ({
             {data.map((item, index) => (
                 <li
                     key={index}
-                    onClick={() => {
-                        if (!disabled) handleChange(item);
-                    }}
+                    onClick={() => handleChange(item)}
                     className={`${active === item.value
                         ? 'after:h-[0.3rem] after:w-full'
                         : 'after:h-0 after:w-0 cursor-pointer'

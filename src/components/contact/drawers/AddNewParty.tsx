@@ -15,13 +15,23 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { addCustomer } from '@/actions/contacts/addCustomer'
 import { useShopId } from '@/stores/useShopId'
 import { contactSchema } from '@/schemas/contacts'
+import { filesUpload } from '@/actions/upload'
+import { useCreateQueryString } from '@/hooks/useCreateQueryString'
+import { addSupplier } from '@/actions/contacts/addSupplier'
 import { addEmployee } from '@/actions/contacts/addEmployee'
 
-const AddEmployee = () => {
+
+const AddNewParty = () => {
+    const { getQueryString } = useCreateQueryString()
+
+    const activeTab = getQueryString('tab') ?? '';
     const shopId = useShopId((state) => state.shopId);
+
     const closeDrawer = useContactStore((state) => state.setContactDrawerState)
+
 
     const form = useForm<z.infer<typeof contactSchema>>({
         resolver: zodResolver(contactSchema),
@@ -42,11 +52,20 @@ const AddEmployee = () => {
             email: data.email as string,
             address: data.address as string,
             shop_id: shopId,
-            salary: data.salary as number
         }
 
-        const addNewEmployee = async () => {
-            const response = await addEmployee(payload)
+        const createNewParty = () => {
+            if (activeTab === 'Customer') {
+                return addCustomer(payload)
+            } else if (activeTab === 'Supplier') {
+                return addSupplier(payload)
+            } else if (activeTab === 'Employee') {
+                return addEmployee({ ...payload, salary: data.salary })
+            }
+        }
+
+        const addNewParty = async () => {
+            const response = await createNewParty()
             if (response?.success) {
                 closeDrawer({ open: false })
                 console.log("response true")
@@ -57,8 +76,14 @@ const AddEmployee = () => {
             console.log("response", response)
         }
 
-        addNewEmployee()
+        addNewParty()
     }
+
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // filesUpload()
+        console.log(e.target.files)
+    }
+
 
 
     return (
@@ -67,7 +92,11 @@ const AddEmployee = () => {
 
                 <div className="flex flex-col items-center justify-center gap-space16 py-space8">
                     <label className="space-y-space12 cursor-pointer">
-                        <input type="file" className="hidden" />
+                        <input
+                            type="file"
+                            className="hidden"
+                            onChange={(e) => handleFileUpload(e)}
+                        />
                         <Image src={`/images/add_user.svg`} alt='' height={100} width={100} />
 
                         <p className="text-blue-600 font-medium text-center">Add Photo</p>
@@ -79,9 +108,9 @@ const AddEmployee = () => {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Employee Name <span className="text-error-100">*</span> </FormLabel>
+                            <FormLabel>Customer Name <span className="text-error-100">*</span> </FormLabel>
                             <FormControl>
-                                <Input placeholder="Employee Name" {...field} />
+                                <Input placeholder="Customer Name" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -126,19 +155,23 @@ const AddEmployee = () => {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="salary"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Salary (Monthly) </FormLabel>
-                            <FormControl>
-                                <Input placeholder="Salary (Monthly)" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+
+                {activeTab === 'Employee' &&
+                    <FormField
+                        control={form.control}
+                        name="salary"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Salary (Monthly) </FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Salary (Monthly)" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                }
+
 
                 <DrawerFooter>
                     <Button type="submit" className='w-full'>Save</Button>
@@ -148,4 +181,4 @@ const AddEmployee = () => {
     )
 }
 
-export default AddEmployee
+export default AddNewParty
