@@ -42,6 +42,8 @@ const GiveNumber = () => {
         router.push("/auth/pin");
       } else if (response?.data?.code === 206) {
         router.push("/auth/signup");
+      } else if (response?.data?.code === 208) {
+        router.push("/auth/pin");
       } else {
         router.push("/auth/error");
       }
