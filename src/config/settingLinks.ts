@@ -5,7 +5,7 @@ export const settingLinks = [
     },
     {
         title: 'Personal QR Code',
-        link: '/settings/qr-code'
+        link: '/settings/qr-code?activeTab=bkash'
     },
     {
         title: 'Switch Shop',

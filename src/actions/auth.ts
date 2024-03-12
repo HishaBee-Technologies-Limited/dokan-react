@@ -1,6 +1,6 @@
 "use server";
 import { AuthError } from "next-auth";
-import { signIn } from "../auth";
+import { signIn } from "@/auth";
 import { api } from "@/lib/api";
 import { z } from "zod";
 import { RegisterSchema } from "@/schemas/auth";

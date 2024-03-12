@@ -6,9 +6,18 @@ import { Image } from '@/components/common/Image'
 import { Button } from '@/components/ui/button'
 import { QRCodeDataType } from "@/types/TabWithQRCode";
 import { InitialQRCodeTabs } from "@/config/tabWithQRCode";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const QRCode = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const [qRCodeData, setQRCodeData] = useState<QRCodeDataType[]>(InitialQRCodeTabs)
+
+    const handleTab = (tab: QRCodeDataType['tabNav']) => {
+        const currentParams = new URLSearchParams(searchParams.toString());
+        currentParams.set('activeTab', tab);
+        router.replace(`?${currentParams.toString()}`, { scroll: false });
+    }
 
     const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, files } = event.target;
@@ -27,16 +36,27 @@ const QRCode = () => {
         }
     };
 
+    const handleSave = async () => {
+        console.log('saved')
+        // addQrCode({
+        //     type: 'BKASH',
+        //     shop_id: 1885,
+        //     image_src: 'xyz'
+        // }).then((response)=> {
+        //     console.log({response})
+        // })
+    }
+
     return (
         <div className='space-y-space16'>
             <PageSubTitle title='Setup your payment QR Code' />
 
             <div className="max-w-[53rem]">
-                <Tabs defaultValue={qRCodeData[0].tabNav}>
+                <Tabs defaultValue={searchParams.get('activeTab') ?? qRCodeData[0].tabNav}>
                     <div className="border-b border-color py-space16 px-space16">
                         <TabsList className='grid grid-cols-4'>
                             {qRCodeData.map((tab) => (
-                                <TabsTrigger key={tab.id} value={tab.tabNav} className="uppercase">{tab.tabNav}</TabsTrigger>
+                                <TabsTrigger key={tab.id} value={tab.tabNav} name={tab.tabNav} onClick={()=> handleTab(tab.tabNav)} className="uppercase">{tab.tabNav}</TabsTrigger>
                             ))}
                         </TabsList>
                     </div>
@@ -62,7 +82,7 @@ const QRCode = () => {
 
                 <div className="flex justify-end gap-space12 mt-space16">
                     <Button variant={'secondary'} className='!px-space40'>Cancel</Button>
-                    <Button className='!px-space40'>Save</Button>
+                    <Button onClick={handleSave} className='!px-space40'>Save</Button>
                 </div>
             </div>
         </div>
