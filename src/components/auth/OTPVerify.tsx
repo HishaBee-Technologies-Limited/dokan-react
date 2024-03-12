@@ -19,7 +19,7 @@ const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
   const [apiError, setApiError] = useState<string>("");
   const router = useRouter();
 
-  const handleOtpReset = async () => {
+  const sendOTP = async () => {
     resetCountdown();
 
     const res = await resendOTP({ mobile_number });
@@ -32,6 +32,9 @@ const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
     } else {
       setApiError(res?.error?.message);
     }
+  };
+  const handleOtpReset = async () => {
+    sendOTP();
   };
 
   useEffect(() => {
@@ -68,6 +71,10 @@ const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
       OTPVerification();
     }
   }, [otp]);
+
+  useEffect(() => {
+    sendOTP();
+  }, []);
 
   return (
     <div>
