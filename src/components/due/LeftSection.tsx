@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Card from '@/components/common/Card'
 import { Input } from '@/components/ui/input'
 import CustomTab from '@/components/common/Tab'
@@ -7,8 +7,11 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
 import { useDueStore } from '@/stores/useDueStore'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { usePathname, useRouter } from 'next/navigation'
 import FallBackImage from '@/components/common/FallBackImage'
+import { IUserResponse } from '@/types/contact/partyResponse'
 import WrapperOddList from '@/components/common/WrapperOddList'
+import { useCreateQueryString } from '@/hooks/useCreateQueryString'
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator'
 
 const tabData = [
@@ -26,21 +29,30 @@ const tabData = [
     },
 ]
 
-export const LeftSection = () => {
-    const activePageTab = useDueStore((state) => state.activePageTab)
-    const activeUserItem = useDueStore((state) => state.activeUserItem)
+export const LeftSection = ({ userList }: { userList: IUserResponse[] | undefined }) => {
     const handleDrawerOpen = useDueStore((state) => state.setDrawerState)
-    const setActivePageTab = useDueStore((state) => state.setActivePageTab)
-    const setActiveUserItem = useDueStore((state) => state.setActiveUserItem)
+
+    const router = useRouter();
+    const pathname = usePathname();
+    const { getQueryString, setQueryString } = useCreateQueryString()
+
+    const activeTab = getQueryString('tab') ?? '';
+    const activeUser = getQueryString('active_user') ?? '';
+
+    useEffect(() => {
+        router.push(`${pathname}?${setQueryString('tab', activeTab ? activeTab : 'Customer')}`)
+    }, [activeTab]);
 
     return (
         <Card className='h-full lg:w-4/12 flex flex-col gap-space16 lg:border-r border-color lg:rounded-tr-none'>
             <div className="space-y-space8 w-full">
                 <CustomTab
                     data={tabData}
-                    active={activePageTab}
-                    handleChange={(item) => setActivePageTab(item.value)}
+                    active={activeTab}
                     className='border-b w-full  px-space12 sm:px-space16 pt-space8'
+                    handleChange={(item) => {
+                        router.push(`${pathname}?${setQueryString('tab', item.value)}`)
+                    }}
                 />
 
                 <Card className="grid grid-cols-2  px-space12 sm:px-space16">
@@ -61,19 +73,19 @@ export const LeftSection = () => {
 
             <ScrollArea className="h-[calc(100%-20.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
                 <WrapperOddList>
-                    {Array(40).fill(0).map((_, index) => (
+                    {userList?.map((item, index) => (
                         <CardWithSideIndicator
                             key={index}
-                            active={index === activeUserItem}
-                            onClick={() => setActiveUserItem(index)}
+                            active={item.id.toString() === activeUser}
+                            onClick={() => router.push(`${pathname}?${setQueryString('active_user', item.id)}`)}
                         >
                             <div className="w-full flex items-center gap-space8">
-                                <FallBackImage src='' fallback='MM' />
+                                <FallBackImage src={item.image_src ?? ''} fallback={item.name.charAt(0)} />
 
                                 <div className="w-full flex items-center justify-between gap-space12">
                                     <article>
-                                        <Text title='নিজাম উদ্দিন' className='!text-md font-medium' />
-                                        <Text title='01542141414' variant='muted' />
+                                        <Text title={item.name} className='!text-md font-medium' />
+                                        <Text title={item.mobile} variant='muted' />
                                     </article>
 
                                     <article>
@@ -90,9 +102,9 @@ export const LeftSection = () => {
             <div className="p-space12 sm:p-space16 border-t border-primary-20 dark:border-primary-80">
                 <Button
                     className='w-full'
-                    onClick={() => handleDrawerOpen({ open: true, header: `Add ${activePageTab}` })}
+                    onClick={() => handleDrawerOpen({ open: true, header: `Add ${activeTab}` })}
                 >
-                    Add {activePageTab}
+                    Add {activeTab}
                 </Button>
             </div>
         </Card>

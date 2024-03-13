@@ -8,25 +8,30 @@ import { Text } from '@/components/common/text'
 import { useDueStore } from '@/stores/useDueStore'
 import { DueTable } from '@/components/due/DueTable'
 import FallBackImage from '@/components/common/FallBackImage'
-import { ScrollArea, ScrollBar } from '../ui/scroll-area'
+import { IUserResponse } from '@/types/contact/partyResponse'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { useCreateQueryString } from '@/hooks/useCreateQueryString'
 
-export const RightSection = () => {
-    const activePageTab = useDueStore((state) => state.activePageTab)
+export const RightSection = ({ userDetails }: { userDetails: IUserResponse | undefined }) => {
+    const { getQueryString } = useCreateQueryString()
+    const activeTab = getQueryString('tab') ?? '';
+
     const handleDialogOpen = useDueStore((state) => state.setDialogState)
     const handleDrawerOpen = useDueStore((state) => state.setDrawerState)
 
+
     const handleGivenClick = () => {
-        if (activePageTab === DueEnum.CUSTOMER) {
+        if (activeTab === DueEnum.CUSTOMER) {
             handleDialogOpen({ open: true, header: DueEnum.SELECT_DUE_TYPE })
-        } else if (activePageTab === DueEnum.SUPPLIER) {
+        } else if (activeTab === DueEnum.SUPPLIER) {
             handleDrawerOpen({ open: true, header: DueEnum.MONEY_GIVEN_ENTRY })
         }
     }
 
     const handleReceivedClick = () => {
-        if (activePageTab === DueEnum.CUSTOMER) {
+        if (activeTab === DueEnum.CUSTOMER) {
             handleDrawerOpen({ open: true, header: DueEnum.MONEY_GIVEN_ENTRY })
-        } else if (activePageTab === DueEnum.SUPPLIER) {
+        } else if (activeTab === DueEnum.SUPPLIER) {
             handleDialogOpen({ open: true, header: DueEnum.SELECT_DUE_TYPE })
         }
     }
@@ -36,10 +41,12 @@ export const RightSection = () => {
             <div className="px-space16 my-space8 border-b border-color">
                 <div className="flex gap-space16 items-center justify-between py-space8">
                     <div className="flex items-center gap-space8">
-                        <FallBackImage src='' fallback='MM' />
+                        <FallBackImage src={userDetails?.image_src ?? ''} fallback={userDetails?.name.charAt(0) ?? ''} />
                         <article>
-                            <Text title='নিজাম উদ্দিন' className='!text-lg font-medium' />
-                            <Text title='Customer  ।  01514252525' variant='muted' />
+                            <Text title={userDetails?.name} className='!text-lg font-medium' />
+                            <Text variant='muted'>
+                                {activeTab} | {userDetails?.mobile} {userDetails?.email && `| ${userDetails.email}`}
+                            </Text>
                         </article>
                     </div>
 
