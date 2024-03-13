@@ -42,7 +42,7 @@ const AddNewUser = () => {
             number: '',
             address: '',
             email: '',
-            salary: undefined
+            salary: ''
         },
     })
 
@@ -62,7 +62,7 @@ const AddNewUser = () => {
             } else if (activeTab === 'Supplier') {
                 return addSupplier(payload)
             } else if (activeTab === 'Employee') {
-                return addEmployee({ ...payload, salary: Number(data.salary) })
+                return addEmployee({ ...payload, salary: data?.salary })
             }
         }
 

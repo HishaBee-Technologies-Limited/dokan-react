@@ -30,7 +30,7 @@ const AddEmployee = () => {
             number: '',
             address: '',
             email: '',
-            salary: undefined
+            salary: ''
         },
     })
 
@@ -42,7 +42,7 @@ const AddEmployee = () => {
             email: data.email as string,
             address: data.address as string,
             shop_id: shopId,
-            salary: data.salary as number
+            salary: data.salary
         }
 
         const addNewEmployee = async () => {
