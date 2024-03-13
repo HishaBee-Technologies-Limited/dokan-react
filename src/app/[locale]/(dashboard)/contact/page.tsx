@@ -1,45 +1,50 @@
-"use client";
 import React from "react";
+import { cookies } from "next/headers";
 import Card from "@/components/common/Card";
-import { ContactEnum } from "@/enum/contact";
-import { Button } from "@/components/ui/button";
-import { AddIcon } from "@/components/common/icons";
-import { PageTitle } from "@/components/common/text";
 import ContactDrawers from "@/components/contact/drawers";
-import { useContactStore } from "@/stores/useContactStore";
+import ContactHeader from "@/components/contact/ContactHeader";
 import { LeftSection } from "@/components/contact/LeftSection";
 import { RightSection } from "@/components/contact/RightSection";
-import { useShopId } from "@/stores/useShopId";
+import { getAllCustomer } from "@/actions/contacts/getAllCustomer";
+import { getAllSupplier } from "@/actions/contacts/getAllSupplier";
+import { getAllEmployee } from "@/actions/contacts/getAllEmployee";
+import { getSingleCustomer } from "@/actions/contacts/getSingleCustomer";
+import { getSingleEmployee } from "@/actions/contacts/getSingleEmployee";
+import { getSingleSupplier } from "@/actions/contacts/getSingleSupplier";
 
-const ContactPage = () => {
-  const handleDrawerOpen = useContactStore(
-    (state) => state.setContactDrawerState
-  );
-  const shopId = useShopId((state) => state.shopId);
-  console.log(shopId);
+type IContactProps = {
+  params: { locale: string };
+  searchParams: any;
+};
+
+const ContactPage = async ({
+  params: { locale },
+  searchParams,
+}: IContactProps) => {
+
+  const shopId = cookies().get('shopId')?.value
+
+  const tab = searchParams.tab?.split('-')[0];
+  const userID = searchParams.active_user?.split('-')[0];
+
+  const customers = await getAllCustomer(Number(shopId));
+  const suppliers = await getAllSupplier(Number(shopId));
+  const employees = await getAllEmployee(Number(shopId));
+  const customerDetails = await getSingleCustomer(Number(userID));
+  const supplierDetails = await getSingleSupplier(Number(userID));
+  const employeeDetails = await getSingleEmployee(Number(userID));
+
+  const userList = tab === 'Customer' ? customers?.data : tab === 'Supplier' ? suppliers?.data : employees?.data
+  const userDetails = tab === 'Customer' ? customerDetails?.data : tab === 'Supplier' ? supplierDetails?.data : employeeDetails?.data
 
   return (
     <>
       <div className="space-y-space16 h-full">
-        <div className="flex flex-wrap gap-space16 justify-between items-center">
-          <PageTitle title="Contact List" />
-
-          <Button
-            onClick={() =>
-              handleDrawerOpen({
-                open: true,
-                header: ContactEnum.ADD_NEW_MEMBER,
-              })
-            }
-          >
-            <AddIcon />
-            <span>Add new member</span>
-          </Button>
-        </div>
+        <ContactHeader />
 
         <Card className="space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]">
-          <LeftSection />
-          <RightSection />
+          <LeftSection userList={userList} />
+          <RightSection userDetails={userDetails} />
         </Card>
       </div>
 

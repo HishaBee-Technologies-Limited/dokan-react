@@ -20,10 +20,16 @@ import { useShopId } from '@/stores/useShopId'
 import { contactSchema } from '@/schemas/contacts'
 import { filesUpload } from '@/actions/upload'
 import { useCreateQueryString } from '@/hooks/useCreateQueryString'
+import { addSupplier } from '@/actions/contacts/addSupplier'
+import { addEmployee } from '@/actions/contacts/addEmployee'
+import { useRouter } from 'next/navigation'
 
 
-const AddCustomer = () => {
+const AddNewUser = () => {
+    const router = useRouter()
     const { getQueryString } = useCreateQueryString()
+
+    const activeTab = getQueryString('tab') ?? '';
     const shopId = useShopId((state) => state.shopId);
 
     const closeDrawer = useContactStore((state) => state.setContactDrawerState)
@@ -36,6 +42,7 @@ const AddCustomer = () => {
             number: '',
             address: '',
             email: '',
+            salary: ''
         },
     })
 
@@ -49,18 +56,29 @@ const AddCustomer = () => {
             shop_id: shopId,
         }
 
-        const addNewCustomer = async () => {
-            const response = await addCustomer(payload)
+        const createNewUser = () => {
+            if (activeTab === 'Customer') {
+                return addCustomer(payload)
+            } else if (activeTab === 'Supplier') {
+                return addSupplier(payload)
+            } else if (activeTab === 'Employee') {
+                return addEmployee({ ...payload, salary: data?.salary })
+            }
+        }
+
+        const addNewUser = async () => {
+            const response = await createNewUser()
             if (response?.success) {
                 closeDrawer({ open: false })
-
+                console.log("response true")
+                router.refresh()
             } else {
                 console.log("error", response?.error)
             }
             console.log("response", response)
         }
 
-        addNewCustomer()
+        addNewUser()
     }
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,9 +110,9 @@ const AddCustomer = () => {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Customer Name <span className="text-error-100">*</span> </FormLabel>
+                            <FormLabel>{activeTab} Name <span className="text-error-100">*</span> </FormLabel>
                             <FormControl>
-                                <Input placeholder="Customer Name" {...field} />
+                                <Input placeholder={`${activeTab} Name`} {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -140,6 +158,23 @@ const AddCustomer = () => {
                     )}
                 />
 
+                {activeTab === 'Employee' &&
+                    <FormField
+                        control={form.control}
+                        name="salary"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Salary (Monthly) </FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Salary (Monthly)" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                }
+
+
                 <DrawerFooter>
                     <Button type="submit" className='w-full'>Save</Button>
                 </DrawerFooter>
@@ -148,4 +183,4 @@ const AddCustomer = () => {
     )
 }
 
-export default AddCustomer
+export default AddNewUser
