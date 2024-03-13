@@ -49,12 +49,9 @@ const AddEmployee = () => {
             const response = await addEmployee(payload)
             if (response?.success) {
                 closeDrawer({ open: false })
-                console.log("response true")
-
             } else {
                 console.log("error", response?.error)
             }
-            console.log("response", response)
         }
 
         addNewEmployee()

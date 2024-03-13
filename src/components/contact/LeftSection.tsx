@@ -29,7 +29,7 @@ const tabData = [
     },
 ]
 
-export const LeftSection = ({ data }: { data: IUserResponse[] | undefined }) => {
+export const LeftSection = ({ userList }: { userList: IUserResponse[] | undefined }) => {
     const router = useRouter();
     const pathname = usePathname();
     const { getQueryString, setQueryString } = useCreateQueryString()
@@ -62,7 +62,7 @@ export const LeftSection = ({ data }: { data: IUserResponse[] | undefined }) => 
 
             <ScrollArea className="h-[calc(100%-20.6rem)] px-space16">
                 <WrapperOddList>
-                    {data?.map((item, index) => (
+                    {userList?.map((item, index) => (
                         <CardWithSideIndicator
                             key={item.id}
                             active={item.id.toString() === activeUser}

@@ -34,8 +34,8 @@ const ContactPage = async ({
   const supplierDetails = await getSingleSupplier(Number(userID));
   const employeeDetails = await getSingleEmployee(Number(userID));
 
-  const data = tab === 'Customer' ? customers?.data : tab === 'Supplier' ? suppliers?.data : employees?.data
-  const details = tab === 'Customer' ? customerDetails?.data : tab === 'Supplier' ? supplierDetails?.data : employeeDetails?.data
+  const userList = tab === 'Customer' ? customers?.data : tab === 'Supplier' ? suppliers?.data : employees?.data
+  const userDetails = tab === 'Customer' ? customerDetails?.data : tab === 'Supplier' ? supplierDetails?.data : employeeDetails?.data
 
   return (
     <>
@@ -43,8 +43,8 @@ const ContactPage = async ({
         <ContactHeader />
 
         <Card className="space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]">
-          <LeftSection data={data} />
-          <RightSection data={details} />
+          <LeftSection userList={userList} />
+          <RightSection userDetails={userDetails} />
         </Card>
       </div>
 
