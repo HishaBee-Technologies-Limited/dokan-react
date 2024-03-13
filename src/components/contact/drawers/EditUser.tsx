@@ -42,9 +42,9 @@ const EditUser = () => {
         defaultValues: {
             name: party?.name as string,
             number: party?.mobile as string,
-            address: party?.address as string,
-            email: party?.email as string,
-            salary: party?.salary as string
+            address: party?.address ?? '',
+            email: party?.email ?? '',
+            salary: party?.salary ?? ''
         },
     })
 
@@ -65,7 +65,7 @@ const EditUser = () => {
             } else if (activeTab === 'Supplier') {
                 return editSupplier(payload)
             } else if (activeTab === 'Employee') {
-                return editEmployee({ ...payload, salary: Number(data.salary) })
+                return editEmployee({ ...payload, salary: data.salary })
             }
         }
 
@@ -78,7 +78,6 @@ const EditUser = () => {
             } else {
                 console.log("error", response?.error)
             }
-            console.log("response", response)
         }
 
         updatedParty()
@@ -88,20 +87,6 @@ const EditUser = () => {
         // filesUpload()
         console.log(e.target.files)
     }
-
-
-    // useEffect(() => {
-    //     form.setValue('name', party?.name as string)
-    //     form.setValue('number', party?.mobile as string)
-    //     form.setValue('address', party?.address as string)
-    //     form.setValue('email', party?.email as string)
-    //     if (activeTab === 'Employee') {
-    //         form.setValue('salary', party?.salary)
-    //     }
-
-    // }, [activeTab])
-
-
 
     return (
         <Form {...form}>

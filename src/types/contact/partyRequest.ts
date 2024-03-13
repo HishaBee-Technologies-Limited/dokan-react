@@ -7,5 +7,5 @@ export type IUserRequest = {
     email: string | null;
     address: string | null;
     image_src?: string | null;
-    salary?: number | null;
+    salary?: string | null;
 }
