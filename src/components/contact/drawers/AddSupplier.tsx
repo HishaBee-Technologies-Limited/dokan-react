@@ -15,23 +15,16 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-
-const formSchema = z.object({
-    name: z.string().min(2, {
-        message: "Name must be at least 2 characters.",
-    }),
-    number: z.string().max(11).min(11, {
-        message: "Number must be 11 characters.",
-    }),
-    address: z.string(),
-    email: z.string(),
-})
+import { contactSchema } from '@/schemas/contacts'
+import { addSupplier } from '@/actions/contacts/addSupplier'
+import { useShopId } from '@/stores/useShopId'
 
 const AddSupplier = () => {
+    const shopId = useShopId((state) => state.shopId);
     const closeDrawer = useContactStore((state) => state.setContactDrawerState)
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof contactSchema>>({
+        resolver: zodResolver(contactSchema),
         defaultValues: {
             name: "",
             number: '',
@@ -40,9 +33,29 @@ const AddSupplier = () => {
         },
     })
 
-    function onSubmit(data: z.infer<typeof formSchema>) {
-        // closeDrawer({ open: false })
-        console.log("data------------", data)
+    function onSubmit(data: z.infer<typeof contactSchema>) {
+
+        const payload = {
+            name: data.name,
+            mobile: data.number,
+            email: data.email as string,
+            address: data.address as string,
+            shop_id: shopId,
+        }
+
+        const addNewSupplier = async () => {
+            const response = await addSupplier(payload)
+            if (response?.success) {
+                closeDrawer({ open: false })
+                console.log("response true")
+
+            } else {
+                console.log("error", response?.error)
+            }
+            console.log("response", response)
+        }
+
+        addNewSupplier()
     }
 
     return (

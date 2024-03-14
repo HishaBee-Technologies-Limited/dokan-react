@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
@@ -15,27 +15,36 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { addCustomer } from '@/actions/contacts/addCustomer'
 import { useShopId } from '@/stores/useShopId'
 import { contactSchema } from '@/schemas/contacts'
 import { filesUpload } from '@/actions/upload'
 import { useCreateQueryString } from '@/hooks/useCreateQueryString'
+import { editCustomer } from '@/actions/contacts/editCustomer'
+import { editSupplier } from '@/actions/contacts/editSupplier'
+import { editEmployee } from '@/actions/contacts/editEmployee'
+import { useRouter } from 'next/navigation'
 
 
-const AddCustomer = () => {
+const EditUser = () => {
+    const router = useRouter()
     const { getQueryString } = useCreateQueryString()
-    const shopId = useShopId((state) => state.shopId);
 
+    const activeTab = getQueryString('tab') ?? '';
+    const userID = getQueryString('active_user') ?? '';
+
+    const shopId = useShopId((state) => state.shopId);
+    const { party } = useContactStore((state) => state)
     const closeDrawer = useContactStore((state) => state.setContactDrawerState)
 
 
     const form = useForm<z.infer<typeof contactSchema>>({
         resolver: zodResolver(contactSchema),
         defaultValues: {
-            name: "",
-            number: '',
-            address: '',
-            email: '',
+            name: party?.name as string,
+            number: party?.mobile as string,
+            address: party?.address ?? '',
+            email: party?.email ?? '',
+            salary: party?.salary ?? ''
         },
     })
 
@@ -47,28 +56,37 @@ const AddCustomer = () => {
             email: data.email as string,
             address: data.address as string,
             shop_id: shopId,
+            id: userID
         }
 
-        const addNewCustomer = async () => {
-            const response = await addCustomer(payload)
-            if (response?.success) {
-                closeDrawer({ open: false })
+        const updateParty = () => {
+            if (activeTab === 'Customer') {
+                return editCustomer(payload)
+            } else if (activeTab === 'Supplier') {
+                return editSupplier(payload)
+            } else if (activeTab === 'Employee') {
+                return editEmployee({ ...payload, salary: data.salary })
+            }
+        }
 
+        const updatedParty = async () => {
+            const response = await updateParty()
+            if (response?.success) {
+                router.refresh()
+                closeDrawer({ open: false })
+                console.log("response true", response)
             } else {
                 console.log("error", response?.error)
             }
-            console.log("response", response)
         }
 
-        addNewCustomer()
+        updatedParty()
     }
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         // filesUpload()
         console.log(e.target.files)
     }
-
-
 
     return (
         <Form {...form}>
@@ -92,9 +110,9 @@ const AddCustomer = () => {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Customer Name <span className="text-error-100">*</span> </FormLabel>
+                            <FormLabel>{activeTab} Name <span className="text-error-100">*</span> </FormLabel>
                             <FormControl>
-                                <Input placeholder="Customer Name" {...field} />
+                                <Input placeholder={`${activeTab} Name`} {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -140,6 +158,23 @@ const AddCustomer = () => {
                     )}
                 />
 
+                {activeTab === 'Employee' &&
+                    <FormField
+                        control={form.control}
+                        name="salary"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Salary (Monthly) </FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Salary (Monthly)" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                }
+
+
                 <DrawerFooter>
                     <Button type="submit" className='w-full'>Save</Button>
                 </DrawerFooter>
@@ -148,4 +183,4 @@ const AddCustomer = () => {
     )
 }
 
-export default AddCustomer
+export default EditUser
