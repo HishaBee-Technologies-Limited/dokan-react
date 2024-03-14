@@ -1,14 +1,17 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from "react";
 import Card from '@/components/common/Card'
 import { Input } from '@/components/ui/input'
 import CustomTab from '@/components/common/Tab'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { usePathname, useRouter } from "next/navigation";
 import { useContactStore } from '@/stores/useContactStore'
 import FallBackImage from '@/components/common/FallBackImage'
 import WrapperOddList from '@/components/common/WrapperOddList'
+import { IUserResponse } from "@/types/contact/partyResponse";
+import { useCreateQueryString } from "@/hooks/useCreateQueryString";
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator'
 
 const tabData = [
@@ -26,8 +29,20 @@ const tabData = [
     },
 ]
 
-export const LeftSection = () => {
-    const { activeTab, activeUserItem, setActiveTab, setActiveUserItem, setContactDrawerState } = useContactStore((state) => state)
+export const LeftSection = ({ userList }: { userList: IUserResponse[] | undefined }) => {
+    const router = useRouter();
+    const pathname = usePathname();
+    const { getQueryString, setQueryString } = useCreateQueryString()
+
+    const activeTab = getQueryString('tab') ?? '';
+    const activeUser = getQueryString('active_user') ?? '';
+
+    const { setContactDrawerState } = useContactStore((state) => state);
+
+    useEffect(() => {
+        router.push(`${pathname}?${setQueryString('tab', activeTab ? activeTab : 'Customer')}`)
+    }, [activeTab]);
+
 
     return (
         <Card className='h-full lg:w-4/12 flex flex-col gap-space16'>
@@ -35,8 +50,10 @@ export const LeftSection = () => {
                 <CustomTab
                     data={tabData}
                     active={activeTab}
-                    handleChange={(item) => setActiveTab(item.value)}
                     className='border-b w-full px-space16 pt-space8'
+                    handleChange={(item) => {
+                        router.push(`${pathname}?${setQueryString('tab', item.value)}`)
+                    }}
                 />
                 <div className="px-space16">
                     <Input placeholder="Search contact" />
@@ -45,17 +62,17 @@ export const LeftSection = () => {
 
             <ScrollArea className="h-[calc(100%-20.6rem)] px-space16">
                 <WrapperOddList>
-                    {Array(40).fill(0).map((_, index) => (
+                    {userList?.map((item, index) => (
                         <CardWithSideIndicator
-                            key={index}
-                            active={index === activeUserItem}
-                            onClick={() => setActiveUserItem(index)}
+                            key={item.id}
+                            active={item.id.toString() === activeUser}
+                            onClick={() => router.push(`${pathname}?${setQueryString('active_user', item.id)}`)}
                         >
                             <div className="flex items-center gap-space8">
-                                <FallBackImage src='' fallback='MM' />
+                                <FallBackImage src={item.image_src ?? ''} fallback={item.name.charAt(0)} />
                                 <article>
-                                    <Text title='নিজাম উদ্দিন' className='!text-md font-medium' />
-                                    <Text title='01542141414' variant='muted' />
+                                    <Text title={item.name} className='!text-md font-medium' />
+                                    <Text title={item.mobile} variant='muted' />
                                 </article>
                             </div>
                         </CardWithSideIndicator>
@@ -68,7 +85,7 @@ export const LeftSection = () => {
                     className='w-full'
                     onClick={() => setContactDrawerState({ open: true, header: `Add ${activeTab}` })}
                 >
-                    Add {activeTab}
+                    Add {activeTab ? activeTab : 'Customer'}
                 </Button>
             </div>
         </Card>
