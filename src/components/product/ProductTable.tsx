@@ -15,14 +15,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useCreateQueryString } from "@/hooks/useCreateQueryString";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { IProduct } from "@/types/product";
 
 export const ProductTable = ({ productData }: { productData: any }) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
+  const { setQueryString } = useCreateQueryString();
+  const pathname = usePathname();
+  const router = useRouter();
 
   console.log(productData);
 
-  const handleRowClick = () => {
+  const handleRowClick = (product: IProduct) => {
     handleDialogOpen({ open: true, header: ProductEnum.PRODUCT_DETAILS });
+    router.push(`${pathname}?${setQueryString("product", product?.unique_id)}`);
   };
 
   return (
@@ -39,10 +47,10 @@ export const ProductTable = ({ productData }: { productData: any }) => {
         </TableHeader>
 
         <TableBody>
-          {productData?.data.data?.map((product: any, i: number) => (
-            <TableRow key={product.id} onClick={() => handleRowClick()}>
+          {productData?.data.data?.map((product: IProduct) => (
+            <TableRow key={product.id} onClick={() => handleRowClick(product)}>
               <TableCell>
-                <div className="flex items-center gap-space8">
+                <div className="gap-space8 flex items-center">
                   <Image
                     src={product.image_url}
                     alt=""
