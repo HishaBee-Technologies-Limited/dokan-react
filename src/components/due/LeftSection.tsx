@@ -84,8 +84,8 @@ export const LeftSection = ({ userList }: { userList: IUserResponse[] | undefine
 
                                 <div className="w-full flex items-center justify-between gap-space12">
                                     <article>
-                                        <Text title={item.name} className='!text-md font-medium' />
-                                        <Text title={item.mobile} variant='muted' />
+                                        <Text title={item?.name} className='!text-md font-medium' />
+                                        <Text title={item?.mobile} variant='muted' />
                                     </article>
 
                                     <article>
