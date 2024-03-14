@@ -9,7 +9,7 @@ export const getShopsProducts = async (page?: number, category?: boolean) => {
   try {
     const shopId = cookies().get("shopId")?.value;
     const res = await authApi.get(
-      `/product/all?shop_id=${1885}&page=${pageCount}&category=${CATEGORY}`,
+      `/product/all?shop_id=${shopId}&page=${pageCount}&category=${CATEGORY}`
     );
     const data = await res.json();
 

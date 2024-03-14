@@ -5,21 +5,35 @@ import { ProductTable } from "@/components/product/ProductTable";
 import { ProductHeader } from "@/components/product/ProductHeader";
 import { ProductQueries } from "@/components/product/ProductQueries";
 import { getShopsProducts } from "@/actions/product/getShopProducts";
+import { getSingleProduct } from "@/actions/product/getSingleProduct";
+import { IProduct } from "@/types/product";
 
-const ProductPage = async () => {
-  const res = await getShopsProducts();
+type IPageProps = {
+  params: { locale: string };
+  searchParams: any;
+};
+const ProductPage = async ({
+  params: { locale },
+  searchParams,
+}: IPageProps) => {
+  const allProductsResponse = await getShopsProducts();
+  const productId = searchParams.product;
+  let singleProduct;
 
-  console.log(res);
+  if (productId) {
+    singleProduct = await getSingleProduct(productId);
+  }
+
   return (
     <>
       <div className="space-y-space16">
         <ProductHeader />
         {/* <ProductQueries /> */}
-        <ProductTable productData={res?.data} />
+        <ProductTable productData={allProductsResponse?.data} />
       </div>
 
       <ProductDrawers />
-      <ProductDialogs />
+      <ProductDialogs product={singleProduct?.data.data as IProduct} />
     </>
   );
 };
