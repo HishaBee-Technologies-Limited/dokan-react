@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 const HomePage = async () => {
   // const shopId = useShopId((state) => state.shopId);
   const cookie = cookies();
-  console.log(cookie.getAll());
+  console.log(cookie.get("shopId"));
   return (
     <div className="">
       <PageTitle title="Dashboard" />

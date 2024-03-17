@@ -5,7 +5,7 @@ import { Text } from "@/components/common/text";
 import { Image } from "@/components/common/Image";
 import { useProductStore } from "@/stores/useProductStore";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { TableDropdownAction } from "@/components/product/TableDropdownAction";
+import { TableDropdownAction } from "./TableDropdownAction.1";
 import {
   Table,
   TableBody,
@@ -48,11 +48,11 @@ export const ProductTable = ({ productData }: { productData: any }) => {
 
         <TableBody>
           {productData?.data.data?.map((product: IProduct) => (
-            <TableRow key={product.id} onClick={() => handleRowClick(product)}>
+            <TableRow key={product?.id} onClick={() => handleRowClick(product)}>
               <TableCell>
                 <div className="gap-space8 flex items-center">
                   <Image
-                    src={product.image_url}
+                    src={product?.image_url}
                     alt=""
                     height={40}
                     width={40}
@@ -61,11 +61,11 @@ export const ProductTable = ({ productData }: { productData: any }) => {
                   <Text title={product.name} className="text-sm" />
                 </div>
               </TableCell>
-              <TableCell>{product.stock}</TableCell>
-              <TableCell>{product.selling_price}</TableCell>
-              <TableCell>{product.sub_category.name}</TableCell>
+              <TableCell>{product?.stock}</TableCell>
+              <TableCell>{product?.selling_price}</TableCell>
+              <TableCell>{product?.sub_category?.name}</TableCell>
               <TableCell className={`text-right`}>
-                <TableDropdownAction data={product} />
+                <TableDropdownAction product={product} />
               </TableCell>
             </TableRow>
           ))}
