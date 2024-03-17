@@ -16,7 +16,7 @@ export const getShopsProducts = async (page?: number, category?: boolean) => {
     if (res.ok) {
       return {
         success: true,
-        status: data?.code,
+        status: data?.status_code,
         data: data,
       };
     }

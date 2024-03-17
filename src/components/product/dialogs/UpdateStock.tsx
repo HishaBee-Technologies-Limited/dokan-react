@@ -47,7 +47,6 @@ export const UpdateStock = ({
       name: product.name,
       selling_price: product.sellingPrice,
       ...(product.version && { version: product.version + 1 }),
-      ...(product.createdAt && { created_at: product.createdAt }),
       updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
       created_at: product?.createdAt,
     });

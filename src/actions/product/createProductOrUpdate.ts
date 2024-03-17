@@ -79,7 +79,7 @@ export const createProductOrUpdate = async ({
     if (res.ok) {
       return {
         success: true,
-        status: data?.code,
+        status: data?.status_code,
         data: data,
       };
     }
