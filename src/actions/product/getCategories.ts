@@ -3,13 +3,10 @@
 import { authApi } from "@/lib/api";
 import { cookies } from "next/headers";
 
-export const getSingleProduct = async (uniqueId: string) => {
+export const getCategories = async (userId: string) => {
   try {
-    const shopId = cookies().get("shopId")?.value;
-
-    console.log(uniqueId);
-
-    const res = await authApi.get(`/product/${uniqueId}?shop_id=${1885}`);
+    const res = await authApi.get(`/product/categories?user_id=${userId}
+    `);
     const data = await res.json();
 
     if (res.ok) {
