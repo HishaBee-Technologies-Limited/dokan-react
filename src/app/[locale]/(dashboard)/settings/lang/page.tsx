@@ -5,7 +5,8 @@ import { useRouter, usePathname } from "@/navigation";
 import { Button } from '@/components/ui/button'
 import { PageSubTitle, Text } from '@/components/common/text'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ILanguageType, languages } from "@/config/locales";
+import { languages, LOCALES_TYPE } from "@/config/locales";
+import { ILanguageType } from "@/types/LocalesType";
 
 const LanguagePage = () => {
     const router = useRouter();
@@ -26,7 +27,7 @@ const LanguagePage = () => {
                         <Text title='Printer Language show' variant='secondary' className='font-medium text-sm' />
                     </article>
 
-                    <Select onValueChange={handleLanguageChange} defaultValue={languages[0].value}>
+                    <Select onValueChange={handleLanguageChange} defaultValue={LOCALES_TYPE.EN}>
                         <SelectTrigger className="min-w-[14rem] max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400" >
                             <SelectValue placeholder="Select" />
                         </SelectTrigger>

@@ -1,7 +1,14 @@
-import { locales } from "@/navigation";
+import { ILanguageType } from "@/types/LocalesType";
 
-export type ILanguageType = { id: number, label: string, value: typeof locales[0] | typeof locales[1] }
+export const LOCALES_TYPE = {
+    EN: 'en',
+    BN: 'bn'
+} as const;
+
+export const locales = [LOCALES_TYPE.EN, LOCALES_TYPE.BN] as const;
+
 export const languages: ILanguageType[] = [
-    { id: 1, label: 'English', value: locales[0] },
-    { id: 2, label: 'Bangla', value: locales[1] }
+    { id: 1, label: 'English', value: LOCALES_TYPE.EN },
+    { id: 2, label: 'Bangla', value: LOCALES_TYPE.BN }
 ]
+
