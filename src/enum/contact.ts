@@ -11,3 +11,9 @@ export enum ContactEnum {
     EDIT_EMPLOYEE = 'Edit Employee',
     ADD_NEW_MEMBER = 'Add new member',
 }
+
+export enum ContactType {
+    CUSTOMER = 'Customer',
+    SUPPLIER = 'Supplier',
+    EMPLOYEE = 'Employee',
+}

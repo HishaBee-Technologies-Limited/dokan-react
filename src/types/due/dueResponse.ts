@@ -2,7 +2,7 @@
 
 
 
-export type IDueListResponse = {
+export interface IDueListResponse {
     id: number;
     user_id: number;
     shop_id: number;
@@ -20,7 +20,7 @@ export type IDueListResponse = {
     alert_notification: boolean;
 }
 
-export type IDueItemsResponse = {
+export interface IDueItemsResponse {
     id: number;
     image: string | null;
     transaction_type: string | null;
