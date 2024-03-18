@@ -6,17 +6,19 @@ import { Image } from '@/components/common/Image'
 import { Button } from '@/components/ui/button'
 import { QRCodeDataType } from "@/types/TabWithQRCode";
 import { InitialQRCodeTabs } from "@/config/tabWithQRCode";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useCreateQueryString } from "@/hooks/useCreateQueryString";
 
 const QRCode = () => {
     const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
+    const { setQueryString } = useCreateQueryString()
     const [qRCodeData, setQRCodeData] = useState<QRCodeDataType[]>(InitialQRCodeTabs)
 
     const handleTab = (tab: QRCodeDataType['tabNav']) => {
-        const currentParams = new URLSearchParams(searchParams.toString());
-        currentParams.set('activeTab', tab);
-        router.replace(`?${currentParams.toString()}`, { scroll: false });
+        setQueryString('activeTab', tab);
+        router.replace(`${pathname}?activeTab=${tab}`, { scroll: false})
     }
 
     const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
