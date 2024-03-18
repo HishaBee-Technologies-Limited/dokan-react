@@ -45,7 +45,7 @@ export function DatePickerWithRange() {
             id="date"
             variant="secondary"
             className={cn(
-              "w-[300px] justify-start text-left font-normal",
+              "justify-start text-left font-normal", //@TODO: remove fix-width; "w-[300px]",
               !date && "text-muted-foreground"
             )}
           >
