@@ -32,7 +32,6 @@ const Overview = async () => {
   const cookieStore = cookies();
   const shopId = cookieStore.get('shopId')
   const shopInfo = await getShopInfo(shopId?.value as string)
-  console.log(shopInfo?.data.shop)
 
   return (
     <div className='w-full h-full flex flex-col gap-space16'>

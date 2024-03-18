@@ -5,10 +5,6 @@ import { getOrders } from "@/actions/shop/orders";
 
 
 const OrderHeader = async () => {
-
-
-    const orders = await getOrders({ activeTab: 'new'})
-    console.log({orders})
     return (
         <div className='flex justify-between items-center gap-space12 flex-wrap'>
             <PageSubTitle title="Order List" />

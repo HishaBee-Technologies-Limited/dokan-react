@@ -1,10 +1,5 @@
-'use client'
 import React from 'react'
-import { useRouter } from 'next/navigation'
-import { Text } from '@/components/common/text'
-import { useOnlineShopStore } from '@/stores/useOnlineShopStore'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { orderTypeWiseStyled } from '@/components/online-shop/orders/orderTypeWiseStyled'
 import {
     Table,
     TableBody,
@@ -14,6 +9,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { getOrders } from "@/actions/shop/orders";
+import { OrdersTableHeader } from "@/config/orders";
 
 const tableData = [
     { id: '113', type: 'new' },
@@ -22,45 +19,40 @@ const tableData = [
     { id: '116', type: 'cancelled' },
 ]
 
-export const OrderTable = () => {
-    const router = useRouter()
+export const OrderTable = async () => {
+    // const orderFilterTab = useOnlineShopStore(state => state.orderFilterTab)
+    // const filteringData = orderFilterTab === 'all' ? tableData : tableData.filter(item => item.type === orderFilterTab)
 
-    const orderFilterTab = useOnlineShopStore(state => state.orderFilterTab)
-
-    const filteringData = orderFilterTab === 'all' ? tableData : tableData.filter(item => item.type === orderFilterTab)
+    const orders = await getOrders({ activeTab: 'new'})
+    console.log(orders?.data)
 
     return (
         <ScrollArea className="pb-space8">
             <Table wrapperClass='rounded-md border border-color'>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Order Id</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Contact</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Items</TableHead>
-                        <TableHead>type</TableHead>
+                        { OrdersTableHeader.map((item)=> <TableHead key={item.id}>{item.label}</TableHead>)}
                     </TableRow>
                 </TableHeader>
 
                 <TableBody>
-                    {filteringData.map((row) => (
-                        <TableRow key={row.id} onClick={() => router.push(`/online-shop/orders/${row.type}`)}>
-                            <TableCell>{'#12546549'}</TableCell>
-                            <TableCell>{'23 May 2023'}</TableCell>
-                            <TableCell>{'Md. Ariful Islam'}</TableCell>
-                            <TableCell>{'৳200'}</TableCell>
-                            <TableCell>{'2 Items'}</TableCell>
-                            <TableCell>
-                                <Text
-                                    title={orderTypeWiseStyled(row.type).title()}
-                                    variant={orderTypeWiseStyled(row.type).textVariant()}
-                                    className={`text-xs font-medium rounded-md px-space8 py-space4 max-w-max 
-                                    ${orderTypeWiseStyled(row.type).textBackground()}`}
-                                />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {/*{filteringData.map((row) => (*/}
+                    {/*    <TableRow key={row.id}>*/}
+                    {/*        <TableCell>{'#12546549'}</TableCell>*/}
+                    {/*        <TableCell>{'23 May 2023'}</TableCell>*/}
+                    {/*        <TableCell>{'Md. Ariful Islam'}</TableCell>*/}
+                    {/*        <TableCell>{'৳200'}</TableCell>*/}
+                    {/*        <TableCell>{'2 Items'}</TableCell>*/}
+                    {/*        <TableCell>*/}
+                    {/*            <Text*/}
+                    {/*                title={orderTypeWiseStyled(row.type).title()}*/}
+                    {/*                variant={orderTypeWiseStyled(row.type).textVariant()}*/}
+                    {/*                className={`text-xs font-medium rounded-md px-space8 py-space4 max-w-max */}
+                    {/*                ${orderTypeWiseStyled(row.type).textBackground()}`}*/}
+                    {/*            />*/}
+                    {/*        </TableCell>*/}
+                    {/*    </TableRow>*/}
+                    {/*))}*/}
                 </TableBody>
 
                 <TableFooter>
