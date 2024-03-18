@@ -7,10 +7,9 @@ import { Link } from "@/navigation";
 
 type IShopActionsProps = {
   slug: string;
-  name: string;
 }
 
-const ShopActions = ({slug, name}: IShopActionsProps) => {
+const ShopActions = ({slug}: IShopActionsProps) => {
   const handleClipboard = () => {
     navigator.clipboard.writeText(slug)
   }
@@ -20,7 +19,7 @@ const ShopActions = ({slug, name}: IShopActionsProps) => {
         Copy shop Link
         <Icon icon="ic:baseline-content-copy" />
       </Button>
-      <Link href={`https://www.hishabee.market/shop/${name}`} target="_blank">
+      <Link href={`https://www.hishabee.market/shop/${slug}`} target="_blank">
         <Button variant={'transparent'} className='bg-primary-10 dark:bg-primary-80'>
           Visit online shop
           <Icon icon="ci:external-link" />

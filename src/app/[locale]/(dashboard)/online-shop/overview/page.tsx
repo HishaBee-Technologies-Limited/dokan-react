@@ -42,7 +42,7 @@ const Overview = async () => {
           <Text title={shopInfo?.data?.shop?.address ?? ''} className='text-sm' variant='secondary' />
         </article>
 
-        <ShopActions slug={shopInfo?.data?.shop?.slug ?? ''} name={shopInfo?.data?.shop?.name ?? ''}/>
+        <ShopActions slug={shopInfo?.data?.shop?.slug ?? ''} />
       </div>
 
 
