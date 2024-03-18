@@ -19,31 +19,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useCreateQueryString } from "@/hooks/useCreateQueryString";
-import { getSingleProduct } from "@/actions/product/getSingleProduct";
 import { IProduct } from "@/types/product";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { productProfitCalculation } from "@/lib/utils";
 
-export const ProductDetails = () => {
+export const ProductDetails = ({ product }: { product: IProduct }) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
   const handleDrawerOpen = useProductStore((state) => state.setDrawerState);
-  const [product, setProduct] = useState<IProduct>();
-
-  const { getQueryString } = useCreateQueryString();
-  const productUniqueId = getQueryString("product") as string;
-
-  useEffect(() => {
-    const singleProduct = async () => {
-      const product = await getSingleProduct(productUniqueId);
-      if (product?.success) {
-        setProduct(product.data.data as IProduct);
-      }
-      console.log(product);
-    };
-    singleProduct();
-  }, []);
 
   return (
     <div>
@@ -134,7 +117,13 @@ export const ProductDetails = () => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={`৳ ${String(productProfitCalculation(product?.cost_price, product?.selling_price, product?.stock))}`}
+                title={`৳ ${String(
+                  productProfitCalculation(
+                    product?.cost_price,
+                    product?.selling_price,
+                    product?.stock
+                  )
+                )}`}
                 className="font-semibold"
               />
             </article>

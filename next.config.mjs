@@ -9,6 +9,15 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "hishabee.fra1.digitaloceanspaces.com",
+        pathname: "/business-manager/**",
+      },
+    ],
+  },
 };
 
 export default withNextIntl(nextConfig);
