@@ -14,10 +14,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { usePathname, useRouter } from "next/navigation";
+import { useCreateQueryString } from "@/hooks/useCreateQueryString";
 
 export function DatePickerWithRange() {
   const router = useRouter();
   const pathname = usePathname();
+  const { setQueryString } = useCreateQueryString()
 
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
@@ -28,7 +30,10 @@ export function DatePickerWithRange() {
     setDate({ from: dates?.from, to: dates?.to})
     const start_date = format(new Date(dates?.from ?? new Date()), 'yyyy-MM-dd')
     const end_date = format(new Date(dates?.to ?? new Date()), 'yyyy-MM-dd')
-    
+
+    setQueryString('start_date', start_date)
+    setQueryString('end_date', end_date)
+
     router.replace(`${pathname}?start_date=${start_date}&end_date=${end_date}`, { scroll: false})
   }
 
