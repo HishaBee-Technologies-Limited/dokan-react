@@ -1,7 +1,6 @@
 import React from 'react'
 import { PageSubTitle } from '@/components/common/text'
 import { DatePickerWithRange } from "@/components/common/DatePickerWithRange";
-import { getOrders } from "@/actions/shop/orders";
 
 
 const OrderHeader = async () => {

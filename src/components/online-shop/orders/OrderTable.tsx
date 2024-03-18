@@ -11,20 +11,17 @@ import {
 } from "@/components/ui/table"
 import { getOrders } from "@/actions/shop/orders";
 import { OrdersTableHeader } from "@/config/orders";
+import { IDeliveryStatusType, IOrderItemType } from "@/types/orders";
+import { formatDate } from "@/lib/date";
+import { Text } from "@/components/common/text";
+import { orderTypeWiseStyled } from "@/components/online-shop/orders/orderTypeWiseStyled";
 
-const tableData = [
-    { id: '113', type: 'new' },
-    { id: '114', type: 'pending' },
-    { id: '1154', type: 'complete' },
-    { id: '116', type: 'cancelled' },
-]
+type IOrderTableType = {
+    activeTab: IDeliveryStatusType | undefined
+}
 
-export const OrderTable = async () => {
-    // const orderFilterTab = useOnlineShopStore(state => state.orderFilterTab)
-    // const filteringData = orderFilterTab === 'all' ? tableData : tableData.filter(item => item.type === orderFilterTab)
-
-    const orders = await getOrders({ activeTab: 'new'})
-    console.log(orders?.data)
+export const OrderTable = async ({activeTab}: IOrderTableType) => {
+    const orders = await getOrders({ activeTab: activeTab ? activeTab : 'new' })
 
     return (
         <ScrollArea className="pb-space8">
@@ -36,23 +33,23 @@ export const OrderTable = async () => {
                 </TableHeader>
 
                 <TableBody>
-                    {/*{filteringData.map((row) => (*/}
-                    {/*    <TableRow key={row.id}>*/}
-                    {/*        <TableCell>{'#12546549'}</TableCell>*/}
-                    {/*        <TableCell>{'23 May 2023'}</TableCell>*/}
-                    {/*        <TableCell>{'Md. Ariful Islam'}</TableCell>*/}
-                    {/*        <TableCell>{'৳200'}</TableCell>*/}
-                    {/*        <TableCell>{'2 Items'}</TableCell>*/}
-                    {/*        <TableCell>*/}
-                    {/*            <Text*/}
-                    {/*                title={orderTypeWiseStyled(row.type).title()}*/}
-                    {/*                variant={orderTypeWiseStyled(row.type).textVariant()}*/}
-                    {/*                className={`text-xs font-medium rounded-md px-space8 py-space4 max-w-max */}
-                    {/*                ${orderTypeWiseStyled(row.type).textBackground()}`}*/}
-                    {/*            />*/}
-                    {/*        </TableCell>*/}
-                    {/*    </TableRow>*/}
-                    {/*))}*/}
+                    { orders?.data?.map((item: IOrderItemType)=> (
+                      <TableRow key={item.id}>
+                          <TableCell>{item.code}</TableCell>
+                          <TableCell>{formatDate(item.created_at)}</TableCell>
+                          <TableCell>{JSON.parse(item.shipping_address)?.mobile_number ?? 'N/A'}</TableCell>
+                          <TableCell>৳{item.grand_total}</TableCell>
+                          <TableCell>{item.order_details?.length ?? 'N/A'}</TableCell>
+                          <TableCell>
+                              <Text
+                                title={orderTypeWiseStyled(item.order_details[0]?.delivery_status).title()}
+                                variant={orderTypeWiseStyled(item.order_details[0]?.delivery_status).textVariant()}
+                                className={`text-xs font-medium rounded-md px-space8 py-space4 max-w-max 
+                                    ${orderTypeWiseStyled(item.order_details[0]?.delivery_status).textBackground()}`}
+                              />
+                          </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
 
                 <TableFooter>
