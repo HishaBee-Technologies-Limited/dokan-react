@@ -7,18 +7,17 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/common/text'
 import { useDueStore } from '@/stores/useDueStore'
 import { DueTable } from '@/components/due/DueTable'
+import { IDueItemsResponse } from '@/types/due/dueResponse'
 import FallBackImage from '@/components/common/FallBackImage'
-import { IUserResponse } from '@/types/contact/partyResponse'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useCreateQueryString } from '@/hooks/useCreateQueryString'
 
-export const RightSection = ({ userDetails }: { userDetails: IUserResponse | undefined }) => {
+export const RightSection = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
     const { getQueryString } = useCreateQueryString()
     const activeTab = getQueryString('tab') ?? '';
 
     const handleDialogOpen = useDueStore((state) => state.setDialogState)
     const handleDrawerOpen = useDueStore((state) => state.setDrawerState)
-
 
     const handleGivenClick = () => {
         if (activeTab === DueEnum.CUSTOMER) {
@@ -41,18 +40,18 @@ export const RightSection = ({ userDetails }: { userDetails: IUserResponse | und
             <div className="px-space16 my-space8 border-b border-color">
                 <div className="flex gap-space16 items-center justify-between py-space8">
                     <div className="flex items-center gap-space8">
-                        <FallBackImage src={userDetails?.image_src ?? ''} fallback={userDetails?.name.charAt(0) ?? ''} />
+                        <FallBackImage src={''} fallback={dueItems[0].due.contact_name.charAt(0)} />
                         <article>
-                            <Text title={userDetails?.name} className='!text-lg font-medium' />
+                            <Text title={dueItems[0].due.contact_name} className='!text-lg font-medium' />
                             <Text variant='muted'>
-                                {activeTab} | {userDetails?.mobile} {userDetails?.email && `| ${userDetails.email}`}
+                                {dueItems[0].due.contact_type} | {dueItems[0].due.contact_mobile}
                             </Text>
                         </article>
                     </div>
 
                     <article className=" text-center">
                         <Text title='Balance' variant='secondary' className='text-sm font-medium' />
-                        <Text title=' ৳ 10,000' className='font-semibold text-lg' variant='success' />
+                        <Text title={`৳ ${dueItems[0].due.due_amount}`} className='font-semibold text-lg' variant='success' />
                     </article>
                 </div>
 
@@ -71,9 +70,8 @@ export const RightSection = ({ userDetails }: { userDetails: IUserResponse | und
             </div>
 
             <ScrollArea className="h-[calc(100%-9rem)] pb-space16 px-space16">
-                <DueTable />
-                <DueTable />
-                <DueTable />
+                <DueTable dueItems={dueItems} />
+
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
 

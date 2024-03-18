@@ -34,6 +34,7 @@ const ContactPage = async ({
   const supplierDetails = await getSingleSupplier(Number(userID));
   const employeeDetails = await getSingleEmployee(Number(userID));
 
+
   const userList = tab === 'Customer' ? customers?.data : tab === 'Supplier' ? suppliers?.data : employees?.data
   const userDetails = tab === 'Customer' ? customerDetails?.data : tab === 'Supplier' ? supplierDetails?.data : employeeDetails?.data
 

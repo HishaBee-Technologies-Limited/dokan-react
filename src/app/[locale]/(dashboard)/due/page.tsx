@@ -1,17 +1,13 @@
 import React from 'react'
-import { cookies } from "next/headers";
 import Card from '@/components/common/Card'
 import DueDialogs from '@/components/due/dialogs'
 import DueDrawers from '@/components/due/drawers'
 import DueHeader from '@/components/due/DueHeader'
+import { getAllDue } from '@/actions/due/getAllDue';
 import { LeftSection } from '@/components/due/LeftSection'
-import { RightSection } from '@/components/due/RightSection'
-import { getAllCustomer } from "@/actions/contacts/getAllCustomer";
-import { getAllSupplier } from "@/actions/contacts/getAllSupplier";
-import { getAllEmployee } from "@/actions/contacts/getAllEmployee";
-import { getSingleCustomer } from "@/actions/contacts/getSingleCustomer";
-import { getSingleEmployee } from "@/actions/contacts/getSingleEmployee";
-import { getSingleSupplier } from "@/actions/contacts/getSingleSupplier";
+import { IDueItemsResponse } from '@/types/due/dueResponse';
+import { RightSection } from '@/components/due/RightSection';
+import { getDueItemByUniqueID } from '@/actions/due/getDueItemByUniqueID';
 
 type IContactProps = {
     params: { locale: string };
@@ -23,20 +19,11 @@ const DuePage = async ({
     searchParams,
 }: IContactProps) => {
 
-    const shopId = cookies().get('shopId')?.value
-
-    const tab = searchParams.tab?.split('-')[0];
     const userID = searchParams.active_user?.split('-')[0];
 
-    const customers = await getAllCustomer(Number(shopId));
-    const suppliers = await getAllSupplier(Number(shopId));
-    const employees = await getAllEmployee(Number(shopId));
-    const customerDetails = await getSingleCustomer(Number(userID));
-    const supplierDetails = await getSingleSupplier(Number(userID));
-    const employeeDetails = await getSingleEmployee(Number(userID));
-
-    const userList = tab === 'Customer' ? customers?.data : tab === 'Supplier' ? suppliers?.data : employees?.data
-    const userDetails = tab === 'Customer' ? customerDetails?.data : tab === 'Supplier' ? supplierDetails?.data : employeeDetails?.data
+    const dueList = await getAllDue();
+    // const dueItems = await getDueItemByUniqueID(userID)
+    const dueItems = await getDueItemByUniqueID('364613f0-ab6d-11ec-9206-e78b660b78db1891648124609199')
 
     return (
         <>
@@ -44,8 +31,11 @@ const DuePage = async ({
                 <DueHeader />
 
                 <Card className='space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]'>
-                    <LeftSection userList={userList} />
-                    <RightSection userDetails={userDetails} />
+                    <LeftSection dueList={dueList?.data} totalValues={dueList?.metadata} />
+                    {dueItems?.data ?
+                        <RightSection dueItems={dueItems?.data as IDueItemsResponse[]} />
+                        : <></>
+                    }
                 </Card>
             </div>
 

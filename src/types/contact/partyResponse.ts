@@ -12,4 +12,7 @@ export interface IUserResponse {
     version: number;
     unique_id: string;
     salary?: string | undefined;
+    other_info?: null | string;
+    supplied_items?: string | null,
 }
+
