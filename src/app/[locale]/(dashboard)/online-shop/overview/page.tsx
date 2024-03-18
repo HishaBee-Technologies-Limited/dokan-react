@@ -11,19 +11,16 @@ const overviewOther = [
   {
     img: '/images/online_message.svg',
     title: 'Online Message',
-    value: '5',
     url: 'messages'
   },
   {
     img: '/images/order_list.svg',
     title: 'Order list',
-    value: '5',
     url: 'orders'
   },
   {
     img: '/images/products.svg',
     title: 'Products',
-    value: '5',
     url: 'product'
   },
 ]
