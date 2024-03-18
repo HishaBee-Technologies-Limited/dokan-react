@@ -1,7 +1,9 @@
 'use client'
 import React from 'react'
-import CustomTab from '@/components/common/Tab'
+import CustomTab, { ITabOption } from "@/components/common/Tab";
 import { useOnlineShopStore } from '@/stores/useOnlineShopStore'
+import { usePathname, useRouter } from "next/navigation";
+import { useCreateQueryString } from "@/hooks/useCreateQueryString";
 
 const filteringOption = [
     {
@@ -27,11 +29,21 @@ const filteringOption = [
 ]
 
 const FilteringTabs = () => {
+    const router = useRouter();
+    const pathname = usePathname();
+    const { setQueryString } = useCreateQueryString()
+
     const orderFilterTab = useOnlineShopStore(state => state.orderFilterTab)
     const setOrderFilterTab = useOnlineShopStore(state => state.setOrderFilterTab)
 
+    const handleTab = (tab: ITabOption) => {
+        setOrderFilterTab(tab.value)
+        setQueryString('activeTab', tab.value)
+        router.replace(`${pathname}?activeTab=${tab.value}`, { scroll: false})
+    }
+
     return (
-        <CustomTab data={filteringOption} active={orderFilterTab} handleChange={(tab) => setOrderFilterTab(tab.value)} />
+        <CustomTab data={filteringOption} active={orderFilterTab} handleChange={handleTab} />
     )
 }
 

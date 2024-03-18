@@ -9,6 +9,20 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  async redirects() {
+    return [
+      {
+        source: '/online-shop',
+        destination: '/online-shop/overview',
+        permanent: true,
+      },
+      {
+        source: '/en/online-shop',
+        destination: '/en/online-shop/overview',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
