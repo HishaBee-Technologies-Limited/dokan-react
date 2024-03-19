@@ -11,16 +11,16 @@ import {
 } from "@/components/ui/table"
 import { getOrders } from "@/actions/shop/orders";
 import { OrdersTableHeader } from "@/config/orders";
-import { IDeliveryStatusType, IOrderItemType } from "@/types/orders";
+import { DeliveryStatusDef, IOrderItemType } from "@/types/orders";
 import { formatDate } from "@/lib/date";
 import { Text } from "@/components/common/text";
 import { orderTypeWiseStyled } from "@/components/online-shop/orders/orderTypeWiseStyled";
 
-type IOrderTableType = {
-    activeTab: IDeliveryStatusType | undefined
+type OrderTablePropsDef = {
+    activeTab: DeliveryStatusDef | undefined
 }
 
-export const OrderTable = async ({activeTab}: IOrderTableType) => {
+export const OrderTable = async ({activeTab}: OrderTablePropsDef) => {
     const orders = await getOrders({ activeTab: activeTab ? activeTab : 'new' })
 
     return (
