@@ -44,8 +44,8 @@ const ContactPage = async ({
         <ContactHeader />
 
         <Card className="space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]">
-          {/*<LeftSection userList={userList} />*/}
-          {/*<RightSection userDetails={userDetails} />*/}
+          <LeftSection userList={userList} />
+          <RightSection userDetails={userDetails} />
         </Card>
       </div>
 
