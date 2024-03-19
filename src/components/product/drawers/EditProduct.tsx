@@ -1,5 +1,5 @@
 import { z } from "zod";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import Icon from "@/components/common/Icon";
 import Card from "@/components/common/Card";
@@ -55,7 +55,7 @@ export const EditProduct = ({
     },
   });
   const router = useRouter();
-
+  const [initialSubCategory, setInitialSubCategory] = useState("");
   const shopId = getCookie("shopId");
   const uuid = uuidv4();
 
@@ -130,6 +130,7 @@ export const EditProduct = ({
       form.setValue("discount_check", true),
       form.setValue("bulk_sell_check", true);
     form.setValue("category", String(category?.id));
+    setInitialSubCategory(String(product?.sub_category.id));
   }, [product, category]);
 
   return (
@@ -285,11 +286,7 @@ export const EditProduct = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category Name</FormLabel>
-                {console.log(field.value)}
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="">
                       <SelectValue placeholder="Category Name" />
@@ -321,8 +318,7 @@ export const EditProduct = ({
                 <FormLabel>Sub-Category Name</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={String(field.value)}
-                  disabled={!subCategory}
+                  value={field.value ? field.value : initialSubCategory}
                 >
                   <FormControl>
                     <SelectTrigger className="">
