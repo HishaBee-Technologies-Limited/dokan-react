@@ -25,8 +25,8 @@ export interface IDueItemsResponse {
     image: string | null;
     transaction_type: string | null;
     note: string | null;
-    due_left: number;
-    amount: number;
+    due_left: number;  //------------------->> due_left
+    amount: number;  //------------------->> amount
     created_at: string;
     updated_at: string;
     shop_id: number;
@@ -40,9 +40,9 @@ export interface IDueItemsResponse {
     contact_id: string | null;
     contact_type: 'CUSTOMER' | 'SUPPLIER';
     contact_unique_id: string | null;
-    pos_balance: number;
-    neg_balance: number;
-    signed_balance: string | null;
+    pos_balance: number; //------------------->> pos_balance
+    neg_balance: number;  //------------------->> neg_balance
+    signed_balance: string | null;  //------------------->> signed_balance
     platform: string;
     archived: string | null;
     contact_name: string;
