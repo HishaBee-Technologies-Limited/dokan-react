@@ -1,6 +1,6 @@
-import { IFilteringOptionType, IOrdersTableHeaderType } from "@/types/orders";
+import { FilteringOptionDef, OrdersTableHeaderDef } from "@/types/orders";
 
-export const OrdersTableHeader:IOrdersTableHeaderType [] = [
+export const OrdersTableHeader:OrdersTableHeaderDef [] = [
   { id: 1, label: 'Order Id'},
   { id: 2, label: 'Date'},
   { id: 3, label: 'Contact'},
@@ -23,7 +23,7 @@ export const DELIVERY_STATUS = {
   COMPLETE: 'complete',
 } as const;
 
-export const filteringOptions:IFilteringOptionType[] = [
+export const filteringOptions:FilteringOptionDef[] = [
   {
     label: 'New orders',
     value: DELIVERY_STATUS.NEW
