@@ -1,9 +1,10 @@
-import { DELIVERY_STATUS, ORDER_TYPE, PAYMENT_STATUS } from "@/config/orders";
+import { DELIVERY_STATUS, ORDER_STATUS, ORDER_TYPE, PAYMENT_STATUS } from "@/config/orders";
 export type OrdersTableHeaderDef = {id: number, label: string}
 export type OrderTypeDef = (typeof ORDER_TYPE)[keyof typeof ORDER_TYPE]
 export type PaymentStatusDef = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS]
 export type DeliveryStatusDef = (typeof DELIVERY_STATUS)[keyof typeof DELIVERY_STATUS]
 export type FilteringOptionDef = { label: string, value: DeliveryStatusDef }
+export type OrderStatusDef = (typeof ORDER_STATUS)[keyof typeof ORDER_STATUS]
 
 export type OrderDetailsDef = {
   id: number,

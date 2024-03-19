@@ -23,6 +23,13 @@ export const DELIVERY_STATUS = {
   COMPLETE: 'complete',
 } as const;
 
+export const ORDER_STATUS = {
+  ACCEPTED: 'accepted',
+  PENDING: 'pending',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled'
+} as const;
+
 export const filteringOptions:FilteringOptionDef[] = [
   {
     label: 'New orders',
