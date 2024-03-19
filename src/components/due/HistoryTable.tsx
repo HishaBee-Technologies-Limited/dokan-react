@@ -1,7 +1,9 @@
 'use client'
 import React from 'react'
 import { Text } from '@/components/common/text'
+import { IDueItemsResponse } from '@/types/due/dueResponse'
 import FallBackImage from '@/components/common/FallBackImage'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
     Table,
     TableBody,
@@ -11,40 +13,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 
-const data = [
-    {
-        number: "01542101414",
-        person: "Customer",
-        amount: "৳200",
-        type: "Taken",
-        date: 'Dec 30, 09:42 PM',
-    },
-    {
-        number: "01542149414",
-        person: "Supplier",
-        amount: "৳200",
-        type: "Given",
-        date: 'Dec 30, 09:42 PM',
-    },
-    {
-        number: "01542741414",
-        person: "Customer",
-        amount: "৳200",
-        type: "Taken",
-        date: 'Dec 30, 09:42 PM',
-    },
-    {
-        number: "01548141414",
-        person: "Supplier",
-        amount: "৳200",
-        type: "Given",
-        date: 'Dec 30, 09:42 PM',
-    },
-]
-
-const HistoryTable = () => {
+const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
 
     return (
         <ScrollArea className="pb-space8">
@@ -60,25 +30,25 @@ const HistoryTable = () => {
                 </TableHeader>
 
                 <TableBody>
-                    {data.map((item, i) => (
-                        <TableRow key={item.number}>
+                    {dueList.map((item, i) => (
+                        <TableRow key={item.id}>
                             <TableCell>
                                 <div className="flex items-center gap-space8">
-                                    <FallBackImage src='' fallback='MM' />
+                                    <FallBackImage src={item.image ?? ''} fallback={item.contact_name.charAt(0)} />
 
-                                    <Text title={`আরিফুল ইসলাম`} className='text-sm' />
+                                    <Text title={item.contact_name} className='text-sm' />
                                 </div>
                             </TableCell>
-                            <TableCell>{item.number}</TableCell>
-                            <TableCell>{item.person}</TableCell>
-                            <TableCell>{item.amount}</TableCell>
+                            <TableCell>{item.contact_mobile}</TableCell>
+                            <TableCell>{item.contact_type}</TableCell>
+                            <TableCell>৳ {item.amount}</TableCell>
                             <TableCell className='text-center'>
                                 <article className="flex items-center gap-space16 justify-center">
                                     <Text
-                                        title={item.type}
-                                        className={`!text-white dark:!text-white max-w-max px-space12 py-space4 rounded-full text-sm uppercase dark:bg-primary-80 ${item.type === 'Given' ? 'bg-error-100' : 'bg-success-100'}`}
+                                        title={item.amount < 0 ? 'Given' : 'Taken'}
+                                        className={`!text-white dark:!text-white max-w-max px-space12 py-space4 rounded-full text-sm uppercase dark:bg-primary-80 ${item.amount < 0 ? 'bg-error-100' : 'bg-success-100'}`}
                                     />
-                                    {item.date}
+                                    {item.created_at}
                                 </article>
                             </TableCell>
                         </TableRow>
