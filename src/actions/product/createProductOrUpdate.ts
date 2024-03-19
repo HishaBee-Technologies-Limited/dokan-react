@@ -33,6 +33,7 @@ export const createProductOrUpdate = async ({
   prevent_stock_item,
   delivery_charge_id,
   weight,
+  unit,
 }: IProductPayload) => {
   try {
     const shopId = cookies().get("shopId")?.value;
@@ -69,6 +70,7 @@ export const createProductOrUpdate = async ({
       ...(prevent_stock_item && { prevent_stock_item }),
       ...(delivery_charge_id && { delivery_charge_id }),
       ...(weight && { weight }),
+      ...(unit && { unit }),
     };
 
     console.log(payload);

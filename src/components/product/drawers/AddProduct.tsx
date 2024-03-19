@@ -110,6 +110,7 @@ export const AddProduct = ({
       unique_id: uuid + shopId + Date.now(),
       selling_price: Number(data.purchase_price),
       updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
+      unit: Number(data.unit),
     });
     if (res?.success) {
       router.refresh();

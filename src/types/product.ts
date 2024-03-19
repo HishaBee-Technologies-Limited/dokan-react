@@ -22,6 +22,7 @@ export interface IProduct {
   warranty_type?: WarrantyType;
   sell_online?: boolean;
   vat_applicable?: boolean;
+  unit?: number;
 }
 
 export interface IProductPayload {

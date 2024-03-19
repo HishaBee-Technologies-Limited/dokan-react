@@ -1,5 +1,5 @@
 import { z } from "zod";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import Icon from "@/components/common/Icon";
 import Card from "@/components/common/Card";
@@ -52,29 +52,6 @@ export const EditProduct = ({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
       files: [],
-      product_name: product?.name ?? "",
-      stock: String(product?.stock ?? ""),
-      purchase_price: String(product?.cost_price ?? ""),
-      sell_price: String(product?.selling_price ?? ""),
-      // others------------
-      bulk_price: String(product?.wholesale_price ?? ""),
-      bulk_quantity: String(product?.wholesale_amount ?? ""),
-      low_stock: String(product?.stock_alert ?? ""),
-      vat_percentage: String(product?.wholesale_price ?? ""),
-      warranty_duration: String(product?.warranty ?? ""),
-      discount: String(product?.discount ?? ""),
-      ...(product?.warranty_type && { warranty_type: product.warranty_type }),
-      ...(product?.discount_type && { discount_type: product.discount_type }),
-      ...(product?.sub_category && {
-        sub_category: String(product?.sub_category.id),
-      }),
-      // boolean
-      online_sell: product?.sell_online ?? false,
-      low_stock_check: true,
-      vat_check: product?.vat_applicable ?? false,
-      warranty_check: true,
-      discount_check: true,
-      bulk_sell_check: true,
     },
   });
   const router = useRouter();
@@ -83,15 +60,14 @@ export const EditProduct = ({
   const uuid = uuidv4();
 
   const selectedCategory = form.watch("category");
-  useMemo(() => {
-    const category = productCategories.find(
+  const category = useMemo(() => {
+    return productCategories.find(
       (category: { sub_category: { id: number }[] }) =>
         category.sub_category.some(
           (sub) => sub.id === product?.sub_category?.id
         )
     );
-    form.setValue("category", category?.id);
-  }, [productCategories, product?.sub_category]);
+  }, [productCategories, product]);
 
   const subCategory = useMemo(() => {
     return productCategories.find(
@@ -100,12 +76,7 @@ export const EditProduct = ({
     )?.sub_category;
   }, [selectedCategory, productCategories]);
 
-  console.log(subCategory);
-
   async function onSubmit(data: ProductFormDef) {
-    // closeDrawer({ open: false })
-    console.log("data------------", data);
-
     const res = await createProductOrUpdate({
       name: data.product_name,
       cost_price: data.purchase_price,
@@ -132,9 +103,34 @@ export const EditProduct = ({
     if (res?.success) {
       router.refresh();
     }
-    console.log(res);
   }
-  console.log(form.formState.errors);
+  useEffect(() => {
+    form.setValue("product_name", product?.name ?? ""),
+      form.setValue("stock", String(product?.stock ?? "")),
+      form.setValue("purchase_price", String(product?.cost_price ?? "")),
+      form.setValue("sell_price", String(product?.selling_price ?? "")),
+      // others------------
+      form.setValue("bulk_price", String(product?.wholesale_price ?? "")),
+      form.setValue("bulk_quantity", String(product?.wholesale_amount ?? "")),
+      form.setValue("low_stock", String(product?.stock_alert ?? "")),
+      form.setValue("vat_percentage", String(product?.wholesale_price ?? "")),
+      form.setValue("warranty_duration", String(product?.warranty ?? "")),
+      form.setValue("discount", String(product?.discount ?? "")),
+      product?.warranty_type &&
+        form.setValue("warranty_type", product.warranty_type),
+      product?.discount_type &&
+        form.setValue("discount_type", product.discount_type),
+      form.setValue("sub_category", String(product?.sub_category.id)),
+      form.setValue("unit", String(product?.unit)),
+      // boolean
+      form.setValue("online_sell", product?.sell_online ?? false),
+      form.setValue("low_stock_check", true),
+      form.setValue("vat_check", product?.vat_applicable ?? false),
+      form.setValue("warranty_check", true),
+      form.setValue("discount_check", true),
+      form.setValue("bulk_sell_check", true);
+    form.setValue("category", String(category?.id));
+  }, [product, category]);
 
   return (
     <Form {...form}>
@@ -263,7 +259,7 @@ export const EditProduct = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Units</FormLabel>
-              <Select onValueChange={field.onChange}>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a Unit" />
@@ -289,9 +285,10 @@ export const EditProduct = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category Name</FormLabel>
+                {console.log(field.value)}
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={String(field.value)}
+                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger className="">
