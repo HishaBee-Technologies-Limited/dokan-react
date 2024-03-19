@@ -11,8 +11,9 @@ export const getSingleEmployee = async (id: number) => {
         if (res.ok) {
             return {
                 success: true,
-                status: data?.code,
-                data: data as IUserResponse,
+                message: data.message,
+                status: data.status_code,
+                data: data.data as IUserResponse,
             };
         }
         if (!res.ok) {

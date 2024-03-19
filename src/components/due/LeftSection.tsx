@@ -8,8 +8,8 @@ import { Text } from '@/components/common/text'
 import { useDueStore } from '@/stores/useDueStore'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { usePathname, useRouter } from 'next/navigation'
+import { IDueListResponse } from '@/types/due/dueResponse'
 import FallBackImage from '@/components/common/FallBackImage'
-import { IUserResponse } from '@/types/contact/partyResponse'
 import WrapperOddList from '@/components/common/WrapperOddList'
 import { useCreateQueryString } from '@/hooks/useCreateQueryString'
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator'
@@ -29,18 +29,36 @@ const tabData = [
     },
 ]
 
-export const LeftSection = ({ userList }: { userList: IUserResponse[] | undefined }) => {
-    const handleDrawerOpen = useDueStore((state) => state.setDrawerState)
 
+interface IProps {
+    dueList: IDueListResponse[] | undefined;
+    totalValues: {
+        total_get: number;
+        total_give: number;
+    } | undefined;
+}
+
+export const LeftSection = ({ dueList, totalValues }: IProps) => {
     const router = useRouter();
     const pathname = usePathname();
     const { getQueryString, setQueryString } = useCreateQueryString()
+    const handleDrawerOpen = useDueStore((state) => state.setDrawerState)
 
     const activeTab = getQueryString('tab') ?? '';
     const activeUser = getQueryString('active_user') ?? '';
 
+    const checkDueValue = (value: number): "success" | "error" | undefined => {
+        if (value > 0) {
+            return 'success'
+        } else if (value < 0) {
+            return 'error'
+        }
+    }
+
+    const filteredDueList = dueList?.filter(item => item.contact_type === activeTab.toUpperCase())
+
     useEffect(() => {
-        router.push(`${pathname}?${setQueryString('tab', activeTab ? activeTab : 'Customer')}`)
+        router.replace(`${pathname}?${setQueryString('tab', activeTab ? activeTab : 'Customer')}`)
     }, [activeTab]);
 
     return (
@@ -51,18 +69,18 @@ export const LeftSection = ({ userList }: { userList: IUserResponse[] | undefine
                     active={activeTab}
                     className='border-b w-full  px-space12 sm:px-space16 pt-space8'
                     handleChange={(item) => {
-                        router.push(`${pathname}?${setQueryString('tab', item.value)}`)
+                        router.replace(`${pathname}?${setQueryString('tab', item.value)}`)
                     }}
                 />
 
                 <Card className="grid grid-cols-2  px-space12 sm:px-space16">
                     <article className="border-r border-color text-center">
                         <Text title='You’ll Give' variant='secondary' className='text-sm font-medium' />
-                        <Text title=' ৳ 10,000' className='font-semibold text-lg' variant='error' />
+                        <Text title={`৳ ${totalValues?.total_give}`} className='font-semibold text-lg' variant='error' />
                     </article>
                     <article className=" text-center">
                         <Text title='You’ll Get' variant='secondary' className='text-sm font-medium' />
-                        <Text title=' ৳ 10,000' className='font-semibold text-lg' variant='success' />
+                        <Text title={`৳ ${totalValues?.total_get}`} className='font-semibold text-lg' variant='success' />
                     </article>
                 </Card>
 
@@ -73,25 +91,35 @@ export const LeftSection = ({ userList }: { userList: IUserResponse[] | undefine
 
             <ScrollArea className="h-[calc(100%-20.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
                 <WrapperOddList>
-                    {userList?.map((item, index) => (
+                    {filteredDueList?.map((item, index) => (
                         <CardWithSideIndicator
                             key={index}
-                            active={item.id.toString() === activeUser}
-                            onClick={() => router.push(`${pathname}?${setQueryString('active_user', item.id)}`)}
+                            active={item.unique_id === activeUser}
+                            onClick={() => router.push(`${pathname}?${setQueryString('active_user', item.unique_id)}`)}
                         >
                             <div className="w-full flex items-center gap-space8">
-                                <FallBackImage src={item.image_src ?? ''} fallback={item.name.charAt(0)} />
+                                <FallBackImage src={''} fallback={item.contact_name.charAt(0)} />
 
                                 <div className="w-full flex items-center justify-between gap-space12">
                                     <article>
-                                        <Text title={item?.name} className='!text-md font-medium' />
-                                        <Text title={item?.mobile} variant='muted' />
+                                        <Text title={item.contact_name} className='!text-md font-medium' />
+                                        <Text title={item.contact_mobile} variant='muted' />
                                     </article>
 
-                                    <article>
-                                        <Text title='+৳ 12,00' className='font-medium' variant='success' />
-                                        <Text title='Taken' variant='white' className='text-xs bg-success-100 px-space12 py-[.2rem] rounded-full dark:!text-primary-100' />
-                                    </article>
+                                    {item.due_amount !== 0 &&
+                                        <article className='flex flex-col items-end'>
+                                            <Text
+                                                className='font-medium'
+                                                variant={checkDueValue(item.due_amount)}
+                                                title={`${checkDueValue(item.due_amount) === 'success' ? '+' : ''}${item.due_amount}`}
+                                            />
+                                            <Text
+                                                title={checkDueValue(item.due_amount) === 'success' ? 'Taken' : 'Given'}
+                                                variant='white'
+                                                className={`text-end max-w-max text-xs px-space12 py-[.2rem] rounded-full dark:!text-primary-100 ${checkDueValue(item.due_amount) === 'success' ? 'bg-success-100' : 'bg-error-100'}`}
+                                            />
+                                        </article>
+                                    }
                                 </div>
                             </div>
                         </CardWithSideIndicator>
@@ -99,14 +127,14 @@ export const LeftSection = ({ userList }: { userList: IUserResponse[] | undefine
                 </WrapperOddList>
             </ScrollArea>
 
-            <div className="p-space12 sm:p-space16 border-t border-primary-20 dark:border-primary-80">
+            {/* <div className="p-space12 sm:p-space16 border-t border-primary-20 dark:border-primary-80">
                 <Button
                     className='w-full'
                     onClick={() => handleDrawerOpen({ open: true, header: `Add ${activeTab}` })}
                 >
                     Add {activeTab}
                 </Button>
-            </div>
+            </div> */}
         </Card>
     )
 }
