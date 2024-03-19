@@ -21,7 +21,7 @@ export const RightSection = ({ userDetails }: { userDetails: IUserResponse | und
             <div className="px-space16 my-space8 border-b border-primary-20 dark:border-primary-80">
                 <div className="flex gap-space16 items-center justify-between py-space8">
                     <div className="flex items-center gap-space8">
-                        <FallBackImage src={userDetails?.image_src ?? ''} fallback={userDetails?.name.charAt(0) ?? ''} />
+                        <FallBackImage src={userDetails?.image_src ?? ''} fallback={userDetails?.name?.charAt(0) ?? ''} />
                         <article>
                             <Text title={userDetails?.name} className='!text-lg font-medium' />
                             <Text variant='muted'>

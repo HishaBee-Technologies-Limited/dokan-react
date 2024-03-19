@@ -1,6 +1,7 @@
 import React from "react";
 import { cookies } from "next/headers";
 import Card from "@/components/common/Card";
+import { ContactType } from "@/enum/contact";
 import ContactDrawers from "@/components/contact/drawers";
 import ContactHeader from "@/components/contact/ContactHeader";
 import { LeftSection } from "@/components/contact/LeftSection";
@@ -34,8 +35,8 @@ const ContactPage = async ({
   const supplierDetails = await getSingleSupplier(Number(userID));
   const employeeDetails = await getSingleEmployee(Number(userID));
 
-  const userList = tab === 'Customer' ? customers?.data : tab === 'Supplier' ? suppliers?.data : employees?.data
-  const userDetails = tab === 'Customer' ? customerDetails?.data : tab === 'Supplier' ? supplierDetails?.data : employeeDetails?.data
+  const userList = tab === ContactType.CUSTOMER ? customers?.data : tab === ContactType.SUPPLIER ? suppliers?.data : employees?.data
+  const userDetails = tab === ContactType.CUSTOMER ? customerDetails?.data : tab === ContactType.SUPPLIER ? supplierDetails?.data : employeeDetails?.data
 
   return (
     <>
@@ -43,8 +44,8 @@ const ContactPage = async ({
         <ContactHeader />
 
         <Card className="space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]">
-          {/*<LeftSection userList={userList} />*/}
-          {/*<RightSection userDetails={userDetails} />*/}
+          <LeftSection userList={userList} />
+          <RightSection userDetails={userDetails} />
         </Card>
       </div>
 
