@@ -120,7 +120,7 @@ export const EditProduct = ({
         form.setValue("warranty_type", product.warranty_type),
       product?.discount_type &&
         form.setValue("discount_type", product.discount_type),
-      form.setValue("sub_category", String(product?.sub_category.id)),
+      form.setValue("sub_category", String(product?.sub_category?.id)),
       form.setValue("unit", String(product?.unit)),
       // boolean
       form.setValue("online_sell", product?.sell_online ?? false),
@@ -130,7 +130,7 @@ export const EditProduct = ({
       form.setValue("discount_check", true),
       form.setValue("bulk_sell_check", true);
     form.setValue("category", String(category?.id));
-    setInitialSubCategory(String(product?.sub_category.id));
+    setInitialSubCategory(String(product?.sub_category?.id));
   }, [product, category]);
 
   return (
@@ -260,7 +260,7 @@ export const EditProduct = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Units</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a Unit" />
@@ -590,7 +590,7 @@ export const EditProduct = ({
                       |
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger className="border-0 px-space4 focus:outline-none focus:border-none">
@@ -676,7 +676,7 @@ export const EditProduct = ({
                       |
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger className="border-0 px-space4 focus:outline-none focus:!border-0">

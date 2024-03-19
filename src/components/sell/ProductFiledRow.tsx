@@ -12,13 +12,17 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { usePurchase } from "@/stores/usePurchaseStore";
+import { IProduct } from "@/types/product";
 
 type IProps = {
   form: UseFormReturn<any>;
-  data?: any;
+  data?: IProduct;
 };
 
 const ProductFiledRow = (props: IProps) => {
+  const products = usePurchase((state) => state.products);
+
   return (
     <div className="border-b border-dashed border-color pt-space8 pb-space12 space-y-space6 ">
       <div className="flex justify-between gap-space10 items-start">
@@ -31,9 +35,9 @@ const ProductFiledRow = (props: IProps) => {
             wrapperClasses="border border-color rounded-md p-space4"
           />
           <article>
-            <Text title="কোকাকোলা ৪০০ মিলি" className="font-medium" />
+            <Text title={props.data?.name} className="font-medium" />
             <Text
-              title="Current Stock 500"
+              title={`Current Stock ${props.data?.stock}`}
               className="text-xs bg-action-40 dark:bg-primary-80 rounded-full px-space10 py-space4 max-w-max "
             />
           </article>
