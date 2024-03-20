@@ -16,6 +16,7 @@ export const getDueItemByUniqueID = async (unique_id: string, exclude_deleted?: 
                 status_code: data.status_code,
                 message: data.message,
                 data: data.data as IDueItemsResponse[],
+                metadata: data.metadata
             };
         }
         if (!res.ok) {
