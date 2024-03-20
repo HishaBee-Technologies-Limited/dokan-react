@@ -40,3 +40,29 @@ export interface shopPayload {
   shopId?: number;
   number?: string;
 }
+
+export type OverviewDef = {
+  name: string,
+  slug: string,
+  address: string,
+  active_orders: number,
+  online_products: number,
+  total_earning: number,
+  processing_orders: number,
+  delivered_orders: number,
+}
+
+export type GetShopInfoDataDef = {
+  overview : OverviewDef //@TODO: collaborate with ziku bhai
+}
+
+export interface IGetShopInfoResponse {
+  data: GetShopInfoDataDef
+}
+
+export type IOverviewOtherDef = {
+  id: number;
+  img: string;
+  title: string;
+  url: string;
+}

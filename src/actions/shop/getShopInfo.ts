@@ -1,6 +1,7 @@
 "use server";
 
 import { authApi } from "@/lib/api";
+import { IGetShopInfoResponse } from "@/types/shop";
 
 export const getShopInfo = async (shopId: string) => {
   try {
@@ -8,7 +9,7 @@ export const getShopInfo = async (shopId: string) => {
     const data = await res.json();
 
     if (res?.ok) {
-      return { success: true, status: data.code, data: data };
+      return { success: true, status: data.code, data: data as IGetShopInfoResponse };
     }
     if (!res?.ok) {
       return { success: false, error: data };
@@ -17,3 +18,4 @@ export const getShopInfo = async (shopId: string) => {
     return { success: false, error: "Something went wrong" };
   }
 };
+
