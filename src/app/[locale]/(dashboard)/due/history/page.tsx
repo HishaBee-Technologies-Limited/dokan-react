@@ -1,9 +1,10 @@
 import React from 'react'
+import { format } from 'date-fns'
 import HistoryTable from '@/components/due/HistoryTable'
 import HistoryHeader from '@/components/due/HistoryHeader'
 import HistoryReport from '@/components/due/HistoryReport'
-import { getAllDueHistory } from '@/actions/due/getAllDueHistory'
 import { IDueItemsResponse } from '@/types/due/dueResponse'
+import { getAllDueHistory } from '@/actions/due/getAllDueHistory'
 
 interface IDueHistoryProps {
     params: { locale: string };
@@ -15,10 +16,13 @@ const DueHistory = async ({
     searchParams,
 }: IDueHistoryProps) => {
 
+    const end_date = searchParams.end_date?.split('-')[0];
+    const start_date = searchParams.start_date?.split('-')[0];
+
     const params = {
         // page: 1,
-        start_date: '2022-01-01 12:12:12',
-        end_date: '2022-06-01 12:12:12'
+        end_date: format(end_date, 'yyyy-MM-dd HH:mm:ss'),
+        start_date: format(start_date, 'yyyy-MM-dd HH:mm:ss'),
     }
 
     const dueList = await getAllDueHistory(params);
