@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table"
 import { getOrders } from "@/actions/shop/orders";
 import { OrdersTableHeader } from "@/config/orders";
-import { DeliveryStatusDef, IOrderItemType } from "@/types/orders";
+import { DeliveryStatusDef } from "@/types/orders";
 import { formatDate } from "@/lib/date";
 import { Text } from "@/components/common/text";
 import { orderTypeWiseStyled } from "@/components/online-shop/orders/orderTypeWiseStyled";
@@ -21,7 +21,7 @@ type OrderTablePropsDef = {
 }
 
 export const OrderTable = async ({activeTab}: OrderTablePropsDef) => {
-    const orders = await getOrders({ activeTab: activeTab ? activeTab : 'new' })
+    const ordersResponse = await getOrders({ activeTab: activeTab ? activeTab : 'new' })
 
     return (
         <ScrollArea className="pb-space8">
@@ -33,7 +33,7 @@ export const OrderTable = async ({activeTab}: OrderTablePropsDef) => {
                 </TableHeader>
 
                 <TableBody>
-                    { orders?.data?.map((item: IOrderItemType)=> (
+                    { ordersResponse?.data?.data?.data?.map((item)=> (
                       <TableRow key={item.id}>
                           <TableCell>{item.code}</TableCell>
                           <TableCell>{formatDate(item.created_at)}</TableCell>
@@ -54,7 +54,7 @@ export const OrderTable = async ({activeTab}: OrderTablePropsDef) => {
 
                 <TableFooter>
                     <TableRow>
-                        <TableCell colSpan={6} className='text-center'>Showing 10 of 100 Transactions</TableCell>
+                        {/*<TableCell colSpan={6} className='text-center'>Showing 10 of 100 Transactions</TableCell>*/}
                     </TableRow>
                 </TableFooter>
             </Table>

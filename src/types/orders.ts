@@ -11,7 +11,7 @@ export type OrderDetailsDef = {
   delivery_status: DeliveryStatusDef
 }
 
-export type IOrderItemType = {
+export type OrdersDef = {
   id: number,
   code: string,
   created_at: string,
@@ -20,4 +20,13 @@ export type IOrderItemType = {
   order_details: OrderDetailsDef[],
   payment_type: OrderTypeDef,
   payment_status: PaymentStatusDef,
+}
+
+export interface IGetOrderResponse {
+  data: {
+    data: OrdersDef[],
+    current_page: number | null;
+    next_page_url: number | null;
+    total: number;
+  }
 }
