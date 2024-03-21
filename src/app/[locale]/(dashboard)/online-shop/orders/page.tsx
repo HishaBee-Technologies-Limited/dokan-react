@@ -2,20 +2,18 @@ import React from 'react'
 import OrderHeader from '@/components/online-shop/orders/OrderHeader'
 import FilteringTabs from '@/components/online-shop/orders/FilteringTabs'
 import { OrderTable } from '@/components/online-shop/orders/OrderTable'
-import { DeliveryStatusDef } from "@/types/orders";
+import { QueryParamsDef } from "@/types/orders";
 
 type OrderPagePropsDef = {
-  searchParams: {
-    activeTab: DeliveryStatusDef | undefined
-  }
+  searchParams: QueryParamsDef
 }
 
-const OrderPage = ({ searchParams}: OrderPagePropsDef) => {
+const OrderPage = ({ searchParams }: OrderPagePropsDef) => {
     return (
         <div className='w-full space-y-space16'>
             <OrderHeader />
             <FilteringTabs />
-            <OrderTable activeTab={searchParams.activeTab} />
+            <OrderTable params={searchParams}/>
         </div>
     )
 }
