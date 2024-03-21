@@ -16,12 +16,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { usePurchase } from "@/stores/usePurchaseStore";
 
 const formSchema = z.object({
-  quantity: z.string().min(1, {
-    message: "This field is required.",
-  }),
-  unit_price: z.string().min(1, {
-    message: "This field is required.",
-  }),
+  quantity: z.string(),
+  unit_price: z.string().optional(),
   total: z.string(),
   delivery_charge: z.string(),
   discount: z.string(),
@@ -32,38 +28,49 @@ export const RightSection = () => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
   const products = usePurchase((state) => state.products);
+  const setProducts = usePurchase((state) => state.setProducts);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    // resolver: zodResolver(formSchema),
     defaultValues: {
-      quantity: "",
-      unit_price: "",
-      total: "",
-      delivery_charge: "",
-      discount: "",
-      discount_type: "",
+      quantity: [],
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: any) {
     console.log("data------------", data);
+    // setProducts([
+    //   ...products,
+    //   {
+    //     ...products.find(product => product.),
+    //     ["product_calculations"]: {
+    //       ["total"]: unitPrice * quantity,
+    //       ["quantity"]: quantity,
+    //     },
+    //   },
+    // ]);
   }
-
+  console.log(form.formState.errors);
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="lg:pl-space12 lg:border-l border-color h-full lg:w-8/12 space-y-space16"
+        className="lg:pl-space12 border-color space-y-space16 h-full lg:w-8/12 lg:border-l"
       >
-        <ScrollArea className="w-full h-[calc(100%-30rem)] overflow-y-scroll shadow p-space8 pt-0 relative rounded-md background">
+        <ScrollArea className="p-space8 background relative h-[calc(100%-30rem)] w-full overflow-y-scroll rounded-md pt-0 shadow">
           <Text
             title="Products Added for Purchase"
-            className="font-semibold sticky top-0 z-20 background pt-space8"
+            className="background pt-space8 sticky top-0 z-20 font-semibold"
           />
 
           <div className="space-y-space12">
-            {products.map((product) => (
-              <ProductFiledRow form={form} data={product} />
+            {products.map((product, index) => (
+              <ProductFiledRow
+                key={product.id}
+                form={form}
+                data={product}
+                {...{ index }}
+              />
             ))}
           </div>
         </ScrollArea>
@@ -71,20 +78,20 @@ export const RightSection = () => {
         <div className="space-y-space8">
           <ProductSellCalculation form={form} />
 
-          <Card className="p-space8 py-space12 rounded-none space-y-space8">
+          <Card className="p-space8 py-space12 space-y-space8 rounded-none">
             <Text title="মূল্য পরিশোধ পদ্ধতি" className="text-sm" />
 
-            <div className="flex gap-space8 sm:gap-space16">
+            <div className="gap-space8 sm:gap-space16 flex">
               <Button
                 size="sm"
                 type="submit"
                 className="w-full"
-                onClick={() =>
-                  handleDrawerOpen({
-                    open: true,
-                    header: SellEnum.CONFIRM_PAYMENT,
-                  })
-                }
+                // onClick={() =>
+                //   handleDrawerOpen({
+                //     open: true,
+                //     header: SellEnum.CONFIRM_PAYMENT,
+                //   })
+                // }
               >
                 নগদ টাকা <ArrowForwardIcon />
               </Button>

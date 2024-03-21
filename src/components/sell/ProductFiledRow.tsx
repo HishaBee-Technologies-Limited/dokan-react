@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/common/text";
@@ -12,16 +12,84 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { usePurchase } from "@/stores/usePurchaseStore";
 import { IProduct } from "@/types/product";
+import { DEFAULT_PRODUCT_QUANTITY } from "@/lib/constants/purchase";
+import { usePurchase } from "@/stores/usePurchaseStore";
 
+export interface IProductPurchase extends IProduct {
+  product_calculations?: { quantity: number; total: number };
+}
 type IProps = {
   form: UseFormReturn<any>;
-  data?: IProduct;
+  data?: IProductPurchase;
+  index: number;
 };
 
 const ProductFiledRow = (props: IProps) => {
   const products = usePurchase((state) => state.products);
+  const calculatedProducts = usePurchase((state) => state.calculatedProducts);
+  const setCalculatedProducts = usePurchase(
+    (state) => state.setCalculatedProducts
+  );
+  const quantity = props.data && props.form.watch(`quantity.${props.index}`);
+  const unitPrice =
+    props.data && props.form.watch(`unit_price-${props.data.id}`);
+  const productIndex = useMemo(() => {
+    return calculatedProducts.findIndex(
+      (product) => product.id === props.data?.id
+    );
+  }, [props.data, calculatedProducts]);
+
+  useMemo(() => {
+    console.log("ll");
+  }, [unitPrice, quantity]);
+
+  useEffect(() => {
+    props.data &&
+      props.form.setValue(
+        `total-${props.data.id}`,
+        String(Number(unitPrice) * Number(quantity))
+      );
+    // console.log(productIndex);
+
+    // setCalculatedProducts([
+    //   ...calculatedProducts,
+    //   {
+    //     ...calculatedProducts[productIndex],
+    //     ["product_calculations"]: {
+    //       ["total"]: unitPrice * quantity,
+    //       ["quantity"]: quantity,
+    //     },
+    //   },
+    // ]);
+  }, [unitPrice, quantity, productIndex]);
+
+  useEffect(() => {
+    if (props.data) {
+      props.form.setValue(`quantity.${props.index}`, DEFAULT_PRODUCT_QUANTITY);
+      props.form.setValue(
+        `unit_price-${props.data.id}`,
+        String(props.data?.cost_price)
+      );
+    }
+  }, [props.data, props.form]);
+  useEffect(() => {
+    console.log(calculatedProducts.length, props.index);
+    if (calculatedProducts.length) return;
+
+    setCalculatedProducts([
+      ...products,
+      {
+        ...products[props.index],
+        ["product_calculations"]: {
+          ["total"]: unitPrice * quantity,
+          ["quantity"]: quantity,
+        },
+      },
+    ]);
+  }, []);
+
+  console.log(calculatedProducts);
 
   return (
     <div className="border-b border-dashed border-color pt-space8 pb-space12 space-y-space6 ">
@@ -51,7 +119,7 @@ const ProductFiledRow = (props: IProps) => {
       <div className="flex gap-space12">
         <FormField
           control={props.form.control}
-          name="quantity"
+          name={`quantity.${props.index}`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
@@ -66,14 +134,14 @@ const ProductFiledRow = (props: IProps) => {
         />
         <FormField
           control={props.form.control}
-          name="unit_price"
+          name={`unit_price-${props.data?.id}`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
                 Unit Price <span className="text-error-100">*</span>{" "}
               </FormLabel>
               <FormControl>
-                <Input placeholder="Unit Price" {...field} />
+                <Input disabled={true} placeholder="Unit Price" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,7 +149,7 @@ const ProductFiledRow = (props: IProps) => {
         />
         <FormField
           control={props.form.control}
-          name="total"
+          name={`total-${props.data?.id}`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>Total</FormLabel>
