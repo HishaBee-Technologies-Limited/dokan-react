@@ -78,4 +78,5 @@ export const INITIAL_QUERY_PARAMS: QueryParamsDef = {
   end_date: getFormattedToday(),
   sorted_by: ORDER_SORT_OPTIONS[0].value,
   page: 1,
+  activatedTab: DELIVERY_STATUS.NEW
 };
