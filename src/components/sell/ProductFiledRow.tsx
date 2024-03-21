@@ -26,70 +26,46 @@ type IProps = {
 };
 
 const ProductFiledRow = (props: IProps) => {
-  const products = usePurchase((state) => state.products);
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
   );
-  const quantity = props.data && props.form.watch(`quantity.${props.index}`);
+  const quantity =
+    props.data &&
+    props.form.watch(
+      `products.${props.index}.product-${props.data?.id}.quantity`
+    );
   const unitPrice =
-    props.data && props.form.watch(`unit_price-${props.data.id}`);
+    props.data &&
+    props.form.watch(
+      `products.${props.index}.product-${props.data?.id}.unit_price`
+    );
   const productIndex = useMemo(() => {
     return calculatedProducts.findIndex(
       (product) => product.id === props.data?.id
     );
   }, [props.data, calculatedProducts]);
 
-  useMemo(() => {
-    console.log("ll");
-  }, [unitPrice, quantity]);
-
   useEffect(() => {
     props.data &&
       props.form.setValue(
-        `total-${props.data.id}`,
+        `products.${props.index}.product-${props.data?.id}.total`,
         String(Number(unitPrice) * Number(quantity))
       );
-    // console.log(productIndex);
-
-    // setCalculatedProducts([
-    //   ...calculatedProducts,
-    //   {
-    //     ...calculatedProducts[productIndex],
-    //     ["product_calculations"]: {
-    //       ["total"]: unitPrice * quantity,
-    //       ["quantity"]: quantity,
-    //     },
-    //   },
-    // ]);
   }, [unitPrice, quantity, productIndex]);
 
   useEffect(() => {
     if (props.data) {
-      props.form.setValue(`quantity.${props.index}`, DEFAULT_PRODUCT_QUANTITY);
       props.form.setValue(
-        `unit_price-${props.data.id}`,
+        `products.${props.index}.product-${props.data.id}.quantity`,
+        DEFAULT_PRODUCT_QUANTITY
+      );
+      props.form.setValue(
+        `products.${props.index}.product-${props.data.id}.unit_price`,
         String(props.data?.cost_price)
       );
     }
   }, [props.data, props.form]);
-  useEffect(() => {
-    console.log(calculatedProducts.length, props.index);
-    if (calculatedProducts.length) return;
-
-    setCalculatedProducts([
-      ...products,
-      {
-        ...products[props.index],
-        ["product_calculations"]: {
-          ["total"]: unitPrice * quantity,
-          ["quantity"]: quantity,
-        },
-      },
-    ]);
-  }, []);
-
-  console.log(calculatedProducts);
 
   return (
     <div className="border-b border-dashed border-color pt-space8 pb-space12 space-y-space6 ">
@@ -119,7 +95,7 @@ const ProductFiledRow = (props: IProps) => {
       <div className="flex gap-space12">
         <FormField
           control={props.form.control}
-          name={`quantity.${props.index}`}
+          name={`products.${props.index}.product-${props.data?.id}.quantity`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
@@ -134,7 +110,7 @@ const ProductFiledRow = (props: IProps) => {
         />
         <FormField
           control={props.form.control}
-          name={`unit_price-${props.data?.id}`}
+          name={`products.${props.index}.product-${props.data?.id}.unit_price`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
@@ -149,7 +125,7 @@ const ProductFiledRow = (props: IProps) => {
         />
         <FormField
           control={props.form.control}
-          name={`total-${props.data?.id}`}
+          name={`products.${props.index}.product-${props.data?.id}.total`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>Total</FormLabel>

@@ -8,8 +8,12 @@ export function cn(...inputs: ClassValue[]) {
 export function productProfitCalculation(
   buyPrice: number,
   sellPrice: number,
-  stock: number,
+  stock: number
 ): number {
   const perProductPrice = sellPrice - buyPrice;
   return stock * perProductPrice;
+}
+
+export function percentage(number: number, percent: number) {
+  return (number / 100) * percent;
 }

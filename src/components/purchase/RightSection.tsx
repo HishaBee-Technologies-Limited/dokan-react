@@ -34,11 +34,33 @@ export const RightSection = () => {
     // resolver: zodResolver(formSchema),
     defaultValues: {
       quantity: [],
+      delivery_charge: 0,
+      discount: 0,
     },
   });
 
   function onSubmit(data: any) {
-    console.log("data------------", data);
+    console.log(
+      "data------------",
+      products.map((product) => {
+        if (
+          data.products.some(
+            (prod: any) => Object.keys(prod)[0] === `product-${product.id}`
+          )
+        ) {
+          return {
+            ...product,
+            calculatedAmount: Object.values(
+              data.products.find(
+                (p: any) => Object.keys(p)[0] === `product-${product.id}`
+              )
+            )[0],
+          };
+        }
+      })
+    );
+    console.log(data);
+
     // setProducts([
     //   ...products,
     //   {
@@ -50,7 +72,6 @@ export const RightSection = () => {
     //   },
     // ]);
   }
-  console.log(form.formState.errors);
   return (
     <Form {...form}>
       <form
