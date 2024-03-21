@@ -1,4 +1,5 @@
 import { DELIVERY_STATUS, ORDER_STATUS, ORDER_TYPE, PAYMENT_STATUS } from "@/config/orders";
+import { ISortOptions } from "@/types/Sorting";
 export type OrdersTableHeaderDef = {id: number, label: string}
 export type OrderTypeDef = (typeof ORDER_TYPE)[keyof typeof ORDER_TYPE]
 export type PaymentStatusDef = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS]
@@ -22,11 +23,23 @@ export type OrdersDef = {
   payment_status: PaymentStatusDef,
 }
 
+export type LinksDef = {
+  url: string | null,
+  label: string,
+  active: boolean
+}
+
 export interface IGetOrderResponse {
   data: {
     data: OrdersDef[],
-    current_page: number | null;
-    next_page_url: number | null;
+    links: LinksDef[]
     total: number;
   }
+}
+
+export type QueryParamsDef = {
+  start_date: string | undefined,
+  end_date: string | undefined,
+  sorted_by: ISortOptions['value'],
+  page: number,
 }
