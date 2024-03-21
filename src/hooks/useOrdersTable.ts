@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import { INITIAL_QUERY_PARAMS } from "@/config/orders";
 import { useOrdersStore } from "@/stores/useOrdersStore";
-import { QueryParamsDef } from "@/types/orders";
+import { DeliveryStatusDef, QueryParamsDef } from "@/types/orders";
 import { generateQueryString } from "@/lib/queryString";
 
 export const useOrdersTable = () => {
@@ -27,7 +27,7 @@ export const useOrdersTable = () => {
       end_date: searchParams.get('end_date') || INITIAL_QUERY_PARAMS.end_date,
       sorted_by: searchParams.get('sorted_by') || INITIAL_QUERY_PARAMS.sorted_by,
       page: Number(searchParams.get('page')) || INITIAL_QUERY_PARAMS.page,
-
+      activatedTab: searchParams.get('activatedTab') as DeliveryStatusDef || INITIAL_QUERY_PARAMS.activatedTab
     };
 
     if (!isEqual(params, queryParams)) {

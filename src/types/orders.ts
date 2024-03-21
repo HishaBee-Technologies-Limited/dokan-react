@@ -42,4 +42,5 @@ export type QueryParamsDef = {
   end_date: string | undefined,
   sorted_by: ISortOptions['value'],
   page: number,
+  activatedTab: DeliveryStatusDef
 }
