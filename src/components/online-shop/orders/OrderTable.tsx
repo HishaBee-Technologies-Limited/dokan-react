@@ -15,6 +15,7 @@ import { QueryParamsDef } from "@/types/orders";
 import { formatDate } from "@/lib/date";
 import { Text } from "@/components/common/text";
 import { orderTypeWiseStyled } from "@/components/online-shop/orders/orderTypeWiseStyled";
+import OrderTableTransactionAmount from "@/components/online-shop/orders/OrderTableTransactionAmount";
 
 type OrderTablePropsDef = {
     params: QueryParamsDef
@@ -57,7 +58,12 @@ export const OrderTable = async ({params}: OrderTablePropsDef) => {
 
                 <TableFooter>
                     <TableRow>
-                        <TableCell colSpan={6} className='text-center'>Showing 10 of 100 Transactions</TableCell>
+                        <TableCell colSpan={6} className='text-center'>
+                            <OrderTableTransactionAmount
+                                to={ordersResponse?.data?.data?.to ?? 0}
+                                total={ordersResponse?.data?.data?.total ?? 0}
+                            />
+                        </TableCell>
                     </TableRow>
                 </TableFooter>
             </Table>
