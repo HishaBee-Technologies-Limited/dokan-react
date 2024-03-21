@@ -11,17 +11,20 @@ import {
 } from "@/components/ui/table"
 import { getOrders } from "@/actions/shop/orders";
 import { OrdersTableHeader } from "@/config/orders";
-import { DeliveryStatusDef } from "@/types/orders";
+import { QueryParamsDef } from "@/types/orders";
 import { formatDate } from "@/lib/date";
 import { Text } from "@/components/common/text";
 import { orderTypeWiseStyled } from "@/components/online-shop/orders/orderTypeWiseStyled";
 
 type OrderTablePropsDef = {
-    activeTab: DeliveryStatusDef | undefined
+    params: QueryParamsDef
 }
 
-export const OrderTable = async ({activeTab}: OrderTablePropsDef) => {
-    const ordersResponse = await getOrders({ activeTab: activeTab ? activeTab : 'new' })
+export const OrderTable = async ({params}: OrderTablePropsDef) => {
+    const ordersResponse = await getOrders({
+        tab: params.activatedTab ? params.activatedTab : 'new',
+        params
+    })
 
     return (
         <ScrollArea className="pb-space8">
@@ -54,7 +57,7 @@ export const OrderTable = async ({activeTab}: OrderTablePropsDef) => {
 
                 <TableFooter>
                     <TableRow>
-                        {/*<TableCell colSpan={6} className='text-center'>Showing 10 of 100 Transactions</TableCell>*/}
+                        <TableCell colSpan={6} className='text-center'>Showing 10 of 100 Transactions</TableCell>
                     </TableRow>
                 </TableFooter>
             </Table>
