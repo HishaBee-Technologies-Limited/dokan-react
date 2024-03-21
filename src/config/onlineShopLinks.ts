@@ -5,7 +5,7 @@ export const onlineShopLinks = [
     },
     {
         title: 'Order list',
-        link: '/online-shop/orders?activeTab=new'
+        link: '/online-shop/orders'
     },
     {
         title: 'Online products',
