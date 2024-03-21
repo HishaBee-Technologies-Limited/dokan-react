@@ -32,8 +32,10 @@ export type LinksDef = {
 export interface IGetOrderResponse {
   data: {
     data: OrdersDef[],
-    links: LinksDef[]
+    to: number;
     total: number;
+    current_page: number;
+    last_page: number;
   }
 }
 
