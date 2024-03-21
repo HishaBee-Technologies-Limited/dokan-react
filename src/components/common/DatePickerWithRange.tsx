@@ -3,7 +3,6 @@
 import * as React from "react"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { addDays, format } from "date-fns"
-import { DateRange } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -13,30 +12,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { usePathname, useRouter } from "next/navigation";
-import { useCreateQueryString } from "@/hooks/useCreateQueryString";
+import { DatePickerWithRangePropsDef } from "@/types/Date";
 
-export function DatePickerWithRange() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const { setQueryString } = useCreateQueryString()
-
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
-  })
-
-  const  handleDateRange = (dates: DateRange | undefined) => {
-    setDate({ from: dates?.from, to: dates?.to})
-    const start_date = format(new Date(dates?.from ?? new Date()), 'yyyy-MM-dd')
-    const end_date = format(new Date(dates?.to ?? new Date()), 'yyyy-MM-dd')
-
-    setQueryString('start_date', start_date)
-    setQueryString('end_date', end_date)
-
-    router.replace(`${pathname}?start_date=${start_date}&end_date=${end_date}`, { scroll: false})
-  }
-
+export function DatePickerWithRange({dateRange, onChange}: DatePickerWithRangePropsDef) {
   return (
     <div className={cn("grid gap-2")}>
       <Popover>
@@ -47,18 +25,18 @@ export function DatePickerWithRange() {
             variant="secondary"
             className={cn(
               "justify-start text-left font-normal", //@TODO: remove fix-width; "w-[300px]",
-              !date && "text-muted-foreground"
+              !dateRange && "text-muted-foreground"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
+            {dateRange?.from ? (
+              dateRange.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(dateRange.from, "LLL dd, y")} -{" "}
+                  {format(dateRange.to, "LLL dd, y")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(dateRange.from, "LLL dd, y")
               )
             ) : (
               <span>Pick a date</span>
@@ -69,9 +47,12 @@ export function DatePickerWithRange() {
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={handleDateRange}
+            defaultMonth={new Date(dateRange.from ?? new Date(2022, 0, 20))}
+            selected={{
+              from: new Date(dateRange.from ?? new Date(2022, 0, 20)),
+              to: addDays(new Date(dateRange.from ?? new Date(2022, 0, 20)), 20),
+            }}
+            onSelect={onChange}
             numberOfMonths={2}
           />
         </PopoverContent>
