@@ -33,7 +33,7 @@ const DuePage = async ({
                 <Card className='space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]'>
                     <LeftSection dueList={dueList?.data} totalValues={dueList?.metadata} />
                     {dueItems?.data ?
-                        <RightSection dueItems={dueItems?.data as IDueItemsResponse[]} />
+                        <RightSection dueItems={dueItems?.data as IDueItemsResponse[]} totalValues={dueItems.metadata} />
                         : <></>
                     }
                 </Card>

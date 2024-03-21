@@ -1,21 +1,40 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
+import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { PageSubTitle } from '@/components/common/text'
-import DatePicker from '@/components/common/DatePicker'
+import { usePathname, useRouter } from 'next/navigation'
 import { FilterIcon, SortIcon } from '@/components/common/icons'
+import { useCreateQueryString } from '@/hooks/useCreateQueryString'
 import { DownloadIcon } from '@/components/common/icons/DownloadIcon'
+import DateRangePicker, { DateRangeDef } from '@/components/common/DateRangePicker'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const HistoryHeader = () => {
-    const [value, setValue] = useState<string>("")
-    const handleSort = (value: string) => { }
+    const router = useRouter()
+    const pathname = usePathname()
+    const { setQueryString } = useCreateQueryString()
+
+    const handleDateRange = (date: DateRangeDef) => {
+
+        if (date?.from) {
+            const start_date = format(date.from, "yyyy-MM-dd HH:mm:ss")
+            router.replace(`${pathname}?${setQueryString('start_date', start_date)}`)
+        }
+
+        if (date?.to) {
+            const end_date = format(date.to, "yyyy-MM-dd HH:mm:ss")
+            router.replace(`${pathname}?${setQueryString('end_date', end_date)}`)
+        }
+    }
+
     return (
         <div className='flex justify-between items-center flex-wrap gap-space16'>
             <PageSubTitle title='Due History' />
 
             <div className="flex flex-wrap gap-space8 sm:gap-space12">
-                <Select onValueChange={handleSort} defaultValue={value}>
+                {/* Need to be feature, not implemented yet because API is not ready, Mobile end Its working manually, but not implemented in the web end. Because Paginated problem */}
+                {/* <Select onValueChange={handleSort} defaultValue={value}>
                     <SelectTrigger className="max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400" >
                         <SortIcon />
                         <SelectValue placeholder="Sort By" />
@@ -40,8 +59,9 @@ const HistoryHeader = () => {
                             <SelectItem value="m@support.com">m@support.com</SelectItem>
                         </div>
                     </SelectContent>
-                </Select>
-                <DatePicker onChange={(date) => console.log(date)} triggerClasses='!h-[4.8rem]' />
+                </Select> */}
+
+                <DateRangePicker onChange={(date) => handleDateRange(date)} triggerClasses='!h-[4.8rem]' />
 
                 <Button variant={'secondary'}><DownloadIcon />PDF Download</Button>
             </div>
