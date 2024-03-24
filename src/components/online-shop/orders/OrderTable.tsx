@@ -16,6 +16,7 @@ import { formatDate } from "@/lib/date";
 import { Text } from "@/components/common/text";
 import { orderTypeWiseStyled } from "@/components/online-shop/orders/orderTypeWiseStyled";
 import OrderTableTransactionAmount from "@/components/online-shop/orders/OrderTableTransactionAmount";
+import OrdersPagination from "@/components/online-shop/orders/OrdersPagination";
 
 type OrderTablePropsDef = {
     params: QueryParamsDef
@@ -67,7 +68,17 @@ export const OrderTable = async ({params}: OrderTablePropsDef) => {
                     </TableRow>
                 </TableFooter>
             </Table>
+
+
             <ScrollBar orientation="horizontal" />
+
+            <div className="my-10">
+                <OrdersPagination
+                  pageCount={Math.ceil((ordersResponse?.data?.data?.total ?? 0) / (ordersResponse?.data?.data?.per_page ?? 0))}
+                  currentPage={ordersResponse?.data?.data?.current_page ?? 0}
+                  lastPage={ordersResponse?.data?.data?.last_page ?? 0}
+                />
+            </div>
         </ScrollArea>
     )
 }
