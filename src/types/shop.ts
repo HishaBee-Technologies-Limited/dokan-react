@@ -52,8 +52,15 @@ export type OverviewDef = {
   delivered_orders: number,
 }
 
+export type ShopDef = OverviewDef & {
+  public_number: string;
+  type: number;
+  area: number;
+}
+
 export type GetShopInfoDataDef = {
   overview : OverviewDef //@TODO: collaborate with ziku bhai
+  shop: ShopDef
 }
 
 export interface IGetShopInfoResponse {

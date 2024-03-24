@@ -91,12 +91,12 @@ const EditShopPage = () => {
       const shopInfo = await getShopInfo(shopId as string);
 
       if (shopInfo?.success) {
-        form.setValue("address", shopInfo?.data?.shop.address);
-        form.setValue("name", shopInfo?.data?.shop.name);
-        form.setValue("number", shopInfo?.data?.shop.public_number);
-        form.setValue("shop_type", shopInfo?.data?.shop.type);
+        form.setValue("address", shopInfo?.data?.data?.shop?.address ?? '');
+        form.setValue("name", shopInfo?.data?.data?.shop?.name ?? '');
+        form.setValue("number", shopInfo?.data?.data?.shop?.public_number ?? '');
+        form.setValue("shop_type", shopInfo?.data?.data?.shop?.type ?? 0);
 
-        const areaData = await getAreaInfo(shopInfo?.data?.shop.area);
+        const areaData = await getAreaInfo(`${shopInfo?.data?.data?.shop?.area}`);
 
         if (areaData?.success) {
           setDivisionValue(areaData?.data?.division.id);
