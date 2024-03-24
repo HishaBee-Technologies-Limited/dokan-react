@@ -1,10 +1,6 @@
-import { IRegisterPayload } from "./types/auth";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { z } from "zod";
 import { authConfig } from "./auth.config";
-// import { cookies } from 'next/headers';
-import { api } from "@/lib/api";
 import { login, signup } from "@/actions/auth";
 import { RegisterSchema } from "./schemas/auth";
 
@@ -47,21 +43,14 @@ export const {
         },
       },
       async authorize(credentials) {
-        console.log("credentials------------", credentials);
-        // const cookieStore = cookies();
         const response = await login({
           mobile_number: credentials?.mobile_number,
           pin: credentials?.pin,
         });
+
         const user = await response?.data;
-        console.log("user-signin------------", response);
-        if (response?.status === 200 && user.user.id) {
-          //   cookieStore.set('access_token', user.access_token);
-          //   cookieStore.set('auth-error-message', '');
-          return user.user;
-        } else {
-          return { errorMessage: user.message };
-        }
+        if (response?.status === 200 && user.user.id) return user.user;
+        else return { errorMessage: user.message };
       },
     }),
     Credentials({
@@ -69,7 +58,6 @@ export const {
       name: "signup",
 
       async authorize(credentials) {
-        console.log("credentials------------Signup", credentials);
         const validatedFields = RegisterSchema.safeParse(credentials);
         console.log(validatedFields);
         if (!validatedFields.success) return null;
@@ -90,13 +78,10 @@ export const {
           address,
           user_intent,
         });
+
         const user = await response?.data;
-        console.log("user-signup------------", response);
-        if (response?.status === 200 && user.user.id) {
-          return user;
-        } else {
-          return { errorMessage: user.message };
-        }
+        if (response?.status === 200 && user.user.id) return user;
+        else return { errorMessage: user.message };
       },
     }),
   ],

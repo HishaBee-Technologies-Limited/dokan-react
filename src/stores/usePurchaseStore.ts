@@ -3,19 +3,31 @@ import { IProduct } from "@/types/product";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-interface ProductState {
+export interface IProductState {
   products: IProduct[];
-  calculatedProducts: IProductPurchase[];
+  calculatedProducts: {
+    products: IProductPurchase[];
+    deliveryCharge?: string;
+    totalPrice?: number;
+    discount?: string;
+  };
 }
-interface ProductStateActions {
+interface IProductStateActions {
   setProducts: (products: IProduct[]) => void;
-  setCalculatedProducts: (products: IProductPurchase[]) => void;
+  setCalculatedProducts: (
+    products: IProductState["calculatedProducts"]
+  ) => void;
 }
-export const usePurchase = create<ProductState & ProductStateActions>()(
+export const usePurchase = create<IProductState & IProductStateActions>()(
   persist(
     (set) => ({
       products: [],
-      calculatedProducts: [],
+      calculatedProducts: {
+        deliveryCharge: "",
+        totalPrice: 0,
+        discount: "",
+        products: [],
+      },
       setProducts: (products) => set({ products: products }),
       setCalculatedProducts: (products) =>
         set({ calculatedProducts: products }),

@@ -7,6 +7,7 @@ import FallBackImage from "@/components/common/FallBackImage";
 import BreadCum from "@/components/layouts/dashboard/BreadCum";
 import { IMenuOpenProps } from "@/components/layouts/dashboard";
 import AppSearch from "@/components/layouts/dashboard/AppSearch";
+import { useSession } from "next-auth/react";
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -17,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/actions/logout";
 
-const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
+const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
   return (
     <header className="sticky top-0 bg-white dark:bg-primary-90 shadow-sm z-40">
       <nav className="h-[7.2rem] flex justify-between items-center gap-2 border-b border-primary-10 dark:border-primary-80 py-space12 px-space16">
@@ -61,7 +62,7 @@ const Header = ({ setMenuOpen, menuOpen }: IMenuOpenProps) => {
                 className="h-[3.8rem] w-[3.8rem] text-sm"
               />
               <span className="hidden lg:block text-primary-90 dark:text-primary-40">
-                MD Maruf Hossain
+                {String(session.user.name)}
               </span>
             </DropdownMenuTrigger>
 

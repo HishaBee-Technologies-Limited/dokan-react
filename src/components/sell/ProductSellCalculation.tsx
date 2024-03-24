@@ -3,12 +3,7 @@ import Card from "@/components/common/Card";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { Text } from "@/components/common/text";
-import {
-  FormItem,
-  FormField,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormItem, FormField, FormControl } from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -17,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DISCOUNT_TYPE } from "@/lib/constants/product";
-import { percentage } from "@/lib/utils";
+import { calculateGrandTotal } from "@/lib/utils";
 
 type IProps = {
   form: UseFormReturn<any>;
@@ -26,25 +21,50 @@ type IProps = {
 
 const ProductSellCalculation = (props: IProps) => {
   const { form } = props;
-  const products = form.watch("products");
-  const total = products?.reduce((prev: any, p: any) => {
-    prev = prev + Number(Object.values(p)[0].total);
-    return prev;
-  }, 0);
-  const discount = form.watch("discount");
+
+  /**
+   * values reading from the hook form
+   */
+  const discountAmount = form.watch("discount");
   const discountType = form.watch("discount_type");
-  const delivery = form.watch("delivery_charge");
-  const grandTotal = discountType
-    ? discountType === "PERCENT"
-      ? total - percentage(total, discount) - delivery
-      : total - discount - delivery
-    : total - delivery;
+  const deliveryCharge = form.watch("delivery_charge");
+  const products = form.watch("products");
+
+  /**
+   * calculating the total price from the selected and entered product quantity
+   */
+  const totalPrice = products?.reduce(
+    (prev: number, p: { total: string }[]) => {
+      prev = prev + Number(Object.values(p)[0].total);
+      return prev;
+    },
+    0
+  );
+
+  /**
+   * calculate based on the discount type
+   * discount type is declared on DISCOUNT_TYPE schema
+   */
+  const grandTotal =
+    totalPrice &&
+    calculateGrandTotal(
+      discountType,
+      Number(totalPrice),
+      Number(deliveryCharge),
+      discountAmount
+    );
+
+  /**
+   * set the total price to the form state for centralize all the necessary information
+   * for next action
+   */
+  grandTotal && form.setValue("totalPrice", String(grandTotal));
 
   return (
     <Card className="p-space8 shadow space-y-space4">
       <article className="flex justify-between items-center gap-space8 py-space4 border-b border-dashed border-color">
         <Text title="Total" className="text-sm" />
-        <Text title={`৳ ${total}`} className="font-medium" />
+        <Text title={`৳ ${totalPrice ?? "0"}`} className="font-medium" />
       </article>
 
       <div className="border-b border-dashed border-color">
@@ -116,7 +136,7 @@ const ProductSellCalculation = (props: IProps) => {
       <article className="flex justify-between items-center gap-space8 py-space4 border-t border-dashed border-color">
         <Text title="Grand Total" className="text-sm" />
         <Text
-          title={`৳ ${grandTotal}`}
+          title={`৳ ${grandTotal ?? "0"}`}
           variant="error"
           className="text-lg font-medium"
         />

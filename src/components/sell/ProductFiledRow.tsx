@@ -26,45 +26,59 @@ type IProps = {
 };
 
 const ProductFiledRow = (props: IProps) => {
-  const calculatedProducts = usePurchase((state) => state.calculatedProducts);
-  const setCalculatedProducts = usePurchase(
-    (state) => state.setCalculatedProducts
+  const setProducts = usePurchase((state) => state.setProducts);
+  const products = usePurchase((state) => state.products);
+
+  /**
+   * This watch controls the onchange calculation on the viewport
+   */
+  const quantityWatch = props.form.watch(
+    `products.${props.index}.product-${props.data?.id}.quantity`
   );
-  const quantity =
-    props.data &&
-    props.form.watch(
+
+  const handleProductDeleteFromSelections = () => {
+    /**
+     * unregister product item from the form array to maintain the calculation
+     * Set the filtered products to update the current view
+     */
+    props.form.unregister(`products.${props.index}.product-${props.data?.id}`);
+    setProducts(products.filter((product) => product.id !== props.data?.id));
+  };
+
+  useEffect(() => {
+    /**
+     * get the required values for the total price calculation for every product
+     */
+    const quantityValue = props.form.getValues(
       `products.${props.index}.product-${props.data?.id}.quantity`
     );
-  const unitPrice =
-    props.data &&
-    props.form.watch(
+    const unitPrice = props.form.getValues(
       `products.${props.index}.product-${props.data?.id}.unit_price`
     );
-  const productIndex = useMemo(() => {
-    return calculatedProducts.findIndex(
-      (product) => product.id === props.data?.id
-    );
-  }, [props.data, calculatedProducts]);
 
-  useEffect(() => {
-    props.data &&
+    if (quantityValue && unitPrice) {
+      /**
+       * set the total value base on the change of the quantity
+       */
       props.form.setValue(
         `products.${props.index}.product-${props.data?.id}.total`,
-        String(Number(unitPrice) * Number(quantity))
-      );
-  }, [unitPrice, quantity, productIndex]);
-
-  useEffect(() => {
-    if (props.data) {
-      props.form.setValue(
-        `products.${props.index}.product-${props.data.id}.quantity`,
-        DEFAULT_PRODUCT_QUANTITY
-      );
-      props.form.setValue(
-        `products.${props.index}.product-${props.data.id}.unit_price`,
-        String(props.data?.cost_price)
+        Number(quantityValue) * Number(unitPrice)
       );
     }
+  }, [quantityWatch]);
+
+  useEffect(() => {
+    /**
+     * set the Default values of the form
+     */
+    props.form.setValue(
+      `products.${props.index}.product-${props.data?.id}.quantity`,
+      DEFAULT_PRODUCT_QUANTITY
+    );
+    props.form.setValue(
+      `products.${props.index}.product-${props.data?.id}.unit_price`,
+      String(props.data?.cost_price)
+    );
   }, [props.data, props.form]);
 
   return (
@@ -87,7 +101,12 @@ const ProductFiledRow = (props: IProps) => {
           </article>
         </div>
 
-        <Button type="button" size={"icon"} variant={"danger"}>
+        <Button
+          type="button"
+          onClick={handleProductDeleteFromSelections}
+          size={"icon"}
+          variant={"danger"}
+        >
           <CancelIcon />
         </Button>
       </div>

@@ -13,7 +13,8 @@ import { ArrowForwardIcon } from "@/components/common/icons";
 import ProductFiledRow from "@/components/sell/ProductFiledRow";
 import ProductSellCalculation from "@/components/sell/ProductSellCalculation";
 import { ScrollArea } from "../ui/scroll-area";
-import { usePurchase } from "@/stores/usePurchaseStore";
+import { IProductState, usePurchase } from "@/stores/usePurchaseStore";
+import { IProduct } from "@/types/product";
 
 const formSchema = z.object({
   quantity: z.string(),
@@ -28,7 +29,9 @@ export const RightSection = () => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
   const products = usePurchase((state) => state.products);
-  const setProducts = usePurchase((state) => state.setProducts);
+  const setCalculatedProducts = usePurchase(
+    (state) => state.setCalculatedProducts
+  );
 
   const form = useForm({
     // resolver: zodResolver(formSchema),
@@ -40,37 +43,30 @@ export const RightSection = () => {
   });
 
   function onSubmit(data: any) {
-    console.log(
-      "data------------",
-      products.map((product) => {
-        if (
-          data.products.some(
-            (prod: any) => Object.keys(prod)[0] === `product-${product.id}`
+    const updatedProducts = products.map((product) => {
+      if (
+        data.products.some(
+          (prod: IProduct) => Object.keys(prod)[0] === `product-${product.id}`
+        )
+      ) {
+        const updatedProduct = Object.values(
+          data.products.find(
+            (p: IProduct) => Object.keys(p)[0] === `product-${product.id}`
           )
-        ) {
-          return {
-            ...product,
-            calculatedAmount: Object.values(
-              data.products.find(
-                (p: any) => Object.keys(p)[0] === `product-${product.id}`
-              )
-            )[0],
-          };
-        }
-      })
-    );
-    console.log(data);
+        )[0] as IProduct;
+        return {
+          ...product,
+          calculatedAmount: updatedProduct,
+        };
+      }
+    });
 
-    // setProducts([
-    //   ...products,
-    //   {
-    //     ...products.find(product => product.),
-    //     ["product_calculations"]: {
-    //       ["total"]: unitPrice * quantity,
-    //       ["quantity"]: quantity,
-    //     },
-    //   },
-    // ]);
+    setCalculatedProducts({
+      products: updatedProducts as IProduct[],
+      deliveryCharge: data.delivery_charge,
+      discount: data.discount,
+      totalPrice: data.totalPrice,
+    });
   }
   return (
     <Form {...form}>
@@ -88,9 +84,8 @@ export const RightSection = () => {
             {products.map((product, index) => (
               <ProductFiledRow
                 key={product.id}
-                form={form}
                 data={product}
-                {...{ index }}
+                {...{ index, form }}
               />
             ))}
           </div>
@@ -107,12 +102,12 @@ export const RightSection = () => {
                 size="sm"
                 type="submit"
                 className="w-full"
-                // onClick={() =>
-                //   handleDrawerOpen({
-                //     open: true,
-                //     header: SellEnum.CONFIRM_PAYMENT,
-                //   })
-                // }
+                onClick={() =>
+                  handleDrawerOpen({
+                    open: true,
+                    header: SellEnum.CONFIRM_PAYMENT,
+                  })
+                }
               >
                 নগদ টাকা <ArrowForwardIcon />
               </Button>
