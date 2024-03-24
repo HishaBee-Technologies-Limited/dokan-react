@@ -30,7 +30,7 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
                 </TableHeader>
 
                 <TableBody>
-                    {dueList.map((item, i) => (
+                    {dueList?.map((item, i) => (
                         <TableRow key={item.id}>
                             <TableCell>
                                 <div className="flex items-center gap-space8">
