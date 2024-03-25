@@ -1,15 +1,15 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect, useCallback } from "react";
-import Card from "@/components/common/Card";
-import Icon from "@/components/common/Icon";
-import { Button } from "@/components/ui/button";
-import { Image } from "@/components/common/Image";
-import { PageSubTitle, Text } from "@/components/common/text";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { getAllShops } from "@/actions/shop/getAllShops";
-import { IShopResponse } from "@/types/shop";
-import { setCookie } from "cookies-next";
+'use client';
+import Link from 'next/link';
+import React, { useState, useEffect, useCallback } from 'react';
+import Card from '@/components/common/Card';
+import Icon from '@/components/common/Icon';
+import { Button } from '@/components/ui/button';
+import { Image } from '@/components/common/Image';
+import { PageSubTitle, Text } from '@/components/common/text';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { getAllShops } from '@/actions/shop/getAllShops';
+import { IShopResponse } from '@/types/shop';
+import { setCookie } from 'cookies-next';
 
 const SwitchShopPage = () => {
   const router = useRouter();
@@ -34,14 +34,14 @@ const SwitchShopPage = () => {
 
   const handleEditClick = (shop: IShopResponse) => {
     router.push(
-      `${pathname}/edit?${createQueryString("shopId", shop.id.toString())}`
+      `${pathname}/edit?${createQueryString('shopId', shop.id.toString())}`
     );
   };
 
   const handleContinue = () => {
     console.log(selectShop);
-    setCookie("shopId", selectShop);
-    router.push("/contact");
+    setCookie('shopId', selectShop);
+    router.push('/contact');
   };
 
   useEffect(() => {
@@ -64,10 +64,10 @@ const SwitchShopPage = () => {
       <div className="gap-space16 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
         {shops?.map((shop) => (
           <Card
-            key={shop.id + "shop"}
+            key={shop.id + 'shop'}
             onClick={() => setSelectShop(shop.id)}
             className={`p-space16 border-color relative flex w-full cursor-pointer flex-col items-center shadow-sm
-                        ${selectShop === shop.id ? "border-[.3rem]" : "border"}
+                        ${selectShop === shop.id ? 'border-[.3rem]' : 'border'}
                         `}
           >
             <div className="mt-space32 gap-space12 flex flex-col items-center">
@@ -87,7 +87,7 @@ const SwitchShopPage = () => {
 
               {/* <Link href={"/shop/edit"}> */}
               <Button
-                size={"sm"}
+                size={'sm'}
                 variant="secondary"
                 className="sm:px-space32"
                 onClick={() => handleEditClick(shop)}
@@ -103,9 +103,9 @@ const SwitchShopPage = () => {
         <Card
           className={`p-space16 py-space40 border-color border-color gap-space32 flex w-full flex-col items-center border shadow-sm`}
         >
-          <Image src={"/images/add_shop.svg"} alt="" height={84} width={84} />
+          <Image src={'/images/add_shop.svg'} alt="" height={84} width={84} />
 
-          <Link href={"/shop/add"}>
+          <Link href={'/shop/add'}>
             <Button variant="secondary" className="sm:px-space32">
               <Icon
                 icon="fontisto:shopping-basket-add"

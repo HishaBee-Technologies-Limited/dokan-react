@@ -1,4 +1,4 @@
-import { DiscountType, WarrantyType } from "@/schemas/products";
+import { DiscountType, WarrantyType } from '@/schemas/products';
 export interface IProduct {
   id: number;
   name: string;
@@ -22,6 +22,7 @@ export interface IProduct {
   warranty_type?: WarrantyType;
   sell_online?: boolean;
   vat_applicable?: boolean;
+  unit?: number;
 }
 
 export interface IProductPayload {
@@ -36,7 +37,7 @@ export interface IProductPayload {
   vat_applicable?: boolean;
   vat_percent?: number;
   gallery?: string[]; // An array of strings (empty in this case)
-  product_type?: "SIMPLE";
+  product_type?: 'SIMPLE';
   barcode?: null | string; // Can be null or a string
   sell_online?: boolean;
   shipping_cost?: number;

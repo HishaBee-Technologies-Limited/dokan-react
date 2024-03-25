@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
-import Icon from "@/components/common/Icon";
-import { ProductEnum } from "@/enum/product";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/common/text";
-import { Image } from "@/components/common/Image";
-import { DialogFooter } from "@/components/common/Dialog";
-import { useProductStore } from "@/stores/useProductStore";
-import { HistoryIcon } from "@/components/common/icons/HistoryIcon";
+import React, { useEffect, useState } from 'react';
+import Icon from '@/components/common/Icon';
+import { ProductEnum } from '@/enum/product';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/common/text';
+import { Image } from '@/components/common/Image';
+import { DialogFooter } from '@/components/common/Dialog';
+import { useProductStore } from '@/stores/useProductStore';
+import { HistoryIcon } from '@/components/common/icons/HistoryIcon';
 import {
   AddIcon,
   DeleteIcon,
   EditIcon,
   MoreVertIcon,
-} from "@/components/common/icons";
+} from '@/components/common/icons';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { IProduct } from "@/types/product";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { productProfitCalculation } from "@/lib/utils";
+} from '@/components/ui/dropdown-menu';
+import { IProduct } from '@/types/product';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { productProfitCalculation } from '@/lib/utils';
 
 export const ProductDetails = ({ product }: { product: IProduct }) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
@@ -48,7 +48,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size={"icon"} variant={"transparent"}>
+                <Button size={'icon'} variant={'transparent'}>
                   <MoreVertIcon />
                 </Button>
               </DropdownMenuTrigger>
@@ -56,8 +56,8 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
               <DropdownMenuContent align="end" side="bottom" className="w-56">
                 <DropdownMenuItem asChild>
                   <Button
-                    size={"sm"}
-                    variant={"transparent"}
+                    size={'sm'}
+                    variant={'transparent'}
                     className="w-full justify-start"
                     onClick={() =>
                       handleDrawerOpen({
@@ -72,8 +72,8 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Button
-                    size={"sm"}
-                    variant={"transparent"}
+                    size={'sm'}
+                    variant={'transparent'}
                     className="text-error-100 w-full justify-start"
                     onClick={() =>
                       handleDialogOpen({
@@ -156,7 +156,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(product?.sub_category?.name ?? "N/A") ?? "--"}
+                title={String(product?.sub_category?.name ?? 'N/A') ?? '--'}
                 className="font-semibold"
               />
             </article>
@@ -212,7 +212,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
             <Text
               variant="secondary"
               className="text-sm"
-              title={product?.description ?? ""}
+              title={product?.description ?? ''}
             />
           </ScrollArea>
         </div>
@@ -237,7 +237,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
 
         <div className="gap-space12 flex">
           <Button
-            variant={"secondary"}
+            variant={'secondary'}
             className="w-full !font-medium"
             onClick={() =>
               handleDialogOpen({
@@ -250,7 +250,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
             Share Product
           </Button>
           <Button
-            variant={"secondary"}
+            variant={'secondary'}
             className="w-full !font-medium"
             onClick={() =>
               handleDialogOpen({

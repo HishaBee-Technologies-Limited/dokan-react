@@ -1,10 +1,10 @@
-import React from "react";
-import Image from "next/image";
-import Icon from "@/components/common/Icon";
-import { ProductEnum } from "@/enum/product";
-import { Button } from "@/components/ui/button";
-import { useProductStore } from "@/stores/useProductStore";
-import { EditIcon, MoreVertIcon } from "@/components/common/icons";
+import React from 'react';
+import Image from 'next/image';
+import Icon from '@/components/common/Icon';
+import { ProductEnum } from '@/enum/product';
+import { Button } from '@/components/ui/button';
+import { useProductStore } from '@/stores/useProductStore';
+import { EditIcon, MoreVertIcon } from '@/components/common/icons';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +12,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { IProduct } from "@/types/product";
-import { useCreateQueryString } from "@/hooks/useCreateQueryString";
-import { usePathname, useRouter } from "next/navigation";
+} from '@/components/ui/dropdown-menu';
+import { IProduct } from '@/types/product';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const TableDropdownAction = ({ product }: { product: IProduct }) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
@@ -28,8 +28,8 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          size={"icon"}
-          variant={"transparent"}
+          size={'icon'}
+          variant={'transparent'}
           onClick={(e) => {
             e.stopPropagation();
           }}
@@ -39,12 +39,12 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" side="bottom" className="">
-        <DropdownMenuLabel>{"Product Name"}</DropdownMenuLabel>
+        <DropdownMenuLabel>{'Product Name'}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Button
-            size={"sm"}
-            variant={"transparent"}
+            size={'sm'}
+            variant={'transparent'}
             className="w-full justify-start"
             onClick={(e) => {
               e.stopPropagation();
@@ -53,7 +53,7 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
                 header: ProductEnum.PRODUCT_DETAILS,
               });
               router.push(
-                `${pathname}?${setQueryString("product", product?.unique_id)}`
+                `${pathname}?${setQueryString('product', product?.unique_id)}`
               );
             }}
           >
@@ -63,8 +63,8 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
-            size={"sm"}
-            variant={"transparent"}
+            size={'sm'}
+            variant={'transparent'}
             className="w-full justify-start"
             onClick={(e) => {
               e.stopPropagation();
@@ -73,7 +73,7 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
                 header: ProductEnum.EDIT_PRODUCT,
               });
               router.push(
-                `${pathname}?${setQueryString("product", product?.unique_id)}`
+                `${pathname}?${setQueryString('product', product?.unique_id)}`
               );
             }}
           >
@@ -104,8 +104,8 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
         </DropdownMenuItem> */}
         <DropdownMenuItem asChild>
           <Button
-            size={"sm"}
-            variant={"transparent"}
+            size={'sm'}
+            variant={'transparent'}
             className="w-full justify-start"
             onClick={(e) => {
               e.stopPropagation();
@@ -114,19 +114,19 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
                 header: ProductEnum.UPDATE_STOCK,
               });
               router.push(
-                `${pathname}?${setQueryString("product", product?.unique_id)}`
+                `${pathname}?${setQueryString('product', product?.unique_id)}`
               );
             }}
           >
-            <Image src={"/images/update.svg"} alt="" height={16} width={16} />
+            <Image src={'/images/update.svg'} alt="" height={16} width={16} />
             Update Stock
           </Button>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Button
-            size={"sm"}
-            variant={"transparent"}
+            size={'sm'}
+            variant={'transparent'}
             className="w-full justify-start"
             onClick={(e) => {
               e.stopPropagation();

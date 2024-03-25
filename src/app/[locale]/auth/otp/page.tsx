@@ -1,11 +1,11 @@
-import OTPVerify from "@/components/auth/OTPVerify";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import OTPVerify from '@/components/auth/OTPVerify';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  const cookie = cookies().get("mobile_number");
+  const cookie = cookies().get('mobile_number');
   if (!cookie?.value) {
-    redirect("/auth");
+    redirect('/auth');
   }
   return (
     <main>

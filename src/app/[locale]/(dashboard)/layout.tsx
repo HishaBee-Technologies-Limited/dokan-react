@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
-import Dashboard from "@/components/layouts/dashboard";
-import { cookies } from "next/headers";
+import { auth } from '@/auth';
+import Dashboard from '@/components/layouts/dashboard';
+import { SessionProvider } from 'next-auth/react';
 
 export default async function DashboardLayout({
   children,
@@ -8,8 +8,9 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-  const cookie = cookies().getAll();
-  console.log("ddddddd", cookie);
-  console.log("ddddddd", session);
-  return <Dashboard>{children}</Dashboard>;
+  return (
+    <SessionProvider basePath="/" session={session}>
+      <Dashboard session={session}>{children}</Dashboard>
+    </SessionProvider>
+  );
 }
