@@ -1,20 +1,20 @@
-import React, { useEffect, useMemo } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/common/text";
-import { UseFormReturn } from "react-hook-form";
-import { Image } from "@/components/common/Image";
-import { CancelIcon } from "@/components/common/icons";
+import React, { useEffect, useMemo } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/common/text';
+import { UseFormReturn } from 'react-hook-form';
+import { Image } from '@/components/common/Image';
+import { CancelIcon } from '@/components/common/icons';
 import {
   FormItem,
   FormLabel,
   FormField,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { IProduct } from "@/types/product";
-import { DEFAULT_PRODUCT_QUANTITY } from "@/lib/constants/purchase";
-import { usePurchase } from "@/stores/usePurchaseStore";
+} from '@/components/ui/form';
+import { IProduct } from '@/types/product';
+import { DEFAULT_PRODUCT_QUANTITY } from '@/lib/constants/purchase';
+import { usePurchase } from '@/stores/usePurchaseStore';
 
 export interface IProductPurchase extends IProduct {
   product_calculations?: { quantity: number; total: number };
@@ -104,8 +104,8 @@ const ProductFiledRow = (props: IProps) => {
         <Button
           type="button"
           onClick={handleProductDeleteFromSelections}
-          size={"icon"}
-          variant={"danger"}
+          size={'icon'}
+          variant={'danger'}
         >
           <CancelIcon />
         </Button>
@@ -118,7 +118,7 @@ const ProductFiledRow = (props: IProps) => {
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
-                Quantity <span className="text-error-100">*</span>{" "}
+                Quantity <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
                 <Input placeholder="Quantity" {...field} />
@@ -133,7 +133,7 @@ const ProductFiledRow = (props: IProps) => {
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
-                Unit Price <span className="text-error-100">*</span>{" "}
+                Unit Price <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
                 <Input disabled={true} placeholder="Unit Price" {...field} />

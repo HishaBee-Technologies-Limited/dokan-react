@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
-import { cookies } from "next/headers";
+import { authApi } from '@/lib/api';
+import { cookies } from 'next/headers';
 
 export const getSingleProduct = async (uniqueId: string) => {
   try {
-    const shopId = cookies().get("shopId")?.value;
+    const shopId = cookies().get('shopId')?.value;
 
     console.log(uniqueId);
 
@@ -23,6 +23,6 @@ export const getSingleProduct = async (uniqueId: string) => {
       return { success: false, error: data };
     }
   } catch {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

@@ -1,1 +1,1 @@
-export const DEFAULT_PRODUCT_QUANTITY = "1";
+export const DEFAULT_PRODUCT_QUANTITY = '1';

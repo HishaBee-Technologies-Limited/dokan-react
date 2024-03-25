@@ -1,4 +1,4 @@
-import Information from "@/components/auth/Information";
+import Information from '@/components/auth/Information';
 
 const SignUpPage = () => {
   return (

@@ -1,18 +1,18 @@
-import React from "react";
-import { Select } from "@radix-ui/react-select";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/common/text";
-import Search from "@/components/common/forms/Search";
-import { AddIcon, FilterIcon, SortIcon } from "@/components/common/icons";
+import React from 'react';
+import { Select } from '@radix-ui/react-select';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/common/text';
+import Search from '@/components/common/forms/Search';
+import { AddIcon, FilterIcon, SortIcon } from '@/components/common/icons';
 import {
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 const ProductListQueries = () => {
-  const [value, setValue] = React.useState<string>("");
+  const [value, setValue] = React.useState<string>('');
 
   return (
     <div className="space-y-space8 w-full p-space8 border-b border-color">
@@ -21,7 +21,7 @@ const ProductListQueries = () => {
       <div className="flex gap-space12">
         <Search onChange={(e: React.ChangeEvent<HTMLInputElement>) => {}} />
         <Button
-          variant={"secondary"}
+          variant={'secondary'}
           className="!h-[4.4rem] w-[4.8rem] sm:px-space8 text-lg"
         >
           <AddIcon />

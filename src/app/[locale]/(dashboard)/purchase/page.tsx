@@ -1,10 +1,10 @@
-import React from "react";
-import PurchaseDialogs from "@/components/purchase/dialogs";
-import PurchaseDrawers from "@/components/purchase/drawers";
-import { LeftSection } from "@/components/purchase/LeftSection";
-import { RightSection } from "@/components/purchase/RightSection";
-import PurchaseHeader from "@/components/purchase/PurchaseHeader";
-import { getShopsProducts } from "@/actions/product/getShopProducts";
+import React from 'react';
+import PurchaseDialogs from '@/components/purchase/dialogs';
+import PurchaseDrawers from '@/components/purchase/drawers';
+import { LeftSection } from '@/components/purchase/LeftSection';
+import { RightSection } from '@/components/purchase/RightSection';
+import PurchaseHeader from '@/components/purchase/PurchaseHeader';
+import { getShopsProducts } from '@/actions/product/getShopProducts';
 
 const PurchasePage = async () => {
   const allProductsResponse = await getShopsProducts();

@@ -1,31 +1,31 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Card from "@/components/common/Card";
-import { Image } from "@/components/common/Image";
-import { PageSubTitle, Text } from "@/components/common/text";
+'use client';
+import React, { useEffect, useState } from 'react';
+import Card from '@/components/common/Card';
+import { Image } from '@/components/common/Image';
+import { PageSubTitle, Text } from '@/components/common/text';
 
-import { z } from "zod";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowForwardIcon } from "@/components/common/icons";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { z } from 'zod';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowForwardIcon } from '@/components/common/icons';
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
 
 import {
   Form,
@@ -34,34 +34,34 @@ import {
   FormField,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { ShopSchema } from "@/schemas/shop";
-import { IAllArea } from "@/types/shop";
-import { getAreasAndTypes } from "@/actions/shop/getAreaAndTypes";
-import { useRouter, useSearchParams } from "next/navigation";
-import { getShopInfo } from "@/actions/shop/getShopInfo";
-import { getAreaInfo } from "@/actions/shop/getArea";
-import { updateShop } from "@/actions/shop/updateShop";
+} from '@/components/ui/form';
+import { ShopSchema } from '@/schemas/shop';
+import { IAllArea } from '@/types/shop';
+import { getAreasAndTypes } from '@/actions/shop/getAreaAndTypes';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getShopInfo } from '@/actions/shop/getShopInfo';
+import { getAreaInfo } from '@/actions/shop/getArea';
+import { updateShop } from '@/actions/shop/updateShop';
 
 const EditShopPage = () => {
   const form = useForm<z.infer<typeof ShopSchema>>({
     resolver: zodResolver(ShopSchema),
     defaultValues: {
-      name: "",
-      address: "",
-      number: "",
+      name: '',
+      address: '',
+      number: '',
     },
   });
   const [divisions, setDivisions] = useState<IAllArea[]>();
   const [open, setOpen] = React.useState(false);
-  const [divisionValue, setDivisionValue] = React.useState("");
+  const [divisionValue, setDivisionValue] = React.useState('');
   const [openDistrict, setOpenDistrict] = React.useState(false);
-  const [districtValue, setDistrictValue] = React.useState("");
+  const [districtValue, setDistrictValue] = React.useState('');
   const [types, setTypes] = useState<any[]>([]);
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const shopId = searchParams.get("shopId");
+  const shopId = searchParams.get('shopId');
 
   async function onSubmit({
     name,
@@ -80,7 +80,7 @@ const EditShopPage = () => {
         number,
       });
       if (res?.success) {
-        router.push("/shop");
+        router.push('/shop');
         router.refresh();
       }
     }
@@ -91,17 +91,17 @@ const EditShopPage = () => {
       const shopInfo = await getShopInfo(shopId as string);
 
       if (shopInfo?.success) {
-        form.setValue("address", shopInfo?.data?.shop.address);
-        form.setValue("name", shopInfo?.data?.shop.name);
-        form.setValue("number", shopInfo?.data?.shop.public_number);
-        form.setValue("shop_type", shopInfo?.data?.shop.type);
+        form.setValue('address', shopInfo?.data?.shop.address);
+        form.setValue('name', shopInfo?.data?.shop.name);
+        form.setValue('number', shopInfo?.data?.shop.public_number);
+        form.setValue('shop_type', shopInfo?.data?.shop.type);
 
         const areaData = await getAreaInfo(shopInfo?.data?.shop.area);
 
         if (areaData?.success) {
           setDivisionValue(areaData?.data?.division.id);
           setDistrictValue(areaData?.data?.district.id);
-          form.setValue("area", areaData?.data?.area.id);
+          form.setValue('area', areaData?.data?.area.id);
         }
       }
       const res = await getAreasAndTypes();
@@ -116,7 +116,7 @@ const EditShopPage = () => {
   return (
     <div className="space-y-space16 pb-space16">
       <div className="flex items-center gap-space16">
-        <Link href={"/shop"}>
+        <Link href={'/shop'}>
           <ArrowForwardIcon rotate={2} />
         </Link>
 
@@ -132,7 +132,7 @@ const EditShopPage = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Shop Name <span className="text-error-100">*</span>{" "}
+                    Shop Name <span className="text-error-100">*</span>{' '}
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="Shop Name" {...field} />
@@ -153,13 +153,13 @@ const EditShopPage = () => {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "h-16 w-full justify-between bg-white",
-                          !field.value && "text-muted-foreground"
+                          'h-16 w-full justify-between bg-white',
+                          !field.value && 'text-muted-foreground'
                         )}
                       >
                         {field.value
                           ? types?.find((type) => type.id === field.value)?.name
-                          : "Select Type..."}
+                          : 'Select Type...'}
                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
@@ -176,16 +176,16 @@ const EditShopPage = () => {
                               key={type.id}
                               value={String(type.id)}
                               onSelect={() => {
-                                form.setValue("shop_type", type.id);
+                                form.setValue('shop_type', type.id);
                               }}
                             >
                               {type.name}
                               <CheckIcon
                                 className={cn(
-                                  "ml-auto h-4 w-4",
+                                  'ml-auto h-4 w-4',
                                   field.value === type.id
-                                    ? "opacity-100"
-                                    : "opacity-0"
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
                                 )}
                               />
                             </CommandItem>
@@ -212,7 +212,7 @@ const EditShopPage = () => {
                           (division) =>
                             String(division.id) === String(divisionValue)
                         )?.name
-                      : "Select Divisions..."}
+                      : 'Select Divisions...'}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -231,7 +231,7 @@ const EditShopPage = () => {
                           onSelect={(currentValue) => {
                             setDivisionValue(
                               currentValue === String(divisionValue)
-                                ? ""
+                                ? ''
                                 : currentValue
                             );
                             setOpen(false);
@@ -240,10 +240,10 @@ const EditShopPage = () => {
                           {division.name}
                           <CheckIcon
                             className={cn(
-                              "ml-auto h-4 w-4",
+                              'ml-auto h-4 w-4',
                               String(divisionValue) === String(division.id)
-                                ? "opacity-100"
-                                : "opacity-0"
+                                ? 'opacity-100'
+                                : 'opacity-0'
                             )}
                           />
                         </CommandItem>
@@ -270,7 +270,7 @@ const EditShopPage = () => {
                             (district) =>
                               String(district.id) === String(districtValue)
                           )?.name
-                      : "Select Districts..."}
+                      : 'Select Districts...'}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -294,7 +294,7 @@ const EditShopPage = () => {
                             onSelect={(currentValue) => {
                               setDistrictValue(
                                 currentValue === String(districtValue)
-                                  ? ""
+                                  ? ''
                                   : currentValue
                               );
                               setOpenDistrict(false);
@@ -303,10 +303,10 @@ const EditShopPage = () => {
                             {district.name}
                             <CheckIcon
                               className={cn(
-                                "ml-auto h-4 w-4",
+                                'ml-auto h-4 w-4',
                                 String(districtValue) === String(district.id)
-                                  ? "opacity-100"
-                                  : "opacity-0"
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
                               )}
                             />
                           </CommandItem>
@@ -328,8 +328,8 @@ const EditShopPage = () => {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "h-16 w-full justify-between bg-white",
-                          !field.value && "text-muted-foreground"
+                          'h-16 w-full justify-between bg-white',
+                          !field.value && 'text-muted-foreground'
                         )}
                       >
                         {field.value
@@ -344,7 +344,7 @@ const EditShopPage = () => {
                               )
                               ?.areas?.find((area) => area.id === field.value)
                               ?.name
-                          : "Select Area..."}
+                          : 'Select Area...'}
                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
@@ -370,16 +370,16 @@ const EditShopPage = () => {
                                 key={area.id}
                                 value={String(area.id)}
                                 onSelect={() => {
-                                  form.setValue("area", area.id);
+                                  form.setValue('area', area.id);
                                 }}
                               >
                                 {area.name}
                                 <CheckIcon
                                   className={cn(
-                                    "ml-auto h-4 w-4",
+                                    'ml-auto h-4 w-4',
                                     field.value === area.id
-                                      ? "opacity-100"
-                                      : "opacity-0"
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
                                   )}
                                 />
                               </CommandItem>
@@ -426,7 +426,7 @@ const EditShopPage = () => {
             <Text title="No changes made" variant="error" />
           )}
           <div className="flex justify-end gap-space12 mt-space16">
-            <Button variant={"secondary"} className="!px-space40">
+            <Button variant={'secondary'} className="!px-space40">
               Cancel
             </Button>
             <Button type="submit" disabled={!form.formState.isValid}>

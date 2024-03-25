@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
-import { api } from "@/lib/api";
+import { api } from '@/lib/api';
 
 export const addQrCode = async (payload: any) => {
   try {
-    const response = await api.post('/qr/add', payload)
+    const response = await api.post('/qr/add', payload);
     const data = await response.json();
 
     if (response.ok) {
@@ -15,4 +15,4 @@ export const addQrCode = async (payload: any) => {
   } catch (error) {
     return { success: false, error: 'Something went wrong!' };
   }
-}
+};

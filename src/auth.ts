@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { authConfig } from "./auth.config";
-import { login, signup } from "@/actions/auth";
-import { RegisterSchema } from "./schemas/auth";
+import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import { authConfig } from './auth.config';
+import { login, signup } from '@/actions/auth';
+import { RegisterSchema } from './schemas/auth';
 
 export const {
   auth,
@@ -13,33 +13,33 @@ export const {
   ...authConfig,
   providers: [
     Credentials({
-      id: "credentials",
-      name: "credentials",
+      id: 'credentials',
+      name: 'credentials',
       credentials: {
         mobile_number: {
-          label: "Mobile Number",
-          type: "text",
-          placeholder: "Mobile",
+          label: 'Mobile Number',
+          type: 'text',
+          placeholder: 'Mobile',
         },
         pin: {
-          label: "Pin",
-          type: "password",
+          label: 'Pin',
+          type: 'password',
         },
         address: {
-          label: "Address",
-          type: "text",
+          label: 'Address',
+          type: 'text',
         },
         user_intent: {
-          label: "Intent",
-          type: "text",
+          label: 'Intent',
+          type: 'text',
         },
         brand_name: {
-          label: "Brand",
-          type: "text",
+          label: 'Brand',
+          type: 'text',
         },
         confirm_pin: {
-          label: "Confirm Pin",
-          type: "password",
+          label: 'Confirm Pin',
+          type: 'password',
         },
       },
       async authorize(credentials) {
@@ -54,8 +54,8 @@ export const {
       },
     }),
     Credentials({
-      id: "signup",
-      name: "signup",
+      id: 'signup',
+      name: 'signup',
 
       async authorize(credentials) {
         const validatedFields = RegisterSchema.safeParse(credentials);

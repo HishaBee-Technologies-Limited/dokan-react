@@ -1,16 +1,16 @@
-import { z } from "zod";
-import React, { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import Icon from "@/components/common/Icon";
-import Card from "@/components/common/Card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Text } from "@/components/common/text";
-import { Image } from "@/components/common/Image";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DrawerFooter } from "@/components/common/Drawer";
-import { v4 as uuidv4 } from "uuid";
+import { z } from 'zod';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Icon from '@/components/common/Icon';
+import Card from '@/components/common/Card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Text } from '@/components/common/text';
+import { Image } from '@/components/common/Image';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DrawerFooter } from '@/components/common/Drawer';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   Select,
@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Form,
   FormItem,
@@ -26,18 +26,18 @@ import {
   FormField,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { IProduct, IProductPayload, IUnits } from "@/types/product";
-import { ProductFormDef, ProductSchema } from "@/schemas/products";
-import { useRouter } from "next/navigation";
-import { getCookie } from "cookies-next";
-import { createProductOrUpdate } from "@/actions/product/createProductOrUpdate";
+} from '@/components/ui/form';
+import { IProduct, IProductPayload, IUnits } from '@/types/product';
+import { ProductFormDef, ProductSchema } from '@/schemas/products';
+import { useRouter } from 'next/navigation';
+import { getCookie } from 'cookies-next';
+import { createProductOrUpdate } from '@/actions/product/createProductOrUpdate';
 import {
   DEFAULT_STARTING_VERSION,
   DISCOUNT_TYPE,
   WARRANTY_TYPE,
-} from "@/lib/constants/product";
-import { format } from "date-fns";
+} from '@/lib/constants/product';
+import { format } from 'date-fns';
 
 export const EditProduct = ({
   product,
@@ -55,11 +55,11 @@ export const EditProduct = ({
     },
   });
   const router = useRouter();
-  const [initialSubCategory, setInitialSubCategory] = useState("");
-  const shopId = getCookie("shopId");
+  const [initialSubCategory, setInitialSubCategory] = useState('');
+  const shopId = getCookie('shopId');
   const uuid = uuidv4();
 
-  const selectedCategory = form.watch("category");
+  const selectedCategory = form.watch('category');
   const category = useMemo(() => {
     return productCategories.find(
       (category: { sub_category: { id: number }[] }) =>
@@ -84,7 +84,7 @@ export const EditProduct = ({
       stock: Number(data.stock),
       ...(product.version && { version: product.version + 1 }),
       ...(product.created_at && { created_at: product.created_at }),
-      updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
+      updated_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
       sub_category: Number(data.sub_category),
       wholesale_amount: Number(data.bulk_quantity),
       wholesale_price: Number(data.bulk_price),
@@ -105,31 +105,31 @@ export const EditProduct = ({
     }
   }
   useEffect(() => {
-    form.setValue("product_name", product?.name ?? ""),
-      form.setValue("stock", String(product?.stock ?? "")),
-      form.setValue("purchase_price", String(product?.cost_price ?? "")),
-      form.setValue("sell_price", String(product?.selling_price ?? "")),
+    form.setValue('product_name', product?.name ?? ''),
+      form.setValue('stock', String(product?.stock ?? '')),
+      form.setValue('purchase_price', String(product?.cost_price ?? '')),
+      form.setValue('sell_price', String(product?.selling_price ?? '')),
       // others------------
-      form.setValue("bulk_price", String(product?.wholesale_price ?? "")),
-      form.setValue("bulk_quantity", String(product?.wholesale_amount ?? "")),
-      form.setValue("low_stock", String(product?.stock_alert ?? "")),
-      form.setValue("vat_percentage", String(product?.wholesale_price ?? "")),
-      form.setValue("warranty_duration", String(product?.warranty ?? "")),
-      form.setValue("discount", String(product?.discount ?? "")),
+      form.setValue('bulk_price', String(product?.wholesale_price ?? '')),
+      form.setValue('bulk_quantity', String(product?.wholesale_amount ?? '')),
+      form.setValue('low_stock', String(product?.stock_alert ?? '')),
+      form.setValue('vat_percentage', String(product?.wholesale_price ?? '')),
+      form.setValue('warranty_duration', String(product?.warranty ?? '')),
+      form.setValue('discount', String(product?.discount ?? '')),
       product?.warranty_type &&
-        form.setValue("warranty_type", product.warranty_type),
+        form.setValue('warranty_type', product.warranty_type),
       product?.discount_type &&
-        form.setValue("discount_type", product.discount_type),
-      form.setValue("sub_category", String(product?.sub_category?.id)),
-      form.setValue("unit", String(product?.unit)),
+        form.setValue('discount_type', product.discount_type),
+      form.setValue('sub_category', String(product?.sub_category?.id)),
+      form.setValue('unit', String(product?.unit)),
       // boolean
-      form.setValue("online_sell", product?.sell_online ?? false),
-      form.setValue("low_stock_check", true),
-      form.setValue("vat_check", product?.vat_applicable ?? false),
-      form.setValue("warranty_check", true),
-      form.setValue("discount_check", true),
-      form.setValue("bulk_sell_check", true);
-    form.setValue("category", String(category?.id));
+      form.setValue('online_sell', product?.sell_online ?? false),
+      form.setValue('low_stock_check', true),
+      form.setValue('vat_check', product?.vat_applicable ?? false),
+      form.setValue('warranty_check', true),
+      form.setValue('discount_check', true),
+      form.setValue('bulk_sell_check', true);
+    form.setValue('category', String(category?.id));
     setInitialSubCategory(String(product?.sub_category?.id));
   }, [product, category]);
 
@@ -168,8 +168,8 @@ export const EditProduct = ({
           />
 
           <div className="flex gap-space12 py-space12">
-            <Image src={""} alt="" height={60} width={60} />
-            <Image src={""} alt="" height={60} width={60} />
+            <Image src={''} alt="" height={60} width={60} />
+            <Image src={''} alt="" height={60} width={60} />
           </div>
         </div>
 
@@ -184,7 +184,7 @@ export const EditProduct = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Product Name <span className="text-error-100">*</span>{" "}
+                Product Name <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
                 <Input placeholder="Product Name" {...field} />
@@ -352,9 +352,9 @@ export const EditProduct = ({
 
         <div
           className={`${
-            form.watch("bulk_sell_check")
-              ? " bg-primary-10 dark:bg-primary-90"
-              : ""
+            form.watch('bulk_sell_check')
+              ? ' bg-primary-10 dark:bg-primary-90'
+              : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -380,16 +380,16 @@ export const EditProduct = ({
 
           <div
             className={`grid ${
-              form.watch("bulk_sell_check")
-                ? "grid-rows-[1fr]"
-                : "grid-rows-[0fr]"
+              form.watch('bulk_sell_check')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("bulk_sell_check")
-                  ? "py-space8 border-t border-color"
-                  : ""
+                form.watch('bulk_sell_check')
+                  ? 'py-space8 border-t border-color'
+                  : ''
               } px-space12 overflow-hidden`}
             >
               <div className="grid sm:grid-cols-2 gap-space12">
@@ -426,9 +426,9 @@ export const EditProduct = ({
         </div>
         <div
           className={`${
-            form.watch("low_stock_check")
-              ? " bg-primary-10 dark:bg-primary-90"
-              : ""
+            form.watch('low_stock_check')
+              ? ' bg-primary-10 dark:bg-primary-90'
+              : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -451,16 +451,16 @@ export const EditProduct = ({
 
           <div
             className={`grid ${
-              form.watch("low_stock_check")
-                ? "grid-rows-[1fr]"
-                : "grid-rows-[0fr]"
+              form.watch('low_stock_check')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("low_stock_check")
-                  ? "py-space8 border-t border-color"
-                  : ""
+                form.watch('low_stock_check')
+                  ? 'py-space8 border-t border-color'
+                  : ''
               } px-space12 overflow-hidden`}
             >
               <FormField
@@ -480,7 +480,7 @@ export const EditProduct = ({
         </div>
         <div
           className={`${
-            form.watch("vat_check") ? " bg-primary-10 dark:bg-primary-90" : ""
+            form.watch('vat_check') ? ' bg-primary-10 dark:bg-primary-90' : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -503,12 +503,12 @@ export const EditProduct = ({
 
           <div
             className={`grid ${
-              form.watch("vat_check") ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              form.watch('vat_check') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("vat_check") ? "py-space8 border-t border-color" : ""
+                form.watch('vat_check') ? 'py-space8 border-t border-color' : ''
               } px-space12 overflow-hidden`}
             >
               <FormField
@@ -528,9 +528,9 @@ export const EditProduct = ({
         </div>
         <div
           className={`${
-            form.watch("warranty_check")
-              ? " bg-primary-10 dark:bg-primary-90"
-              : ""
+            form.watch('warranty_check')
+              ? ' bg-primary-10 dark:bg-primary-90'
+              : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -553,16 +553,16 @@ export const EditProduct = ({
 
           <div
             className={`grid ${
-              form.watch("warranty_check")
-                ? "grid-rows-[1fr]"
-                : "grid-rows-[0fr]"
+              form.watch('warranty_check')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("warranty_check")
-                  ? "py-space8 border-t border-color"
-                  : ""
+                form.watch('warranty_check')
+                  ? 'py-space8 border-t border-color'
+                  : ''
               } px-space12 overflow-hidden`}
             >
               <Text title="Days after sale date" />
@@ -614,9 +614,9 @@ export const EditProduct = ({
         </div>
         <div
           className={`${
-            form.watch("discount_check")
-              ? " bg-primary-10 dark:bg-primary-90"
-              : ""
+            form.watch('discount_check')
+              ? ' bg-primary-10 dark:bg-primary-90'
+              : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -639,16 +639,16 @@ export const EditProduct = ({
 
           <div
             className={`grid ${
-              form.watch("discount_check")
-                ? "grid-rows-[1fr]"
-                : "grid-rows-[0fr]"
+              form.watch('discount_check')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("discount_check")
-                  ? "py-space8 border-t border-color"
-                  : ""
+                form.watch('discount_check')
+                  ? 'py-space8 border-t border-color'
+                  : ''
               } px-space12 overflow-hidden`}
             >
               <Text title="Discount" />
@@ -700,7 +700,7 @@ export const EditProduct = ({
         </div>
 
         <DrawerFooter>
-          <Button type="button" variant={"secondary"} className="w-full">
+          <Button type="button" variant={'secondary'} className="w-full">
             Cancel
           </Button>
           <Button type="submit" className="w-full">

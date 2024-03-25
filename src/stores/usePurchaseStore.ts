@@ -1,7 +1,7 @@
-import { IProductPurchase } from "@/components/sell/ProductFiledRow";
-import { IProduct } from "@/types/product";
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { IProductPurchase } from '@/components/sell/ProductFiledRow';
+import { IProduct } from '@/types/product';
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export interface IProductState {
   products: IProduct[];
@@ -15,7 +15,7 @@ export interface IProductState {
 interface IProductStateActions {
   setProducts: (products: IProduct[]) => void;
   setCalculatedProducts: (
-    products: IProductState["calculatedProducts"]
+    products: IProductState['calculatedProducts']
   ) => void;
 }
 export const usePurchase = create<IProductState & IProductStateActions>()(
@@ -23,9 +23,9 @@ export const usePurchase = create<IProductState & IProductStateActions>()(
     (set) => ({
       products: [],
       calculatedProducts: {
-        deliveryCharge: "",
+        deliveryCharge: '',
         totalPrice: 0,
-        discount: "",
+        discount: '',
         products: [],
       },
       setProducts: (products) => set({ products: products }),
@@ -35,7 +35,7 @@ export const usePurchase = create<IProductState & IProductStateActions>()(
     {
       storage: createJSONStorage(() => sessionStorage),
 
-      name: "products",
+      name: 'products',
     }
   )
 );

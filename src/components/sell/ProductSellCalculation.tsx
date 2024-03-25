@@ -1,18 +1,18 @@
-import React, { useEffect, useMemo, useState } from "react";
-import Card from "@/components/common/Card";
-import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
-import { Text } from "@/components/common/text";
-import { FormItem, FormField, FormControl } from "@/components/ui/form";
+import React, { useEffect, useMemo, useState } from 'react';
+import Card from '@/components/common/Card';
+import { Input } from '@/components/ui/input';
+import { UseFormReturn } from 'react-hook-form';
+import { Text } from '@/components/common/text';
+import { FormItem, FormField, FormControl } from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { DISCOUNT_TYPE } from "@/lib/constants/product";
-import { calculateGrandTotal } from "@/lib/utils";
+} from '@/components/ui/select';
+import { DISCOUNT_TYPE } from '@/lib/constants/product';
+import { calculateGrandTotal } from '@/lib/utils';
 
 type IProps = {
   form: UseFormReturn<any>;
@@ -25,10 +25,10 @@ const ProductSellCalculation = (props: IProps) => {
   /**
    * values reading from the hook form
    */
-  const discountAmount = form.watch("discount");
-  const discountType = form.watch("discount_type");
-  const deliveryCharge = form.watch("delivery_charge");
-  const products = form.watch("products");
+  const discountAmount = form.watch('discount');
+  const discountType = form.watch('discount_type');
+  const deliveryCharge = form.watch('delivery_charge');
+  const products = form.watch('products');
 
   /**
    * calculating the total price from the selected and entered product quantity
@@ -58,13 +58,13 @@ const ProductSellCalculation = (props: IProps) => {
    * set the total price to the form state for centralize all the necessary information
    * for next action
    */
-  grandTotal && form.setValue("totalPrice", String(grandTotal));
+  grandTotal && form.setValue('totalPrice', String(grandTotal));
 
   return (
     <Card className="p-space8 shadow space-y-space4">
       <article className="flex justify-between items-center gap-space8 py-space4 border-b border-dashed border-color">
         <Text title="Total" className="text-sm" />
-        <Text title={`৳ ${totalPrice ?? "0"}`} className="font-medium" />
+        <Text title={`৳ ${totalPrice ?? '0'}`} className="font-medium" />
       </article>
 
       <div className="border-b border-dashed border-color">
@@ -136,7 +136,7 @@ const ProductSellCalculation = (props: IProps) => {
       <article className="flex justify-between items-center gap-space8 py-space4 border-t border-dashed border-color">
         <Text title="Grand Total" className="text-sm" />
         <Text
-          title={`৳ ${grandTotal ?? "0"}`}
+          title={`৳ ${grandTotal ?? '0'}`}
           variant="error"
           className="text-lg font-medium"
         />

@@ -1,6 +1,6 @@
-import { DiscountType } from "@/schemas/products";
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { DiscountType } from '@/schemas/products';
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,7 +27,7 @@ export function calculateGrandTotal(
 ) {
   console.log(typeof totalPrice, typeof deliveryCharge);
   return discountType
-    ? discountType === "PERCENT"
+    ? discountType === 'PERCENT'
       ? totalPrice - percentage(totalPrice, discountAmount) + deliveryCharge
       : totalPrice - discountAmount + deliveryCharge
     : totalPrice + deliveryCharge;

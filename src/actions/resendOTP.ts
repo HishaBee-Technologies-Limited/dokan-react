@@ -1,5 +1,5 @@
-"use server";
-import { api } from "@/lib/api";
+'use server';
+import { api } from '@/lib/api';
 
 export const resendOTP = async ({
   mobile_number,

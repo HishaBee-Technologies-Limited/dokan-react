@@ -1,8 +1,8 @@
-"use client";
-import React, { useState } from "react";
-import Header from "@/components/layouts/dashboard/Header";
-import AsideBar from "@/components/layouts/dashboard/AsideBar";
-import { SessionProvider } from "next-auth/react";
+'use client';
+import React, { useState } from 'react';
+import Header from '@/components/layouts/dashboard/Header';
+import AsideBar from '@/components/layouts/dashboard/AsideBar';
+import { SessionProvider } from 'next-auth/react';
 
 // import { useSession } from "next-auth/react";
 
@@ -25,15 +25,15 @@ const Dashboard = ({
       <AsideBar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <div
         className={`hidden xl:block hd:hidden ${
-          menuOpen ? "w-[34.4rem] left-0" : "left-0 w-[8rem]"
+          menuOpen ? 'w-[34.4rem] left-0' : 'left-0 w-[8rem]'
         } duration-500`}
       ></div>
 
       <main
         className={`h-screen ${
           menuOpen
-            ? "w-full xl:w-[calc(100%-34.4rem)]"
-            : "w-full xl:w-[calc(100%-8rem)]"
+            ? 'w-full xl:w-[calc(100%-34.4rem)]'
+            : 'w-full xl:w-[calc(100%-8rem)]'
         } duration-500`}
       >
         <Header

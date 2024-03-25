@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import { Icon as Iconify, IconifyIcon } from '@iconify/react';
 
@@ -14,10 +14,17 @@ type IIconProps = {
   color?: string;
   icon: string | IconifyIcon;
   rotate?: number;
-  className?: string
+  className?: string;
 };
 
-const Icon = ({ height, width, color, icon, rotate, className }: IIconProps) => {
+const Icon = ({
+  height,
+  width,
+  color,
+  icon,
+  rotate,
+  className,
+}: IIconProps) => {
   return (
     <Iconify
       icon={icon}

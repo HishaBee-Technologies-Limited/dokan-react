@@ -1,34 +1,34 @@
-"use client";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import Icon from "@/components/common/Icon";
-import { Text } from "@/components/common/text";
-import { Button } from "@/components/ui/button";
-import { StatefulPinInput } from "react-input-pin-code";
-import { authenticate, authenticateSignUp } from "@/actions/auth";
-import { signIn } from "@/auth";
-import { useRouter } from "next/navigation";
-import { getCookie } from "cookies-next";
+'use client';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import Icon from '@/components/common/Icon';
+import { Text } from '@/components/common/text';
+import { Button } from '@/components/ui/button';
+import { StatefulPinInput } from 'react-input-pin-code';
+import { authenticate, authenticateSignUp } from '@/actions/auth';
+import { signIn } from '@/auth';
+import { useRouter } from 'next/navigation';
+import { getCookie } from 'cookies-next';
 
 const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
   const router = useRouter();
   const [showPin, setShowPin] = useState<boolean>(false);
-  const [confirmPin, setConfirmPin] = useState<string>("");
+  const [confirmPin, setConfirmPin] = useState<string>('');
   const [showConfirmPin, setShowConfirmPin] = useState<boolean>(false);
-  const [pin, setPin] = useState<string>("");
-  const [pinError, setError] = useState<string>("");
-  const cookie = getCookie("signup");
-  console.log("ccccc", JSON.parse(cookie ? cookie : ""));
+  const [pin, setPin] = useState<string>('');
+  const [pinError, setError] = useState<string>('');
+  const cookie = getCookie('signup');
+  console.log('ccccc', JSON.parse(cookie ? cookie : ''));
 
-  const signUpString = JSON.parse(cookie ? cookie : "");
+  const signUpString = JSON.parse(cookie ? cookie : '');
   const { address, brand_name, user_intent } = signUpString;
 
   useEffect(() => {
     if (confirmPin.length === 5) {
       if (pin !== confirmPin) {
-        setError("PIN does not match");
+        setError('PIN does not match');
       } else {
-        setError("");
+        setError('');
       }
     }
   }, [confirmPin]);
@@ -67,16 +67,16 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
             showState={false}
             initialValue={pin}
             mask={!showPin}
-            containerStyle={{ maxWidth: "416px", gap: "1rem" }}
-            onChange={(value, index, values) => setPin(values.join(""))}
+            containerStyle={{ maxWidth: '416px', gap: '1rem' }}
+            onChange={(value, index, values) => setPin(values.join(''))}
             inputClassName="focus:!shadow-none !border-t-0 !border-x-0 !rounded-none !w-[4rem] md:!w-[5.4rem] lg:!w-[4rem] xl:!w-[5.4rem]"
             inputStyle={{
-              color: "#333",
-              outline: "none",
-              fontSize: "2.4rem",
-              fontWeight: "bold",
-              padding: "24px 8px",
-              borderBottom: "2px solid #CCCCCC",
+              color: '#333',
+              outline: 'none',
+              fontSize: '2.4rem',
+              fontWeight: 'bold',
+              padding: '24px 8px',
+              borderBottom: '2px solid #CCCCCC',
             }}
           />
 
@@ -108,16 +108,16 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
             showState={false}
             initialValue={confirmPin}
             mask={!showConfirmPin}
-            containerStyle={{ maxWidth: "416px", gap: "1rem" }}
-            onChange={(value, index, values) => setConfirmPin(values.join(""))}
+            containerStyle={{ maxWidth: '416px', gap: '1rem' }}
+            onChange={(value, index, values) => setConfirmPin(values.join(''))}
             inputClassName="focus:!shadow-none !border-t-0 !border-x-0 !rounded-none !w-[4rem] md:!w-[5.4rem] lg:!w-[4rem] xl:!w-[5.4rem]"
             inputStyle={{
-              color: "#333",
-              outline: "none",
-              fontSize: "2.4rem",
-              fontWeight: "bold",
-              padding: "24px 8px",
-              borderBottom: "2px solid #CCCCCC",
+              color: '#333',
+              outline: 'none',
+              fontSize: '2.4rem',
+              fontWeight: 'bold',
+              padding: '24px 8px',
+              borderBottom: '2px solid #CCCCCC',
             }}
           />
 
@@ -142,7 +142,7 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
       {pinError.length ? (
         <Text title={pinError} variant="error" className="mb-space24" />
       ) : (
-        ""
+        ''
       )}
 
       <Button
@@ -154,7 +154,7 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
       >
         Confirm
       </Button>
-      <Button className="w-full" variant={"transparent"}>
+      <Button className="w-full" variant={'transparent'}>
         Forgot pin?
       </Button>
     </div>

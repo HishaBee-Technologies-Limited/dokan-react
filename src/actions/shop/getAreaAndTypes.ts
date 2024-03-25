@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
+import { authApi } from '@/lib/api';
 
 export const getAreasAndTypes = async () => {
   try {
-    const areas = await authApi.get("/area/all");
-    const types = await authApi.get("/shop/types");
+    const areas = await authApi.get('/area/all');
+    const types = await authApi.get('/shop/types');
 
     const areaData = await areas.json();
     const typesData = await types.json();
@@ -21,6 +21,6 @@ export const getAreasAndTypes = async () => {
       return { success: false, error: { areaData, typesData } };
     }
   } catch (error) {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

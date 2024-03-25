@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
-import { IShopResponse } from "@/types/shop";
+import { authApi } from '@/lib/api';
+import { IShopResponse } from '@/types/shop';
 
 export const getAllShops = async () => {
   try {
-    const res = await authApi.get("/shop/all");
+    const res = await authApi.get('/shop/all');
     const data = await res.json();
 
     if (res.ok) {
@@ -19,6 +19,6 @@ export const getAllShops = async () => {
       return { success: false, error: data };
     }
   } catch {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

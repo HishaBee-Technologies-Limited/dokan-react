@@ -9,19 +9,23 @@ import { useDueStore } from '@/stores/useDueStore'
 import { useCreateQueryString } from '@/hooks/useCreateQueryString'
 
 const dueTypes = [
-    { title: 'Product Due', value: 'product_due', img: '/images/product_due.svg' },
-    { title: 'Money Due', value: 'money_due', img: '/images/money.svg' },
-]
+  {
+    title: 'Product Due',
+    value: 'product_due',
+    img: '/images/product_due.svg',
+  },
+  { title: 'Money Due', value: 'money_due', img: '/images/money.svg' },
+];
 
 const SelectDueType = () => {
-    const router = useRouter()
-    const [activeDueType, setActiveDueType] = useState<string>()
+  const router = useRouter();
+  const [activeDueType, setActiveDueType] = useState<string>();
 
     const { getQueryString } = useCreateQueryString()
     const activeTab = getQueryString('tab') ?? '';
 
-    const handleDrawerOpen = useDueStore((state) => state.setDrawerState)
-    const handleDialogClose = useDueStore((state) => state.setDialogState)
+  const handleDrawerOpen = useDueStore((state) => state.setDrawerState);
+  const handleDialogClose = useDueStore((state) => state.setDialogState);
 
     const handleDueType = (type: string) => {
         setActiveDueType(type)
@@ -42,6 +46,7 @@ const SelectDueType = () => {
             }
         }
     }
+  };
 
     return (
         <div className="grid grid-cols-2 gap-space16 py-space16 pb-space32 px-space16">
@@ -60,4 +65,4 @@ const SelectDueType = () => {
     )
 }
 
-export default SelectDueType
+export default SelectDueType;

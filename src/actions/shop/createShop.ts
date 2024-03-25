@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
-import { IShopResponse, shopPayload } from "@/types/shop";
+import { authApi } from '@/lib/api';
+import { IShopResponse, shopPayload } from '@/types/shop';
 
 export const createShops = async ({
   area,
@@ -27,6 +27,6 @@ export const createShops = async ({
       return { success: false, error: data };
     }
   } catch {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

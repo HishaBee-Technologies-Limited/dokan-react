@@ -1,20 +1,20 @@
-"use client";
-import { z } from "zod";
-import React from "react";
-import { SellEnum } from "@/enum/sell";
-import { useForm } from "react-hook-form";
-import Card from "@/components/common/Card";
-import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/common/text";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { usePurchaseStore } from "@/stores/usePurchase";
-import { ArrowForwardIcon } from "@/components/common/icons";
-import ProductFiledRow from "@/components/sell/ProductFiledRow";
-import ProductSellCalculation from "@/components/sell/ProductSellCalculation";
-import { ScrollArea } from "../ui/scroll-area";
-import { IProductState, usePurchase } from "@/stores/usePurchaseStore";
-import { IProduct } from "@/types/product";
+'use client';
+import { z } from 'zod';
+import React from 'react';
+import { SellEnum } from '@/enum/sell';
+import { useForm } from 'react-hook-form';
+import Card from '@/components/common/Card';
+import { Form } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/common/text';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { usePurchaseStore } from '@/stores/usePurchase';
+import { ArrowForwardIcon } from '@/components/common/icons';
+import ProductFiledRow from '@/components/sell/ProductFiledRow';
+import ProductSellCalculation from '@/components/sell/ProductSellCalculation';
+import { ScrollArea } from '../ui/scroll-area';
+import { IProductState, usePurchase } from '@/stores/usePurchaseStore';
+import { IProduct } from '@/types/product';
 
 const formSchema = z.object({
   quantity: z.string(),

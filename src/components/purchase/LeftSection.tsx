@@ -1,15 +1,15 @@
-"use client";
-import React from "react";
-import Card from "@/components/common/Card";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/common/text";
-import { Image } from "@/components/common/Image";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import ProductListQueries from "@/components/sell/ProductListQueries";
-import { IProduct } from "@/types/product";
-import { useCreateQueryString } from "@/hooks/useCreateQueryString";
-import { usePathname, useRouter } from "next/navigation";
-import { usePurchase } from "@/stores/usePurchaseStore";
+'use client';
+import React from 'react';
+import Card from '@/components/common/Card';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/common/text';
+import { Image } from '@/components/common/Image';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import ProductListQueries from '@/components/sell/ProductListQueries';
+import { IProduct } from '@/types/product';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import { usePathname, useRouter } from 'next/navigation';
+import { usePurchase } from '@/stores/usePurchaseStore';
 
 export const LeftSection = ({ productData }: { productData: any }) => {
   const { setQueryString } = useCreateQueryString();
@@ -33,7 +33,7 @@ export const LeftSection = ({ productData }: { productData: any }) => {
                 <Text title={product.name} className="text-sm" />
               </div>
               <Button
-                size={"sm"}
+                size={'sm'}
                 onClick={() => setProducts([...products, product])}
                 disabled={products.some((prod) => prod.id === product.id)}
               >

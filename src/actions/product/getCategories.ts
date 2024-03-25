@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
-import { cookies } from "next/headers";
+import { authApi } from '@/lib/api';
+import { cookies } from 'next/headers';
 
 export const getCategories = async (userId: string) => {
   try {
@@ -20,6 +20,6 @@ export const getCategories = async (userId: string) => {
       return { success: false, error: data };
     }
   } catch {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

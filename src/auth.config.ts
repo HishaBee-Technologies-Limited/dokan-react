@@ -1,16 +1,16 @@
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig } from 'next-auth';
 import {
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
   publicRoutes,
   rootRoute,
-} from "./routes";
-import { add, format } from "date-fns";
+} from './routes';
+import { add, format } from 'date-fns';
 
 export const authConfig = {
   pages: {
-    signIn: "/",
+    signIn: '/',
   },
   providers: [
     // added later in auth.ts
@@ -21,7 +21,7 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl, cookies, headers } }) {
       const isLoggedIn = !!auth;
 
-      console.log("isLoggedIn", isLoggedIn);
+      console.log('isLoggedIn', isLoggedIn);
 
       const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
       const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -32,12 +32,12 @@ export const authConfig = {
         return;
       }
       if (isRootRoute) {
-        return Response.redirect(new URL("/auth", nextUrl));
+        return Response.redirect(new URL('/auth', nextUrl));
       }
       if (isAuthRoute) {
         if (isLoggedIn) {
-          if (cookies.get("shopId")?.value) {
-            return Response.redirect(new URL("/home", nextUrl));
+          if (cookies.get('shopId')?.value) {
+            return Response.redirect(new URL('/home', nextUrl));
           }
           return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
@@ -69,6 +69,6 @@ export const authConfig = {
     },
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
 } satisfies NextAuthConfig;
