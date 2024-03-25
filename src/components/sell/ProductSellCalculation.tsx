@@ -103,7 +103,9 @@ const ProductSellCalculation = (props: IProps) => {
                     </FormControl>
                     <SelectContent align="end" side="top">
                       {DISCOUNT_TYPE.map((type) => (
-                        <SelectItem value={type.value}>{type.name}</SelectItem>
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

@@ -60,12 +60,12 @@ export const RightSection = () => {
           />
 
           <div className="space-y-space12">
+            {/* <ProductFiledRow form={form} />
             <ProductFiledRow form={form} />
             <ProductFiledRow form={form} />
             <ProductFiledRow form={form} />
             <ProductFiledRow form={form} />
-            <ProductFiledRow form={form} />
-            <ProductFiledRow form={form} />
+            <ProductFiledRow form={form} /> */}
           </div>
         </ScrollArea>
 

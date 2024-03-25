@@ -40,34 +40,36 @@ const HistoryHeader = () => {
       <PageSubTitle title="Due History" />
 
       <div className="flex flex-wrap gap-space8 sm:gap-space12">
-        <Select onValueChange={handleSort} defaultValue={value}>
-          <SelectTrigger className="max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400">
-            <SortIcon />
-            <SelectValue placeholder="Sort By" />
-          </SelectTrigger>
-          <SelectContent>
-            <div className="max-h-[24rem] overflow-y-scroll">
-              <SelectItem value="m@example.com">m@example.com</SelectItem>
-              <SelectItem value="m@google.com">m@google.com</SelectItem>
-              <SelectItem value="m@support.com">m@support.com</SelectItem>
-            </div>
-          </SelectContent>
-        </Select>
-        <Select onValueChange={handleSort} defaultValue={value}>
-          <SelectTrigger className="max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400">
-            <FilterIcon />
-            <SelectValue placeholder="Filter By" />
-          </SelectTrigger>
-          <SelectContent>
-            <div className="max-h-[24rem] overflow-y-scroll">
-              <SelectItem value="m@example.com">m@example.com</SelectItem>
-              <SelectItem value="m@google.com">m@google.com</SelectItem>
-              <SelectItem value="m@support.com">m@support.com</SelectItem>
-            </div>
-          </SelectContent>
-        </Select>
-        <DatePicker
-          onChange={(date) => console.log(date)}
+        {/* Need to be feature, not implemented yet because API is not ready, Mobile end Its working manually, but not implemented in the web end. Because Paginated problem */}
+        {/* <Select onValueChange={handleSort} defaultValue={value}>
+                    <SelectTrigger className="max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400" >
+                        <SortIcon />
+                        <SelectValue placeholder="Sort By" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <div className="max-h-[24rem] overflow-y-scroll">
+                            <SelectItem value="m@example.com">m@example.com</SelectItem>
+                            <SelectItem value="m@google.com">m@google.com</SelectItem>
+                            <SelectItem value="m@support.com">m@support.com</SelectItem>
+                        </div>
+                    </SelectContent>
+                </Select>
+                <Select onValueChange={handleSort} defaultValue={value}>
+                    <SelectTrigger className="max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400" >
+                        <FilterIcon />
+                        <SelectValue placeholder="Filter By" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <div className="max-h-[24rem] overflow-y-scroll">
+                            <SelectItem value="m@example.com">m@example.com</SelectItem>
+                            <SelectItem value="m@google.com">m@google.com</SelectItem>
+                            <SelectItem value="m@support.com">m@support.com</SelectItem>
+                        </div>
+                    </SelectContent>
+                </Select> */}
+
+        <DateRangePicker
+          onChange={(date) => handleDateRange(date)}
           triggerClasses="!h-[4.8rem]"
         />
 

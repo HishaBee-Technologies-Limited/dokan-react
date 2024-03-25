@@ -13,16 +13,16 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 
 interface IProps {
-    dueItems: IDueItemsResponse[]
-    totalValues: {
-        total_give: number;
-        total_get: number;
-    }
+  dueItems: IDueItemsResponse[];
+  totalValues: {
+    total_give: number;
+    total_get: number;
+  };
 }
 
 export const RightSection = ({ dueItems, totalValues }: IProps) => {
-    const { getQueryString } = useCreateQueryString()
-    const activeTab = getQueryString('tab') ?? '';
+  const { getQueryString } = useCreateQueryString();
+  const activeTab = getQueryString('tab') ?? '';
 
   const handleDialogOpen = useDueStore((state) => state.setDialogState);
   const handleDrawerOpen = useDueStore((state) => state.setDrawerState);
@@ -41,7 +41,7 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
     } else if (activeTab === DueEnum.SUPPLIER) {
       handleDialogOpen({ open: true, header: DueEnum.SELECT_DUE_TYPE });
     }
-
+  };
 
   return (
     <Card className="h-full lg:w-8/12 flex flex-col gap-space8">
@@ -107,16 +107,28 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
         <article className="sm:px-space12 flex justify-between gap-space8 pb-space8">
           <Text title="Total" className="text-sm font-bold" />
 
-                    <article className="sm:w-1/2 md:pl-space16 flex justify-between gap-space16">
-                        <Text title={`৳ ${totalValues.total_get}`} variant='success' className='text-sm font-bold' />
-                        <Text title={`৳ ${totalValues.total_give}`} variant='error' className='text-sm font-bold' />
-                        <Text
-                            className='text-sm font-bold'
-                            title={`৳ ${totalValues.total_give - totalValues.total_get}`}
-                            variant={(totalValues.total_give - totalValues.total_get) < 0 ? 'success' : 'error'}
-                        />
-                    </article>
-                </article>
+          <article className="sm:w-1/2 md:pl-space16 flex justify-between gap-space16">
+            <Text
+              title={`৳ ${totalValues.total_get}`}
+              variant="success"
+              className="text-sm font-bold"
+            />
+            <Text
+              title={`৳ ${totalValues.total_give}`}
+              variant="error"
+              className="text-sm font-bold"
+            />
+            <Text
+              className="text-sm font-bold"
+              title={`৳ ${totalValues.total_give - totalValues.total_get}`}
+              variant={
+                totalValues.total_give - totalValues.total_get < 0
+                  ? 'success'
+                  : 'error'
+              }
+            />
+          </article>
+        </article>
 
         <div className="grid grid-cols-2 gap-space16">
           <Button
