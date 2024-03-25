@@ -19,11 +19,10 @@ const DuePage = async ({
     searchParams,
 }: IContactProps) => {
 
-    const userID = searchParams.active_user?.split('-')[0];
+    const userID = searchParams.active_user || '';
 
     const dueList = await getAllDue();
-    // const dueItems = await getDueItemByUniqueID(userID)
-    const dueItems = await getDueItemByUniqueID('364613f0-ab6d-11ec-9206-e78b660b78db1891648124609199')
+    const dueItems = await getDueItemByUniqueID(`${userID}`)
 
     return (
         <>

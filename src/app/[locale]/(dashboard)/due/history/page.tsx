@@ -16,8 +16,8 @@ const DueHistory = async ({
     searchParams,
 }: IDueHistoryProps) => {
 
-    const end_date = searchParams.end_date?.split('-')[0];
-    const start_date = searchParams.start_date?.split('-')[0];
+    const end_date = searchParams.end_date?.split('-')[0] ?? new Date();
+    const start_date = searchParams.start_date?.split('-')[0] ?? new Date();
 
     const params = {
         // page: 1,
