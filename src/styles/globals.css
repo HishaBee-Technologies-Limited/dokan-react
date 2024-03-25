@@ -14,7 +14,6 @@
     font-size: 1.6rem !important;
   }
 
-
   /* width */
   ::-webkit-scrollbar {
     width: 0.2rem;
@@ -49,18 +48,17 @@
   }
 
   /* Hide the up and down arrows */
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
 
   /* Firefox */
-  input[type="number"] {
+  input[type='number'] {
     -moz-appearance: textfield;
   }
 }
-
 
 @layer components {
   .nth_child_even_odd {
@@ -68,28 +66,26 @@
   }
 
   .border-color {
-    @apply border-primary-20 dark:border-primary-80
+    @apply border-primary-20 dark:border-primary-80;
   }
 
   .background {
-    @apply bg-white dark:bg-primary-90
+    @apply bg-white dark:bg-primary-90;
   }
 
   .bg-secondary {
-    @apply bg-primary-5 dark:bg-primary-80
+    @apply bg-primary-5 dark:bg-primary-80;
   }
 }
 
-
 @layer utilities {
-
   /* Toggle Button Styles Start */
   .switch {
     position: relative;
     display: inline-block;
   }
 
-  .switch>span {
+  .switch > span {
     position: absolute;
     top: 2px;
     pointer-events: none;
@@ -99,21 +95,21 @@
     text-align: center;
   }
 
-  input.check-toggle-round-flat:checked~.off {
+  input.check-toggle-round-flat:checked ~ .off {
     color: #000;
   }
 
-  input.check-toggle-round-flat:checked~.on {
+  input.check-toggle-round-flat:checked ~ .on {
     color: #fff;
   }
 
-  .switch>span.on {
+  .switch > span.on {
     left: 0;
     padding-left: 2px;
     color: #000;
   }
 
-  .switch>span.off {
+  .switch > span.off {
     right: 0;
     padding-right: 3.5px;
     color: #fff;
@@ -125,7 +121,7 @@
     visibility: hidden;
   }
 
-  .check-toggle+label {
+  .check-toggle + label {
     display: block;
     position: relative;
     cursor: pointer;
@@ -133,7 +129,7 @@
     user-select: none;
   }
 
-  input.check-toggle-round-flat+label {
+  input.check-toggle-round-flat + label {
     padding: 2px;
     width: 64px;
     height: 24px;
@@ -141,14 +137,14 @@
     border-radius: 4px;
   }
 
-  input.check-toggle-round-flat+label:before,
-  input.check-toggle-round-flat+label:after {
+  input.check-toggle-round-flat + label:before,
+  input.check-toggle-round-flat + label:after {
     display: block;
     position: absolute;
     content: '';
   }
 
-  input.check-toggle-round-flat+label:before {
+  input.check-toggle-round-flat + label:before {
     top: 2px;
     left: 2px;
     bottom: 2px;
@@ -157,7 +153,7 @@
     border-radius: 4px;
   }
 
-  input.check-toggle-round-flat+label:after {
+  input.check-toggle-round-flat + label:after {
     top: 3px;
     left: 3.5px;
     bottom: 3.5px;
@@ -174,12 +170,11 @@
     transition: margin 0.2s;
   }
 
-  input.check-toggle-round-flat:checked+label:after {
+  input.check-toggle-round-flat:checked + label:after {
     margin-left: 27px;
   }
 
   /* Toggle Button Styles End  */
-
 
   .slick-active .__active {
     opacity: 100;

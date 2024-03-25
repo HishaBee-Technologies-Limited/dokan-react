@@ -1,21 +1,21 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const WarrantyTypeSchema = z.union([
-  z.literal("DAY"),
-  z.literal("WEEK"),
-  z.literal("MONTH"),
-  z.literal("YEAR"),
+  z.literal('DAY'),
+  z.literal('WEEK'),
+  z.literal('MONTH'),
+  z.literal('YEAR'),
 ]);
 export type WarrantyType = z.infer<typeof WarrantyTypeSchema>;
 
-const DiscountTypeSchema = z.union([z.literal("PERCENT"), z.literal("AMOUNT")]);
+const DiscountTypeSchema = z.union([z.literal('PERCENT'), z.literal('AMOUNT')]);
 
 export type DiscountType = z.infer<typeof DiscountTypeSchema>;
 
 export const ProductSchema = z.object({
   files: z.array(z.string()),
   product_name: z.string().min(2, {
-    message: "this field is required.",
+    message: 'this field is required.',
   }),
   stock: z.string(),
   purchase_price: z.string(),

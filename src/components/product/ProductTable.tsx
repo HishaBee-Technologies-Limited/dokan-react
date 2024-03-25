@@ -1,11 +1,11 @@
-"use client";
-import React from "react";
-import { ProductEnum } from "@/enum/product";
-import { Text } from "@/components/common/text";
-import { Image } from "@/components/common/Image";
-import { useProductStore } from "@/stores/useProductStore";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { TableDropdownAction } from "./TableDropdownAction.1";
+'use client';
+import React from 'react';
+import { ProductEnum } from '@/enum/product';
+import { Text } from '@/components/common/text';
+import { Image } from '@/components/common/Image';
+import { useProductStore } from '@/stores/useProductStore';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { TableDropdownAction } from './TableDropdownAction.1';
 import {
   Table,
   TableBody,
@@ -14,11 +14,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useCreateQueryString } from "@/hooks/useCreateQueryString";
-import { usePathname, useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { IProduct } from "@/types/product";
+} from '@/components/ui/table';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import { usePathname, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { IProduct } from '@/types/product';
 
 export const ProductTable = ({ productData }: { productData: any }) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
@@ -30,7 +30,7 @@ export const ProductTable = ({ productData }: { productData: any }) => {
 
   const handleRowClick = (product: IProduct) => {
     handleDialogOpen({ open: true, header: ProductEnum.PRODUCT_DETAILS });
-    router.push(`${pathname}?${setQueryString("product", product?.unique_id)}`);
+    router.push(`${pathname}?${setQueryString('product', product?.unique_id)}`);
   };
 
   return (

@@ -1,6 +1,6 @@
-"use server";
-import { api } from "@/lib/api";
-import { cookies } from "next/headers";
+'use server';
+import { api } from '@/lib/api';
+import { cookies } from 'next/headers';
 
 export const verifyOTP = async ({
   mobile_number,
@@ -16,7 +16,7 @@ export const verifyOTP = async ({
   const data = await res.json();
   console.log(data);
   if (res.ok) {
-    cookieStore.set("otp", otp);
+    cookieStore.set('otp', otp);
     return { success: true, status: data.code, data: data };
   }
   if (!res.ok) {

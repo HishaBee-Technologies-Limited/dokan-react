@@ -1,13 +1,13 @@
-"use client";
-import { z } from "zod";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/common/text";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+'use client';
+import { z } from 'zod';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/common/text';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Form,
   FormControl,
@@ -15,24 +15,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { getDivisions } from "@/actions/publicData";
-import { Skeleton } from "@/components/ui/skeleton";
-import { saveSignupInfo } from "@/actions/saveSignupInfo";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { getDivisions } from '@/actions/publicData';
+import { Skeleton } from '@/components/ui/skeleton';
+import { saveSignupInfo } from '@/actions/saveSignupInfo';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   brand_name: z.string(),
@@ -45,10 +45,10 @@ const formSchema = z.object({
 
 const Information = () => {
   const [divisions, setDivisions] = useState<{ division: string }[] | null>(
-    null,
+    null
   );
   const [districts, setDistricts] = useState<{ district: string }[] | null>(
-    null,
+    null
   );
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
@@ -56,11 +56,11 @@ const Information = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      brand_name: "",
-      area: "",
-      address: "",
-      division: "",
-      district: "",
+      brand_name: '',
+      area: '',
+      address: '',
+      division: '',
+      district: '',
     },
   });
 
@@ -76,7 +76,7 @@ const Information = () => {
     // console.log("data------------", data);
     const fullAddress = `${address}, ${area}, ${district}, ${division}}`;
     await saveSignupInfo({ brand_name, address: fullAddress, user_intent });
-    router.push("/auth/setup-pin");
+    router.push('/auth/setup-pin');
   }
 
   useEffect(() => {
@@ -142,15 +142,15 @@ const Information = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "h-16 w-[200px] justify-between bg-white",
-                            !field.value && "text-muted-foreground",
+                            'h-16 w-[200px] justify-between bg-white',
+                            !field.value && 'text-muted-foreground'
                           )}
                         >
                           {field.value
                             ? divisions?.find(
-                                (division) => division.division === field.value,
+                                (division) => division.division === field.value
                               )?.division
-                            : "Select Division"}
+                            : 'Select Division'}
                           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -171,16 +171,16 @@ const Information = () => {
                                 value={division.division}
                                 key={division.division}
                                 onSelect={() => {
-                                  form.setValue("division", division.division);
+                                  form.setValue('division', division.division);
                                 }}
                               >
                                 {division.division}
                                 <CheckIcon
                                   className={cn(
-                                    "ml-auto h-4 w-4",
+                                    'ml-auto h-4 w-4',
                                     division.division === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
                                   )}
                                 />
                               </CommandItem>
@@ -213,15 +213,15 @@ const Information = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "h-16 w-[200px] justify-between bg-white",
-                            !field.value && "text-muted-foreground",
+                            'h-16 w-[200px] justify-between bg-white',
+                            !field.value && 'text-muted-foreground'
                           )}
                         >
                           {field.value
                             ? districts?.find(
-                                (district) => district.district === field.value,
+                                (district) => district.district === field.value
                               )?.district
-                            : "Select District"}
+                            : 'Select District'}
                           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -240,16 +240,16 @@ const Information = () => {
                                 value={district.district}
                                 key={district.district}
                                 onSelect={() => {
-                                  form.setValue("district", district.district);
+                                  form.setValue('district', district.district);
                                 }}
                               >
                                 {district.district}
                                 <CheckIcon
                                   className={cn(
-                                    "ml-auto h-4 w-4",
+                                    'ml-auto h-4 w-4',
                                     district.district === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
                                   )}
                                 />
                               </CommandItem>

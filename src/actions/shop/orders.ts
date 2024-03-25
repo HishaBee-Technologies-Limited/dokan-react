@@ -1,14 +1,16 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
-import { cookies } from "next/headers";
+import { authApi } from '@/lib/api';
+import { cookies } from 'next/headers';
 
-export const getOrders = async ({ activeTab}: { activeTab: string}) => {
+export const getOrders = async ({ activeTab }: { activeTab: string }) => {
   const cookieStore = cookies();
-  const shopId = cookieStore.get('shopId')
+  const shopId = cookieStore.get('shopId');
 
   try {
-    const res = await authApi.get(`/online-shop/orders/${activeTab}/?shop_id=${shopId?.value}`);
+    const res = await authApi.get(
+      `/online-shop/orders/${activeTab}/?shop_id=${shopId?.value}`
+    );
     const data = await res.json();
 
     if (res?.ok) {
@@ -18,6 +20,6 @@ export const getOrders = async ({ activeTab}: { activeTab: string}) => {
       return { success: false, error: data };
     }
   } catch (error) {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

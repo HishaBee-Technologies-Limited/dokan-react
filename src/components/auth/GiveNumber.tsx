@@ -1,11 +1,11 @@
-"use client";
-import { z } from "zod";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/common/text";
-import { zodResolver } from "@hookform/resolvers/zod";
+'use client';
+import { z } from 'zod';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/common/text';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -13,13 +13,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { checkNumber } from "@/actions/checkNumber";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/form';
+import { checkNumber } from '@/actions/checkNumber';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   mobile_number: z.string().max(11).min(11, {
-    message: "Number must be 11 characters.",
+    message: 'Number must be 11 characters.',
   }),
 });
 
@@ -29,23 +29,23 @@ const GiveNumber = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      mobile_number: "",
+      mobile_number: '',
     },
   });
 
   async function onSubmit({ mobile_number }: z.infer<typeof formSchema>) {
     // closeDrawer({ open: false })
     const response = await checkNumber({ mobile_number });
-    console.log("data------------", response);
+    console.log('data------------', response);
     if (response?.success) {
       if (response.data?.status_code === 200) {
-        router.push("/auth/pin");
+        router.push('/auth/pin');
       } else if (response?.data?.status_code === 206) {
-        router.push("/auth/signup");
+        router.push('/auth/signup');
       } else if (response?.data?.status_code === 208) {
-        router.push("/auth/setup-pin");
+        router.push('/auth/setup-pin');
       } else {
-        router.push("/auth/error");
+        router.push('/auth/error');
       }
     }
     if (!response?.success) {
@@ -53,9 +53,9 @@ const GiveNumber = () => {
         response?.error?.status_code === 403 ||
         response?.error?.status_code === 404
       ) {
-        router.push("/auth/otp");
+        router.push('/auth/otp');
       } else {
-        router.push("/auth/error");
+        router.push('/auth/error');
       }
     }
   }
@@ -88,7 +88,7 @@ const GiveNumber = () => {
           <Button
             type="submit"
             className="w-full"
-            disabled={form.watch("mobile_number").length !== 11}
+            disabled={form.watch('mobile_number').length !== 11}
           >
             Save
           </Button>

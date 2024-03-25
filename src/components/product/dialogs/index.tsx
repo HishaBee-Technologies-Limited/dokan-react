@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import { ProductEnum } from "@/enum/product";
-import { Dialog } from "@/components/common/Dialog";
-import { useProductStore } from "@/stores/useProductStore";
-import { UpdateStock } from "@/components/product/dialogs/UpdateStock";
-import { ShareProduct } from "@/components/product/dialogs/ShareProduct";
-import { DeleteProduct } from "@/components/product/dialogs/DeleteProduct";
-import { ProductDetails } from "@/components/product/dialogs/ProductDetails";
-import { ProductHistory } from "@/components/product/dialogs/ProductHistory";
-import { IProduct, IProductPayload } from "@/types/product";
-import { usePathname, useRouter } from "next/navigation";
+import React from 'react';
+import { ProductEnum } from '@/enum/product';
+import { Dialog } from '@/components/common/Dialog';
+import { useProductStore } from '@/stores/useProductStore';
+import { UpdateStock } from '@/components/product/dialogs/UpdateStock';
+import { ShareProduct } from '@/components/product/dialogs/ShareProduct';
+import { DeleteProduct } from '@/components/product/dialogs/DeleteProduct';
+import { ProductDetails } from '@/components/product/dialogs/ProductDetails';
+import { ProductHistory } from '@/components/product/dialogs/ProductHistory';
+import { IProduct, IProductPayload } from '@/types/product';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const ProductDialogs = ({ product }: { product: IProduct }) => {
   const dialogState = useProductStore((state) => state.dialogState);

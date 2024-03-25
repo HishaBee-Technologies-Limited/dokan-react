@@ -1,25 +1,27 @@
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig } from 'next-auth';
 import {
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
   publicRoutes,
   rootRoute,
-} from "./routes";
+} from './routes';
+import { add, format } from 'date-fns';
 
 export const authConfig = {
   pages: {
-    signIn: "/",
+    signIn: '/',
   },
   providers: [
     // added later in auth.ts
     // while this file is also used in non-Node.js environments
   ],
+
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
+    authorized({ auth, request: { nextUrl, cookies, headers } }) {
       const isLoggedIn = !!auth;
 
-      console.log("isLoggedIn", isLoggedIn);
+      console.log('isLoggedIn', isLoggedIn);
 
       const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
       const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -30,10 +32,13 @@ export const authConfig = {
         return;
       }
       if (isRootRoute) {
-        return Response.redirect(new URL("/auth", nextUrl));
+        return Response.redirect(new URL('/auth', nextUrl));
       }
       if (isAuthRoute) {
         if (isLoggedIn) {
+          if (cookies.get('shopId')?.value) {
+            return Response.redirect(new URL('/home', nextUrl));
+          }
           return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
 
@@ -48,18 +53,22 @@ export const authConfig = {
 
         const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
-        // return Response.redirect(new URL(`/auth`, nextUrl));
+        return Response.redirect(new URL(`/auth`, nextUrl));
       }
       return true;
     },
-    async jwt({ token, user }) {
-      if (user) token.user = user as any;
-      return token;
-    },
-
-    async session({ token, session }) {
+    async session({ session, token }) {
       session.user = token.user as any;
       return session;
     },
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+  },
+  session: {
+    strategy: 'jwt',
   },
 } satisfies NextAuthConfig;

@@ -1,44 +1,50 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { CalendarIcon } from "@radix-ui/react-icons"
-import { addDays, format } from "date-fns"
-import { DateRange } from "react-day-picker"
+import * as React from 'react';
+import { CalendarIcon } from '@radix-ui/react-icons';
+import { addDays, format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { usePathname, useRouter } from "next/navigation";
-import { useCreateQueryString } from "@/hooks/useCreateQueryString";
+} from '@/components/ui/popover';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 
 export function DatePickerWithRange() {
   const router = useRouter();
   const pathname = usePathname();
-  const { setQueryString } = useCreateQueryString()
+  const { setQueryString } = useCreateQueryString();
 
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
-  })
+  });
 
-  const  handleDateRange = (dates: DateRange | undefined) => {
-    setDate({ from: dates?.from, to: dates?.to})
-    const start_date = format(new Date(dates?.from ?? new Date()), 'yyyy-MM-dd')
-    const end_date = format(new Date(dates?.to ?? new Date()), 'yyyy-MM-dd')
+  const handleDateRange = (dates: DateRange | undefined) => {
+    setDate({ from: dates?.from, to: dates?.to });
+    const start_date = format(
+      new Date(dates?.from ?? new Date()),
+      'yyyy-MM-dd'
+    );
+    const end_date = format(new Date(dates?.to ?? new Date()), 'yyyy-MM-dd');
 
-    setQueryString('start_date', start_date)
-    setQueryString('end_date', end_date)
+    setQueryString('start_date', start_date);
+    setQueryString('end_date', end_date);
 
-    router.replace(`${pathname}?start_date=${start_date}&end_date=${end_date}`, { scroll: false})
-  }
+    router.replace(
+      `${pathname}?start_date=${start_date}&end_date=${end_date}`,
+      { scroll: false }
+    );
+  };
 
   return (
-    <div className={cn("grid gap-2")}>
+    <div className={cn('grid gap-2')}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -46,19 +52,19 @@ export function DatePickerWithRange() {
             id="date"
             variant="secondary"
             className={cn(
-              "w-[300px] justify-start text-left font-normal",
-              !date && "text-muted-foreground"
+              'w-[300px] justify-start text-left font-normal',
+              !date && 'text-muted-foreground'
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date.from, 'LLL dd, y')} -{' '}
+                  {format(date.to, 'LLL dd, y')}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, 'LLL dd, y')
               )
             ) : (
               <span>Pick a date</span>
@@ -77,5 +83,5 @@ export function DatePickerWithRange() {
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

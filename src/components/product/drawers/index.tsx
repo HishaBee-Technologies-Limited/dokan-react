@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import { ProductEnum } from "@/enum/product";
-import { Drawer } from "@/components/common/Drawer";
-import { useProductStore } from "@/stores/useProductStore";
-import { AddProduct } from "@/components/product/drawers/AddProduct";
-import { EditProduct } from "@/components/product/drawers/EditProduct";
-import { IProduct, IProductPayload, IUnits } from "@/types/product";
-import { usePathname, useRouter } from "next/navigation";
+import React from 'react';
+import { ProductEnum } from '@/enum/product';
+import { Drawer } from '@/components/common/Drawer';
+import { useProductStore } from '@/stores/useProductStore';
+import { AddProduct } from '@/components/product/drawers/AddProduct';
+import { EditProduct } from '@/components/product/drawers/EditProduct';
+import { IProduct, IProductPayload, IUnits } from '@/types/product';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const ProductDrawers = ({
   product,

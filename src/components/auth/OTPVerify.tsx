@@ -1,22 +1,22 @@
-"use client";
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-import OtpInput from "react-otp-input";
-import { useCountdown } from "usehooks-ts";
-import { Text } from "@/components/common/text";
-import { verifyOTP } from "@/actions/OTPVerify";
-import { useRouter } from "next/navigation";
-import { resendOTP } from "@/actions/resendOTP";
+'use client';
+import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import OtpInput from 'react-otp-input';
+import { useCountdown } from 'usehooks-ts';
+import { Text } from '@/components/common/text';
+import { verifyOTP } from '@/actions/OTPVerify';
+import { useRouter } from 'next/navigation';
+import { resendOTP } from '@/actions/resendOTP';
 
 const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
-  const [otp, setOtp] = useState<string>("");
+  const [otp, setOtp] = useState<string>('');
   const [inValidOtp, setInValidOtp] = useState<boolean>(false);
   const [disableResentOtpButton, setDisableResetOtpButton] =
     useState<boolean>(true);
   const [count, { startCountdown, stopCountdown, resetCountdown }] =
     useCountdown({ countStart: 59, intervalMs: 1000 });
-  const [apiError, setApiError] = useState<string>("");
+  const [apiError, setApiError] = useState<string>('');
   const router = useRouter();
 
   const sendOTP = async () => {
@@ -28,7 +28,7 @@ const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
       startCountdown();
       setDisableResetOtpButton(true);
       setInValidOtp(false);
-      setOtp("");
+      setOtp('');
     } else {
       setApiError(res?.error?.message);
     }
@@ -59,7 +59,7 @@ const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
 
           if (res.status === 200) {
             console.log(res.data);
-            router.push("/auth/signup");
+            router.push('/auth/signup');
           }
           if (res.status === 400) {
             setDisableResetOtpButton(false);
@@ -98,15 +98,15 @@ const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
           shouldAutoFocus={true}
           onChange={(e) => setOtp(e)}
           renderInput={(props) => <input {...props} placeholder="-" />}
-          containerStyle={{ justifyContent: "space-between", gap: "1rem" }}
+          containerStyle={{ justifyContent: 'space-between', gap: '1rem' }}
           inputStyle={{
-            width: "48.38px",
-            height: "48.38px",
-            padding: "8px 8px",
-            border: inValidOtp ? "1px solid #FF3B30" : "1px solid #CCCCCC",
-            outline: "none",
-            borderRadius: "8px",
-            color: inValidOtp ? "#FF3B30" : "#333",
+            width: '48.38px',
+            height: '48.38px',
+            padding: '8px 8px',
+            border: inValidOtp ? '1px solid #FF3B30' : '1px solid #CCCCCC',
+            outline: 'none',
+            borderRadius: '8px',
+            color: inValidOtp ? '#FF3B30' : '#333',
           }}
         />
       </div>
@@ -135,7 +135,7 @@ const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
               disabled={disableResentOtpButton}
               className="text-sm text-primary-400 hover:text-primary-500 disabled:text-primary-20"
             >
-              {disableResentOtpButton ? "Please wait..." : "Resend code"}
+              {disableResentOtpButton ? 'Please wait...' : 'Resend code'}
             </button>
             <Text title={`00.${count}s`} className="text-sm" />
           </div>
