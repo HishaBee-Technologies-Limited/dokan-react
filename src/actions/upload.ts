@@ -1,25 +1,25 @@
 'use server';
 
-import { authApi } from '@/lib/api';
+import { uploadApi } from '@/lib/api';
 
-export const filesUpload = async (payload: { image: string; type: string }) => {
+export const filesUpload = async (payload: any) => {
   try {
-    const res = await authApi.post(`/upload`, payload);
+    const res = await uploadApi.post(`/upload`, payload);
+
     const data = await res.json();
 
-    console.log({ data });
-    console.log({ res });
+    console.log('ssssss', { data });
 
-    // if (res.ok) {
-    //     return {
-    //         success: true,
-    //         status: data?.code,
-    //         data: data,
-    //     };
-    // }
-    // if (!res.ok) {
-    //     return { success: false, error: data };
-    // }
+    if (res.ok) {
+      return {
+        success: true,
+        status: data?.code,
+        data: data,
+      };
+    }
+    if (!res.ok) {
+      return { success: false, error: data };
+    }
   } catch {
     return { success: false, error: 'Something went wrong' };
   }

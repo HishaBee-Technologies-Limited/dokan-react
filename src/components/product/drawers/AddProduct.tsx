@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { ChangeEvent, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
 import Card from '@/components/common/Card';
@@ -37,6 +37,8 @@ import { createProductOrUpdate } from '@/actions/product/createProductOrUpdate';
 import { format } from 'date-fns';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useFileUpload } from '@/hooks/uploadMultipleFile';
 
 export const AddProduct = ({
   units,
@@ -70,6 +72,8 @@ export const AddProduct = ({
     },
   });
   const router = useRouter();
+  const [selectedFiles, setSelectedFiles] = useState<FileList>();
+  const [imageUrls, loading] = useFileUpload(selectedFiles);
 
   const shopId = getCookie('shopId');
   const uuid = uuidv4();
@@ -83,10 +87,7 @@ export const AddProduct = ({
     )?.sub_category;
   }, [selectedCategory, productCategories]);
 
-  console.log(subCategory);
-
   async function onSubmit(data: ProductFormDef) {
-    // closeDrawer({ open: false })
     console.log('data------------', data);
 
     const res = await createProductOrUpdate({
@@ -104,6 +105,8 @@ export const AddProduct = ({
       warranty_type: data.warranty_type,
       discount: data.discount,
       discount_type: data.discount_type,
+      gallery: imageUrls.length ? `[${imageUrls}]` : '',
+      image_url: imageUrls.length ? imageUrls[0] : '',
       // description: ,
       vat_applicable: data.vat_check,
       vat_percent: Number(data.vat_percentage),
@@ -117,45 +120,54 @@ export const AddProduct = ({
     }
     console.log(res);
   }
-  console.log(form.formState.errors);
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    const selectedFiles = files as FileList;
+
+    setSelectedFiles(selectedFiles);
+  };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
         <div>
-          <FormField
-            control={form.control}
-            name="files"
-            render={({ field }) => (
-              <FormItem className="border border-dashed border-color rounded-lg py-space16 px-space12 flex flex-col items-center">
-                <Icon icon="ion:cloud-upload-outline" height={24} width={24} />
+          <div className="border border-dashed border-color rounded-lg py-space16 px-space12 flex flex-col items-center">
+            <Icon icon="ion:cloud-upload-outline" height={24} width={24} />
 
-                <FormControl>
-                  <Input id="files" type="file" {...field} className="hidden" />
-                </FormControl>
+            <FormControl>
+              <Input
+                id="files"
+                type="file"
+                onChange={handleImageUpload}
+                className="hidden"
+                multiple
+              />
+            </FormControl>
 
-                <Text className="text-sm">
-                  <label
-                    htmlFor="files"
-                    className="cursor-pointer underline rounded-md pr-space8"
-                  >
-                    Click to upload
-                  </label>
-                  or drag & drop
-                </Text>
-                <Text
-                  title="JPG, PNG Image files, up to 5MB"
-                  variant="muted"
-                  className="text-sm"
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <Text className="text-sm">
+              <label
+                htmlFor="files"
+                className="cursor-pointer underline rounded-md pr-space8"
+              >
+                Click to upload
+              </label>
+              or drag & drop
+            </Text>
+            <Text
+              title="JPG, PNG Image files, up to 5MB"
+              variant="muted"
+              className="text-sm"
+            />
+          </div>
 
           <div className="flex gap-space12 py-space12">
-            <Image src={''} alt="" height={60} width={60} />
-            <Image src={''} alt="" height={60} width={60} />
+            {imageUrls.map((url: string) => (
+              <div>
+                <Image src={url} alt="" height={60} width={60} />
+                {loading && <Skeleton className="h-2 w-full rounded-none" />}
+              </div>
+            ))}
           </div>
         </div>
 

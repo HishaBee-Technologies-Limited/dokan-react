@@ -51,7 +51,7 @@ export const RightSection = () => {
       ) {
         const updatedProduct = Object.values(
           data.products.find(
-            (p: IProduct) => Object.keys(p)[0] === `product-${product.id}`
+            (prod: IProduct) => Object.keys(prod)[0] === `product-${product.id}`
           )
         )[0] as IProduct;
         return {

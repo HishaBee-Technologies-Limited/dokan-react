@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
 import Card from '@/components/common/Card';
@@ -38,6 +38,9 @@ import {
   WARRANTY_TYPE,
 } from '@/lib/constants/product';
 import { format } from 'date-fns';
+import { filesUpload } from '@/actions/upload';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useFileUpload } from '@/hooks/uploadMultipleFile';
 
 export const EditProduct = ({
   product,
@@ -56,8 +59,8 @@ export const EditProduct = ({
   });
   const router = useRouter();
   const [initialSubCategory, setInitialSubCategory] = useState('');
-  const shopId = getCookie('shopId');
-  const uuid = uuidv4();
+  const [selectedFiles, setSelectedFiles] = useState<FileList>();
+  const [imageUrls, loading, saveImageUrls] = useFileUpload(selectedFiles);
 
   const selectedCategory = form.watch('category');
   const category = useMemo(() => {
@@ -82,6 +85,8 @@ export const EditProduct = ({
       cost_price: data.purchase_price,
       sell_online: data.online_sell,
       stock: Number(data.stock),
+      gallery: `[${imageUrls}]`,
+      image_url: imageUrls.length ? imageUrls[0] : '',
       ...(product.version && { version: product.version + 1 }),
       ...(product.created_at && { created_at: product.created_at }),
       updated_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
@@ -100,10 +105,19 @@ export const EditProduct = ({
       selling_price: Number(data.purchase_price),
       unit: Number(data.unit),
     });
+    console.log(res);
     if (res?.success) {
       router.refresh();
     }
   }
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    const selectedFiles = files as FileList;
+
+    setSelectedFiles(selectedFiles);
+  };
+
   useEffect(() => {
     form.setValue('product_name', product?.name ?? ''),
       form.setValue('stock', String(product?.stock ?? '')),
@@ -131,8 +145,10 @@ export const EditProduct = ({
       form.setValue('bulk_sell_check', true);
     form.setValue('category', String(category?.id));
     setInitialSubCategory(String(product?.sub_category?.id));
+    saveImageUrls(
+      product.gallery?.substring(1, product.gallery.length - 1).split(',')
+    );
   }, [product, category]);
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
@@ -145,7 +161,13 @@ export const EditProduct = ({
                 <Icon icon="ion:cloud-upload-outline" height={24} width={24} />
 
                 <FormControl>
-                  <Input id="files" type="file" {...field} className="hidden" />
+                  <Input
+                    id="files"
+                    type="file"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    multiple
+                  />
                 </FormControl>
 
                 <Text className="text-sm">
@@ -168,8 +190,12 @@ export const EditProduct = ({
           />
 
           <div className="flex gap-space12 py-space12">
-            <Image src={''} alt="" height={60} width={60} />
-            <Image src={''} alt="" height={60} width={60} />
+            {imageUrls.map((url: string) => (
+              <div>
+                <Image src={url} alt="" height={60} width={60} />
+                {loading && <Skeleton className="h-2 w-full rounded-none" />}
+              </div>
+            ))}
           </div>
         </div>
 
