@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 export const getDivisions = async () => {
   try {
@@ -23,7 +23,7 @@ export const getDivisions = async () => {
   } catch (err) {
     return {
       success: false,
-      error: "Something went wrong, Possible Network Error",
+      error: 'Something went wrong, Possible Network Error',
     };
   }
 };

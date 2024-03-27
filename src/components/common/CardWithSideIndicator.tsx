@@ -1,6 +1,10 @@
-import React, { HTMLProps } from 'react'
+import React, { HTMLProps } from 'react';
 
-const CardWithSideIndicator = ({ active, className, ...props }: HTMLProps<HTMLDivElement> & { active: boolean }) => {
+const CardWithSideIndicator = ({
+  active,
+  className,
+  ...props
+}: HTMLProps<HTMLDivElement> & { active: boolean }) => {
   return (
     <div
       {...props}
@@ -8,7 +12,7 @@ const CardWithSideIndicator = ({ active, className, ...props }: HTMLProps<HTMLDi
     >
       {props.children}
     </div>
-  )
-}
+  );
+};
 
-export default CardWithSideIndicator
+export default CardWithSideIndicator;

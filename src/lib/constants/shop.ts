@@ -1,4 +1,4 @@
 export const cashType = [
-  { value: "yes", label: "Yes" },
-  { value: "no", label: "No" },
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
 ];

@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
-import { cookies } from "next/headers";
-import { IProductPayload } from "@/types/product";
+import { authApi } from '@/lib/api';
+import { cookies } from 'next/headers';
+import { IProductPayload } from '@/types/product';
 
 export const createProductOrUpdate = async ({
   unique_id,
@@ -33,9 +33,10 @@ export const createProductOrUpdate = async ({
   prevent_stock_item,
   delivery_charge_id,
   weight,
+  unit,
 }: IProductPayload) => {
   try {
-    const shopId = cookies().get("shopId")?.value;
+    const shopId = cookies().get('shopId')?.value;
 
     // console.log(uniqueId);
 
@@ -69,6 +70,7 @@ export const createProductOrUpdate = async ({
       ...(prevent_stock_item && { prevent_stock_item }),
       ...(delivery_charge_id && { delivery_charge_id }),
       ...(weight && { weight }),
+      ...(unit && { unit }),
     };
 
     console.log(payload);
@@ -87,6 +89,6 @@ export const createProductOrUpdate = async ({
       return { success: false, error: data };
     }
   } catch {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

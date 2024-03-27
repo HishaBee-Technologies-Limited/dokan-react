@@ -1,15 +1,15 @@
-import React, { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import Icon from "@/components/common/Icon";
-import Card from "@/components/common/Card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Text } from "@/components/common/text";
-import { Image } from "@/components/common/Image";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DrawerFooter } from "@/components/common/Drawer";
-import { v4 as uuidv4 } from "uuid";
+import React, { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import Icon from '@/components/common/Icon';
+import Card from '@/components/common/Card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Text } from '@/components/common/text';
+import { Image } from '@/components/common/Image';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DrawerFooter } from '@/components/common/Drawer';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   Select,
@@ -17,7 +17,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Form,
   FormItem,
@@ -25,18 +25,18 @@ import {
   FormField,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { IUnits } from "@/types/product";
-import { ProductFormDef, ProductSchema } from "@/schemas/products";
+} from '@/components/ui/form';
+import { IUnits } from '@/types/product';
+import { ProductFormDef, ProductSchema } from '@/schemas/products';
 import {
   DEFAULT_STARTING_VERSION,
   DISCOUNT_TYPE,
   WARRANTY_TYPE,
-} from "@/lib/constants/product";
-import { createProductOrUpdate } from "@/actions/product/createProductOrUpdate";
-import { format } from "date-fns";
-import { getCookie } from "cookies-next";
-import { useRouter } from "next/navigation";
+} from '@/lib/constants/product';
+import { createProductOrUpdate } from '@/actions/product/createProductOrUpdate';
+import { format } from 'date-fns';
+import { getCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
 
 export const AddProduct = ({
   units,
@@ -49,17 +49,17 @@ export const AddProduct = ({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
       files: [],
-      product_name: "",
-      stock: "",
-      purchase_price: "",
-      sell_price: "",
+      product_name: '',
+      stock: '',
+      purchase_price: '',
+      sell_price: '',
       // others------------
-      bulk_price: "",
-      bulk_quantity: "",
-      low_stock: "",
-      vat_percentage: "",
-      warranty_duration: "",
-      discount: "",
+      bulk_price: '',
+      bulk_quantity: '',
+      low_stock: '',
+      vat_percentage: '',
+      warranty_duration: '',
+      discount: '',
       // boolean
       online_sell: false,
       low_stock_check: false,
@@ -71,10 +71,10 @@ export const AddProduct = ({
   });
   const router = useRouter();
 
-  const shopId = getCookie("shopId");
+  const shopId = getCookie('shopId');
   const uuid = uuidv4();
 
-  const selectedCategory = form.watch("category");
+  const selectedCategory = form.watch('category');
 
   const subCategory = useMemo(() => {
     return productCategories.find(
@@ -87,7 +87,7 @@ export const AddProduct = ({
 
   async function onSubmit(data: ProductFormDef) {
     // closeDrawer({ open: false })
-    console.log("data------------", data);
+    console.log('data------------', data);
 
     const res = await createProductOrUpdate({
       name: data.product_name,
@@ -95,7 +95,7 @@ export const AddProduct = ({
       sell_online: data.online_sell,
       stock: Number(data.stock),
       version: DEFAULT_STARTING_VERSION,
-      created_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
+      created_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
       sub_category: Number(data.sub_category),
       wholesale_amount: Number(data.bulk_quantity),
       wholesale_price: Number(data.bulk_price),
@@ -109,7 +109,8 @@ export const AddProduct = ({
       vat_percent: Number(data.vat_percentage),
       unique_id: uuid + shopId + Date.now(),
       selling_price: Number(data.purchase_price),
-      updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
+      updated_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
+      unit: Number(data.unit),
     });
     if (res?.success) {
       router.refresh();
@@ -153,8 +154,8 @@ export const AddProduct = ({
           />
 
           <div className="flex gap-space12 py-space12">
-            <Image src={""} alt="" height={60} width={60} />
-            <Image src={""} alt="" height={60} width={60} />
+            <Image src={''} alt="" height={60} width={60} />
+            <Image src={''} alt="" height={60} width={60} />
           </div>
         </div>
 
@@ -169,7 +170,7 @@ export const AddProduct = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Product Name <span className="text-error-100">*</span>{" "}
+                Product Name <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
                 <Input placeholder="Product Name" {...field} />
@@ -341,9 +342,9 @@ export const AddProduct = ({
 
         <div
           className={`${
-            form.watch("bulk_sell_check")
-              ? " bg-primary-10 dark:bg-primary-90"
-              : ""
+            form.watch('bulk_sell_check')
+              ? ' bg-primary-10 dark:bg-primary-90'
+              : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -369,16 +370,16 @@ export const AddProduct = ({
 
           <div
             className={`grid ${
-              form.watch("bulk_sell_check")
-                ? "grid-rows-[1fr]"
-                : "grid-rows-[0fr]"
+              form.watch('bulk_sell_check')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("bulk_sell_check")
-                  ? "py-space8 border-t border-color"
-                  : ""
+                form.watch('bulk_sell_check')
+                  ? 'py-space8 border-t border-color'
+                  : ''
               } px-space12 overflow-hidden`}
             >
               <div className="grid sm:grid-cols-2 gap-space12">
@@ -415,9 +416,9 @@ export const AddProduct = ({
         </div>
         <div
           className={`${
-            form.watch("low_stock_check")
-              ? " bg-primary-10 dark:bg-primary-90"
-              : ""
+            form.watch('low_stock_check')
+              ? ' bg-primary-10 dark:bg-primary-90'
+              : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -440,16 +441,16 @@ export const AddProduct = ({
 
           <div
             className={`grid ${
-              form.watch("low_stock_check")
-                ? "grid-rows-[1fr]"
-                : "grid-rows-[0fr]"
+              form.watch('low_stock_check')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("low_stock_check")
-                  ? "py-space8 border-t border-color"
-                  : ""
+                form.watch('low_stock_check')
+                  ? 'py-space8 border-t border-color'
+                  : ''
               } px-space12 overflow-hidden`}
             >
               <FormField
@@ -469,7 +470,7 @@ export const AddProduct = ({
         </div>
         <div
           className={`${
-            form.watch("vat_check") ? " bg-primary-10 dark:bg-primary-90" : ""
+            form.watch('vat_check') ? ' bg-primary-10 dark:bg-primary-90' : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -492,12 +493,12 @@ export const AddProduct = ({
 
           <div
             className={`grid ${
-              form.watch("vat_check") ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              form.watch('vat_check') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("vat_check") ? "py-space8 border-t border-color" : ""
+                form.watch('vat_check') ? 'py-space8 border-t border-color' : ''
               } px-space12 overflow-hidden`}
             >
               <FormField
@@ -517,9 +518,9 @@ export const AddProduct = ({
         </div>
         <div
           className={`${
-            form.watch("warranty_check")
-              ? " bg-primary-10 dark:bg-primary-90"
-              : ""
+            form.watch('warranty_check')
+              ? ' bg-primary-10 dark:bg-primary-90'
+              : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -542,16 +543,16 @@ export const AddProduct = ({
 
           <div
             className={`grid ${
-              form.watch("warranty_check")
-                ? "grid-rows-[1fr]"
-                : "grid-rows-[0fr]"
+              form.watch('warranty_check')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("warranty_check")
-                  ? "py-space8 border-t border-color"
-                  : ""
+                form.watch('warranty_check')
+                  ? 'py-space8 border-t border-color'
+                  : ''
               } px-space12 overflow-hidden`}
             >
               <Text title="Days after sale date" />
@@ -603,9 +604,9 @@ export const AddProduct = ({
         </div>
         <div
           className={`${
-            form.watch("discount_check")
-              ? " bg-primary-10 dark:bg-primary-90"
-              : ""
+            form.watch('discount_check')
+              ? ' bg-primary-10 dark:bg-primary-90'
+              : ''
           } border border-color rounded-lg duration-500`}
         >
           <FormField
@@ -628,16 +629,16 @@ export const AddProduct = ({
 
           <div
             className={`grid ${
-              form.watch("discount_check")
-                ? "grid-rows-[1fr]"
-                : "grid-rows-[0fr]"
+              form.watch('discount_check')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
             } duration-500`}
           >
             <div
               className={`${
-                form.watch("discount_check")
-                  ? "py-space8 border-t border-color"
-                  : ""
+                form.watch('discount_check')
+                  ? 'py-space8 border-t border-color'
+                  : ''
               } px-space12 overflow-hidden`}
             >
               <Text title="Discount" />
@@ -689,7 +690,7 @@ export const AddProduct = ({
         </div>
 
         <DrawerFooter>
-          <Button type="button" variant={"secondary"} className="w-full">
+          <Button type="button" variant={'secondary'} className="w-full">
             Cancel
           </Button>
           <Button type="submit" className="w-full">

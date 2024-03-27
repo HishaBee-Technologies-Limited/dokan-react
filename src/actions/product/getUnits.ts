@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
-import { cookies } from "next/headers";
+import { authApi } from '@/lib/api';
+import { cookies } from 'next/headers';
 
 export const getUnits = async () => {
   try {
@@ -19,6 +19,6 @@ export const getUnits = async () => {
       return { success: false, error: data };
     }
   } catch {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

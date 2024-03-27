@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
+import { authApi } from '@/lib/api';
 
 export const getAreaInfo = async (areaId: string) => {
   try {
@@ -14,6 +14,6 @@ export const getAreaInfo = async (areaId: string) => {
       return { success: false, error: data };
     }
   } catch (error) {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

@@ -1,34 +1,34 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Text } from "@/components/common/text";
-import { Button } from "@/components/ui/button";
-import { Image } from "@/components/common/Image";
-import { SaveIcon } from "@/components/common/icons";
-import { DialogFooter } from "@/components/common/Dialog";
-import { useForm } from "react-hook-form";
-import { IProduct, IProductPayload } from "@/types/product";
-import { createProductOrUpdate } from "@/actions/product/createProductOrUpdate";
-import { format } from "date-fns";
-import { usePathname, useRouter } from "next/navigation";
-import { useProductStore } from "@/stores/useProductStore";
-import { ProductEnum } from "@/enum/product";
-import { toast } from "sonner";
-import { useCreateQueryString } from "@/hooks/useCreateQueryString";
+import React, { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Text } from '@/components/common/text';
+import { Button } from '@/components/ui/button';
+import { Image } from '@/components/common/Image';
+import { SaveIcon } from '@/components/common/icons';
+import { DialogFooter } from '@/components/common/Dialog';
+import { useForm } from 'react-hook-form';
+import { IProduct, IProductPayload } from '@/types/product';
+import { createProductOrUpdate } from '@/actions/product/createProductOrUpdate';
+import { format } from 'date-fns';
+import { usePathname, useRouter } from 'next/navigation';
+import { useProductStore } from '@/stores/useProductStore';
+import { ProductEnum } from '@/enum/product';
+import { toast } from 'sonner';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 
 export const UpdateStock = ({
   product,
 }: {
   product: {
-    uniqueId: IProduct["unique_id"];
-    stock: IProduct["stock"];
-    sellingPrice: IProduct["selling_price"];
-    name: IProduct["name"];
-    image: IProduct["image_url"];
-    version: IProduct["version"];
-    createdAt: IProduct["created_at"];
+    uniqueId: IProduct['unique_id'];
+    stock: IProduct['stock'];
+    sellingPrice: IProduct['selling_price'];
+    name: IProduct['name'];
+    image: IProduct['image_url'];
+    version: IProduct['version'];
+    createdAt: IProduct['created_at'];
   };
 }) => {
-  const form = useForm<{ stock: IProductPayload["stock"] }>({
+  const form = useForm<{ stock: IProductPayload['stock'] }>({
     defaultValues: { stock: product.stock ?? 0 },
   });
   const router = useRouter();
@@ -39,7 +39,7 @@ export const UpdateStock = ({
   const handleSubmit = async ({
     stock,
   }: {
-    stock: IProductPayload["stock"];
+    stock: IProductPayload['stock'];
   }) => {
     const res = await createProductOrUpdate({
       stock,
@@ -47,13 +47,13 @@ export const UpdateStock = ({
       name: product.name,
       selling_price: product.sellingPrice,
       ...(product.version && { version: product.version + 1 }),
-      updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
+      updated_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
       created_at: product?.createdAt,
     });
 
     if (res?.success) {
       router.refresh();
-      router.push(`${pathname}?${setQueryString("product", undefined)}`);
+      router.push(`${pathname}?${setQueryString('product', undefined)}`);
 
       handleClose({ open: false, header: ProductEnum.UPDATE_STOCK });
     } else {
@@ -61,7 +61,7 @@ export const UpdateStock = ({
     }
   };
 
-  const stock = form.watch("stock");
+  const stock = form.watch('stock');
 
   return (
     <div className="space-y-space16 pt-space16">
@@ -71,7 +71,7 @@ export const UpdateStock = ({
         <article className="space-y-space4">
           <Text title={product.name} className="text-sm font-semibold" />
           <Text
-            title={String(product.sellingPrice ?? "")}
+            title={String(product.sellingPrice ?? '')}
             variant="secondary"
             className="text-sm font-semibold"
           />
@@ -81,9 +81,9 @@ export const UpdateStock = ({
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="gap-space12 pb-space16 px-space16 md:px-space32 flex items-center">
           <Button
-            variant={"danger"}
+            variant={'danger'}
             className="!text-xl !font-bold"
-            onClick={() => form.setValue("stock", stock ? stock - 1 : stock)}
+            onClick={() => form.setValue('stock', stock ? stock - 1 : stock)}
             type="button"
           >
             -
@@ -92,13 +92,13 @@ export const UpdateStock = ({
           <Input
             type="number"
             className="h-[4.8rem] text-center text-xl"
-            {...form.register("stock")}
+            {...form.register('stock')}
           />
 
           <Button
-            variant={"success"}
+            variant={'success'}
             className="!text-xl !font-bold"
-            onClick={() => form.setValue("stock", stock ? stock + 1 : stock)}
+            onClick={() => form.setValue('stock', stock ? stock + 1 : stock)}
             type="button"
           >
             +

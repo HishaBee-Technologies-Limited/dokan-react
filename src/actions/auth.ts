@@ -1,24 +1,24 @@
-"use server";
-import { AuthError } from "next-auth";
-import { signIn } from "@/auth";
-import { api } from "@/lib/api";
-import { z } from "zod";
-import { RegisterSchema } from "@/schemas/auth";
-import { cookies } from "next/headers";
+'use server';
+import { AuthError } from 'next-auth';
+import { signIn } from '@/auth';
+import { api } from '@/lib/api';
+import { z } from 'zod';
+import { RegisterSchema } from '@/schemas/auth';
+import { cookies } from 'next/headers';
 
 export async function authenticate(
   prevState: string | undefined,
   formData: { mobile_number: string; pin: string }
 ) {
   try {
-    await signIn("credentials", formData);
+    await signIn('credentials', formData);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
-        case "CredentialsSignin":
-          return "Invalid credentials.";
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
         default:
-          return "Something went wrong.";
+          return 'Something went wrong.';
       }
     }
     throw error;
@@ -30,14 +30,14 @@ export async function authenticateSignUp(
   formData: z.infer<typeof RegisterSchema>
 ) {
   try {
-    await signIn("signup", formData);
+    await signIn('signup', formData);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
-        case "CredentialsSignin":
-          return "Invalid credentials.";
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
         default:
-          return "Something went wrong.";
+          return 'Something went wrong.';
       }
     }
     throw error;
@@ -52,7 +52,7 @@ export const login = async (payload: any) => {
   const data = await res.json();
   console.log(data);
   if (res.ok) {
-    cookies().set("access_token", data?.access_token);
+    cookies().set('access_token', data?.access_token);
     return { success: true, status: data.code, data: data };
   }
   if (!res.ok) {

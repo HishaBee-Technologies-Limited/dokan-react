@@ -71,69 +71,68 @@ const breadCrumbLinks = [
     link: '/settings/feedback',
   },
 
-  // Product 
+  // Product
   {
     label: 'Product List',
-    link: '/product'
+    link: '/product',
   },
-  // Stock 
+  // Stock
   {
     label: 'Stock Management',
-    link: '/stock'
+    link: '/stock',
   },
   {
     label: 'Stock History',
-    link: '/stock/history'
+    link: '/stock/history',
   },
   {
     label: 'Stock Update',
-    link: '/stock/update'
+    link: '/stock/update',
   },
-  // Printer 
+  // Printer
   {
     label: 'Printer',
-    link: '/printer/guide'
+    link: '/printer/guide',
   },
   {
     label: 'Configuration',
-    link: '/printer/configuration'
+    link: '/printer/configuration',
   },
 
-  // SMS Marketing 
+  // SMS Marketing
   {
     label: 'SMS Marketing',
-    link: '/sms'
+    link: '/sms',
   },
   {
     label: 'Packages',
-    link: '/sms/packages'
+    link: '/sms/packages',
   },
   // Online Shop
   {
     label: 'Online-shop',
-    link: '/online-shop'
+    link: '/online-shop',
   },
   {
     label: 'Online Message',
-    link: '/online-shop/messages'
+    link: '/online-shop/messages',
   },
   {
     label: 'Order List',
-    link: '/online-shop/orders'
+    link: '/online-shop/orders',
   },
   {
     label: 'Online Products',
-    link: '/online-shop/product'
+    link: '/online-shop/product',
   },
   {
     label: 'Store Settings',
-    link: '/online-shop/settings'
+    link: '/online-shop/settings',
   },
   {
     label: 'Themes',
-    link: '/online-shop/themes'
+    link: '/online-shop/themes',
   },
-
 ] as const;
 
 export default breadCrumbLinks;

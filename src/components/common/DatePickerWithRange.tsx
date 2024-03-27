@@ -1,12 +1,12 @@
-"use client"
+'use client';
 
 import * as React from "react"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { addDays, format } from "date-fns"
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/popover"
 import { DatePickerWithRangePropsDef } from "@/types/Date";
 
-export function DatePickerWithRange({dateRange, onChange}: DatePickerWithRangePropsDef) {
+export function DatePickerWithRange({ dateRange, onChange }: DatePickerWithRangePropsDef) {
   return (
-    <div className={cn("grid gap-2")}>
+    <div className={cn('grid gap-2')}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -58,5 +58,5 @@ export function DatePickerWithRange({dateRange, onChange}: DatePickerWithRangePr
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

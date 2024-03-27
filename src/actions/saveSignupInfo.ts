@@ -1,9 +1,9 @@
-"use server";
+'use server';
 
-import { cookies } from "next/headers";
-import { SignupCookieStringDef } from "@/schemas/auth";
+import { cookies } from 'next/headers';
+import { SignupCookieStringDef } from '@/schemas/auth';
 
 export const saveSignupInfo = async (signupInfo: SignupCookieStringDef) => {
   const cookie = cookies();
-  cookie.set("signup", JSON.stringify(signupInfo), { maxAge: 60 * 1000 });
+  cookie.set('signup', JSON.stringify(signupInfo), { maxAge: 60 * 1000 });
 };

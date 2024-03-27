@@ -9,13 +9,13 @@ type OrderPagePropsDef = {
 }
 
 const OrderPage = ({ searchParams }: OrderPagePropsDef) => {
-    return (
-        <div className='w-full space-y-space16'>
-            <OrderHeader />
-            <FilteringTabs />
-            <OrderTable params={searchParams}/>
-        </div>
-    )
+  return (
+    <div className='w-full space-y-space16'>
+      <OrderHeader />
+      <FilteringTabs />
+      <OrderTable params={searchParams} />
+    </div>
+  )
 }
 
-export default OrderPage
+export default OrderPage;

@@ -1,10 +1,10 @@
-"use client";
-import React from "react";
-import { ProductEnum } from "@/enum/product";
-import { Button } from "@/components/ui/button";
-import { AddIcon } from "@/components/common/icons";
-import { PageTitle } from "@/components/common/text";
-import { useProductStore } from "@/stores/useProductStore";
+'use client';
+import React from 'react';
+import { ProductEnum } from '@/enum/product';
+import { Button } from '@/components/ui/button';
+import { AddIcon } from '@/components/common/icons';
+import { PageTitle } from '@/components/common/text';
+import { useProductStore } from '@/stores/useProductStore';
 
 export const ProductHeader = () => {
   const handleDrawerOpen = useProductStore((state) => state.setDrawerState);

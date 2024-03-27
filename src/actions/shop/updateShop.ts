@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { authApi } from "@/lib/api";
-import { shopPayload } from "@/types/shop";
+import { authApi } from '@/lib/api';
+import { shopPayload } from '@/types/shop';
 
 export const updateShop = async ({
   shopId,
@@ -28,6 +28,6 @@ export const updateShop = async ({
       return { success: false, error: data };
     }
   } catch {
-    return { success: false, error: "Something went wrong" };
+    return { success: false, error: 'Something went wrong' };
   }
 };

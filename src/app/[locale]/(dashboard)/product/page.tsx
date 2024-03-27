@@ -1,15 +1,15 @@
-import React from "react";
-import { ProductDialogs } from "@/components/product/dialogs";
-import { ProductDrawers } from "@/components/product/drawers";
-import { ProductTable } from "@/components/product/ProductTable";
-import { ProductHeader } from "@/components/product/ProductHeader";
-import { ProductQueries } from "@/components/product/ProductQueries";
-import { getShopsProducts } from "@/actions/product/getShopProducts";
-import { getSingleProduct } from "@/actions/product/getSingleProduct";
-import { IProduct, IProductPayload, IUnits } from "@/types/product";
-import { getUnits } from "@/actions/product/getUnits";
-import { auth } from "@/auth";
-import { getCategories } from "@/actions/product/getCategories";
+import React from 'react';
+import { ProductDialogs } from '@/components/product/dialogs';
+import { ProductDrawers } from '@/components/product/drawers';
+import { ProductTable } from '@/components/product/ProductTable';
+import { ProductHeader } from '@/components/product/ProductHeader';
+import { ProductQueries } from '@/components/product/ProductQueries';
+import { getShopsProducts } from '@/actions/product/getShopProducts';
+import { getSingleProduct } from '@/actions/product/getSingleProduct';
+import { IProduct, IProductPayload, IUnits } from '@/types/product';
+import { getUnits } from '@/actions/product/getUnits';
+import { auth } from '@/auth';
+import { getCategories } from '@/actions/product/getCategories';
 
 type IPageProps = {
   params: { locale: string };
@@ -33,7 +33,7 @@ const ProductPage = async ({
     singleProduct = await getSingleProduct(productId);
   }
 
-  console.log("User-----", session?.user?.id);
+  console.log('User-----', session?.user?.id);
   return (
     <>
       <div className="space-y-space16">

@@ -1,12 +1,12 @@
-"use server";
+'use server';
 
 import { authApi } from "@/lib/api";
 import { cookies } from "next/headers";
 import { IGetOrderResponse, QueryParamsDef } from "@/types/orders";
 
-export const getOrders = async ({ tab, params }: { tab: string, params: Omit<QueryParamsDef, 'activatedTab'>}) => {
+export const getOrders = async ({ tab, params }: { tab: string, params: Omit<QueryParamsDef, 'activatedTab'> }) => {
   const cookieStore = cookies();
-  const shopId = cookieStore.get('shopId')
+  const shopId = cookieStore.get('shopId');
 
   try {
     const res = await authApi.get(`/online-shop/orders/${tab}/?` + new URLSearchParams({
@@ -20,7 +20,7 @@ export const getOrders = async ({ tab, params }: { tab: string, params: Omit<Que
     const data = await res.json();
 
     if (res?.ok) {
-      return { success: true, status: data, data: data as IGetOrderResponse};
+      return { success: true, status: data, data: data as IGetOrderResponse };
     }
     if (!res?.ok) {
       return { success: false, error: data };

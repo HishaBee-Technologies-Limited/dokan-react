@@ -1,13 +1,12 @@
-'use client'
+'use client';
 import { useTheme } from 'next-themes';
 import { ModeToggle } from '@/themes/ThemeChanging';
 import { ThemeProvider } from '@/themes/ThemeProvider';
 
-
 const CurrentTheme = (current: string): boolean => {
-    const { theme } = useTheme()
+  const { theme } = useTheme();
 
-    return theme === current
-}
+  return theme === current;
+};
 
-export { ModeToggle, ThemeProvider, CurrentTheme }
+export { ModeToggle, ThemeProvider, CurrentTheme };

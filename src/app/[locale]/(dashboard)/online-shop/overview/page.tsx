@@ -14,7 +14,7 @@ const Overview = async () => {
   const shopInfo = await getShopInfo(shopId?.value as string)
 
   return (
-    <div className='w-full h-full flex flex-col gap-space16'>
+    <div className="w-full h-full flex flex-col gap-space16">
       <div className="flex items-center justify-between gap-space16 flex-wrap">
         <article className="space-y-space4">
           <PageTitle title={shopInfo?.data?.data?.overview?.name} />
@@ -23,7 +23,6 @@ const Overview = async () => {
 
         <ShopActions slug={shopInfo?.data?.data?.overview?.slug ?? ''} />
       </div>
-
 
       <div className="flex justify-center flex-wrap gap-space12">
         <Card className="w-full max-w-[14rem] h-[12rem] flex flex-col items-center justify-center gap-space8">
@@ -56,14 +55,14 @@ const Overview = async () => {
         {overviewOther.map((item) => (
           <Link href={item.url} key={item.id} className="w-full max-w-[24rem]">
             <Card className="h-full max-h-[12rem] p-5 flex flex-col items-center justify-center gap-space8">
-              <Image src={item.img} alt='' height={48} width={48} />
-              <Text title={item.title} variant='secondary' />
+              <Image src={item.img} alt="" height={48} width={48} />
+              <Text title={item.title} variant="secondary" />
             </Card>
           </Link>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Overview
+export default Overview;
