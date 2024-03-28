@@ -30,6 +30,11 @@ const nextConfig = {
         hostname: 'hishabee.fra1.digitaloceanspaces.com',
         pathname: '/business-manager/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'dashboard.hishabee.io',
+        pathname: '/storage/**',
+      },
     ],
   },
 };
