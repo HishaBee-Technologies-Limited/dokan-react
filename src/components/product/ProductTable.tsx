@@ -17,9 +17,9 @@ import {
 } from '@/components/ui/table';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import { usePathname, useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 import { IProduct } from '@/types/product';
 import { cn } from '@/lib/utils';
+import ProductPagination from '@/components/product/ProductPagination';
 
 type ProductTableProps = { productData: any; isStatusShow?: boolean };
 
@@ -94,16 +94,18 @@ export const ProductTable = ({
             </TableRow>
           ))}
         </TableBody>
-
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={5} className="text-center">
-              Showing 10 of 100 Transactions
-            </TableCell>
-          </TableRow>
-        </TableFooter>
       </Table>
       <ScrollBar orientation="horizontal" />
+
+      <div className="my-10">
+        <ProductPagination
+          pageCount={Math.ceil(
+            (productData?.data?.total ?? 0) / (productData?.data?.per_page ?? 0)
+          )}
+          currentPage={productData?.data?.current_page ?? 0}
+          lastPage={productData?.data?.last_page ?? 0}
+        />
+      </div>
     </ScrollArea>
   );
 };
