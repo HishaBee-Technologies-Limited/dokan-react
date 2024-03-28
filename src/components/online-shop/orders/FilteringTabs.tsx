@@ -1,54 +1,26 @@
 'use client';
 import React from 'react';
-import CustomTab, { ITabOption } from '@/components/common/Tab';
-import { useOnlineShopStore } from '@/stores/useOnlineShopStore';
-import { usePathname, useRouter } from 'next/navigation';
-import { useCreateQueryString } from '@/hooks/useCreateQueryString';
-
-const filteringOption = [
-  {
-    label: 'All History',
-    value: 'all',
-  },
-  {
-    label: 'New orders',
-    value: 'new',
-  },
-  {
-    label: 'Active orders',
-    value: 'pending',
-  },
-  {
-    label: 'Delivered',
-    value: 'complete',
-  },
-  {
-    label: 'Cancelled',
-    value: 'cancelled',
-  },
-];
+import CustomTab from '@/components/common/Tab';
+import { filteringOptions } from '@/config/orders';
+import { useOrdersStore } from '@/stores/useOrdersStore';
+import { useOrdersTable } from '@/hooks/useOrdersTable';
+import { DeliveryStatusDef } from '@/types/orders';
 
 const FilteringTabs = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const { setQueryString } = useCreateQueryString();
-
-  const orderFilterTab = useOnlineShopStore((state) => state.orderFilterTab);
-  const setOrderFilterTab = useOnlineShopStore(
-    (state) => state.setOrderFilterTab
-  );
-
-  const handleTab = (tab: ITabOption) => {
-    setOrderFilterTab(tab.value);
-    setQueryString('activeTab', tab.value);
-    router.replace(`${pathname}?activeTab=${tab.value}`, { scroll: false });
-  };
+  const { queryParams, setQueryParams } = useOrdersStore();
+  const { updateQueryParams } = useOrdersTable();
 
   return (
     <CustomTab
-      data={filteringOption}
-      active={orderFilterTab}
-      handleChange={handleTab}
+      data={filteringOptions}
+      active={queryParams.activatedTab}
+      handleChange={(item) => {
+        updateQueryParams({
+          ...queryParams,
+          activatedTab: item.value as DeliveryStatusDef,
+          page: 1,
+        });
+      }}
     />
   );
 };

@@ -1,3 +1,5 @@
+import { ORDER_STATUS } from '@/config/orders';
+
 export const orderTypeWiseStyled = (type: string) => {
   const textVariant = ():
     | 'blue'
@@ -6,13 +8,13 @@ export const orderTypeWiseStyled = (type: string) => {
     | 'error'
     | undefined => {
     switch (type) {
-      case 'new':
+      case ORDER_STATUS.ACCEPTED:
         return 'blue';
-      case 'pending':
+      case ORDER_STATUS.PENDING:
         return 'warning';
-      case 'complete':
+      case ORDER_STATUS.COMPLETED:
         return 'success';
-      case 'cancelled':
+      case ORDER_STATUS.CANCELLED:
         return 'error';
       default:
         return undefined;
@@ -20,13 +22,13 @@ export const orderTypeWiseStyled = (type: string) => {
   };
   const textBackground = () => {
     switch (type) {
-      case 'new':
+      case ORDER_STATUS.ACCEPTED:
         return 'bg-blue-100 dark:bg-primary-80';
-      case 'pending':
+      case ORDER_STATUS.PENDING:
         return 'bg-warning-10 dark:bg-primary-80';
-      case 'complete':
+      case ORDER_STATUS.COMPLETED:
         return 'bg-success-20 dark:bg-primary-80';
-      case 'cancelled':
+      case ORDER_STATUS.CANCELLED:
         return 'bg-error-10 dark:bg-primary-80';
       default:
         return undefined;
@@ -34,16 +36,16 @@ export const orderTypeWiseStyled = (type: string) => {
   };
   const title = () => {
     switch (type) {
-      case 'new':
-        return 'New Order';
-      case 'pending':
+      case ORDER_STATUS.ACCEPTED:
+        return 'Accepted';
+      case ORDER_STATUS.PENDING:
         return 'Pending';
-      case 'complete':
+      case ORDER_STATUS.COMPLETED:
         return 'Complete';
-      case 'cancelled':
+      case ORDER_STATUS.CANCELLED:
         return 'Cancelled';
       default:
-        return undefined;
+        return 'N/A';
     }
   };
 

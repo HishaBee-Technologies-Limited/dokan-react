@@ -1,10 +1,5 @@
-'use client';
 import React from 'react';
-import { useRouter } from 'next/navigation';
-import { Text } from '@/components/common/text';
-import { useOnlineShopStore } from '@/stores/useOnlineShopStore';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { orderTypeWiseStyled } from '@/components/online-shop/orders/orderTypeWiseStyled';
 import {
   Table,
   TableBody,
@@ -14,55 +9,56 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { getOrders } from '@/actions/shop/orders';
+import { OrdersTableHeader } from '@/config/orders';
+import { QueryParamsDef } from '@/types/orders';
+import { formatDate } from '@/lib/date';
+import { Text } from '@/components/common/text';
+import { orderTypeWiseStyled } from '@/components/online-shop/orders/orderTypeWiseStyled';
+import OrderTableTransactionAmount from '@/components/online-shop/orders/OrderTableTransactionAmount';
+import OrdersPagination from '@/components/online-shop/orders/OrdersPagination';
 
-const tableData = [
-  { id: '113', type: 'new' },
-  { id: '114', type: 'pending' },
-  { id: '1154', type: 'complete' },
-  { id: '116', type: 'cancelled' },
-];
+type OrderTablePropsDef = {
+  params: QueryParamsDef;
+};
 
-export const OrderTable = () => {
-  const router = useRouter();
-
-  const orderFilterTab = useOnlineShopStore((state) => state.orderFilterTab);
-
-  const filteringData =
-    orderFilterTab === 'all'
-      ? tableData
-      : tableData.filter((item) => item.type === orderFilterTab);
+export const OrderTable = async ({ params }: OrderTablePropsDef) => {
+  const ordersResponse = await getOrders({
+    tab: params.activatedTab ? params.activatedTab : 'new',
+    params,
+  });
 
   return (
     <ScrollArea className="pb-space8">
       <Table wrapperClass="rounded-md border border-color">
         <TableHeader>
           <TableRow>
-            <TableHead>Order Id</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Contact</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Items</TableHead>
-            <TableHead>type</TableHead>
+            {OrdersTableHeader.map((item) => (
+              <TableHead key={item.id}>{item.label}</TableHead>
+            ))}
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {filteringData.map((row) => (
-            <TableRow
-              key={row.id}
-              onClick={() => router.push(`/online-shop/orders/${row.type}`)}
-            >
-              <TableCell>{'#12546549'}</TableCell>
-              <TableCell>{'23 May 2023'}</TableCell>
-              <TableCell>{'Md. Ariful Islam'}</TableCell>
-              <TableCell>{'৳200'}</TableCell>
-              <TableCell>{'2 Items'}</TableCell>
+          {ordersResponse?.data?.data?.data?.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.code}</TableCell>
+              <TableCell>{formatDate(item.created_at)}</TableCell>
+              <TableCell>
+                {JSON.parse(item.shipping_address)?.mobile_number ?? 'N/A'}
+              </TableCell>
+              <TableCell>৳{item.grand_total}</TableCell>
+              <TableCell>{item.order_details?.length ?? 'N/A'}</TableCell>
               <TableCell>
                 <Text
-                  title={orderTypeWiseStyled(row.type).title()}
-                  variant={orderTypeWiseStyled(row.type).textVariant()}
+                  title={orderTypeWiseStyled(
+                    item.order_details[0]?.delivery_status
+                  ).title()}
+                  variant={orderTypeWiseStyled(
+                    item.order_details[0]?.delivery_status
+                  ).textVariant()}
                   className={`text-xs font-medium rounded-md px-space8 py-space4 max-w-max 
-                                    ${orderTypeWiseStyled(row.type).textBackground()}`}
+                                    ${orderTypeWiseStyled(item.order_details[0]?.delivery_status).textBackground()}`}
                 />
               </TableCell>
             </TableRow>
@@ -72,12 +68,27 @@ export const OrderTable = () => {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={6} className="text-center">
-              Showing 10 of 100 Transactions
+              <OrderTableTransactionAmount
+                to={ordersResponse?.data?.data?.to ?? 0}
+                total={ordersResponse?.data?.data?.total ?? 0}
+              />
             </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
+
       <ScrollBar orientation="horizontal" />
+
+      <div className="my-10">
+        <OrdersPagination
+          pageCount={Math.ceil(
+            (ordersResponse?.data?.data?.total ?? 0) /
+              (ordersResponse?.data?.data?.per_page ?? 0)
+          )}
+          currentPage={ordersResponse?.data?.data?.current_page ?? 0}
+          lastPage={ordersResponse?.data?.data?.last_page ?? 0}
+        />
+      </div>
     </ScrollArea>
   );
 };
