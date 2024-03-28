@@ -12,7 +12,7 @@ export const getAllShops = async () => {
       return {
         success: true,
         status: data?.code,
-        data: data as IShopResponse[],
+        data: data.data as IShopResponse[],
       };
     }
     if (!res.ok) {

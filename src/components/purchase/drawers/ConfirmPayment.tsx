@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SellEnum } from '@/enum/sell';
 import { useForm } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
@@ -26,6 +26,22 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import { usePurchase } from '@/stores/usePurchaseStore';
+import { getAllSupplier } from '@/actions/contacts/getAllSupplier';
+import { getCookie } from 'cookies-next';
+import { IUserResponse } from '@/types/contact/partyResponse';
+import { getAllEmployee } from '@/actions/contacts/getAllEmployee';
+import { createPurchase } from '@/actions/purchase/createPurchase';
+import { IProductPurchasePayload } from '@/types/purchase';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@radix-ui/react-popover';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { CalendarIcon } from '@radix-ui/react-icons';
+import { Calendar } from '@/components/ui/calendar';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -35,17 +51,23 @@ const formSchema = z.object({
   details: z.string(),
   images: z.string(),
   cash_type: z.string(),
-  customer_info: z.boolean().default(false).optional(),
-  customer_number: z.string().optional(),
-  customer: z.string(),
+  supplier_info: z.boolean().default(false).optional(),
+  supplier_number: z.string().optional(),
+  supplier: z.string(),
   employee_info: z.boolean().default(false).optional(),
   employee_number: z.string().optional(),
   employee: z.string().optional(),
+  date: z.date(),
 });
 
 const ConfirmPayment = () => {
   const closeDrawer = usePurchaseStore((state) => state.setDrawerState);
   const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
+  const calculatedProducts = usePurchase((state) => state.calculatedProducts);
+  const [suppliers, setSuppliers] = useState<IUserResponse[]>();
+  const [employees, setEmployee] = useState<IUserResponse[]>();
+
+  console.log('sss', calculatedProducts);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,28 +77,111 @@ const ConfirmPayment = () => {
       note: '',
       images: '',
       cash_type: '',
-      customer_info: false,
-      customer_number: '',
-      customer: '',
-      employee_info: false,
+      supplier_info: true,
+      supplier_number: '',
+      supplier: '',
+      employee_info: true,
       employee_number: '',
       employee: '',
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    closeDrawer({ open: false });
-    openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+  const selectedSupplier = form.watch('supplier');
+  const selectedEmployee = form.watch('employee');
+  useEffect(() => {
+    if (calculatedProducts) {
+      form.setValue('amount', String(calculatedProducts.totalPrice));
+    }
+  }, [calculatedProducts, form]);
+  useEffect(() => {
+    if (selectedSupplier) {
+      form.setValue('supplier_number', selectedSupplier.split('-')[1]);
+    }
+    if (selectedEmployee) {
+      form.setValue('employee_number', selectedEmployee.split('-')[1]);
+    }
+  }, [selectedSupplier, form, selectedEmployee]);
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    // const purchaseData: IProductPurchasePayload = {
+    //   date:
+    // }
+    // const res = await createPurchase()
     console.log('data------------', data);
+    // closeDrawer({ open: false });
+    // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
   }
+
+  useEffect(() => {
+    const fetchSuppliersAndEmployees = async () => {
+      const shopId = getCookie('shopId');
+
+      const suppliers = await getAllSupplier(Number(shopId));
+      const employees = await getAllEmployee(Number(shopId));
+      if (suppliers?.success) {
+        setSuppliers(suppliers?.data as IUserResponse[]);
+      } else {
+        console.log(suppliers);
+      }
+      if (employees?.success) {
+        setEmployee(employees?.data as IUserResponse[]);
+      } else {
+        console.log(employees);
+      }
+    };
+    fetchSuppliersAndEmployees();
+  }, []);
+
+  console.log(form.formState.errors);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
-        <DatePicker
+        {/* <DatePicker
           onChange={() => {}}
           contentAlign={'center'}
           triggerClasses={'w-full justify-center'}
+        /> */}
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date of birth</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'w-[240px] pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, 'PPP')
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    initialFocus
+                    className="bg-white"
+                    weekStartsOn={0}
+                  />
+                </PopoverContent>
+              </Popover>
+
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
         <FormField
@@ -88,7 +193,7 @@ const ConfirmPayment = () => {
                 Amount <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Amount" {...field} />
+                <Input type="number" disabled placeholder="Amount" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -110,11 +215,11 @@ const ConfirmPayment = () => {
         <div>
           <FormField
             control={form.control}
-            name="customer_info"
+            name="supplier_info"
             render={({ field }) => (
               <FormItem className="flex justify-between items-center gap-space8">
                 <FormLabel>
-                  <Text title="Customer information" className="text-sm" />
+                  <Text title="Supplier information" className="text-sm" />
                 </FormLabel>
                 <FormControl>
                   <Switch
@@ -127,14 +232,20 @@ const ConfirmPayment = () => {
           />
 
           <div
-            className={`grid ${form.watch('customer_info') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} duration-500`}
+            className={`grid ${
+              form.watch('supplier_info')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
+            } duration-500`}
           >
             <div
-              className={`${form.watch('customer_info') ? 'p-space8' : 'overflow-hidden'} overflow-hidden space-y-space12`}
+              className={`${
+                form.watch('supplier_info') ? 'p-space8' : 'overflow-hidden'
+              } overflow-hidden space-y-space12`}
             >
               <FormField
                 control={form.control}
-                name="customer"
+                name="supplier"
                 render={({ field }) => (
                   <FormItem>
                     <Select
@@ -143,20 +254,19 @@ const ConfirmPayment = () => {
                     >
                       <FormControl>
                         <SelectTrigger className="">
-                          <SelectValue placeholder="Customer" />
+                          <SelectValue placeholder="Supplier" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <div className="max-h-[24rem] overflow-y-scroll">
-                          <SelectItem value="m@example.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@google.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@support.com">
-                            m@support.com
-                          </SelectItem>
+                          {suppliers?.map((supplier) => (
+                            <SelectItem
+                              key={supplier.unique_id}
+                              value={`${supplier.name}-${supplier.mobile}`}
+                            >
+                              {supplier.name}
+                            </SelectItem>
+                          ))}
                         </div>
 
                         {/* <Button
@@ -173,7 +283,7 @@ const ConfirmPayment = () => {
 
               <FormField
                 control={form.control}
-                name="customer_number"
+                name="supplier_number"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -207,10 +317,16 @@ const ConfirmPayment = () => {
           />
 
           <div
-            className={`grid ${form.watch('employee_info') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} duration-500`}
+            className={`grid ${
+              form.watch('employee_info')
+                ? 'grid-rows-[1fr]'
+                : 'grid-rows-[0fr]'
+            } duration-500`}
           >
             <div
-              className={`${form.watch('employee_info') ? 'p-space8' : 'overflow-hidden'} overflow-hidden space-y-space12`}
+              className={`${
+                form.watch('employee_info') ? 'p-space8' : 'overflow-hidden'
+              } overflow-hidden space-y-space12`}
             >
               <FormField
                 control={form.control}
@@ -228,15 +344,14 @@ const ConfirmPayment = () => {
                       </FormControl>
                       <SelectContent>
                         <div className="max-h-[24rem] overflow-y-scroll">
-                          <SelectItem value="m@example.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@google.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@support.com">
-                            m@support.com
-                          </SelectItem>
+                          {employees?.map((employee) => (
+                            <SelectItem
+                              key={employee.unique_id}
+                              value={`${employee.name}-${employee.mobile}`}
+                            >
+                              {employee.name}
+                            </SelectItem>
+                          ))}
                         </div>
 
                         {/* <Button

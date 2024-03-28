@@ -83,7 +83,7 @@ export const RightSection = () => {
           <div className="space-y-space12">
             {products.map((product, index) => (
               <ProductFiledRow
-                key={product.id}
+                key={product.unique_id}
                 data={product}
                 {...{ index, form }}
               />

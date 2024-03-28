@@ -25,7 +25,6 @@ export function calculateGrandTotal(
   deliveryCharge: number,
   discountAmount: number
 ) {
-  console.log(typeof totalPrice, typeof deliveryCharge);
   return discountType
     ? discountType === 'PERCENT'
       ? totalPrice - percentage(totalPrice, discountAmount) + deliveryCharge

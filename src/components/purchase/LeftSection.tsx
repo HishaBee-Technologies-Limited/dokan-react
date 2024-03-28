@@ -25,7 +25,7 @@ export const LeftSection = ({ productData }: { productData: any }) => {
         <ScrollArea className="h-[calc(100%-14rem)] overflow-y-scroll px-space8">
           {productData?.data.data?.map((product: IProduct) => (
             <div
-              key={product.id}
+              key={product.unique_id}
               className="flex items-center gap-space12 justify-between py-space8 px-space8"
             >
               <div className="flex items-center gap-space8">
