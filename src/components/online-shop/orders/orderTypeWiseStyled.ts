@@ -1,53 +1,57 @@
-import { ORDER_STATUS } from "@/config/orders";
+import { ORDER_STATUS } from '@/config/orders';
 
 export const orderTypeWiseStyled = (type: string) => {
-  const textVariant = (): "blue" | "warning" | "success" | "error" | undefined => {
+  const textVariant = ():
+    | 'blue'
+    | 'warning'
+    | 'success'
+    | 'error'
+    | undefined => {
     switch (type) {
       case ORDER_STATUS.ACCEPTED:
-        return 'blue'
+        return 'blue';
       case ORDER_STATUS.PENDING:
-        return 'warning'
+        return 'warning';
       case ORDER_STATUS.COMPLETED:
-        return 'success'
+        return 'success';
       case ORDER_STATUS.CANCELLED:
-        return 'error'
+        return 'error';
       default:
-        return undefined
+        return undefined;
     }
-  }
+  };
   const textBackground = () => {
     switch (type) {
       case ORDER_STATUS.ACCEPTED:
-        return 'bg-blue-100 dark:bg-primary-80'
+        return 'bg-blue-100 dark:bg-primary-80';
       case ORDER_STATUS.PENDING:
-        return 'bg-warning-10 dark:bg-primary-80'
+        return 'bg-warning-10 dark:bg-primary-80';
       case ORDER_STATUS.COMPLETED:
-        return 'bg-success-20 dark:bg-primary-80'
+        return 'bg-success-20 dark:bg-primary-80';
       case ORDER_STATUS.CANCELLED:
-        return 'bg-error-10 dark:bg-primary-80'
+        return 'bg-error-10 dark:bg-primary-80';
       default:
-        return undefined
+        return undefined;
     }
-  }
+  };
   const title = () => {
     switch (type) {
       case ORDER_STATUS.ACCEPTED:
-        return 'Accepted'
+        return 'Accepted';
       case ORDER_STATUS.PENDING:
-        return 'Pending'
+        return 'Pending';
       case ORDER_STATUS.COMPLETED:
-        return 'Complete'
+        return 'Complete';
       case ORDER_STATUS.CANCELLED:
-        return 'Cancelled'
+        return 'Cancelled';
       default:
-        return 'N/A'
+        return 'N/A';
     }
-  }
+  };
 
   return {
     title,
     textVariant,
     textBackground,
-  }
-
-}
+  };
+};

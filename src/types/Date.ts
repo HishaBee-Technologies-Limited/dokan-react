@@ -1,11 +1,11 @@
-import { DateRange } from "react-day-picker";
+import { DateRange } from 'react-day-picker';
 
 type DateRangeDef = {
   from: string | undefined;
   to: string | undefined;
-}
+};
 
 export type DatePickerWithRangePropsDef = {
-  dateRange: DateRangeDef,
+  dateRange: DateRangeDef;
   onChange: (dateRange: DateRange | undefined) => void;
-}
+};

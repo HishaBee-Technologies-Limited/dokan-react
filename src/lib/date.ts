@@ -1,8 +1,8 @@
-import { format, startOfMonth } from "date-fns";
+import { format, startOfMonth } from 'date-fns';
 
 export const formatDate = (date: string) => {
-  return format(new Date(date), 'dd MMM yyyy')
-}
+  return format(new Date(date), 'dd MMM yyyy');
+};
 
 export const getFormattedStartOfMonth = () =>
   format(startOfMonth(new Date()), 'yyyy-MM-dd');

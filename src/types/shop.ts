@@ -42,29 +42,29 @@ export interface shopPayload {
 }
 
 export type OverviewDef = {
-  name: string,
-  slug: string,
-  address: string,
-  active_orders: number,
-  online_products: number,
-  total_earning: number,
-  processing_orders: number,
-  delivered_orders: number,
-}
+  name: string;
+  slug: string;
+  address: string;
+  active_orders: number;
+  online_products: number;
+  total_earning: number;
+  processing_orders: number;
+  delivered_orders: number;
+};
 
 export type ShopDef = OverviewDef & {
   public_number: string;
   type: number;
   area: number;
-}
+};
 
 export type GetShopInfoDataDef = {
-  overview : OverviewDef //@TODO: collaborate with ziku bhai
-  shop: ShopDef
-}
+  overview: OverviewDef; //@TODO: collaborate with ziku bhai
+  shop: ShopDef;
+};
 
 export interface IGetShopInfoResponse {
-  data: GetShopInfoDataDef
+  data: GetShopInfoDataDef;
 }
 
 export type IOverviewOtherDef = {
@@ -72,4 +72,4 @@ export type IOverviewOtherDef = {
   img: string;
   title: string;
   url: string;
-}
+};

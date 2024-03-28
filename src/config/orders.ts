@@ -1,21 +1,25 @@
-import { FilteringOptionDef, OrdersTableHeaderDef, QueryParamsDef } from "@/types/orders";
-import { getFormattedStartOfMonth, getFormattedToday } from "@/lib/date";
+import {
+  FilteringOptionDef,
+  OrdersTableHeaderDef,
+  QueryParamsDef,
+} from '@/types/orders';
+import { getFormattedStartOfMonth, getFormattedToday } from '@/lib/date';
 
-export const OrdersTableHeader:OrdersTableHeaderDef [] = [
-  { id: 1, label: 'Order Id'},
-  { id: 2, label: 'Date'},
-  { id: 3, label: 'Contact'},
-  { id: 4, label: 'Amount'},
-  { id: 5, label: 'Items'},
-  { id: 6, label: 'type'},
-]
+export const OrdersTableHeader: OrdersTableHeaderDef[] = [
+  { id: 1, label: 'Order Id' },
+  { id: 2, label: 'Date' },
+  { id: 3, label: 'Contact' },
+  { id: 4, label: 'Amount' },
+  { id: 5, label: 'Items' },
+  { id: 6, label: 'type' },
+];
 
 export const ORDER_TYPE = {
-  CASH_ON_DELIVERY: 'CASH_ON_DELIVERY'
+  CASH_ON_DELIVERY: 'CASH_ON_DELIVERY',
 } as const;
 
 export const PAYMENT_STATUS = {
-  UNPAID: 'unpaid'
+  UNPAID: 'unpaid',
 } as const;
 
 export const DELIVERY_STATUS = {
@@ -28,23 +32,23 @@ export const ORDER_STATUS = {
   ACCEPTED: 'accepted',
   PENDING: 'pending',
   COMPLETED: 'completed',
-  CANCELLED: 'cancelled'
+  CANCELLED: 'cancelled',
 } as const;
 
-export const filteringOptions:FilteringOptionDef[] = [
+export const filteringOptions: FilteringOptionDef[] = [
   {
     label: 'New orders',
-    value: DELIVERY_STATUS.NEW
+    value: DELIVERY_STATUS.NEW,
   },
   {
     label: 'Active orders',
-    value: DELIVERY_STATUS.ACTIVE
+    value: DELIVERY_STATUS.ACTIVE,
   },
   {
     label: 'Complete',
-    value: DELIVERY_STATUS.COMPLETE
+    value: DELIVERY_STATUS.COMPLETE,
   },
-]
+];
 
 export const ORDER_SORT_OPTIONS = [
   {
@@ -71,12 +75,12 @@ export const ORDER_SORT_OPTIONS = [
     bn_name: '৳ - বেশি থেকে কম',
     value: 'highest_amount',
   },
-]
+];
 
 export const INITIAL_QUERY_PARAMS: QueryParamsDef = {
   start_date: getFormattedStartOfMonth(),
   end_date: getFormattedToday(),
   sorted_by: ORDER_SORT_OPTIONS[0].value,
   page: 1,
-  activatedTab: DELIVERY_STATUS.NEW
+  activatedTab: DELIVERY_STATUS.NEW,
 };

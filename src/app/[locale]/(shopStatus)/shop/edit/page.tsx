@@ -91,12 +91,17 @@ const EditShopPage = () => {
       const shopInfo = await getShopInfo(shopId as string);
 
       if (shopInfo?.success) {
-        form.setValue("address", shopInfo?.data?.data?.shop?.address ?? '');
-        form.setValue("name", shopInfo?.data?.data?.shop?.name ?? '');
-        form.setValue("number", shopInfo?.data?.data?.shop?.public_number ?? '');
-        form.setValue("shop_type", shopInfo?.data?.data?.shop?.type ?? 0);
+        form.setValue('address', shopInfo?.data?.data?.shop?.address ?? '');
+        form.setValue('name', shopInfo?.data?.data?.shop?.name ?? '');
+        form.setValue(
+          'number',
+          shopInfo?.data?.data?.shop?.public_number ?? ''
+        );
+        form.setValue('shop_type', shopInfo?.data?.data?.shop?.type ?? 0);
 
-        const areaData = await getAreaInfo(`${shopInfo?.data?.data?.shop?.area}`);
+        const areaData = await getAreaInfo(
+          `${shopInfo?.data?.data?.shop?.area}`
+        );
 
         if (areaData?.success) {
           setDivisionValue(areaData?.data?.division.id);
@@ -209,9 +214,9 @@ const EditShopPage = () => {
                   >
                     {divisionValue
                       ? divisions?.find(
-                        (division) =>
-                          String(division.id) === String(divisionValue)
-                      )?.name
+                          (division) =>
+                            String(division.id) === String(divisionValue)
+                        )?.name
                       : 'Select Divisions...'}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -262,14 +267,14 @@ const EditShopPage = () => {
                   >
                     {districtValue
                       ? divisions
-                        ?.find(
-                          (division) =>
-                            String(division.id) === String(divisionValue)
-                        )
-                        ?.districts.find(
-                          (district) =>
-                            String(district.id) === String(districtValue)
-                        )?.name
+                          ?.find(
+                            (division) =>
+                              String(division.id) === String(divisionValue)
+                          )
+                          ?.districts.find(
+                            (district) =>
+                              String(district.id) === String(districtValue)
+                          )?.name
                       : 'Select Districts...'}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -334,16 +339,16 @@ const EditShopPage = () => {
                       >
                         {field.value
                           ? divisions
-                            ?.find(
-                              (division) =>
-                                String(division.id) === String(divisionValue)
-                            )
-                            ?.districts.find(
-                              (district) =>
-                                String(district.id) === String(districtValue)
-                            )
-                            ?.areas?.find((area) => area.id === field.value)
-                            ?.name
+                              ?.find(
+                                (division) =>
+                                  String(division.id) === String(divisionValue)
+                              )
+                              ?.districts.find(
+                                (district) =>
+                                  String(district.id) === String(districtValue)
+                              )
+                              ?.areas?.find((area) => area.id === field.value)
+                              ?.name
                           : 'Select Area...'}
                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
