@@ -6,7 +6,7 @@ import { ProductHeader } from '@/components/product/ProductHeader';
 import { ProductQueries } from '@/components/product/ProductQueries';
 import { getShopsProducts } from '@/actions/product/getShopProducts';
 import { getSingleProduct } from '@/actions/product/getSingleProduct';
-import { IProduct, IProductPayload, IUnits } from '@/types/product';
+import { IProduct, IUnits } from '@/types/product';
 import { getUnits } from '@/actions/product/getUnits';
 import { auth } from '@/auth';
 import { getCategories } from '@/actions/product/getCategories';

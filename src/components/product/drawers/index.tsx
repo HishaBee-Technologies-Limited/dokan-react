@@ -6,8 +6,9 @@ import { Drawer } from '@/components/common/Drawer';
 import { useProductStore } from '@/stores/useProductStore';
 import { AddProduct } from '@/components/product/drawers/AddProduct';
 import { EditProduct } from '@/components/product/drawers/EditProduct';
-import { IProduct, IProductPayload, IUnits } from '@/types/product';
-import { usePathname, useRouter } from 'next/navigation';
+import { IProduct, IUnits } from '@/types/product';
+import { useProductTable } from '@/hooks/useProductTable';
+import { INITIAL_QUERY_PARAMS } from '@/config/product';
 
 export const ProductDrawers = ({
   product,
@@ -21,12 +22,11 @@ export const ProductDrawers = ({
   const drawerState = useProductStore((state) => state.drawerState);
   const handleClose = useProductStore((state) => state.setDrawerState);
 
-  const pathname = usePathname();
-  const router = useRouter();
+  const { updateQueryParams } = useProductTable();
 
   const handleCloseAndClearParams = ({ open }: { open: boolean }) => {
     handleClose({ open });
-    router.push(`${pathname}`);
+    updateQueryParams(INITIAL_QUERY_PARAMS);
   };
 
   const renderedDrawers = (activeDrawer: string | undefined) => {
