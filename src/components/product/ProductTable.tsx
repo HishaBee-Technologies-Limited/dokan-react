@@ -19,14 +19,20 @@ import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { IProduct } from '@/types/product';
+import { cn } from '@/lib/utils';
 
-export const ProductTable = ({ productData }: { productData: any }) => {
+type ProductTableProps = { productData: any; isStatusShow?: boolean };
+
+export const ProductTable = ({
+  productData,
+  isStatusShow = false,
+}: ProductTableProps) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
   const { setQueryString } = useCreateQueryString();
   const pathname = usePathname();
   const router = useRouter();
 
-  console.log(productData);
+  console.log({ productData });
 
   const handleRowClick = (product: IProduct) => {
     handleDialogOpen({ open: true, header: ProductEnum.PRODUCT_DETAILS });
@@ -42,6 +48,7 @@ export const ProductTable = ({ productData }: { productData: any }) => {
             <TableHead>Current Stock</TableHead>
             <TableHead>Price</TableHead>
             <TableHead>Category</TableHead>
+            {isStatusShow ? <TableHead>Status</TableHead> : <></>}
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -64,6 +71,23 @@ export const ProductTable = ({ productData }: { productData: any }) => {
               <TableCell>{product?.stock}</TableCell>
               <TableCell>{product?.selling_price}</TableCell>
               <TableCell>{product?.sub_category?.name}</TableCell>
+              {isStatusShow ? (
+                <TableCell>
+                  <Text
+                    title="Published"
+                    variant="white"
+                    className={cn(
+                      'text-xs rounded-full px-space12  max-w-max',
+                      product?.published
+                        ? 'bg-success-100 dark:bg-primary-80'
+                        : 'bg-error-100 dark:bg-error-80'
+                    )}
+                  />
+                </TableCell>
+              ) : (
+                <></>
+              )}
+
               <TableCell className={`text-right`}>
                 <TableDropdownAction product={product} />
               </TableCell>

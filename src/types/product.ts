@@ -23,6 +23,7 @@ export interface IProduct {
   sell_online?: boolean;
   vat_applicable?: boolean;
   unit?: number;
+  published: boolean;
 }
 
 export interface IProductPayload {
