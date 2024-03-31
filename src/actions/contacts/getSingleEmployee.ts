@@ -5,7 +5,7 @@ import { IUserResponse } from '@/types/contact/partyResponse';
 
 export const getSingleEmployee = async (id: number) => {
   try {
-    const res = await authApi.get(`/employee/${id}`);
+    const res = await authApi.get(`/employees/${id}`);
     const data = await res.json();
 
     if (res.ok) {
