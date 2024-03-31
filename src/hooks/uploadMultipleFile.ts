@@ -1,5 +1,5 @@
-import { filesUpload } from "@/actions/upload";
-import { useEffect, useState } from "react";
+import { filesUpload } from '@/actions/upload';
+import { useEffect, useState } from 'react';
 
 export const useFileUpload = (selectedFiles?: FileList) => {
   const [imageUrls, setImageUrls] = useState<any>([]);
@@ -17,7 +17,7 @@ export const useFileUpload = (selectedFiles?: FileList) => {
           const body = new FormData();
           console.log(file);
 
-          body.set("image", file);
+          body.set('image', file);
           const image = await filesUpload(body);
           console.log(image);
           if (image?.success) {
