@@ -10,7 +10,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -31,8 +30,6 @@ export const ProductTable = ({
   const { setQueryString } = useCreateQueryString();
   const pathname = usePathname();
   const router = useRouter();
-
-  console.log({ productData });
 
   const handleRowClick = (product: IProduct) => {
     handleDialogOpen({ open: true, header: ProductEnum.PRODUCT_DETAILS });
