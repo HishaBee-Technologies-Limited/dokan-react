@@ -4,7 +4,7 @@ import {
   ORDER_TYPE,
   PAYMENT_STATUS,
 } from '@/config/orders';
-import { ISortOptions } from '@/types/Sorting';
+import { ISortOptions, SortOptionsTypesDef } from '@/types/Sorting';
 export type OrdersTableHeaderDef = { id: number; label: string };
 export type OrderTypeDef = (typeof ORDER_TYPE)[keyof typeof ORDER_TYPE];
 export type PaymentStatusDef =
@@ -50,7 +50,7 @@ export interface IGetOrderResponse {
 export type QueryParamsDef = {
   start_date: string | undefined;
   end_date: string | undefined;
-  sorted_by: ISortOptions['value'];
+  sorted_by: SortOptionsTypesDef;
   page: number;
   activatedTab: DeliveryStatusDef;
 };

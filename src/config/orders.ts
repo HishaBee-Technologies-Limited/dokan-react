@@ -4,6 +4,7 @@ import {
   QueryParamsDef,
 } from '@/types/orders';
 import { getFormattedStartOfMonth, getFormattedToday } from '@/lib/date';
+import { SORT_OPTIONS_TYPES } from '@/config/sorting';
 
 export const OrdersTableHeader: OrdersTableHeaderDef[] = [
   { id: 1, label: 'Order Id' },
@@ -50,37 +51,10 @@ export const filteringOptions: FilteringOptionDef[] = [
   },
 ];
 
-export const ORDER_SORT_OPTIONS = [
-  {
-    id: 1,
-    name: 'New to Old',
-    bn_name: 'নতুন থেকে পুরাতন',
-    value: 'new_to_old',
-  },
-  {
-    id: 2,
-    name: 'Old  to New',
-    bn_name: 'পুরাতন থেকে নতুন',
-    value: 'old_to_new',
-  },
-  {
-    id: 3,
-    name: '৳ - Less to More',
-    bn_name: '৳ - কম থেকে বেশি',
-    value: 'lowest_amount',
-  },
-  {
-    id: 4,
-    name: '৳ - More to Less',
-    bn_name: '৳ - বেশি থেকে কম',
-    value: 'highest_amount',
-  },
-];
-
 export const INITIAL_QUERY_PARAMS: QueryParamsDef = {
   start_date: getFormattedStartOfMonth(),
   end_date: getFormattedToday(),
-  sorted_by: ORDER_SORT_OPTIONS[0].value,
+  sorted_by: SORT_OPTIONS_TYPES.NEW_TO_OLD,
   page: 1,
   activatedTab: DELIVERY_STATUS.NEW,
 };

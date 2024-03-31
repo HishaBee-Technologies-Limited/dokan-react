@@ -8,9 +8,10 @@ import {
 } from '@/components/ui/select';
 import { SortIcon } from '@/components/common/icons';
 import React from 'react';
-import { ORDER_SORT_OPTIONS } from '@/config/orders';
+import { SORT_OPTIONS } from '@/config/sorting';
 import { useOrdersStore } from '@/stores/useOrdersStore';
 import { useOrdersTable } from '@/hooks/useOrdersTable';
+import { SortOptionsTypesDef } from '@/types/Sorting';
 
 const OrderListSorting = () => {
   const { queryParams, setQueryParams } = useOrdersStore();
@@ -19,7 +20,11 @@ const OrderListSorting = () => {
   return (
     <Select
       onValueChange={(value) => {
-        updateQueryParams({ ...queryParams, sorted_by: value, page: 1 });
+        updateQueryParams({
+          ...queryParams,
+          sorted_by: value as SortOptionsTypesDef,
+          page: 1,
+        });
       }}
       defaultValue={queryParams.sorted_by}
     >
@@ -29,7 +34,7 @@ const OrderListSorting = () => {
       </SelectTrigger>
       <SelectContent align="end">
         <div className="max-h-[24rem] overflow-y-scroll">
-          {ORDER_SORT_OPTIONS.map((item) => (
+          {SORT_OPTIONS.map((item) => (
             <SelectItem key={item.id} value={item.value}>
               {item.name}
             </SelectItem>
