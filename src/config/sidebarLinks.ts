@@ -89,6 +89,13 @@ const SidebarLinks: IAsideBarMenuItem[] = [
       },
       {
         id: 303,
+        title: 'Access Management',
+        bn_title: 'স্টক ইতিহাস',
+        image: '/images/features/stock_management.svg',
+        link: '/access-management',
+      },
+      {
+        id: 304,
         title: 'Printer',
         bn_title: 'স্টক ইতিহাস',
         image: '/images/features/printer.svg',
