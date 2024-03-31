@@ -16,22 +16,17 @@ const AccessibleFeatureList = () => {
             <FeatureImageTitle
               image={''}
               title={'item.name'}
-              active={true}
+              active={false}
               showActivity={true}
             />
             <div className="pl-[4.8rem] flex gap-space12 flex-wrap">
               <AccessTitle active={true} title={'jjjjj'} />
+              <AccessTitle active={true} title={'kkk'} />
+              <AccessTitle active={true} title={'mmm'} />
+              <AccessTitle active={true} title={'nnn'} />
             </div>
-            kkkkk
           </div>
         ))}
-      <FeatureImageTitle
-        image={''}
-        title={'item.name'}
-        active={false}
-        showActivity={true}
-      />
-      <AccessTitle active={true} title={'jjjjj'} />
     </div>
   );
 };

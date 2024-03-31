@@ -1,4 +1,5 @@
 import Icon from '@/components/common/Icon';
+import { Text } from '@/components/common/text';
 
 type IAccessTitle = {
   title: string;
@@ -14,23 +15,21 @@ const AccessTitle = ({
   className = '',
 }: IAccessTitle) => {
   return (
-    <article
-      className={`text-md text-500 flex items-center gap-1 ${className} `}
-    >
+    <Text className={`flex items-center gap-space6 ${className}`}>
       {!removeCheck && (
         <span
-          className={`h-[1.4rem] w-[1.4rem] flex items-center justify-center rounded-sm border-[1.6px] border-primary-20 ${
+          className={`h-[1.4rem] w-[1.4rem] flex items-center justify-center rounded-sm  ${
             active
               ? 'text-white bg-success-100 border-success-100'
-              : 'text-text500 border-primary-20'
+              : 'border-[.2rem] border-primary-80'
           }`}
         >
-          <Icon icon="mingcute:check-fill" width={9} height={9} />
+          {active && <Icon icon="mingcute:check-fill" width={9} height={9} />}
         </span>
       )}
 
       {title}
-    </article>
+    </Text>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '@/components/common/Icon';
+import { Text } from '@/components/common/text';
 import { Image } from '@/components/common/Image';
-import { Text } from '../common/text';
 
 type IProps = {
   image: string;
@@ -30,9 +30,9 @@ const FeatureImageTitle = ({ image, title, active, showActivity }: IProps) => {
           </span>
         ) : (
           <Text
+            variant="error"
             title={'no access'}
             className="font-medium text-sm"
-            variant="error"
           />
         ))}
     </div>
