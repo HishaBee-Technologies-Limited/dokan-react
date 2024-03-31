@@ -12,6 +12,8 @@ import WrapperOddList from '@/components/common/WrapperOddList';
 import { AddIcon, ExpandMoreIcon } from '@/components/common/icons';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator';
+import { useAccessManagementStore } from '@/stores/useAccessManagementStore';
+import { AccessManagementEnum } from '@/enum/accessManagement';
 
 const users = [
   {
@@ -45,6 +47,7 @@ export const LeftSection = ({
   const router = useRouter();
   const pathname = usePathname();
   const { getQueryString, setQueryString } = useCreateQueryString();
+  const openDrawer = useAccessManagementStore((state) => state.setDrawerState);
 
   const activeUser = getQueryString('active_user') ?? '';
 
@@ -94,7 +97,15 @@ export const LeftSection = ({
       </ScrollArea>
 
       <div className="p-space16 border-t border-primary-20 dark:border-primary-80">
-        <Button className="w-full">
+        <Button
+          className="w-full"
+          onClick={() =>
+            openDrawer({
+              open: true,
+              header: AccessManagementEnum.NEW_USER_ACCESS,
+            })
+          }
+        >
           <AddIcon />
           Add New User
         </Button>

@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { addCustomer } from '@/actions/contacts/addCustomer';
-import { useShopId } from '@/stores/useShopId';
 import { contactSchema } from '@/schemas/contacts';
 import { filesUpload } from '@/actions/upload';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
@@ -29,7 +28,6 @@ const AddNewUser = () => {
   const { getQueryString } = useCreateQueryString();
 
   const activeTab = getQueryString('tab') ?? '';
-  const shopId = useShopId((state) => state.shopId);
 
   const closeDrawer = useContactStore((state) => state.setContactDrawerState);
 
@@ -50,7 +48,6 @@ const AddNewUser = () => {
       mobile: data.number,
       email: data.email as string,
       address: data.address as string,
-      shop_id: shopId,
     };
 
     const createNewUser = () => {
