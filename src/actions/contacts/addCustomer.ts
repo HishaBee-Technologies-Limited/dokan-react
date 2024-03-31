@@ -4,10 +4,8 @@ import { authApi } from '@/lib/api';
 import { IUserRequest } from '@/types/contact/partyRequest';
 
 export const addCustomer = async (payload: IUserRequest) => {
-  const { name, mobile, shop_id, email, address, image_src } = payload;
-  const params = `name=${name}&shop_id=${shop_id}&address=${address}&email=${email}&mobile=${mobile}&image_src=${image_src}`;
   try {
-    const res = await authApi.get(`/customer/add?${params}`);
+    const res = await authApi.post(`/customers`, payload);
     const data = await res.json();
 
     if (res.ok) {

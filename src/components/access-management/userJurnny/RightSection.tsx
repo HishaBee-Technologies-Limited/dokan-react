@@ -7,8 +7,7 @@ import { Text } from '@/components/common/text';
 import { EditIcon } from '@/components/common/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import FallBackImage from '@/components/common/FallBackImage';
-import { ContactTable } from '@/components/contact/ContactTable';
-import AccessibleFeatureList from '../AccessibleFeatureList';
+import AccessibleFeatureList from '@/components/access-management/AccessibleFeatureList';
 
 export const RightSection = () => {
   return (
@@ -29,7 +28,7 @@ export const RightSection = () => {
         </div>
       </div>
 
-      <div className="px-space16 py-space8 space-y-space12">
+      <div className="px-space16 pt-space8 space-y-space12">
         <div className="flex justify-between items-center gap-space12">
           <article>
             <Text title={'এপের লিংক পাঠান'} className="font-semibold" />
@@ -47,7 +46,7 @@ export const RightSection = () => {
 
         <div className="flex justify-between items-center gap-space12">
           <Text title={'যেসব ফিচারে এক্সেস পাবে'} className="font-semibold" />
-          <Button variant={'transparent'} className="">
+          <Button variant={'transparent'} className="!px-0">
             <Icon icon="bx:edit" />
             পদবী এডিট
           </Button>
@@ -56,15 +55,6 @@ export const RightSection = () => {
 
       <ScrollArea className="h-full pb-space16 px-space16">
         <AccessibleFeatureList />
-        {/* <ContactTable />
-        <ContactTable />
-
-        <ContactTable />
-
-        <ContactTable />
-        <ContactTable />
-        <ContactTable />
-        <ContactTable /> */}
       </ScrollArea>
 
       <div className="p-space16 border-t border-primary-20 dark:border-primary-80 flex gap-space12 justify-end">

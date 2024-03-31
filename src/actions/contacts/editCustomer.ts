@@ -3,11 +3,9 @@
 import { authApi } from '@/lib/api';
 import { IUserRequest } from '@/types/contact/partyRequest';
 
-export const editCustomer = async (payload: IUserRequest) => {
-  const { id, name, mobile, shop_id, email, address, image_src } = payload;
-  const params = `id=${id}&name=${name}&shop_id=${shop_id}&address=${address}&email=${email}&mobile=${mobile}&image_src=${image_src}`;
+export const editCustomer = async ({ id, ...payload }: IUserRequest) => {
   try {
-    const res = await authApi.put(`/customer/edit?${params}`, payload);
+    const res = await authApi.put(`/customers/${id}`, payload);
     const data = await res.json();
 
     if (res.ok) {
