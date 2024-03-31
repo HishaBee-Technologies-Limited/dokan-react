@@ -7,7 +7,7 @@ import PurchaseHeader from '@/components/purchase/PurchaseHeader';
 import { getShopsProducts } from '@/actions/product/getShopProducts';
 
 const PurchasePage = async () => {
-  const allProductsResponse = await getShopsProducts();
+  const allProductsResponse = await getShopsProducts({});
 
   return (
     <>
