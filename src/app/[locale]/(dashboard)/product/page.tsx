@@ -43,11 +43,11 @@ const ProductPage = async ({ searchParams }: ProductPagePropsDef) => {
       </div>
 
       <ProductDrawers
-        product={singleProduct?.data.data as IProduct}
+        product={singleProduct?.data?.data as IProduct}
         units={productUnits?.data.data as IUnits[]}
         {...{ productCategories }}
       />
-      <ProductDialogs product={singleProduct?.data.data as IProduct} />
+      <ProductDialogs product={singleProduct?.data?.data as IProduct} />
     </>
   );
 };
