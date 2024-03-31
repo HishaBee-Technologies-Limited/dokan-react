@@ -1,7 +1,6 @@
 'use client';
 
 import Pagination from '@/components/common/CustomPagination';
-import { useOrdersStore } from '@/stores/useOrdersStore';
 import { useOrdersTable } from '@/hooks/useOrdersTable';
 
 type OrdersPaginationPropsDef = {
@@ -15,8 +14,7 @@ const OrdersPagination = ({
   lastPage,
   pageCount,
 }: OrdersPaginationPropsDef) => {
-  const { queryParams, setQueryParams } = useOrdersStore();
-  const { updateQueryParams } = useOrdersTable();
+  const { updateQueryParams, queryParams } = useOrdersTable();
 
   return (
     <Pagination

@@ -1,9 +1,7 @@
-import { isEqual } from 'lodash';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { INITIAL_QUERY_PARAMS } from '@/config/orders';
-import { useOrdersStore } from '@/stores/useOrdersStore';
 import { DeliveryStatusDef, QueryParamsDef } from '@/types/orders';
 import { generateQueryString } from '@/lib/queryString';
 
@@ -11,7 +9,9 @@ export const useOrdersTable = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()!;
-  const { setQueryParams, queryParams } = useOrdersStore();
+
+  const [queryParams, setQueryParams] =
+    useState<QueryParamsDef>(INITIAL_QUERY_PARAMS);
 
   const updateQueryParams = useCallback(
     (params: QueryParamsDef) => {
@@ -38,5 +38,5 @@ export const useOrdersTable = () => {
     router.push(pathname + '?' + generateQueryString(params));
   }, [searchParams]);
 
-  return { updateQueryParams };
+  return { updateQueryParams, queryParams };
 };
