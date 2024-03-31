@@ -5,12 +5,12 @@ import FeatureImageTitle from '@/components/access-management/FeatureImageTitle'
 const AccessibleFeatureList = () => {
   return (
     <div>
-      {Array()
-        .fill(6)
-        .map((item, idx) => (
+      {Array(6)
+        .fill(0)
+        .map((_, idx) => (
           <div
             key={idx}
-            className={`px-space16 py-space12 `}
+            className={`px-space8 py-space12 `}
             // ${idx === lastItem ? '' : 'border-b border-primary-20'}
           >
             <FeatureImageTitle
@@ -19,10 +19,10 @@ const AccessibleFeatureList = () => {
               active={true}
               showActivity={true}
             />
-
             <div className="pl-[4.8rem] flex gap-space12 flex-wrap">
               <AccessTitle active={true} title={'jjjjj'} />
             </div>
+            kkkkk
           </div>
         ))}
       <FeatureImageTitle
