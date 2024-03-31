@@ -2,12 +2,10 @@
 
 import React from 'react';
 import { DatePickerWithRange } from '@/components/common/DatePickerWithRange';
-import { useOrdersStore } from '@/stores/useOrdersStore';
 import { useOrdersTable } from '@/hooks/useOrdersTable';
 
 const OrderDateRangePicker = () => {
-  const { queryParams, setQueryParams } = useOrdersStore();
-  const { updateQueryParams } = useOrdersTable();
+  const { updateQueryParams, queryParams } = useOrdersTable();
 
   const selectedDateRange = {
     from: queryParams.start_date,

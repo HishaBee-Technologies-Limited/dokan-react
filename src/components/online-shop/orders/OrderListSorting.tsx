@@ -9,13 +9,11 @@ import {
 import { SortIcon } from '@/components/common/icons';
 import React from 'react';
 import { SORT_OPTIONS } from '@/config/sorting';
-import { useOrdersStore } from '@/stores/useOrdersStore';
 import { useOrdersTable } from '@/hooks/useOrdersTable';
 import { SortOptionsTypesDef } from '@/types/Sorting';
 
 const OrderListSorting = () => {
-  const { queryParams, setQueryParams } = useOrdersStore();
-  const { updateQueryParams } = useOrdersTable();
+  const { updateQueryParams, queryParams } = useOrdersTable();
 
   return (
     <Select
