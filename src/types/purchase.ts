@@ -9,16 +9,16 @@ export interface IProductPurchasePayload {
   note?: string;
   payment_method: number;
   payment_status: 'PAID' | 'UNPAID';
-  purchase_barcode: string;
+  purchase_barcode?: string;
   received_amount: number;
-  shop_id: number;
+  shop_id?: number;
   supplier_mobile?: string;
   supplier_name?: string;
   total_item: number;
   total_price: number;
   unique_id: string;
   updated_at: string;
-  user_id: number;
+  user_id?: number;
   version: number;
 }
 

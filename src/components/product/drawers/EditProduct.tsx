@@ -41,6 +41,8 @@ import { format } from 'date-fns';
 import { filesUpload } from '@/actions/upload';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFileUpload } from '@/hooks/uploadMultipleFile';
+import { DATE_FORMATS } from '@/lib/constants/common';
+import { formatDate } from '@/lib/utils';
 
 export const EditProduct = ({
   product,
@@ -89,7 +91,7 @@ export const EditProduct = ({
       image_url: imageUrls.length ? imageUrls[0] : '',
       ...(product.version && { version: product.version + 1 }),
       ...(product.created_at && { created_at: product.created_at }),
-      updated_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
+      updated_at: formatDate(DATE_FORMATS.default),
       sub_category: Number(data.sub_category),
       wholesale_amount: Number(data.bulk_quantity),
       wholesale_price: Number(data.bulk_price),

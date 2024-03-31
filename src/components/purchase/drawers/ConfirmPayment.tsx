@@ -38,10 +38,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@radix-ui/react-popover';
-import { cn } from '@/lib/utils';
+import { cn, formatDate, generateUlid } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { Calendar } from '@/components/ui/calendar';
+import {
+  DATE_FORMATS,
+  PAYMENT_METHODS,
+  PAYMENT_STATUS,
+} from '@/lib/constants/common';
+import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -64,6 +70,9 @@ const ConfirmPayment = () => {
   const closeDrawer = usePurchaseStore((state) => state.setDrawerState);
   const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
+  const setCalculatedProducts = usePurchase(
+    (state) => state.setCalculatedProducts
+  );
   const [suppliers, setSuppliers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
 
@@ -83,6 +92,7 @@ const ConfirmPayment = () => {
       employee_info: true,
       employee_number: '',
       employee: '',
+      date: new Date(),
     },
   });
 
@@ -108,8 +118,42 @@ const ConfirmPayment = () => {
     // }
     // const res = await createPurchase()
     console.log('data------------', data);
-    // closeDrawer({ open: false });
-    // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+    const res = await createPurchase({
+      batch: '',
+      created_at: formatDate(DATE_FORMATS.default),
+      date: formatDate(DATE_FORMATS.default, data.date),
+      discount: Number(calculatedProducts.discount),
+      employee_mobile: data.employee_number,
+      employee_name: data.employee,
+      extra_charge: Number(calculatedProducts.deliveryCharge),
+      note: data.note,
+      payment_method: PAYMENT_METHODS.Cash,
+      payment_status: PAYMENT_STATUS.PAID,
+      purchase_barcode: '',
+      received_amount: Number(data.amount),
+      supplier_mobile: data.supplier_number,
+      supplier_name: data.supplier,
+      total_item: calculatedProducts.products.length,
+      total_price: Number(data.amount),
+      unique_id: generateUlid(),
+      updated_at: formatDate(DATE_FORMATS.default),
+      user_id: 1,
+      version: DEFAULT_STARTING_VERSION,
+    });
+    console.log('date-------', formatDate(DATE_FORMATS.default));
+    console.log('res-------', res);
+    if (res?.success) {
+      // const res =
+      // closeDrawer({ open: false });
+      // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+      // setCalculatedProducts({
+      //   ...calculatedProducts,
+      //   date: res.data.data.created_at,
+      // });
+    }
+    if (res?.error) {
+      console.log('error-------', res?.error);
+    }
   }
 
   useEffect(() => {
@@ -161,7 +205,7 @@ const ConfirmPayment = () => {
                       {field.value ? (
                         format(field.value, 'PPP')
                       ) : (
-                        <span>Pick a date</span>
+                        <span>Pick a Date</span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>

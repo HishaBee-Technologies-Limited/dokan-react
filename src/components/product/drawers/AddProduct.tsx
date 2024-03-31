@@ -39,6 +39,8 @@ import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFileUpload } from '@/hooks/uploadMultipleFile';
+import { DATE_FORMATS } from '@/lib/constants/common';
+import { formatDate } from '@/lib/utils';
 
 export const AddProduct = ({
   units,
@@ -96,7 +98,7 @@ export const AddProduct = ({
       sell_online: data.online_sell,
       stock: Number(data.stock),
       version: DEFAULT_STARTING_VERSION,
-      created_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
+      created_at: formatDate(DATE_FORMATS.default),
       sub_category: Number(data.sub_category),
       wholesale_amount: Number(data.bulk_quantity),
       wholesale_price: Number(data.bulk_price),
@@ -112,7 +114,7 @@ export const AddProduct = ({
       vat_percent: Number(data.vat_percentage),
       unique_id: uuid + shopId + Date.now(),
       selling_price: Number(data.purchase_price),
-      updated_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
+      updated_at: formatDate(DATE_FORMATS.default),
       unit: Number(data.unit),
     });
     if (res?.success) {

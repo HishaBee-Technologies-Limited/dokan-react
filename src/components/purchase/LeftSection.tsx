@@ -25,11 +25,11 @@ export const LeftSection = ({ productData }: { productData: any }) => {
         <ScrollArea className="h-[calc(100%-14rem)] overflow-y-scroll px-space8">
           {productData?.data.data?.map((product: IProduct) => (
             <div
-              key={product.unique_id}
+              key={product.id}
               className="flex items-center gap-space12 justify-between py-space8 px-space8"
             >
               <div className="flex items-center gap-space8">
-                <Image height={32} width={32} src="" alt="" />
+                <Image height={32} width={32} src={product?.image_url} alt="" />
                 <Text title={product.name} className="text-sm" />
               </div>
               <Button

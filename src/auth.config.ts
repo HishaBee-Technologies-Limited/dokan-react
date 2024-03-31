@@ -6,7 +6,6 @@ import {
   publicRoutes,
   rootRoute,
 } from './routes';
-import { add, format } from 'date-fns';
 
 export const authConfig = {
   pages: {
