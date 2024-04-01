@@ -2,12 +2,18 @@
 
 import { authApi } from '@/lib/api';
 import { IUserRequest } from '@/types/contact/partyRequest';
+import { cookies } from 'next/headers';
 
 export const addEmployee = async (payload: IUserRequest) => {
-  const { name, mobile, shop_id, email, address, image_src, salary } = payload;
-  const params = `name=${name}&shop_id=${shop_id}&address=${address}&email=${email}&mobile=${mobile}&image_src=${image_src}&salary_amount=${salary}`;
+  const shopId = cookies().get('shopId')?.value;
+
+  const updatedPayload = {
+    ...payload,
+    shop_id: Number(shopId),
+  };
+
   try {
-    const res = await authApi.get(`/employee/add?${params}`);
+    const res = await authApi.post(`/employees`, updatedPayload);
     const data = await res.json();
 
     if (res.ok) {

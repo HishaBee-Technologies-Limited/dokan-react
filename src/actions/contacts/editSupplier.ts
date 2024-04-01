@@ -1,13 +1,19 @@
 'use server';
 
 import { authApi } from '@/lib/api';
+import { cookies } from 'next/headers';
 import { IUserRequest } from '@/types/contact/partyRequest';
 
-export const editSupplier = async (payload: IUserRequest) => {
-  const { id, name, mobile, shop_id, email, address, image_src } = payload;
-  const params = `id=${id}&name=${name}&shop_id=${shop_id}&address=${address}&email=${email}&mobile=${mobile}&image_src=${image_src}`;
+export const editSupplier = async ({ id, ...payload }: IUserRequest) => {
+  const shopId = cookies().get('shopId')?.value;
+
+  const updatedPayload = {
+    ...payload,
+    shop_id: Number(shopId),
+  };
+
   try {
-    const res = await authApi.get(`/supplier/edit?${params}`);
+    const res = await authApi.put(`/suppliers/${id}`, updatedPayload);
     const data = await res.json();
 
     if (res.ok) {

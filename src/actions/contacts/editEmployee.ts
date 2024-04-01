@@ -1,14 +1,19 @@
 'use server';
 
 import { authApi } from '@/lib/api';
+import { cookies } from 'next/headers';
 import { IUserRequest } from '@/types/contact/partyRequest';
 
-export const editEmployee = async (payload: IUserRequest) => {
-  const { id, name, mobile, shop_id, email, address, image_src, salary } =
-    payload;
-  const params = `id=${id}&name=${name}&shop_id=${shop_id}&address=${address}&email=${email}&mobile=${mobile}&image_src=${image_src}&salary_amount=${salary}`;
+export const editEmployee = async ({ id, ...payload }: IUserRequest) => {
+  const shopId = cookies().get('shopId')?.value;
+
+  const updatedPayload = {
+    ...payload,
+    shop_id: Number(shopId),
+  };
+
   try {
-    const res = await authApi.get(`/employee/edit?${params}`);
+    const res = await authApi.put(`/employees/${id}`, updatedPayload);
     const data = await res.json();
 
     if (res.ok) {

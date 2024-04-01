@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useShopId } from '@/stores/useShopId';
 import { contactSchema } from '@/schemas/contacts';
 import { filesUpload } from '@/actions/upload';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
@@ -31,7 +30,6 @@ const EditUser = () => {
   const activeTab = getQueryString('tab') ?? '';
   const userID = getQueryString('active_user') ?? '';
 
-  const shopId = useShopId((state) => state.shopId);
   const { party } = useContactStore((state) => state);
   const closeDrawer = useContactStore((state) => state.setContactDrawerState);
 
@@ -52,7 +50,6 @@ const EditUser = () => {
       mobile: data.number,
       email: data.email as string,
       address: data.address as string,
-      shop_id: shopId,
       id: userID,
     };
 

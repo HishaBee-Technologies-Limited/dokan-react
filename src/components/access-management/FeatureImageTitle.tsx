@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from '@/components/common/Icon';
+import { Text } from '@/components/common/text';
 import { Image } from '@/components/common/Image';
 
 type IProps = {
@@ -17,18 +18,22 @@ const FeatureImageTitle = ({ image, title, active, showActivity }: IProps) => {
           <Image src={image} alt="" height={36} width={36} />
         </div>
 
-        <p className="text-md text-500 font-semibold">{title}</p>
+        <Text title={title} className="font-semibold" />
       </div>
 
       {showActivity &&
         (active ? (
           <span
-            className={`h-[1.4rem] w-[1.4rem] flex items-center justify-center rounded-full text-0 bg-success-100`}
+            className={`h-[1.6rem] w-[1.6rem] flex items-center justify-center rounded-sm text-white bg-success-100`}
           >
-            <Icon icon="mingcute:check-fill" width={9} height={9} />
+            <Icon icon="mingcute:check-fill" width={12} height={12} />
           </span>
         ) : (
-          <p className="text-error-100 text-sm font-medium">{'no_access'}</p>
+          <Text
+            variant="error"
+            title={'no access'}
+            className="font-medium text-sm"
+          />
         ))}
     </div>
   );
