@@ -37,7 +37,7 @@ const CheckButton = ({
       >
         <span
           className={`h-[1.4rem] w-[1.4rem] flex items-center justify-center rounded-sm
-          ${checked ? 'text-black bg-white border-white' : 'border-[.2rem] border-primary-80'}
+          ${checked ? 'text-black bg-white border-white' : 'border border-primary-30'}
           `}
         >
           {checked && <Icon icon="mingcute:check-fill" width={9} height={9} />}

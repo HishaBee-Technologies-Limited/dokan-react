@@ -1,15 +1,13 @@
 import { z } from 'zod';
-import NewUser from './NewUser';
-import UserAccess from './UserAccess';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { contactSchema } from '@/schemas/contacts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DrawerFooter } from '@/components/common/Drawer';
+import NewUser from '@/components/access-management/drawers/NewUser';
+import UserAccess from '@/components/access-management/drawers/UserAccess';
 import { useAccessManagementStore } from '@/stores/useAccessManagementStore';
 
 const NewUserAccess = () => {

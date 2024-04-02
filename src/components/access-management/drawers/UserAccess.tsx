@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import Icon from '@/components/common/Icon';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { AddIcon } from '@/components/common/icons';
 import CheckButton from '@/components/access-management/CheckButton';
+import AccessibleFeatureList from '@/components/access-management/AccessibleFeatureList';
 
 const userRoles = [
   {
@@ -23,7 +25,7 @@ const UserAccess = () => {
   const [accessRole, setAccessRole] = useState<number>(1);
 
   return (
-    <div>
+    <div className="h-full flex flex-col gap-space6 ">
       <div className="space-y-space4">
         <Text>Role *</Text>
         <div className="flex gap-space8 flex-wrap">
@@ -43,6 +45,16 @@ const UserAccess = () => {
           </Button>
         </div>
       </div>
+
+      <div className="flex justify-between items-center gap-space12">
+        <Text title={'যেসব ফিচারে এক্সেস পাবে'} className="font-semibold" />
+        <Button variant={'transparent'} className="!px-0">
+          <Icon icon="bx:edit" />
+          পদবী এডিট
+        </Button>
+      </div>
+
+      <AccessibleFeatureList />
     </div>
   );
 };
