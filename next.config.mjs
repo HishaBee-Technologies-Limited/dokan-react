@@ -21,6 +21,16 @@ const nextConfig = {
         destination: '/en/online-shop/overview',
         permanent: true,
       },
+      {
+        source: '/printer',
+        destination: '/printer/guide',
+        permanent: true,
+      },
+      {
+        source: '/en/printer',
+        destination: '/en/printer/guide',
+        permanent: true,
+      },
     ];
   },
   images: {
