@@ -3,7 +3,9 @@ import Icon from '@/components/common/Icon';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { AddIcon } from '@/components/common/icons';
+import { AccessManagementEnum } from '@/enum/accessManagement';
 import CheckButton from '@/components/access-management/CheckButton';
+import { useAccessManagementStore } from '@/stores/useAccessManagementStore';
 import AccessibleFeatureList from '@/components/access-management/AccessibleFeatureList';
 
 const userRoles = [
@@ -23,6 +25,7 @@ const userRoles = [
 
 const UserAccess = () => {
   const [accessRole, setAccessRole] = useState<number>(1);
+  const openDrawer = useAccessManagementStore((state) => state.setDrawerState);
 
   return (
     <div className="h-full flex flex-col gap-space6 ">
@@ -39,9 +42,17 @@ const UserAccess = () => {
             />
           ))}
 
-          <Button variant={'outline'} className="!h-[4rem] !px-space12">
-            <AddIcon />
-            Add New Rule
+          <Button
+            variant={'outline'}
+            className="!h-[4rem] !px-space12"
+            onClick={() =>
+              openDrawer({
+                open: true,
+                header: AccessManagementEnum.NEW_ROLE,
+              })
+            }
+          >
+            <AddIcon /> Add New Rule
           </Button>
         </div>
       </div>
