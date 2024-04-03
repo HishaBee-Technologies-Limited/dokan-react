@@ -5,7 +5,7 @@ import FeatureImageTitle from '@/components/access-management/FeatureImageTitle'
 const AccessibleFeatureList = () => {
   return (
     <div>
-      {Array(6)
+      {Array(12)
         .fill(0)
         .map((_, idx) => (
           <div

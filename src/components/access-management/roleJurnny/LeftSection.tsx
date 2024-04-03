@@ -1,20 +1,18 @@
 'use client';
 import React from 'react';
+import Link from 'next/link';
 import Card from '@/components/common/Card';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
-import Search from '@/components/common/forms/Search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { usePathname, useRouter } from 'next/navigation';
-import FallBackImage from '@/components/common/FallBackImage';
 import { IUserResponse } from '@/types/contact/partyResponse';
+import { AccessManagementEnum } from '@/enum/accessManagement';
 import WrapperOddList from '@/components/common/WrapperOddList';
 import { AddIcon, ExpandMoreIcon } from '@/components/common/icons';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator';
 import { useAccessManagementStore } from '@/stores/useAccessManagementStore';
-import { AccessManagementEnum } from '@/enum/accessManagement';
-import Link from 'next/link';
 
 const users = [
   {
@@ -54,16 +52,13 @@ export const LeftSection = ({
 
   return (
     <Card className="h-full lg:w-4/12 flex flex-col gap-space16 border-r rounded-r-none">
-      <div className="space-y-space8 w-full p-space16">
-        <Link href="/access-management/roles">
+      <div className="w-full p-space16">
+        <Link href="/access-management">
           <Button variant={'outline'} className="w-full">
-            Access Roles (3)
-            <ExpandMoreIcon rotate={3} />
+            <ExpandMoreIcon rotate={1} />
+            এক্সেস ইউজারস (৩টি)
           </Button>
         </Link>
-        <div className="">
-          <Search placeholder="Search" onChange={() => {}} />
-        </div>
       </div>
 
       <ScrollArea className="h-full px-space16">
@@ -78,22 +73,7 @@ export const LeftSection = ({
                 )
               }
             >
-              <div className="flex items-center gap-space8">
-                <FallBackImage
-                  src={item.image_src ?? ''}
-                  fallback={item.name.charAt(0)}
-                />
-                <article>
-                  <div className="flex items-center gap-space12">
-                    <Text title={item.name} className="font-medium" />
-                    <Text
-                      title={item.type}
-                      className="text-sm font-medium px-space8 py-[.2rem] rounded-md bg-warning-40 uppercase"
-                    />
-                  </div>
-                  <Text title={item.mobile} variant="muted" />
-                </article>
-              </div>
+              <Text title={item.type} className="font-medium" />
             </CardWithSideIndicator>
           ))}
         </WrapperOddList>
@@ -105,12 +85,12 @@ export const LeftSection = ({
           onClick={() =>
             openDrawer({
               open: true,
-              header: AccessManagementEnum.NEW_USER_ACCESS,
+              header: AccessManagementEnum.NEW_ROLE,
             })
           }
         >
           <AddIcon />
-          Add New User
+          Add New Role
         </Button>
       </div>
     </Card>
