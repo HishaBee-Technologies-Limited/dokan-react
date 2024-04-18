@@ -4,16 +4,17 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 export interface IProductState {
-  products: IProduct[];
+  products: IProductPurchase[];
   calculatedProducts: {
     products: IProductPurchase[];
     deliveryCharge?: string;
     totalPrice?: number;
     discount?: string;
+    date?: string;
   };
 }
 interface IProductStateActions {
-  setProducts: (products: IProduct[]) => void;
+  setProducts: (products: IProductPurchase[] | IProduct[]) => void;
   setCalculatedProducts: (
     products: IProductState['calculatedProducts']
   ) => void;
@@ -27,6 +28,7 @@ export const usePurchase = create<IProductState & IProductStateActions>()(
         totalPrice: 0,
         discount: '',
         products: [],
+        date: '',
       },
       setProducts: (products) => set({ products: products }),
       setCalculatedProducts: (products) =>

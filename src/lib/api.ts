@@ -54,6 +54,35 @@ export const authFetchAPI = (
   });
 };
 
+export const uploadFetchApi = (
+  url: string,
+  method: string,
+  payload: any,
+  tags?: string[]
+) => {
+  const cookieStore = cookies();
+  const token = cookieStore.get('access_token');
+  return fetch(`${BaseURL}${url}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${token?.value}`,
+    },
+    ...(method === 'POST' && {
+      body: payload,
+    }),
+    ...(method === 'PUT' && {
+      body: JSON.stringify({
+        ...payload,
+      }),
+    }),
+    next: {
+      //TODO: change it properly adds tags
+      tags: tags ? ['get-roles'] : [],
+    },
+    cache: 'no-store',
+  });
+};
+
 export const api = {
   get: async (url: string, tags?: string[]) => await fetchAPI(url, 'GET', tags),
   post: (url: string, payload?: any, tags?: string[]) =>
@@ -68,4 +97,14 @@ export const authApi = {
   put: (url: string, payload: any, tags?: string[]) =>
     authFetchAPI(url, 'PUT', payload, tags),
   delete: (url: string, tags?: string[]) => authFetchAPI(url, 'DELETE', tags),
+};
+
+export const uploadApi = {
+  get: async (url: string, tags?: string[]) =>
+    await uploadFetchApi(url, 'GET', tags),
+  post: (url: string, payload?: any, tags?: string[]) =>
+    uploadFetchApi(url, 'POST', payload, tags),
+  put: (url: string, payload: any, tags?: string[]) =>
+    uploadFetchApi(url, 'PUT', payload, tags),
+  delete: (url: string, tags?: string[]) => uploadFetchApi(url, 'DELETE', tags),
 };

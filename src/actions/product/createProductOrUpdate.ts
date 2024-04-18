@@ -34,14 +34,14 @@ export const createProductOrUpdate = async ({
   delivery_charge_id,
   weight,
   unit,
+  image_url,
 }: IProductPayload) => {
   try {
     const shopId = cookies().get('shopId')?.value;
 
-    // console.log(uniqueId);
-
     const payload = {
       shop_id: Number(shopId),
+      image_url,
       ...(unique_id && { unique_id }),
       ...(id && { id }),
       ...(sub_category && { sub_category }),
@@ -52,7 +52,7 @@ export const createProductOrUpdate = async ({
       ...(description && { description }),
       ...(vat_applicable && { vat_applicable }),
       ...(vat_percent && { vat_percent }),
-      ...(gallery && { gallery }),
+      gallery,
       ...(product_type && { product_type }),
       ...(barcode && { barcode }),
       ...(sell_online && { sell_online }),
@@ -72,8 +72,6 @@ export const createProductOrUpdate = async ({
       ...(weight && { weight }),
       ...(unit && { unit }),
     };
-
-    console.log(payload);
 
     const res = await authApi.post(`/product`, payload);
     const data = await res.json();

@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Image } from '@/components/common/Image';
 import { usePurchaseStore } from '@/stores/usePurchase';
 import { DialogFooter } from '@/components/common/Dialog';
+import { usePurchase } from '@/stores/usePurchaseStore';
 
 const Successful = () => {
   const handleClose = usePurchaseStore((state) => state.setDialogState);
+  const calculatedProducts = usePurchase((state) => state.calculatedProducts);
 
   return (
     <>
@@ -28,11 +30,17 @@ const Successful = () => {
         <article className="space-y-space8">
           <article className="flex justify-between gap-space8">
             <Text title="Buy Amount" />
-            <Text title="৳ 12,000" className="font-semibold" />
+            <Text
+              title={String(calculatedProducts.totalPrice)}
+              className="font-semibold"
+            />
           </article>
           <article className="flex justify-between gap-space8 border-b border-color">
             <Text title="Payment Amount" />
-            <Text title="৳ 12,000" className="font-semibold" />
+            <Text
+              title={String(calculatedProducts.totalPrice)}
+              className="font-semibold"
+            />
           </article>
           <article className="flex justify-between gap-space8">
             <Text title="Due" />
@@ -40,7 +48,7 @@ const Successful = () => {
           </article>
 
           <Text
-            title="Date: 14 July 2022 | 12:55 pm"
+            title={`Date: ${calculatedProducts.date}`}
             className="text-sm text-center pt-space16"
           />
         </article>

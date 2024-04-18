@@ -17,7 +17,7 @@ import { DEFAULT_PRODUCT_QUANTITY } from '@/lib/constants/purchase';
 import { usePurchase } from '@/stores/usePurchaseStore';
 
 export interface IProductPurchase extends IProduct {
-  product_calculations?: { quantity: number; total: number };
+  calculatedAmount?: { quantity: number; total: number };
 }
 type IProps = {
   form: UseFormReturn<any>;
