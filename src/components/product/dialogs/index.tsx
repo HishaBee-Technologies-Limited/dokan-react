@@ -9,19 +9,18 @@ import { ShareProduct } from '@/components/product/dialogs/ShareProduct';
 import { DeleteProduct } from '@/components/product/dialogs/DeleteProduct';
 import { ProductDetails } from '@/components/product/dialogs/ProductDetails';
 import { ProductHistory } from '@/components/product/dialogs/ProductHistory';
-import { IProduct, IProductPayload } from '@/types/product';
-import { usePathname, useRouter } from 'next/navigation';
+import { IProduct } from '@/types/product';
+import { useProductTable } from '@/hooks/useProductTable';
+import { INITIAL_QUERY_PARAMS } from '@/config/product';
 
 export const ProductDialogs = ({ product }: { product: IProduct }) => {
   const dialogState = useProductStore((state) => state.dialogState);
   const handleClose = useProductStore((state) => state.setDialogState);
-
-  const pathname = usePathname();
-  const router = useRouter();
+  const { updateQueryParams } = useProductTable();
 
   const handleCloseAndClearParams = ({ open }: { open: boolean }) => {
     handleClose({ open });
-    router.push(`${pathname}`);
+    updateQueryParams(INITIAL_QUERY_PARAMS);
   };
 
   const productForUpdateStock = {

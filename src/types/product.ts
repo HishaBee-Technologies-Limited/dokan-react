@@ -1,4 +1,6 @@
 import { DiscountType, WarrantyType } from '@/schemas/products';
+import { ISortOptions } from '@/types/Sorting';
+import { DeliveryStatusDef } from '@/types/orders';
 export interface IProduct {
   id: number;
   name: string;
@@ -23,6 +25,7 @@ export interface IProduct {
   sell_online?: boolean;
   vat_applicable?: boolean;
   unit?: number;
+  published: boolean;
 }
 
 export interface IProductPayload {
@@ -65,3 +68,9 @@ export interface IUnits {
   bn_name: string;
   type: string;
 }
+
+export type QueryParamsDef = {
+  sorted_by: ISortOptions['value'];
+  page: number;
+  search?: string;
+};

@@ -10,19 +10,19 @@ import { IProduct, IProductPayload, IUnits } from '@/types/product';
 import { getUnits } from '@/actions/product/getUnits';
 import { auth } from '@/auth';
 import { getCategories } from '@/actions/product/getCategories';
+import { QueryParamsDef } from '@/types/orders';
 
-type IPageProps = {
-  params: { locale: string };
-  searchParams: any;
+type ProductPagePropsDef = {
+  searchParams: QueryParamsDef & {
+    product?: string;
+  };
 };
-const ProductPage = async ({
-  params: { locale },
-  searchParams,
-}: IPageProps) => {
+
+const ProductPage = async ({ searchParams }: ProductPagePropsDef) => {
   const session = await auth();
 
   const productUnits = await getUnits();
-  const allProductsResponse = await getShopsProducts();
+  const allProductsResponse = await getShopsProducts({ params: searchParams });
   const categories = await getCategories(session?.user?.id as string);
 
   const productCategories = categories?.data.data.data;
@@ -38,16 +38,16 @@ const ProductPage = async ({
     <>
       <div className="space-y-space16">
         <ProductHeader />
-        {/* <ProductQueries /> */}
+        <ProductQueries />
         <ProductTable productData={allProductsResponse?.data} />
       </div>
 
       <ProductDrawers
-        product={singleProduct?.data.data as IProduct}
+        product={singleProduct?.data?.data as IProduct}
         units={productUnits?.data.data as IUnits[]}
         {...{ productCategories }}
       />
-      <ProductDialogs product={singleProduct?.data.data as IProduct} />
+      <ProductDialogs product={singleProduct?.data?.data as IProduct} />
     </>
   );
 };

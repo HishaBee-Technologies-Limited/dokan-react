@@ -9,11 +9,11 @@ import {
 import { SortIcon } from '@/components/common/icons';
 import React from 'react';
 import { SORT_OPTIONS } from '@/config/sorting';
-import { useOrdersTable } from '@/hooks/useOrdersTable';
+import { useProductTable } from '@/hooks/useProductTable';
 import { SortOptionsTypesDef } from '@/types/Sorting';
 
-const OrderListSorting = () => {
-  const { updateQueryParams, queryParams } = useOrdersTable();
+const ProductListSorting = () => {
+  const { updateQueryParams, queryParams } = useProductTable();
 
   return (
     <Select
@@ -26,7 +26,7 @@ const OrderListSorting = () => {
       }}
       defaultValue={queryParams.sorted_by}
     >
-      <SelectTrigger className="max-w-max gap-space8 border-color  h-[3.6rem]">
+      <SelectTrigger className="max-w-max gap-space8 border-color">
         <SortIcon />
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
@@ -43,4 +43,4 @@ const OrderListSorting = () => {
   );
 };
 
-export default OrderListSorting;
+export default ProductListSorting;
