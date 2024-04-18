@@ -10,7 +10,9 @@ import { Text } from '@/components/common/text';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { usePurchaseStore } from '@/stores/usePurchase';
 import { ArrowForwardIcon } from '@/components/common/icons';
-import ProductFiledRow from '@/components/sell/ProductFiledRow';
+import ProductFiledRow, {
+  IProductPurchase,
+} from '@/components/sell/ProductFiledRow';
 import ProductSellCalculation from '@/components/sell/ProductSellCalculation';
 import { ScrollArea } from '../ui/scroll-area';
 import { IProductState, usePurchase } from '@/stores/usePurchaseStore';
@@ -53,7 +55,7 @@ export const RightSection = () => {
           data.products.find(
             (prod: IProduct) => Object.keys(prod)[0] === `product-${product.id}`
           )
-        )[0] as IProduct;
+        )[0];
         return {
           ...product,
           calculatedAmount: updatedProduct,
@@ -62,7 +64,7 @@ export const RightSection = () => {
     });
 
     setCalculatedProducts({
-      products: updatedProducts as IProduct[],
+      products: updatedProducts as IProductPurchase[],
       deliveryCharge: data.delivery_charge,
       discount: data.discount,
       totalPrice: data.totalPrice,

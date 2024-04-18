@@ -144,7 +144,7 @@ const ConfirmPayment = () => {
         const res = createItemPurchase({
           created_at: formatDate(DATE_FORMATS.default),
           name: product.name,
-          quantity: product.calculatedAmount.quantity,
+          quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
 
@@ -152,7 +152,7 @@ const ConfirmPayment = () => {
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,
-          price: product.calculatedAmount.total,
+          price: product.calculatedAmount?.total,
           unique_id: generateUlid(),
           updated_at: formatDate(DATE_FORMATS.default),
           version: DEFAULT_STARTING_VERSION,

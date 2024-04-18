@@ -27,7 +27,7 @@ export type PaymentStatusDef = 'PAID' | 'UNPAID';
 export interface IProductItemPurchasePayload {
   created_at: string;
   name?: string;
-  quantity: number;
+  quantity?: number;
   unit_price: number;
   unit_cost: number;
   purchase_unique_id: string;
@@ -35,7 +35,7 @@ export interface IProductItemPurchasePayload {
   shop_product_variance_id: number;
   shop_id?: number;
   purchase_id?: number;
-  price: number;
+  price?: number;
   unique_id: string;
   updated_at: string;
   version: number;
