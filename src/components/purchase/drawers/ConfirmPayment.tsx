@@ -48,6 +48,7 @@ import {
   PAYMENT_STATUS,
 } from '@/lib/constants/common';
 import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
+import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -67,12 +68,7 @@ const formSchema = z.object({
 });
 
 const ConfirmPayment = () => {
-  const closeDrawer = usePurchaseStore((state) => state.setDrawerState);
-  const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
-  const setCalculatedProducts = usePurchase(
-    (state) => state.setCalculatedProducts
-  );
   const [suppliers, setSuppliers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
 
@@ -118,7 +114,7 @@ const ConfirmPayment = () => {
     // }
     // const res = await createPurchase()
     console.log('data------------', data);
-    const res = await createPurchase({
+    const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default),
       date: formatDate(DATE_FORMATS.default, data.date),
@@ -141,9 +137,27 @@ const ConfirmPayment = () => {
       version: DEFAULT_STARTING_VERSION,
     });
     console.log('date-------', formatDate(DATE_FORMATS.default));
-    console.log('res-------', res);
-    if (res?.success) {
+    console.log('res-------', responseCreatePurchase);
+    if (responseCreatePurchase?.success) {
       // const res =
+      calculatedProducts.products.forEach((product) => {
+        const res = createItemPurchase({
+          created_at: formatDate(DATE_FORMATS.default),
+          name: product.name,
+          quantity: product.calculatedAmount.quantity,
+          unit_price: product.selling_price,
+          unit_cost: product.cost_price,
+
+          purchase_unique_id: responseCreatePurchase.data.unique_id,
+
+          shop_product_id: product.id,
+          shop_product_variance_id: 1,
+          price: product.calculatedAmount.total,
+          unique_id: generateUlid(),
+          updated_at: formatDate(DATE_FORMATS.default),
+          version: DEFAULT_STARTING_VERSION,
+        });
+      });
       // closeDrawer({ open: false });
       // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
       // setCalculatedProducts({
@@ -151,8 +165,8 @@ const ConfirmPayment = () => {
       //   date: res.data.data.created_at,
       // });
     }
-    if (res?.error) {
-      console.log('error-------', res?.error);
+    if (responseCreatePurchase?.error) {
+      console.log('error-------', responseCreatePurchase?.error);
     }
   }
 

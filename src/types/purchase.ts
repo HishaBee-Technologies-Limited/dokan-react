@@ -23,3 +23,20 @@ export interface IProductPurchasePayload {
 }
 
 export type PaymentStatusDef = 'PAID' | 'UNPAID';
+
+export interface IProductItemPurchasePayload {
+  created_at: string;
+  name?: string;
+  quantity: number;
+  unit_price: number;
+  unit_cost: number;
+  purchase_unique_id: string;
+  shop_product_id: number;
+  shop_product_variance_id: number;
+  shop_id?: number;
+  purchase_id?: number;
+  price: number;
+  unique_id: string;
+  updated_at: string;
+  version: number;
+}

@@ -90,8 +90,6 @@ export const AddProduct = ({
   }, [selectedCategory, productCategories]);
 
   async function onSubmit(data: ProductFormDef) {
-    console.log('data------------', data);
-
     const res = await createProductOrUpdate({
       name: data.product_name,
       cost_price: data.purchase_price,
