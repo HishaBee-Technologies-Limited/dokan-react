@@ -28,6 +28,7 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import { PurchaseEnum } from '@/enum/purchase';
 
 const partyList = ['customer', 'supplier', 'employee'];
 
@@ -69,7 +70,7 @@ const MoneyGiveReceived = () => {
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     handleSellDrawer({ open: false });
-    openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+    openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
     console.log('data------------', data);
   }
 
@@ -94,9 +95,12 @@ const MoneyGiveReceived = () => {
       form.setValue('cash_type', 'given');
     }
     if (form.watch('cash_type') === 'given') {
-      handleSellDrawer({ open: true, header: SellEnum.MONEY_GIVEN_ENTRY });
+      handleSellDrawer({ open: true, header: PurchaseEnum.MONEY_GIVEN_ENTRY });
     } else {
-      handleSellDrawer({ open: true, header: SellEnum.MONEY_RECEIVED_ENTRY });
+      handleSellDrawer({
+        open: true,
+        header: PurchaseEnum.MONEY_RECEIVED_ENTRY,
+      });
     }
   }, [form.watch('cash_type')]);
 

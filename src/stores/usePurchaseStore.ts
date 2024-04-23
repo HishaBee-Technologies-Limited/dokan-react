@@ -20,24 +20,23 @@ interface IProductStateActions {
   ) => void;
 }
 export const usePurchase = create<IProductState & IProductStateActions>()(
-  persist(
-    (set) => ({
+  // persist(
+  (set) => ({
+    products: [],
+    calculatedProducts: {
+      deliveryCharge: '',
+      totalPrice: 0,
+      discount: '',
       products: [],
-      calculatedProducts: {
-        deliveryCharge: '',
-        totalPrice: 0,
-        discount: '',
-        products: [],
-        date: '',
-      },
-      setProducts: (products) => set({ products: products }),
-      setCalculatedProducts: (products) =>
-        set({ calculatedProducts: products }),
-    }),
-    {
-      storage: createJSONStorage(() => sessionStorage),
+      date: '',
+    },
+    setProducts: (products) => set({ products: products }),
+    setCalculatedProducts: (products) => set({ calculatedProducts: products }),
+  })
+  // {
+  //   storage: createJSONStorage(() => sessionStorage),
 
-      name: 'products',
-    }
-  )
+  //   name: 'products',
+  // }
+  // )
 );

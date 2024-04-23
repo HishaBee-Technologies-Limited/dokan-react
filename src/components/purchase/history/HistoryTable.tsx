@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { PurchaseEnum } from '@/enum/purchase';
 
 const invoices = [
   {
@@ -54,11 +55,11 @@ const HistoryTable = () => {
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
 
   const handleRowClick = (row: any) => {
-    handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_DETAILS });
+    handleDrawerOpen({ open: true, header: PurchaseEnum.TRANSACTION_DETAILS });
   };
 
   const handleEditClick = (item: any) => {
-    handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_EDIT });
+    handleDrawerOpen({ open: true, header: PurchaseEnum.TRANSACTION_EDIT });
   };
 
   const transactionTypeTextVariant = (type: string): 'success' | 'error' => {
@@ -148,7 +149,7 @@ const HistoryTable = () => {
                           e.stopPropagation();
                           handleDialogOpen({
                             open: true,
-                            header: SellEnum.TRANSACTION_DELETE,
+                            header: PurchaseEnum.TRANSACTION_DELETE,
                           });
                         }}
                       >

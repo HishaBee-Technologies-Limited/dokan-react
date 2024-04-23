@@ -12,6 +12,7 @@ import {
   EditIcon,
   ExpandMoreIcon,
 } from '@/components/common/icons';
+import { PurchaseEnum } from '@/enum/purchase';
 
 const productList = [
   {
@@ -198,7 +199,7 @@ const TransactionDetails = () => {
           onClick={() =>
             handleDialogOpen({
               open: true,
-              header: SellEnum.TRANSACTION_DELETE,
+              header: PurchaseEnum.TRANSACTION_DELETE,
             })
           }
         >
@@ -207,7 +208,10 @@ const TransactionDetails = () => {
         <Button
           className="w-full"
           onClick={() =>
-            handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_EDIT })
+            handleDrawerOpen({
+              open: true,
+              header: PurchaseEnum.TRANSACTION_EDIT,
+            })
           }
         >
           <EditIcon /> Edit

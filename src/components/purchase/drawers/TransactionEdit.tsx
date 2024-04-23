@@ -29,6 +29,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { usePurchaseStore } from '@/stores/usePurchase';
+import { PurchaseEnum } from '@/enum/purchase';
 
 const partyList = ['customer', 'supplier', 'employee'];
 
@@ -70,7 +71,7 @@ const TransactionEdit = () => {
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     handleSellDrawer({ open: false });
-    openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+    openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
     console.log('data------------', data);
   }
 

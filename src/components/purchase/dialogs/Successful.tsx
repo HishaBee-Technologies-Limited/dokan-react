@@ -7,10 +7,12 @@ import { Image } from '@/components/common/Image';
 import { usePurchaseStore } from '@/stores/usePurchase';
 import { DialogFooter } from '@/components/common/Dialog';
 import { usePurchase } from '@/stores/usePurchaseStore';
-
+import { useFormContext } from 'react-hook-form';
 const Successful = () => {
   const handleClose = usePurchaseStore((state) => state.setDialogState);
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
+  const clearProductArray = usePurchase((state) => state.setProducts);
+  const methods = useFormContext();
 
   return (
     <>
@@ -78,7 +80,14 @@ const Successful = () => {
       </div>
 
       <DialogFooter>
-        <Button className="w-full" variant={'secondary'}>
+        <Button
+          onClick={() => {
+            handleClose({ open: false });
+            clearProductArray([]);
+          }}
+          className="w-full"
+          variant={'secondary'}
+        >
           Close
         </Button>
       </DialogFooter>

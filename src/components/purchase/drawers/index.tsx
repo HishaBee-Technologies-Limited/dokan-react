@@ -8,21 +8,22 @@ import ConfirmPayment from '@/components/purchase/drawers/ConfirmPayment';
 import TransactionEdit from '@/components/purchase/drawers/TransactionEdit';
 import MoneyGiveReceived from '@/components/purchase/drawers/MoneyGiveReceived';
 import TransactionDetails from '@/components/purchase/drawers/TransactionDetails';
+import { PurchaseEnum } from '@/enum/purchase';
 
 const PurchaseDrawers = () => {
   const drawerState = usePurchaseStore((state) => state.drawerState);
   const handleClose = usePurchaseStore((state) => state.setDrawerState);
 
   const renderedDrawers = (activeDrawer: string | undefined) => {
-    if (SellEnum.CONFIRM_PAYMENT === activeDrawer) {
+    if (PurchaseEnum.CONFIRM_PAYMENT === activeDrawer) {
       return <ConfirmPayment />;
-    } else if (SellEnum.MONEY_GIVEN_ENTRY === activeDrawer) {
+    } else if (PurchaseEnum.MONEY_GIVEN_ENTRY === activeDrawer) {
       return <MoneyGiveReceived />;
-    } else if (SellEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
+    } else if (PurchaseEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
       return <MoneyGiveReceived />;
-    } else if (SellEnum.TRANSACTION_DETAILS === activeDrawer) {
+    } else if (PurchaseEnum.TRANSACTION_DETAILS === activeDrawer) {
       return <TransactionDetails />;
-    } else if (SellEnum.TRANSACTION_EDIT === activeDrawer) {
+    } else if (PurchaseEnum.TRANSACTION_EDIT === activeDrawer) {
       return <TransactionEdit />;
     }
   };
