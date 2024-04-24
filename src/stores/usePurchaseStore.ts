@@ -11,6 +11,7 @@ export interface IProductState {
     totalPrice?: number;
     discount?: string;
     date?: string;
+    paymentAmount?: number;
   };
 }
 interface IProductStateActions {
@@ -29,6 +30,7 @@ export const usePurchase = create<IProductState & IProductStateActions>()(
       discount: '',
       products: [],
       date: '',
+      paymentAmount: 0,
     },
     setProducts: (products) => set({ products: products }),
     setCalculatedProducts: (products) => set({ calculatedProducts: products }),

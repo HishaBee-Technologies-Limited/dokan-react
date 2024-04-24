@@ -9,8 +9,9 @@ import TransactionEdit from '@/components/purchase/drawers/TransactionEdit';
 import MoneyGiveReceived from '@/components/purchase/drawers/MoneyGiveReceived';
 import TransactionDetails from '@/components/purchase/drawers/TransactionDetails';
 import { PurchaseEnum } from '@/enum/purchase';
+import { IUserResponse } from '@/types/contact/partyResponse';
 
-const PurchaseDrawers = () => {
+const PurchaseDrawers = ({ suppliers }: { suppliers: IUserResponse[] }) => {
   const drawerState = usePurchaseStore((state) => state.drawerState);
   const handleClose = usePurchaseStore((state) => state.setDrawerState);
 
@@ -18,9 +19,9 @@ const PurchaseDrawers = () => {
     if (PurchaseEnum.CONFIRM_PAYMENT === activeDrawer) {
       return <ConfirmPayment />;
     } else if (PurchaseEnum.MONEY_GIVEN_ENTRY === activeDrawer) {
-      return <MoneyGiveReceived />;
+      return <MoneyGiveReceived suppliers={suppliers} />;
     } else if (PurchaseEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
-      return <MoneyGiveReceived />;
+      return <MoneyGiveReceived suppliers={suppliers} />;
     } else if (PurchaseEnum.TRANSACTION_DETAILS === activeDrawer) {
       return <TransactionDetails />;
     } else if (PurchaseEnum.TRANSACTION_EDIT === activeDrawer) {

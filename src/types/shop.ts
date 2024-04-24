@@ -3,6 +3,7 @@ export interface IShopResponse {
   name: string;
   address: string;
   active: number;
+  sms_count: number;
 }
 
 export interface IArea {

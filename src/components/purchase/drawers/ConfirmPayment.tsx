@@ -51,6 +51,7 @@ import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
 import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 import { toast } from 'sonner';
 import { PurchaseEnum } from '@/enum/purchase';
+import { jwtDecode } from 'jwt-decode';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -75,6 +76,7 @@ const ConfirmPayment = () => {
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
   const [suppliers, setSuppliers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
+  const tkn = getCookie('access_token');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -130,7 +132,7 @@ const ConfirmPayment = () => {
       total_price: Number(data.amount),
       unique_id: generateUlid(),
       updated_at: formatDate(DATE_FORMATS.default),
-      user_id: 1,
+      user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
     });
 
@@ -196,7 +198,7 @@ const ConfirmPayment = () => {
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
+              <FormLabel>Date of Purchase</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>

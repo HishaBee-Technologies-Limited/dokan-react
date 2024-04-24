@@ -5,9 +5,15 @@ import { LeftSection } from '@/components/purchase/LeftSection';
 import { RightSection } from '@/components/purchase/RightSection';
 import PurchaseHeader from '@/components/purchase/PurchaseHeader';
 import { getShopsProducts } from '@/actions/product/getShopProducts';
+import { getAllSupplier } from '@/actions/contacts/getAllSupplier';
+import { cookies } from 'next/headers';
+import { IUserResponse } from '@/types/contact/partyResponse';
 
 const PurchasePage = async () => {
+  const shopId = cookies().get('shopId')?.value;
+
   const allProductsResponse = await getShopsProducts({});
+  const allSupplier = await getAllSupplier(Number(shopId));
 
   return (
     <>
@@ -20,7 +26,7 @@ const PurchasePage = async () => {
         </div>
       </div>
 
-      <PurchaseDrawers />
+      <PurchaseDrawers suppliers={allSupplier?.data as IUserResponse[]} />
       <PurchaseDialogs />
     </>
   );

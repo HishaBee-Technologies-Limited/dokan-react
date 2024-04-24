@@ -13,7 +13,7 @@ import { setCookie } from 'cookies-next';
 
 const SwitchShopPage = () => {
   const router = useRouter();
-  const [selectShop, setSelectShop] = useState<number | null>(null);
+  const [selectShop, setSelectShop] = useState<IShopResponse>();
   const [shops, setShops] = useState<IShopResponse[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,10 +38,15 @@ const SwitchShopPage = () => {
     );
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     console.log(selectShop);
-    setCookie('shopId', selectShop);
-    router.push('/contact');
+    if (selectShop) {
+      const shop = JSON.stringify({ sms_count: selectShop.sms_count });
+      console.log(shop);
+      setCookie('shopId', selectShop?.id);
+      setCookie('shop', shop);
+      router.push('/contact');
+    }
   };
 
   useEffect(() => {
@@ -65,9 +70,9 @@ const SwitchShopPage = () => {
         {shops?.map((shop) => (
           <Card
             key={shop.id + 'shop'}
-            onClick={() => setSelectShop(shop.id)}
+            onClick={() => setSelectShop(shop)}
             className={`p-space16 border-color relative flex w-full cursor-pointer flex-col items-center shadow-sm
-                        ${selectShop === shop.id ? 'border-[.3rem]' : 'border'}
+                        ${selectShop?.id === shop.id ? 'border-[.3rem]' : 'border'}
                         `}
           >
             <div className="mt-space32 gap-space12 flex flex-col items-center">

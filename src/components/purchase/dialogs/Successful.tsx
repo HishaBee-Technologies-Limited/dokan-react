@@ -13,7 +13,11 @@ const Successful = () => {
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
   const clearProductArray = usePurchase((state) => state.setProducts);
   const methods = useFormContext();
-
+  const payment =
+    (calculatedProducts?.totalPrice &&
+      calculatedProducts?.paymentAmount &&
+      calculatedProducts?.totalPrice - calculatedProducts?.paymentAmount) ??
+    0;
   return (
     <>
       <div className="py-space16 mx-auto max-w-[26.4rem] space-y-space40">
@@ -39,14 +43,15 @@ const Successful = () => {
           </article>
           <article className="flex justify-between gap-space8 border-b border-color">
             <Text title="Payment Amount" />
-            <Text
-              title={String(calculatedProducts.totalPrice)}
-              className="font-semibold"
-            />
+            <Text title={String(payment)} className="font-semibold" />
           </article>
           <article className="flex justify-between gap-space8">
             <Text title="Due" />
-            <Text title="৳ 00" className="font-semibold" variant="error" />
+            <Text
+              title={String(calculatedProducts.paymentAmount)}
+              className="font-semibold"
+              variant="error"
+            />
           </article>
 
           <Text
