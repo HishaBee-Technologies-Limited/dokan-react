@@ -22,6 +22,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { PurchaseEnum } from '@/enum/purchase';
+import { useProductTable } from '@/hooks/useProductTable';
+import Pagination from '@/components/common/CustomPagination';
+import { IPurchaseHistoryResponse } from '@/types/purchase';
+import { ICommonGetResponse } from '@/types/common';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import { usePathname, useRouter } from 'next/navigation';
+import { generateQueryString } from '@/lib/queryString';
+import { usePurchase } from '@/stores/usePurchaseStore';
 
 const invoices = [
   {
@@ -50,12 +58,23 @@ const invoices = [
   },
 ];
 
-const HistoryTable = () => {
+const HistoryTable = ({
+  purchaseHistory,
+}: {
+  purchaseHistory: ICommonGetResponse<IPurchaseHistoryResponse>;
+}) => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
+  const { updateQueryParams, queryParams } = useProductTable();
+  const pathname = usePathname();
+  const router = useRouter();
+  const { setQueryString } = useCreateQueryString();
+  const setCurrentPurchase = usePurchase((state) => state.setCurrentPurchase);
 
-  const handleRowClick = (row: any) => {
+  const handleRowClick = (row: IPurchaseHistoryResponse) => {
     handleDrawerOpen({ open: true, header: PurchaseEnum.TRANSACTION_DETAILS });
+    console.log(row);
+    setCurrentPurchase(row);
   };
 
   const handleEditClick = (item: any) => {
@@ -63,19 +82,24 @@ const HistoryTable = () => {
   };
 
   const transactionTypeTextVariant = (type: string): 'success' | 'error' => {
-    if (type === 'buy') {
-      return 'success';
-    } else {
+    if (type === 'UNPAID') {
       return 'error';
+    } else {
+      return 'success';
     }
   };
   const transactionTypeTextBG = (type: string): string => {
-    if (type === 'buy') {
-      return 'bg-success-20';
-    } else {
+    if (type === 'UNPAID') {
       return 'bg-error-20';
+    } else {
+      return 'bg-success-20 ';
     }
   };
+  // const params = new URLSearchParams({
+  //   page: String(purchaseHistory.current_page ?? 1),
+  //   start_date:
+  // })
+  console.log(purchaseHistory);
 
   return (
     <ScrollArea className="pb-space8">
@@ -93,18 +117,21 @@ const HistoryTable = () => {
         </TableHeader>
 
         <TableBody>
-          {invoices.map((item, i) => (
-            <TableRow key={item.id} onClick={() => handleRowClick(item)}>
-              <TableCell>{item.id}</TableCell>
-              <TableCell>{item.item}</TableCell>
-              <TableCell>{item.contact}</TableCell>
-              <TableCell>{item.amount}</TableCell>
-              <TableCell>{item.date}</TableCell>
+          {purchaseHistory.data?.map((purchase) => (
+            <TableRow
+              key={purchase.id}
+              onClick={() => handleRowClick(purchase)}
+            >
+              <TableCell>{purchase.id}</TableCell>
+              <TableCell>{purchase.total_item}</TableCell>
+              <TableCell>{purchase.supplier_name}</TableCell>
+              <TableCell>{purchase.total_price}</TableCell>
+              <TableCell>{purchase.updated_at}</TableCell>
               <TableCell>
                 <Text
-                  title={item.transactionType}
-                  variant={transactionTypeTextVariant(item.transactionType)}
-                  className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(item.transactionType)}`}
+                  title={purchase.payment_status}
+                  variant={transactionTypeTextVariant(purchase.payment_status)}
+                  className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(purchase.payment_status)}`}
                 />
               </TableCell>
               <TableCell className={`text-right`}>
@@ -133,7 +160,7 @@ const HistoryTable = () => {
                         className="w-full justify-start"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleEditClick(item);
+                          handleEditClick(purchase);
                         }}
                       >
                         <EditIcon />
@@ -173,6 +200,20 @@ const HistoryTable = () => {
         </TableFooter>
       </Table>
       <ScrollBar orientation="horizontal" />
+      <Pagination
+        pageCount={
+          purchaseHistory.data.length === 0
+            ? purchaseHistory.last_page
+            : Math.ceil(
+                purchaseHistory.total ?? 0 / purchaseHistory.per_page ?? 0
+              )
+        }
+        currentPage={purchaseHistory.current_page ?? 0}
+        lastPage={purchaseHistory.last_page ?? 0}
+        onChanage={(page) => {
+          router.push(`${pathname}?${setQueryString('page', page)}`);
+        }}
+      />
     </ScrollArea>
   );
 };

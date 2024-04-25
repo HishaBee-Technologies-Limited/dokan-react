@@ -11,7 +11,7 @@ import TransactionDetails from '@/components/purchase/drawers/TransactionDetails
 import { PurchaseEnum } from '@/enum/purchase';
 import { IUserResponse } from '@/types/contact/partyResponse';
 
-const PurchaseDrawers = ({ suppliers }: { suppliers: IUserResponse[] }) => {
+const PurchaseDrawers = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   const drawerState = usePurchaseStore((state) => state.drawerState);
   const handleClose = usePurchaseStore((state) => state.setDrawerState);
 
@@ -25,7 +25,7 @@ const PurchaseDrawers = ({ suppliers }: { suppliers: IUserResponse[] }) => {
     } else if (PurchaseEnum.TRANSACTION_DETAILS === activeDrawer) {
       return <TransactionDetails />;
     } else if (PurchaseEnum.TRANSACTION_EDIT === activeDrawer) {
-      return <TransactionEdit />;
+      return <TransactionEdit suppliers={suppliers} />;
     }
   };
 

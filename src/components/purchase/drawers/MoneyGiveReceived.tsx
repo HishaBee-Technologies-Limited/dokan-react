@@ -91,7 +91,7 @@ const formSchema = z.object({
   date: z.date(),
 });
 
-const MoneyGiveReceived = ({ suppliers }: { suppliers: IUserResponse[] }) => {
+const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   const handleSellDrawer = usePurchaseStore((state) => state.setDrawerState);
   const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
   const [contact, setContact] = useState<IUserResponse>();
@@ -124,7 +124,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers: IUserResponse[] }) => {
       created_at: formatDate(DATE_FORMATS.default),
       date: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
-
+      discount_type: calculatedProducts.discountType ?? '',
       extra_charge: Number(calculatedProducts.deliveryCharge),
       note: data.details,
       payment_method: PAYMENT_METHODS['Due Payment'],
@@ -142,7 +142,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers: IUserResponse[] }) => {
     });
 
     const payload = {
-      amount: -Number(data.amount),
+      amount: Number(data.amount),
       unique_id: generateUlid(),
       due_left: -Number(data.amount),
       version: DEFAULT_STARTING_VERSION,
@@ -370,7 +370,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers: IUserResponse[] }) => {
                             <CommandEmpty>No language found.</CommandEmpty>
                             <CommandGroup>
                               <ScrollArea className="h-[300px] scroll-p-4 rounded-md border">
-                                {suppliers.map((supplier) => (
+                                {suppliers?.map((supplier) => (
                                   <CommandItem
                                     value={contact?.name}
                                     key={supplier.id}

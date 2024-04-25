@@ -25,13 +25,14 @@ const Pagination = ({
   pageCount,
   onChanage,
 }: PaginationPropsDef) => (
-  <SPagination>
+  <SPagination className="mt-10">
     <PaginationContent>
       <PaginationItem>
         <PaginationPrevious
           size="sm"
           onClick={() => onChanage(currentPage - 1)}
           disabled={currentPage === 1}
+          className="cursor-pointer"
         />
       </PaginationItem>
 

@@ -115,9 +115,10 @@ const ConfirmPayment = () => {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const responseCreatePurchase = await createPurchase({
       batch: '',
-      created_at: formatDate(DATE_FORMATS.default),
+      created_at: formatDate(DATE_FORMATS.default, data.date),
       date: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
+      discount_type: calculatedProducts.discountType ?? '',
       employee_mobile: data.employee_number,
       employee_name: data.employee,
       extra_charge: Number(calculatedProducts.deliveryCharge),

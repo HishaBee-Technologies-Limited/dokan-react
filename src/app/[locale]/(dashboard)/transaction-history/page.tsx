@@ -9,7 +9,7 @@ const PurchaseHistory = () => {
     <>
       <div className="space-y-space16 h-full w-full">
         <HistoryHeader />
-        <HistoryTable />
+        {/* <HistoryTable /> */}
       </div>
 
       <PurchaseDrawers />

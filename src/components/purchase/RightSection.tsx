@@ -67,6 +67,7 @@ export const RightSection = () => {
       deliveryCharge: data.delivery_charge,
       discount: data.discount,
       totalPrice: data.totalPrice,
+      discountType: data.discount_type,
     });
   }
   return (
