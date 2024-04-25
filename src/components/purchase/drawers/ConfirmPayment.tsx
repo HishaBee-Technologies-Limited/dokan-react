@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import React, { useEffect, useState } from 'react';
 import { SellEnum } from '@/enum/sell';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -49,6 +49,9 @@ import {
 } from '@/lib/constants/common';
 import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
 import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
+import { toast } from 'sonner';
+import { PurchaseEnum } from '@/enum/purchase';
+import { jwtDecode } from 'jwt-decode';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -68,11 +71,12 @@ const formSchema = z.object({
 });
 
 const ConfirmPayment = () => {
+  const closeDrawer = usePurchaseStore((state) => state.setDrawerState);
+  const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
   const [suppliers, setSuppliers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
-
-  console.log('sss', calculatedProducts);
+  const tkn = getCookie('access_token');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -109,16 +113,12 @@ const ConfirmPayment = () => {
   }, [selectedSupplier, form, selectedEmployee]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    // const purchaseData: IProductPurchasePayload = {
-    //   date:
-    // }
-    // const res = await createPurchase()
-    console.log('data------------', data);
     const responseCreatePurchase = await createPurchase({
       batch: '',
-      created_at: formatDate(DATE_FORMATS.default),
+      created_at: formatDate(DATE_FORMATS.default, data.date),
       date: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
+      discount_type: calculatedProducts.discountType ?? '',
       employee_mobile: data.employee_number,
       employee_name: data.employee,
       extra_charge: Number(calculatedProducts.deliveryCharge),
@@ -133,15 +133,13 @@ const ConfirmPayment = () => {
       total_price: Number(data.amount),
       unique_id: generateUlid(),
       updated_at: formatDate(DATE_FORMATS.default),
-      user_id: 1,
+      user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
     });
-    console.log('date-------', formatDate(DATE_FORMATS.default));
-    console.log('res-------', responseCreatePurchase);
+
     if (responseCreatePurchase?.success) {
-      // const res =
-      calculatedProducts.products.forEach((product) => {
-        const res = createItemPurchase({
+      calculatedProducts.products.forEach(async (product) => {
+        createItemPurchase({
           created_at: formatDate(DATE_FORMATS.default),
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
@@ -158,14 +156,12 @@ const ConfirmPayment = () => {
           version: DEFAULT_STARTING_VERSION,
         });
       });
-      // closeDrawer({ open: false });
-      // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
-      // setCalculatedProducts({
-      //   ...calculatedProducts,
-      //   date: res.data.data.created_at,
-      // });
+      closeDrawer({ open: false });
+      openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
     }
     if (responseCreatePurchase?.error) {
+      toast.error('Something went wrong');
+
       console.log('error-------', responseCreatePurchase?.error);
     }
   }
@@ -190,8 +186,6 @@ const ConfirmPayment = () => {
     fetchSuppliersAndEmployees();
   }, []);
 
-  console.log(form.formState.errors);
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
@@ -205,7 +199,7 @@ const ConfirmPayment = () => {
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
+              <FormLabel>Date of Purchase</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>

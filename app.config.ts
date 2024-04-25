@@ -1,4 +1,6 @@
 export const appConfig = {
+  title: 'Dokan',
+  description: 'Business Manager',
   themes: {
     // Font size --------------------
     fontSize: {

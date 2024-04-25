@@ -1,3 +1,5 @@
+import { DiscountType } from '@/schemas/products';
+
 export interface IProductPurchasePayload {
   batch?: string;
   created_at: string;
@@ -20,6 +22,7 @@ export interface IProductPurchasePayload {
   updated_at: string;
   user_id?: number;
   version: number;
+  discount_type: string;
 }
 
 export type PaymentStatusDef = 'PAID' | 'UNPAID';
@@ -38,5 +41,32 @@ export interface IProductItemPurchasePayload {
   price?: number;
   unique_id: string;
   updated_at: string;
+  version: number;
+}
+
+export interface IPurchaseHistoryResponse {
+  batch: string | null;
+  created_at: string;
+  discount: number | null;
+  discount_type: DiscountType;
+  employee_mobile: string;
+  employee_name: string;
+  extra_charge: number | null;
+  id: number;
+  image: string | null;
+  note: string | null;
+  payment_method: number;
+  payment_status: string;
+  purchase_barcode: null | string;
+  received_amount: number;
+  shop_id: number;
+  supplier_address: null | string;
+  supplier_mobile: string;
+  supplier_name: string;
+  total_item: number;
+  total_price: number;
+  unique_id: string;
+  updated_at: string;
+  user_id: number;
   version: number;
 }

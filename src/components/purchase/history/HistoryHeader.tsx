@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import OrderDateRangePicker from '@/components/online-shop/orders/OrderDateRangePicker';
 
 const HistoryHeader = () => {
   const [value, setValue] = useState<string>('');
@@ -26,11 +27,8 @@ const HistoryHeader = () => {
       </Button>
 
       <div className="flex flex-wrap gap-space8 sm:gap-space12">
-        <DatePicker
-          onChange={(date) => console.log(date)}
-          triggerClasses="!h-[4.8rem]"
-        />
-        <Select onValueChange={handleSort} defaultValue={value}>
+        <OrderDateRangePicker />
+        {/* <Select onValueChange={handleSort} defaultValue={value}>
           <SelectTrigger className="max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400">
             <SortIcon />
             <SelectValue placeholder="Employee" />
@@ -42,7 +40,7 @@ const HistoryHeader = () => {
               <SelectItem value="m@support.com">m@support.com</SelectItem>
             </div>
           </SelectContent>
-        </Select>
+        </Select> */}
         <Button variant={'secondary'} className="hidden sm:flex">
           <DownloadIcon />
           PDF Download

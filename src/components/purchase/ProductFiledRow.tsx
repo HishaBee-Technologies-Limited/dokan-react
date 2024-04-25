@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
@@ -12,13 +12,75 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import { IProduct } from '@/types/product';
+import { DEFAULT_PRODUCT_QUANTITY } from '@/lib/constants/purchase';
+import { usePurchase } from '@/stores/usePurchaseStore';
 
+export interface IProductPurchase extends IProduct {
+  calculatedAmount?: { quantity: number; total: number };
+}
 type IProps = {
   form: UseFormReturn<any>;
-  data?: any;
+  data?: IProductPurchase;
+  index: number;
 };
 
 const ProductFiledRow = (props: IProps) => {
+  const setProducts = usePurchase((state) => state.setProducts);
+  const products = usePurchase((state) => state.products);
+
+  /**
+   * This watch controls the onchange calculation on the viewport
+   */
+  const quantityWatch = props.form.watch(
+    `products.${props.index}.product-${props.data?.id}.quantity`
+  );
+
+  const handleProductDeleteFromSelections = () => {
+    /**
+     * unregister product item from the form array to maintain the calculation
+     * Set the filtered products to update the current view
+     */
+    props.form.unregister(`products.${props.index}.product-${props.data?.id}`);
+    setProducts(products.filter((product) => product.id !== props.data?.id));
+  };
+
+  useEffect(() => {
+    /**
+     * get the required values for the total price calculation for every product
+     */
+    const quantityValue = props.form.getValues(
+      `products.${props.index}.product-${props.data?.id}.quantity`
+    );
+    const unitPrice = props.form.getValues(
+      `products.${props.index}.product-${props.data?.id}.unit_price`
+    );
+
+    if (quantityValue && unitPrice) {
+      /**
+       * set the total value base on the change of the quantity
+       */
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.total`,
+        Number(quantityValue) * Number(unitPrice)
+      );
+    }
+  }, [quantityWatch]);
+
+  useEffect(() => {
+    /**
+     * set the Default values of the form
+     */
+    props.form.setValue(
+      `products.${props.index}.product-${props.data?.id}.quantity`,
+      DEFAULT_PRODUCT_QUANTITY
+    );
+    props.form.setValue(
+      `products.${props.index}.product-${props.data?.id}.unit_price`,
+      String(props.data?.cost_price)
+    );
+  }, [props.data, props.form]);
+
   return (
     <div className="border-b border-dashed border-color pt-space8 pb-space12 space-y-space6 ">
       <div className="flex justify-between gap-space10 items-start">
@@ -31,15 +93,20 @@ const ProductFiledRow = (props: IProps) => {
             wrapperClasses="border border-color rounded-md p-space4"
           />
           <article>
-            <Text title="কোকাকোলা ৪০০ মিলি" className="font-medium" />
+            <Text title={props.data?.name} className="font-medium" />
             <Text
-              title="Current Stock 500"
+              title={`Current Stock ${props.data?.stock}`}
               className="text-xs bg-action-40 dark:bg-primary-80 rounded-full px-space10 py-space4 max-w-max "
             />
           </article>
         </div>
 
-        <Button type="button" size={'icon'} variant={'danger'}>
+        <Button
+          type="button"
+          onClick={handleProductDeleteFromSelections}
+          size={'icon'}
+          variant={'danger'}
+        >
           <CancelIcon />
         </Button>
       </div>
@@ -47,7 +114,7 @@ const ProductFiledRow = (props: IProps) => {
       <div className="flex gap-space12">
         <FormField
           control={props.form.control}
-          name="quantity"
+          name={`products.${props.index}.product-${props.data?.id}.quantity`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
@@ -62,14 +129,14 @@ const ProductFiledRow = (props: IProps) => {
         />
         <FormField
           control={props.form.control}
-          name="unit_price"
+          name={`products.${props.index}.product-${props.data?.id}.unit_price`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
                 Unit Price <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
-                <Input placeholder="Unit Price" {...field} />
+                <Input disabled={true} placeholder="Unit Price" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,7 +144,7 @@ const ProductFiledRow = (props: IProps) => {
         />
         <FormField
           control={props.form.control}
-          name="total"
+          name={`products.${props.index}.product-${props.data?.id}.total`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>Total</FormLabel>

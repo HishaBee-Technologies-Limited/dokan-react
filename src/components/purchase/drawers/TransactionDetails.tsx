@@ -1,5 +1,5 @@
 import { SellEnum } from '@/enum/sell';
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/common/Image';
@@ -12,6 +12,12 @@ import {
   EditIcon,
   ExpandMoreIcon,
 } from '@/components/common/icons';
+import { PurchaseEnum } from '@/enum/purchase';
+import { usePurchase } from '@/stores/usePurchaseStore';
+import { calculateTotal, formatDate, percentage } from '@/lib/utils';
+import { DATE_FORMATS } from '@/lib/constants/common';
+import { format } from 'date-fns';
+import { PAYMENT_STATUS } from '@/lib/constants/purchase';
 
 const productList = [
   {
@@ -45,37 +51,56 @@ const TransactionDetails = () => {
 
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
+  const currentPurchase = usePurchase((state) => state.currentPurchase);
+
+  const total = useMemo(() => {
+    return (
+      currentPurchase?.total_price &&
+      Math.round(
+        calculateTotal(
+          currentPurchase?.total_price,
+          currentPurchase?.extra_charge ?? 0,
+          currentPurchase?.discount ?? 0,
+          currentPurchase?.discount_type
+        ) ?? 0
+      )
+    );
+  }, [currentPurchase]);
 
   return (
     <div className="space-y-space12">
       <section className="bg-secondary rounded-lg p-space12 space-y-space16 ">
         <Text title="Total Item: 03" className="font-semibold" />
 
-        <div className="flex items-center gap-space8">
-          <Text title="Customer" />
-          <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
-            <FallBackImage
-              src=""
-              fallback="M"
-              className="w-space24 h-space24 mr-space8"
-            />
-            <span> মতিউর রহমান</span>
+        {currentPurchase?.supplier_name && (
+          <div className="flex items-center gap-space8">
+            <Text title="Customer" />
+            <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
+              <FallBackImage
+                src=""
+                fallback="M"
+                className="w-space24 h-space24 mr-space8"
+              />
+              <span> {currentPurchase?.supplier_name}</span>
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-space8">
-          <Text title="Employee" />
-          <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
-            <FallBackImage
-              src=""
-              fallback="M"
-              className="w-space24 h-space24 mr-space8"
-            />
-            <span> মতি ভাই</span>
+        )}
+        {currentPurchase?.employee_name && (
+          <div className="flex items-center gap-space8">
+            <Text title="Employee" />
+            <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
+              <FallBackImage
+                src=""
+                fallback="M"
+                className="w-space24 h-space24 mr-space8"
+              />
+              <span> {currentPurchase.employee_name}</span>
+            </div>
           </div>
-        </div>
+        )}
 
         <Text
-          title={`Transaction date  2/3/2023  |  12:30pm `}
+          title={`Transaction date  ${currentPurchase?.created_at} `}
           className="font-semibold"
         />
       </section>
@@ -85,37 +110,47 @@ const TransactionDetails = () => {
           <Text title="Payment: ৳ 1,200" className="text-lg font-semibold" />
 
           <article className="flex gap-space8">
-            <Text
-              title="Due"
-              className="text-sm !text-white uppercase px-space8 py-space4 rounded-md bg-error-100"
-            />
-            <Text
-              title="Cash"
-              className="text-sm !text-white uppercase px-space8 py-space4 rounded-md bg-blue-500"
-            />
+            {currentPurchase?.payment_status === PAYMENT_STATUS.unpaid ? (
+              <Text
+                title="Due"
+                className="text-sm !text-white uppercase px-space8 py-space4 rounded-md bg-error-100"
+              />
+            ) : (
+              <Text
+                title="Cash"
+                className="text-sm !text-white uppercase px-space8 py-space4 rounded-md bg-blue-500"
+              />
+            )}
           </article>
         </article>
 
         <article className="flex justify-between items-center gap-space8">
           <Text title="Total" />
-          <Text title="৳ 1180" />
+          <Text title={`৳ ${total ?? 0}`} />
         </article>
         <article className="flex justify-between items-center gap-space8">
           <Text title="Delivery Charge" />
-          <Text title="৳ 1180" />
+          <Text title={`৳ ${currentPurchase?.extra_charge ?? 0}`} />
         </article>
         <article className="flex justify-between items-center gap-space8">
           <Text title="Discount" />
-          <Text title="৳ 1180" />
+          {currentPurchase?.discount_type === 'PERCENT' ? (
+            <Text title={`${currentPurchase?.discount ?? 0}%`} />
+          ) : (
+            <Text title={`৳ ${currentPurchase?.discount ?? 0}`} />
+          )}
         </article>
-        <article className="flex justify-between items-center gap-space8">
+        {/* <article className="flex justify-between items-center gap-space8">
           <Text title="Due" />
           <Text title="৳ 1180" />
-        </article>
+        </article> */}
 
         <article className="flex justify-between items-center gap-space8 border-t border-color pt-space12">
           <Text title="Grand Total" className="text-lg font-semibold" />
-          <Text title="৳ 1260" className="text-lg font-semibold" />
+          <Text
+            title={`৳ ${currentPurchase?.total_price}`}
+            className="text-lg font-semibold"
+          />
         </article>
       </article>
 
@@ -198,7 +233,7 @@ const TransactionDetails = () => {
           onClick={() =>
             handleDialogOpen({
               open: true,
-              header: SellEnum.TRANSACTION_DELETE,
+              header: PurchaseEnum.TRANSACTION_DELETE,
             })
           }
         >
@@ -207,7 +242,10 @@ const TransactionDetails = () => {
         <Button
           className="w-full"
           onClick={() =>
-            handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_EDIT })
+            handleDrawerOpen({
+              open: true,
+              header: PurchaseEnum.TRANSACTION_EDIT,
+            })
           }
         >
           <EditIcon /> Edit

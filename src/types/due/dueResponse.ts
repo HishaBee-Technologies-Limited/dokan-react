@@ -45,3 +45,18 @@ export interface IDueItemsResponse {
   contact_mobile: string;
   due: IDueListResponse;
 }
+
+export interface IDueCreate {
+  shop_id?: number;
+  amount: number;
+  unique_id: string;
+  due_left: number;
+  version: number;
+  updated_at: string;
+  created_at: string;
+  message: string;
+  contact_mobile: string;
+  contact_type: string;
+  contact_name: string;
+  sms: boolean;
+}

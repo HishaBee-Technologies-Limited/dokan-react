@@ -1,7 +1,6 @@
 'use client';
 import { z } from 'zod';
 import React from 'react';
-import { SellEnum } from '@/enum/sell';
 import { useForm } from 'react-hook-form';
 import Card from '@/components/common/Card';
 import { Form } from '@/components/ui/form';
@@ -10,13 +9,13 @@ import { Text } from '@/components/common/text';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { usePurchaseStore } from '@/stores/usePurchase';
 import { ArrowForwardIcon } from '@/components/common/icons';
-import ProductFiledRow, {
-  IProductPurchase,
-} from '@/components/sell/ProductFiledRow';
+
 import ProductSellCalculation from '@/components/sell/ProductSellCalculation';
 import { ScrollArea } from '../ui/scroll-area';
 import { IProductState, usePurchase } from '@/stores/usePurchaseStore';
 import { IProduct } from '@/types/product';
+import { PurchaseEnum } from '@/enum/purchase';
+import ProductFiledRow, { IProductPurchase } from './ProductFiledRow';
 
 const formSchema = z.object({
   quantity: z.string(),
@@ -68,6 +67,7 @@ export const RightSection = () => {
       deliveryCharge: data.delivery_charge,
       discount: data.discount,
       totalPrice: data.totalPrice,
+      discountType: data.discount_type,
     });
   }
   return (
@@ -104,12 +104,12 @@ export const RightSection = () => {
                 size="sm"
                 type="submit"
                 className="w-full"
-                onClick={() =>
+                onClick={() => {
                   handleDrawerOpen({
                     open: true,
-                    header: SellEnum.CONFIRM_PAYMENT,
-                  })
-                }
+                    header: PurchaseEnum.CONFIRM_PAYMENT,
+                  });
+                }}
               >
                 নগদ টাকা <ArrowForwardIcon />
               </Button>
@@ -120,7 +120,7 @@ export const RightSection = () => {
                 onClick={() =>
                   handleDrawerOpen({
                     open: true,
-                    header: SellEnum.MONEY_GIVEN_ENTRY,
+                    header: PurchaseEnum.MONEY_GIVEN_ENTRY,
                   })
                 }
               >
@@ -131,7 +131,7 @@ export const RightSection = () => {
                 type="submit"
                 className="w-full"
                 onClick={() =>
-                  handleDialogOpen({ open: true, header: SellEnum.QR_CODE })
+                  handleDialogOpen({ open: true, header: PurchaseEnum.QR_CODE })
                 }
               >
                 নিজস্ব QR কোড <ArrowForwardIcon />

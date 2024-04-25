@@ -10,6 +10,7 @@ export const createPurchase = async ({
   created_at,
   date,
   discount,
+  discount_type,
   employee_mobile,
   employee_name,
   extra_charge,
@@ -53,6 +54,7 @@ export const createPurchase = async ({
       total_item: total_item,
       total_price: total_price,
       user_id: user_id,
+      discount_type: discount_type,
     };
 
     const res = await authApi.post(`/purchase`, payload);

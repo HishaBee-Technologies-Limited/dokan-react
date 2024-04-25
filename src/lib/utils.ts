@@ -58,6 +58,27 @@ export function calculateGrandTotal(
       : totalPrice - discountAmount + deliveryCharge
     : totalPrice + deliveryCharge;
 }
+export function calculateTotal(
+  totalPrice: number,
+  deliveryCharge: number,
+  discountAmount: number,
+  discountType?: DiscountType
+) {
+  const totalWithoutDelivery = totalPrice - deliveryCharge;
+  console.log(totalWithoutDelivery);
+  if (discountType) {
+    if (discountType === 'PERCENT') {
+      const discountPercentToTaka = 1 - discountAmount / 100;
+      return totalWithoutDelivery / discountPercentToTaka;
+    }
+
+    if (discountType === 'AMOUNT') {
+      return totalPrice + discountAmount - deliveryCharge;
+    }
+  } else {
+    return totalWithoutDelivery;
+  }
+}
 
 /**
  * Formats a date using the given format string.
