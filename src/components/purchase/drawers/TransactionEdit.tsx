@@ -83,7 +83,7 @@ const formSchema = z.object({
   number: z.string().min(11).max(11, {
     message: 'this field is required.',
   }),
-  details: z.string(),
+  details: z.string().optional(),
   images: z.string(),
   cash_type: z.string(),
   contact: z.any(),
@@ -121,52 +121,55 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const responseCreatePurchase = await createPurchase({
-      batch: '',
-      created_at: formatDate(DATE_FORMATS.default, data.date),
-      date: formatDate(DATE_FORMATS.default, data.date),
-      discount: Number(currentPurchase?.discount),
-      discount_type: currentPurchase?.discount_type ?? '',
-      extra_charge: Number(currentPurchase?.extra_charge),
-      note: data.details,
-      payment_method: PAYMENT_METHODS['Due Payment'],
-      payment_status: PAYMENT_STATUS.unpaid,
-      purchase_barcode: currentPurchase?.purchase_barcode ?? '',
-      received_amount: Number(data.amount),
-      supplier_mobile: data.name,
-      supplier_name: data.number,
-      total_item: currentPurchase?.total_item ?? 0,
-      total_price: Number(data.amount),
-      unique_id: generateUlid(),
-      updated_at: formatDate(DATE_FORMATS.default),
-      user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
-      version: currentPurchase?.version ? currentPurchase?.version + 1 : 0,
-    });
+    // const responseCreatePurchase = await createPurchase({
+    //   batch: '',
+    //   created_at: formatDate(DATE_FORMATS.default, data.date),
+    //   date: formatDate(DATE_FORMATS.default, data.date),
+    //   discount: Number(currentPurchase?.discount),
+    //   discount_type: currentPurchase?.discount_type ?? '',
+    //   extra_charge: Number(currentPurchase?.extra_charge),
+    //   note: data.details,
+    //   payment_method: PAYMENT_METHODS['Due Payment'],
+    //   payment_status: PAYMENT_STATUS.unpaid,
+    //   purchase_barcode: currentPurchase?.purchase_barcode ?? '',
+    //   received_amount: Number(data.amount),
+    //   supplier_mobile: data.name,
+    //   supplier_name: data.number,
+    //   total_item: currentPurchase?.total_item ?? 0,
+    //   total_price: Number(data.amount),
+    //   unique_id: generateUlid(),
+    //   updated_at: formatDate(DATE_FORMATS.default),
+    //   user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
+    //   version: currentPurchase?.version ? currentPurchase?.version + 1 : 0,
+    // });
 
-    const payload = {
-      amount: Number(data.amount),
-      unique_id: generateUlid(),
-      due_left: -Number(data.amount),
-      version: DEFAULT_STARTING_VERSION,
-      updated_at: formatDate(DATE_FORMATS.default),
-      created_at: formatDate(DATE_FORMATS.default),
-      message: data.details,
-      contact_mobile: data.number,
-      contact_type: 'SUPPLIER',
-      contact_name: data.name,
-      sms: data.sms ?? false,
-    };
+    // if (currentPurchase?.payment_status === PAYMENT_STATUS.unpaid) {
+    //   const payload = {
+    //     amount: Number(data.amount),
+    //     unique_id: generateUlid(),
+    //     due_left: -Number(data.amount),
+    //     version: DEFAULT_STARTING_VERSION,
+    //     updated_at: formatDate(DATE_FORMATS.default),
+    //     created_at: formatDate(DATE_FORMATS.default),
+    //     message: data.details,
+    //     contact_mobile: data.number,
+    //     contact_type: 'SUPPLIER',
+    //     contact_name: data.name,
+    //     sms: data.sms ?? false,
+    //   };
 
-    const res = await createDueItem(payload);
-    setCalculatedProducts({
-      ...calculatedProducts,
-      paymentAmount: Number(data.amount),
-      date: formatDate(DATE_FORMATS.default, data.date),
-    });
-    console.log(res, responseCreatePurchase);
+    //   const res = await createDueItem(payload);
+    // }
 
-    handleSellDrawer({ open: false });
-    openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
+    // setCalculatedProducts({
+    //   ...calculatedProducts,
+    //   paymentAmount: Number(data.amount),
+    //   date: formatDate(DATE_FORMATS.default, data.date),
+    // });
+    // // console.log(res, responseCreatePurchase);
+
+    // handleSellDrawer({ open: false });
+    // openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
     console.log('data------------', data);
   }
 
@@ -190,14 +193,14 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     if (!form.watch('cash_type')) {
       form.setValue('cash_type', 'given');
     }
-    if (form.watch('cash_type') === 'given') {
-      handleSellDrawer({ open: true, header: PurchaseEnum.MONEY_GIVEN_ENTRY });
-    } else {
-      handleSellDrawer({
-        open: true,
-        header: PurchaseEnum.MONEY_RECEIVED_ENTRY,
-      });
-    }
+    // if (form.watch('cash_type') === 'given') {
+    //   handleSellDrawer({ open: true, header: PurchaseEnum.MONEY_GIVEN_ENTRY });
+    // } else {
+    //   handleSellDrawer({
+    //     open: true,
+    //     header: PurchaseEnum.MONEY_RECEIVED_ENTRY,
+    //   });
+    // }
   }, [form.watch('cash_type')]);
 
   useEffect(() => {
@@ -209,8 +212,14 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   }, [contact]);
 
   useEffect(() => {
-    form.setValue('amount', String(calculatedProducts.totalPrice));
-  }, [calculatedProducts]);
+    form.setValue('amount', String(currentPurchase?.total_price));
+    form.setValue('name', currentPurchase?.supplier_name ?? '');
+    form.setValue('number', currentPurchase?.supplier_mobile ?? '');
+    form.setValue('date', new Date(currentPurchase?.created_at ?? ''));
+    form.setValue('details', currentPurchase?.note ?? '');
+  }, [currentPurchase]);
+  console.log(new Date(currentPurchase?.created_at ?? ''));
+  console.log(suppliers);
   return (
     <div className="space-y-space12">
       <Tabs onChange={(value) => {}} defaultValue={partyList[1]}>

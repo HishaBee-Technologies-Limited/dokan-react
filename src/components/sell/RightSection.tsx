@@ -8,11 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowForwardIcon } from '@/components/common/icons';
-import ProductFiledRow from '@/components/sell/ProductFiledRow';
+import ProductFiledRow, {
+  IProductPurchase,
+} from '@/components/sell/ProductFiledRow';
 import ProductSellCalculation from '@/components/sell/ProductSellCalculation';
 import { useSellStore } from '@/stores/useSellStore';
 import { SellEnum } from '@/enum/sell';
 import { ScrollArea } from '../ui/scroll-area';
+import { IProduct } from '@/types/product';
 
 const formSchema = z.object({
   quantity: z.string().min(1, {
@@ -31,20 +34,46 @@ export const RightSection = () => {
   const handleSellDialog = useSellStore((state) => state.setSellDialogState);
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const products = useSellStore((state) => state.products);
+  const setCalculatedProducts = useSellStore(
+    (state) => state.setCalculatedProducts
+  );
+
+  const form = useForm({
+    // resolver: zodResolver(formSchema),
     defaultValues: {
-      quantity: '',
-      unit_price: '',
-      total: '',
-      delivery_charge: '',
-      discount: '',
-      discount_type: '',
+      quantity: [],
+      delivery_charge: 0,
+      discount: 0,
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log('data------------', data);
+  function onSubmit(data: any) {
+    const updatedProducts = products.map((product) => {
+      if (
+        data.products.some(
+          (prod: IProduct) => Object.keys(prod)[0] === `product-${product.id}`
+        )
+      ) {
+        const updatedProduct = Object.values(
+          data.products.find(
+            (prod: IProduct) => Object.keys(prod)[0] === `product-${product.id}`
+          )
+        )[0];
+        return {
+          ...product,
+          calculatedAmount: updatedProduct,
+        };
+      }
+    });
+
+    setCalculatedProducts({
+      products: updatedProducts as IProductPurchase[],
+      deliveryCharge: data.delivery_charge,
+      discount: data.discount,
+      totalPrice: data.totalPrice,
+      discountType: data.discount_type,
+    });
   }
 
   return (
@@ -60,12 +89,13 @@ export const RightSection = () => {
           />
 
           <div className="space-y-space12">
-            {/* <ProductFiledRow form={form} />
-            <ProductFiledRow form={form} />
-            <ProductFiledRow form={form} />
-            <ProductFiledRow form={form} />
-            <ProductFiledRow form={form} />
-            <ProductFiledRow form={form} /> */}
+            {products.map((product, index) => (
+              <ProductFiledRow
+                key={product.unique_id}
+                data={product}
+                {...{ index, form }}
+              />
+            ))}
           </div>
         </ScrollArea>
 

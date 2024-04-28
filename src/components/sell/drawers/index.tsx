@@ -10,26 +10,27 @@ import ConfirmPayment from '@/components/sell/drawers/ConfirmPayment';
 import TransactionEdit from '@/components/sell/drawers/TransactionEdit';
 import MoneyGiveReceived from '@/components/sell/drawers/MoneyGiveReceived';
 import TransactionDetails from '@/components/sell/drawers/TransactionDetails';
+import { IUserResponse } from '@/types/contact/partyResponse';
 
-const SellDrawers = () => {
+const SellDrawers = ({ customers }: { customers?: IUserResponse[] }) => {
   const drawerState = useSellStore((state) => state.sellDrawerState);
   const handleClose = useSellStore((state) => state.setSellDrawerState);
 
   const renderedDrawers = (activeDrawer: string | undefined) => {
     if (SellEnum.QUICK_SELL === activeDrawer) {
-      return <QuickSell />;
+      return <QuickSell customers={customers} />;
     } else if (SellEnum.CONFIRM_PAYMENT === activeDrawer) {
       return <ConfirmPayment />;
     } else if (SellEnum.MONEY_GIVEN_ENTRY === activeDrawer) {
-      return <MoneyGiveReceived />;
+      return <MoneyGiveReceived customers={customers} />;
     } else if (SellEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
-      return <MoneyGiveReceived />;
+      return <MoneyGiveReceived customers={customers} />;
     } else if (SellEnum.TRANSACTION_DETAILS === activeDrawer) {
       return <TransactionDetails />;
     } else if (SellEnum.QUICK_SELL_EDIT === activeDrawer) {
-      return <QuickSellEdit />;
+      return <QuickSellEdit customers={customers} />;
     } else if (SellEnum.TRANSACTION_EDIT === activeDrawer) {
-      return <TransactionEdit />;
+      return <TransactionEdit customers={customers} />;
     }
   };
 

@@ -28,6 +28,7 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import { IUserResponse } from '@/types/contact/partyResponse';
 
 const partyList = ['customer', 'supplier', 'employee'];
 
@@ -51,7 +52,7 @@ const formSchema = z.object({
   cash_type: z.string(),
 });
 
-const TransactionEdit = () => {
+const TransactionEdit = ({ customers }: { customers?: IUserResponse[] }) => {
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 

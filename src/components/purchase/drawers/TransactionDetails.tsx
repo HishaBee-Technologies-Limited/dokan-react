@@ -104,7 +104,6 @@ const TransactionDetails = () => {
           className="font-semibold"
         />
       </section>
-
       <article className="bg-secondary rounded-lg p-space12 space-y-space16 ">
         <article className="flex justify-between items-center gap-space8 border-b border-color pb-space12">
           <Text title="Payment: ৳ 1,200" className="text-lg font-semibold" />
@@ -153,7 +152,6 @@ const TransactionDetails = () => {
           />
         </article>
       </article>
-
       <section>
         <div
           onClick={() => setAccordion(!accordion)}
@@ -163,7 +161,7 @@ const TransactionDetails = () => {
 
           <ExpandMoreIcon />
         </div>
-
+        ----TODO----
         <div
           className={`grid ${accordion ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} duration-500`}
         >
@@ -192,17 +190,17 @@ const TransactionDetails = () => {
           </WrapperOddList>
         </div>
       </section>
+      {currentPurchase?.note && (
+        <article className="space-y-space8">
+          <Text title="Notes" />
 
-      <article className="space-y-space8">
-        <Text title="Notes" />
-
-        <Text
-          title="This is a sample note for sample things"
-          variant="secondary"
-          className="text-lg"
-        />
-      </article>
-
+          <Text
+            title={currentPurchase.note}
+            variant="secondary"
+            className="text-lg"
+          />
+        </article>
+      )}
       <div className="grid grid-cols-2 gap-space16">
         <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
           <Image
@@ -225,7 +223,6 @@ const TransactionDetails = () => {
           <Text title="Share receipt " className="text-sm font-medium" />
         </Button>
       </div>
-
       <DrawerFooter>
         <Button
           className="w-full"

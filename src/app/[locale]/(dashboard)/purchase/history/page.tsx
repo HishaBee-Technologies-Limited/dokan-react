@@ -6,6 +6,9 @@ import HistoryHeader from '@/components/purchase/history/HistoryHeader';
 import { getPurchaseHistory } from '@/actions/purchase/getPurchaseHistory';
 import { IPurchaseHistoryResponse } from '@/types/purchase';
 import { ICommonGetResponse } from '@/types/common';
+import { cookies } from 'next/headers';
+import { getAllSupplier } from '@/actions/contacts/getAllSupplier';
+import { IUserResponse } from '@/types/contact/partyResponse';
 
 const PurchaseHistory = async ({ searchParams }: any) => {
   console.log(searchParams);
@@ -14,6 +17,9 @@ const PurchaseHistory = async ({ searchParams }: any) => {
     searchParams.start_date,
     searchParams.end_date
   );
+  const shopId = cookies().get('shopId')?.value;
+  const allSupplier = await getAllSupplier(Number(shopId));
+
   return (
     <>
       <div className="space-y-space16 h-full w-full">
@@ -21,7 +27,7 @@ const PurchaseHistory = async ({ searchParams }: any) => {
         <HistoryTable purchaseHistory={purchaseHistory?.data as any} />
       </div>
 
-      <PurchaseDrawers />
+      <PurchaseDrawers suppliers={allSupplier?.data as IUserResponse[]} />
       <PurchaseDialogs />
     </>
   );
