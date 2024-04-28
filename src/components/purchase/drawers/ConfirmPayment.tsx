@@ -140,7 +140,7 @@ const ConfirmPayment = () => {
     if (responseCreatePurchase?.success) {
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
-          created_at: formatDate(DATE_FORMATS.default),
+          created_at: formatDate(DATE_FORMATS.default, data.date),
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
@@ -189,11 +189,6 @@ const ConfirmPayment = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
-        {/* <DatePicker
-          onChange={() => {}}
-          contentAlign={'center'}
-          triggerClasses={'w-full justify-center'}
-        /> */}
         <FormField
           control={form.control}
           name="date"
