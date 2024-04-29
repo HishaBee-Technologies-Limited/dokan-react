@@ -125,7 +125,7 @@ const ConfirmPayment = () => {
       purchase_barcode: '',
       received_amount: Number(data.amount),
       customer_mobile: data.customer_number,
-      customer_name: data.customer_number,
+      customer_name: data.customer,
       customer_address: data.customer_address,
       total_item: calculatedProducts.products.length,
       total_price: Number(data.amount),
@@ -135,6 +135,7 @@ const ConfirmPayment = () => {
       version: DEFAULT_STARTING_VERSION,
       total_discount: 0,
     });
+    console.log('res----', responseCreateSell);
 
     if (responseCreateSell?.success) {
       calculatedProducts.products.forEach(async (product) => {
@@ -145,7 +146,7 @@ const ConfirmPayment = () => {
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
 
-          transaction_unique_id: responseCreateSell.data.unique_id,
+          transaction_unique_id: responseCreateSell.data.transaction.unique_id,
           profit: 0,
           status: 'PAID',
 
@@ -305,12 +306,12 @@ const ConfirmPayment = () => {
                       </FormControl>
                       <SelectContent>
                         <div className="max-h-[24rem] overflow-y-scroll">
-                          {customers?.map((supplier) => (
+                          {customers?.map((customer, i) => (
                             <SelectItem
-                              key={supplier.unique_id}
-                              value={`${supplier.name}-${supplier.mobile}`}
+                              key={String(i + 1)}
+                              value={`${customer.name}-${customer.mobile}`}
                             >
-                              {supplier.name}
+                              {customer.name}
                             </SelectItem>
                           ))}
                         </div>
@@ -397,15 +398,14 @@ const ConfirmPayment = () => {
                       </FormControl>
                       <SelectContent>
                         <div className="max-h-[24rem] overflow-y-scroll">
-                          <SelectItem value="m@example.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@google.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@support.com">
-                            m@support.com
-                          </SelectItem>
+                          {employees?.map((employee) => (
+                            <SelectItem
+                              key={employee.unique_id}
+                              value={`${employee.name}-${employee.mobile}`}
+                            >
+                              {employee.name}
+                            </SelectItem>
+                          ))}
                         </div>
 
                         {/* <Button

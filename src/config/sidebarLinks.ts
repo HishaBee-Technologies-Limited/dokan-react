@@ -41,7 +41,7 @@ const SidebarLinks: IAsideBarMenuItem[] = [
         title: 'Transaction',
         bn_title: 'স্টক ইতিহাস',
         image: '/images/features/transaction.svg',
-        link: '/order-history',
+        link: '/sell/history',
       },
       {
         id: 204,

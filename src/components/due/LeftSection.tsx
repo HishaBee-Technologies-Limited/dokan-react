@@ -13,6 +13,7 @@ import FallBackImage from '@/components/common/FallBackImage';
 import WrapperOddList from '@/components/common/WrapperOddList';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator';
+import { ICommonGetResponse } from '@/types/common';
 
 const tabData = [
   {
@@ -30,7 +31,7 @@ const tabData = [
 ];
 
 interface IProps {
-  dueList: IDueListResponse[] | undefined;
+  dueList: ICommonGetResponse<IDueListResponse> | undefined;
   totalValues:
     | {
         total_get: number;
@@ -55,7 +56,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
     }
   };
 
-  const filteredDueList = dueList?.filter(
+  const filteredDueList = dueList?.data?.filter(
     (item) => item.contact_type === activeTab.toUpperCase()
   );
 

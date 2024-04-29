@@ -4,9 +4,22 @@ import Icon from '@/components/common/Icon';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/common/Image';
+import { usePurchaseStore } from '@/stores/usePurchase';
 import { DialogFooter } from '@/components/common/Dialog';
-
+import { usePurchase } from '@/stores/usePurchaseStore';
+import { useFormContext } from 'react-hook-form';
+import { useSellStore } from '@/stores/useSellStore';
 const Successful = () => {
+  const handleClose = useSellStore((state) => state.setSellDialogState);
+  const calculatedProducts = useSellStore((state) => state.calculatedProducts);
+  const clearProductArray = useSellStore((state) => state.setProducts);
+  const methods = useFormContext();
+  const payment =
+    (calculatedProducts?.totalPrice &&
+      calculatedProducts?.paymentAmount &&
+      calculatedProducts?.totalPrice -
+        Math.abs(calculatedProducts?.paymentAmount)) ??
+    0;
   return (
     <>
       <div className="py-space16 mx-auto max-w-[26.4rem] space-y-space40">
@@ -16,7 +29,7 @@ const Successful = () => {
           </div>
 
           <Text
-            title="Sell Successful"
+            title="Buy Successful"
             variant="success"
             className="text-xl font-bold"
           />
@@ -24,20 +37,27 @@ const Successful = () => {
 
         <article className="space-y-space8">
           <article className="flex justify-between gap-space8">
-            <Text title="Sell Amount" />
-            <Text title="৳ 12,000" className="font-semibold" />
+            <Text title="Buy Amount" />
+            <Text
+              title={String(calculatedProducts.totalPrice)}
+              className="font-semibold"
+            />
           </article>
           <article className="flex justify-between gap-space8 border-b border-color">
             <Text title="Payment Amount" />
-            <Text title="৳ 12,000" className="font-semibold" />
+            <Text title={String(payment)} className="font-semibold" />
           </article>
           <article className="flex justify-between gap-space8">
             <Text title="Due" />
-            <Text title="৳ 00" className="font-semibold" variant="error" />
+            <Text
+              title={String(calculatedProducts.paymentAmount)}
+              className="font-semibold"
+              variant="error"
+            />
           </article>
 
           <Text
-            title="Date: 14 July 2022 | 12:55 pm"
+            title={`Date: ${calculatedProducts.date}`}
             className="text-sm text-center pt-space16"
           />
         </article>
@@ -67,7 +87,14 @@ const Successful = () => {
       </div>
 
       <DialogFooter>
-        <Button className="w-full" variant={'secondary'}>
+        <Button
+          onClick={() => {
+            handleClose({ open: false });
+            clearProductArray([]);
+          }}
+          className="w-full"
+          variant={'secondary'}
+        >
           Close
         </Button>
       </DialogFooter>

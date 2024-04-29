@@ -65,6 +65,8 @@ import { createPurchase } from '@/actions/purchase/createPurchase';
 import { useSession } from 'next-auth/react';
 import { jwtDecode } from 'jwt-decode';
 import { createDueItem } from '@/actions/due/createDueItem';
+import { toast } from 'sonner';
+import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 
 const partyList = ['customer', 'supplier'];
 
@@ -141,10 +143,36 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       version: DEFAULT_STARTING_VERSION,
     });
 
+    if (responseCreatePurchase?.success) {
+      calculatedProducts.products.forEach(async (product) => {
+        createItemPurchase({
+          created_at: formatDate(DATE_FORMATS.default, data.date),
+          name: product.name,
+          quantity: product.calculatedAmount?.quantity,
+          unit_price: product.selling_price,
+          unit_cost: product.cost_price,
+
+          purchase_unique_id: responseCreatePurchase.data.unique_id,
+
+          shop_product_id: product.id,
+          shop_product_variance_id: 1,
+          price: product.calculatedAmount?.total,
+          unique_id: generateUlid(),
+          updated_at: formatDate(DATE_FORMATS.default),
+          version: DEFAULT_STARTING_VERSION,
+        });
+      });
+    }
+    if (responseCreatePurchase?.error) {
+      toast.error('Something went wrong');
+
+      console.log('error-------', responseCreatePurchase?.error);
+    }
+
     const payload = {
       amount: Number(data.amount),
       unique_id: generateUlid(),
-      due_left: -Number(data.amount),
+      due_left: Number(data.amount),
       version: DEFAULT_STARTING_VERSION,
       updated_at: formatDate(DATE_FORMATS.default),
       created_at: formatDate(DATE_FORMATS.default),

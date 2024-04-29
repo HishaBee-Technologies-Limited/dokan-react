@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { IDueListResponse } from '@/types/due/dueResponse';
 
 export const getAllDue = async (page?: number) => {
-  const pageCount = page ? page : 1;
+  const pageCount = page ? page : 10;
   try {
     const shopId = cookies().get('shopId')?.value;
     const params = `shop_id=${shopId}&per_page=${pageCount}`;

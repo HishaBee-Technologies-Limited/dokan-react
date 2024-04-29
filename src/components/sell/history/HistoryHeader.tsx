@@ -35,18 +35,18 @@ const HistoryHeader = () => {
             <SortIcon />
             <SelectValue placeholder="Employee" />
           </SelectTrigger>
-          <SelectContent>
+          {/* <SelectContent>
             <div className="max-h-[24rem] overflow-y-scroll">
               <SelectItem value="m@example.com">m@example.com</SelectItem>
               <SelectItem value="m@google.com">m@google.com</SelectItem>
               <SelectItem value="m@support.com">m@support.com</SelectItem>
             </div>
-          </SelectContent>
+          </SelectContent> */}
         </Select>
-        <Button variant={'secondary'} className="hidden sm:flex">
+        {/* <Button variant={'secondary'} className="hidden sm:flex">
           <DownloadIcon />
           PDF Download
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

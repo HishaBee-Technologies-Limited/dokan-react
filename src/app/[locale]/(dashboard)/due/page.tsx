@@ -19,6 +19,9 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
 
   const dueList = await getAllDue();
   const dueItems = await getDueItemByUniqueID(`${userID}`);
+  console.log(dueList?.data.data);
+
+  console.log();
 
   return (
     <>
@@ -27,7 +30,7 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
 
         <Card className="space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]">
           <LeftSection
-            dueList={dueList?.data}
+            dueList={dueList?.data as any}
             totalValues={dueList?.metadata}
           />
           {dueItems?.data ? (
