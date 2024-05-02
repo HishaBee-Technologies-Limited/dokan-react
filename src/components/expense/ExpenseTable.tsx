@@ -20,55 +20,30 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { ICommonGetResponse } from '@/types/common';
+import { IExpense } from '@/types/expense';
+import Pagination from '@/components/common/CustomPagination';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 
-const invoices = [
-  {
-    category: 'গাড়ি/ভ্যান ভাড়া',
-    amount: '৳200',
-    date: 'Dec 30, 09:42 PM',
-    note: 'this is demo notes',
-  },
-  {
-    category: 'সকালের নাস্তা',
-    amount: '৳2000000',
-    date: 'Dec 30, 09:42 PM',
-    note: 'this is demo notes',
-  },
-  {
-    category: 'গাড়ি/ভ্যান ভাড়া',
-    amount: '৳2000000',
-    date: 'Dec 30, 09:42 PM',
-    note: 'this is demo notes',
-  },
-  {
-    category: 'সকালের নাস্তা',
-    amount: '৳2000000',
-    date: 'Dec 30, 09:42 PM',
-  },
-  {
-    category: 'গাড়ি/ভ্যান ভাড়া',
-    amount: '৳2000000',
-    date: 'Dec 30, 09:42 PM',
-    note: 'this is demo notes',
-  },
-  {
-    category: 'সকালের নাস্তা',
-    amount: '৳2000000',
-    date: 'Dec 30, 09:42 PM',
-    note: 'this is demo notes',
-  },
-];
-
-const ExpenseTable = () => {
+const ExpenseTable = ({
+  expenseList,
+}: {
+  expenseList: ICommonGetResponse<IExpense>;
+}) => {
   const setExpenseDialog = useExpenseStore(
     (state) => state.setExpenseDialogState
   );
   const setExpenseDrawer = useExpenseStore(
     (state) => state.setExpenseDrawerState
   );
+  const pathname = usePathname();
+  const router = useRouter();
+  const { setQueryString } = useCreateQueryString();
 
-  const handleRowClick = () => {
+  const handleRowClick = (expense: IExpense) => {
     setExpenseDialog({ open: true, header: ExpenseEnum.EXPENSE_DETAILS });
+    router.push(`${pathname}?${setQueryString('expense', expense?.unique_id)}`);
   };
 
   return (
@@ -85,17 +60,17 @@ const ExpenseTable = () => {
         </TableHeader>
 
         <TableBody>
-          {invoices.map((invoice, i) => (
-            <TableRow key={i} onClick={() => handleRowClick()}>
+          {expenseList.data.map((expense, i) => (
+            <TableRow key={i} onClick={() => handleRowClick(expense)}>
               <TableCell>
                 <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
                   <div className="w-space24 h-space24 bg-primary-40 rounded-full mr-space8"></div>
-                  <span>{invoice.category}</span>
+                  <span>{expense.type}</span>
                 </div>
               </TableCell>
-              <TableCell>{invoice.amount}</TableCell>
-              <TableCell>{invoice.date}</TableCell>
-              <TableCell>{invoice.note}</TableCell>
+              <TableCell>{expense.amount}</TableCell>
+              <TableCell>{expense.created_at}</TableCell>
+              <TableCell>{expense.details}</TableCell>
               <TableCell className={`text-right`}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -166,6 +141,18 @@ const ExpenseTable = () => {
       </Table>
 
       <ScrollBar orientation="horizontal" />
+      <Pagination
+        pageCount={
+          expenseList.data.length === 0
+            ? expenseList.last_page
+            : Math.ceil(expenseList.total ?? 0 / expenseList.per_page ?? 0)
+        }
+        currentPage={expenseList.current_page ?? 0}
+        lastPage={expenseList.last_page ?? 0}
+        onChanage={(page) => {
+          router.push(`${pathname}?${setQueryString('page', page)}`);
+        }}
+      />
     </ScrollArea>
   );
 };

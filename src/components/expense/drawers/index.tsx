@@ -7,8 +7,9 @@ import { useExpenseStore } from '@/stores/useExpenseStore';
 import AddExpense from '@/components/expense/drawers/AddExpense';
 import EditExpense from '@/components/expense/drawers/EditExpense';
 import AllExpenseCategories from '@/components/expense/drawers/AllExpenseCategories';
+import { IExpense } from '@/types/expense';
 
-const ExpenseDrawers = () => {
+const ExpenseDrawers = ({ expense }: { expense: IExpense }) => {
   const drawerState = useExpenseStore((state) => state.expenseDrawerState);
   const handleClose = useExpenseStore((state) => state.setExpenseDrawerState);
 
@@ -16,7 +17,7 @@ const ExpenseDrawers = () => {
     if (ExpenseEnum.ADD_EXPENSE === activeDrawer) {
       return <AddExpense />;
     } else if (ExpenseEnum.EDIT_EXPENSE === activeDrawer) {
-      return <EditExpense />;
+      return <EditExpense expense={expense} />;
     } else if (ExpenseEnum.ALL_EXPENSE_CATEGORIES === activeDrawer) {
       return <AllExpenseCategories />;
     }

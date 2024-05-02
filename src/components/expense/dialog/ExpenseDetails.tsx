@@ -7,8 +7,9 @@ import { Text } from '@/components/common/text';
 import { DialogFooter } from '@/components/common/Dialog';
 import { useExpenseStore } from '@/stores/useExpenseStore';
 import { DeleteIcon, EditIcon } from '@/components/common/icons';
+import { IExpense } from '@/types/expense';
 
-const ExpenseDetails = () => {
+const ExpenseDetails = ({ expense }: { expense: IExpense }) => {
   const setExpenseDialog = useExpenseStore(
     (state) => state.setExpenseDialogState
   );
@@ -33,28 +34,28 @@ const ExpenseDetails = () => {
                 height={24}
                 className="object-contain"
                 alt="expense category image"
-                src="/images/add_user.svg"
+                src={expense?.image ?? ''}
               />
-              <Text title="Category Name" />
+              <Text title={expense?.type} />
             </div>
           </li>
 
           <li className="space-y-space6">
             <Text title="Amount" variant="secondary" className="text-sm" />
-            <Text title="৳ 1200" />
+            <Text title={`"৳ ${expense?.amount}"`} />
           </li>
 
           <li className="space-y-space6">
             <Text title="Employee" variant="secondary" className="text-sm" />
             <div className="flex gap-space8">
-              <Image
+              {/* <Image
                 width={24}
                 height={24}
                 className="object-contain"
                 alt="employee image"
                 src="/images/add_user.svg"
-              />
-              <Text title="employee Name" />
+              /> */}
+              <Text title={expense?.contact_name ?? 'N/A'} />
             </div>
           </li>
 
@@ -64,27 +65,29 @@ const ExpenseDetails = () => {
               variant="secondary"
               className="text-sm"
             />
-            <Text title="Dec 30, 09:42 PM" />
+            <Text title={expense?.created_at} />
           </li>
           <li className="space-y-space6">
             <Text title="Notes" variant="secondary" className="text-sm" />
-            <Text title="This is a sample note for sample things" />
+            <Text title={expense?.details ?? ''} />
           </li>
 
-          <li className="space-y-space6">
-            <Text title="Images" variant="secondary" className="text-sm" />
-            <div className="flex gap-4">
-              <div className="shadow-md bg-primary-5 rounded-md h-[6.4rem] w-[6.4rem]">
-                <Image
-                  src="/images/add_user.svg"
-                  width={64}
-                  height={64}
-                  alt="note image"
-                  className=" object-cover rounded-lg"
-                />
+          {expense.image ? (
+            <li className="space-y-space6">
+              <Text title="Images" variant="secondary" className="text-sm" />
+              <div className="flex gap-4">
+                <div className="shadow-md bg-primary-5 rounded-md h-[6.4rem] w-[6.4rem]">
+                  <Image
+                    src={expense?.image ?? ''}
+                    width={64}
+                    height={64}
+                    alt="ni"
+                    className=" object-cover rounded-lg"
+                  />
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
+          ) : null}
         </ul>
       </div>
 
