@@ -40,6 +40,7 @@ export interface shopPayload {
   publicData?: number;
   shopId?: number;
   number?: string;
+  shop_image?: string;
 }
 
 export type OverviewDef = {
@@ -51,6 +52,7 @@ export type OverviewDef = {
   total_earning: number;
   processing_orders: number;
   delivered_orders: number;
+  logo_url?: string;
 };
 
 export type ShopDef = OverviewDef & {

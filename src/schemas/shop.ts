@@ -11,4 +11,5 @@ export const ShopSchema = z.object({
   address: z.string(),
   sell_type: z.string().optional(),
   number: z.string().optional(),
+  shop_image: z.string().optional(),
 });

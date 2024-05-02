@@ -1,7 +1,7 @@
 'use server';
 
 import { authApi } from '@/lib/api';
-import { IShopResponse, shopPayload } from '@/types/shop';
+import { shopPayload } from '@/types/shop';
 
 export const createShops = async ({
   area,
@@ -9,11 +9,18 @@ export const createShops = async ({
   address,
   name,
   publicData,
+  shop_image,
 }: shopPayload) => {
   try {
-    const res = await authApi.get(
-      `/shop/create?name=${name}&type=${type}&address=${address}&area=${area}&public=${publicData}`
-    );
+    const payload = {
+      name,
+      address,
+      area,
+      type,
+      publicData,
+      shop_image,
+    };
+    const res = await authApi.post(`/shop/create`, payload);
     const data = await res.json();
 
     if (res.ok) {

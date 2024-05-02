@@ -1,21 +1,32 @@
 'use client';
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Card from '@/components/common/Card';
 import { Image } from '@/components/common/Image';
 import { PageSubTitle, Text } from '@/components/common/text';
 
 import { z } from 'zod';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowForwardIcon } from '@/components/common/icons';
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
+
+import { cn } from '@/lib/utils';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+
 import {
   Form,
   FormItem,
@@ -24,51 +35,119 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-
-const cashType = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' },
-];
-
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: 'this field is required.',
-  }),
-  shop_type: z.string().min(1, {
-    message: 'this field is required.',
-  }),
-  shop_image: z.string(),
-  division: z.string(),
-  district: z.string(),
-  area: z.string(),
-  address: z.string(),
-  number: z.string(),
-});
+import { ShopSchema } from '@/schemas/shop';
+import { IAllArea } from '@/types/shop';
+import { getAreasAndTypes } from '@/actions/shop/getAreaAndTypes';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getShopInfo } from '@/actions/shop/getShopInfo';
+import { getAreaInfo } from '@/actions/shop/getArea';
+import { updateShop } from '@/actions/shop/updateShop';
+import { toast } from 'sonner';
+import { useFileUpload } from '@/hooks/uploadMultipleFile';
 
 const EditShopPage = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof ShopSchema>>({
+    resolver: zodResolver(ShopSchema),
     defaultValues: {
       name: '',
-      shop_type: '',
-      shop_image: '',
-      division: '',
-      district: '',
       address: '',
-      area: '',
       number: '',
     },
   });
+  const [divisions, setDivisions] = useState<IAllArea[]>();
+  const [open, setOpen] = React.useState(false);
+  const [divisionValue, setDivisionValue] = React.useState('');
+  const [openDistrict, setOpenDistrict] = React.useState(false);
+  const [districtValue, setDistrictValue] = React.useState('');
+  const [types, setTypes] = useState<any[]>([]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [selectedFiles, setSelectedFiles] = useState<FileList>();
+  const [imageUrls, loading] = useFileUpload(selectedFiles);
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log('data------------', data);
+  const shopId = searchParams.get('shopId');
+
+  async function onSubmit({
+    name,
+    shop_type,
+    address,
+    number,
+    area,
+    shop_image,
+  }: z.infer<typeof ShopSchema>) {
+    console.log(shopId, address);
+    if (shopId) {
+      const res = await updateShop({
+        shopId: Number(shopId),
+        name,
+        type: shop_type,
+        address,
+        area,
+        number,
+        shop_image,
+      });
+      if (res?.success) {
+        router.push('/settings/shop');
+        router.refresh();
+      }
+      if (res?.error) {
+        toast.error('Something went wrong');
+      }
+    }
   }
+
+  useEffect(() => {
+    const getAllAreasAndTypes = async () => {
+      const shopInfo = await getShopInfo(shopId as string);
+
+      if (shopInfo?.success) {
+        form.setValue('address', shopInfo?.data?.data?.shop?.address ?? '');
+        form.setValue('name', shopInfo?.data?.data?.shop?.name ?? '');
+        form.setValue(
+          'number',
+          shopInfo?.data?.data?.shop?.public_number ?? ''
+        );
+        form.setValue('shop_type', shopInfo?.data?.data?.shop?.type ?? 0);
+        form.setValue('shop_image', shopInfo?.data?.data?.shop?.logo_url);
+
+        const areaData = await getAreaInfo(
+          `${shopInfo?.data?.data?.shop?.area}`
+        );
+
+        if (areaData?.success) {
+          setDivisionValue(areaData?.data?.division.id);
+          setDistrictValue(areaData?.data?.district.id);
+          form.setValue('area', areaData?.data?.area.id);
+        }
+      }
+      const res = await getAreasAndTypes();
+      if (res?.success) {
+        setDivisions(res?.data?.areaData);
+        setTypes(res?.data?.typesData.data);
+      }
+    };
+    getAllAreasAndTypes();
+  }, []);
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    const selectedFiles = files as FileList;
+    setSelectedFiles(selectedFiles);
+  };
+
+  useEffect(() => {
+    form.setValue('shop_image', imageUrls[0]);
+  }, [imageUrls]);
 
   return (
     <div className="space-y-space16 pb-space16">
-      <PageSubTitle title="Edit Shop" />
+      <div className="flex items-center gap-space16">
+        <Link href={'/settings/shop'}>
+          <ArrowForwardIcon rotate={2} />
+        </Link>
 
+        <PageSubTitle title="Edit Shop" />
+      </div>
       <div className="max-w-[53rem]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -80,7 +159,7 @@ const EditShopPage = () => {
                   <FormItem className="flex flex-col items-center justify-center gap-space16 py-space12">
                     <div className="h-[10rem] w-[10rem] bg-primary-5 dark:bg-primary-80 border border-color rounded-full flex items-center justify-center">
                       <Image
-                        src={`/images/update_shop.svg`}
+                        src={`${field.value ? field.value : '/images/update_shop.svg'}`}
                         alt=""
                         height={54}
                         width={54}
@@ -88,7 +167,11 @@ const EditShopPage = () => {
                     </div>
 
                     <label className="cursor-pointer">
-                      <input type="file" className="hidden" {...field} />
+                      <input
+                        type="file"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
 
                       <p className="text-blue-600 text-sm font-medium text-center">
                         Add a logo of your Shop
@@ -97,7 +180,6 @@ const EditShopPage = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="name"
@@ -119,102 +201,175 @@ const EditShopPage = () => {
                 name="shop_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Shop Type <span className="text-error-100">*</span>
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="">
-                          <SelectValue placeholder="Shop type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <div className="max-h-[24rem] overflow-y-scroll">
-                          <SelectItem value="m@example.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@google.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@support.com">
-                            m@support.com
-                          </SelectItem>
-                        </div>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'h-16 w-full justify-between bg-white',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value
+                            ? types?.find((type) => type.id === field.value)
+                                ?.name
+                            : 'Select Type...'}
+                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[600px] p-0">
+                        <Command>
+                          <CommandInput
+                            placeholder="Search Type..."
+                            className="h-12"
+                          />
+                          <CommandEmpty>No type found.</CommandEmpty>
+                          <CommandGroup className="max-h-80 overflow-scroll">
+                            {types?.map((type) => (
+                              <CommandItem
+                                key={type.id}
+                                value={String(type.id)}
+                                onSelect={() => {
+                                  form.setValue('shop_type', type.id);
+                                }}
+                              >
+                                {type.name}
+                                <CheckIcon
+                                  className={cn(
+                                    'ml-auto h-4 w-4',
+                                    field.value === type.id
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </FormItem>
                 )}
               />
 
-              <div className="grid grid-cols-2 gap-space8 sm:gap-space16">
-                <FormField
-                  control={form.control}
-                  name="division"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Division</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="">
-                            <SelectValue placeholder="Division" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <div className="max-h-[24rem] overflow-y-scroll">
-                            <SelectItem value="m@example.com">
-                              m@example.com
-                            </SelectItem>
-                            <SelectItem value="m@google.com">
-                              m@google.com
-                            </SelectItem>
-                            <SelectItem value="m@support.com">
-                              m@support.com
-                            </SelectItem>
-                          </div>
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="district"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>District</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="">
-                            <SelectValue placeholder="District" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <div className="max-h-[24rem] overflow-y-scroll">
-                            <SelectItem value="m@example.com">
-                              m@example.com
-                            </SelectItem>
-                            <SelectItem value="m@google.com">
-                              m@google.com
-                            </SelectItem>
-                            <SelectItem value="m@support.com">
-                              m@support.com
-                            </SelectItem>
-                          </div>
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
+              <div className="gap-space8 sm:gap-space16 grid grid-cols-2">
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="justify-between"
+                    >
+                      {divisionValue
+                        ? divisions?.find(
+                            (division) =>
+                              String(division.id) === String(divisionValue)
+                          )?.name
+                        : 'Select Divisions...'}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[350px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search framework..."
+                        className="h-12"
+                      />
+                      <CommandEmpty>No division found.</CommandEmpty>
+                      <CommandGroup>
+                        {divisions?.map((division) => (
+                          <CommandItem
+                            key={division.id}
+                            value={String(division.id)}
+                            onSelect={(currentValue) => {
+                              setDivisionValue(
+                                currentValue === String(divisionValue)
+                                  ? ''
+                                  : currentValue
+                              );
+                              setOpen(false);
+                            }}
+                          >
+                            {division.name}
+                            <CheckIcon
+                              className={cn(
+                                'ml-auto h-4 w-4',
+                                String(divisionValue) === String(division.id)
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <Popover open={openDistrict} onOpenChange={setOpenDistrict}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={openDistrict}
+                      className=" justify-between"
+                    >
+                      {districtValue
+                        ? divisions
+                            ?.find(
+                              (division) =>
+                                String(division.id) === String(divisionValue)
+                            )
+                            ?.districts.find(
+                              (district) =>
+                                String(district.id) === String(districtValue)
+                            )?.name
+                        : 'Select Districts...'}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[320px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search Districts..."
+                        className="h-12"
+                      />
+                      <CommandEmpty>No districts found.</CommandEmpty>
+                      <CommandGroup>
+                        {divisions
+                          ?.find(
+                            (division) =>
+                              String(division.id) === String(divisionValue)
+                          )
+                          ?.districts.map((district) => (
+                            <CommandItem
+                              key={district.id}
+                              value={String(district.id)}
+                              onSelect={(currentValue) => {
+                                setDistrictValue(
+                                  currentValue === String(districtValue)
+                                    ? ''
+                                    : currentValue
+                                );
+                                setOpenDistrict(false);
+                              }}
+                            >
+                              {district.name}
+                              <CheckIcon
+                                className={cn(
+                                  'ml-auto h-4 w-4',
+                                  String(districtValue) === String(district.id)
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               <FormField
@@ -222,10 +377,74 @@ const EditShopPage = () => {
                 name="area"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Area </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Area" {...field} />
-                    </FormControl>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'h-16 w-full justify-between bg-white',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value
+                            ? divisions
+                                ?.find(
+                                  (division) =>
+                                    String(division.id) ===
+                                    String(divisionValue)
+                                )
+                                ?.districts.find(
+                                  (district) =>
+                                    String(district.id) ===
+                                    String(districtValue)
+                                )
+                                ?.areas?.find((area) => area.id === field.value)
+                                ?.name
+                            : 'Select Area...'}
+                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[600px] p-0">
+                        <Command>
+                          <CommandInput
+                            placeholder="Search Districts..."
+                            className="h-12"
+                          />
+                          <CommandEmpty>No area found.</CommandEmpty>
+                          <CommandGroup className="max-h-80 overflow-scroll">
+                            {divisions
+                              ?.find(
+                                (division) =>
+                                  String(division.id) === String(divisionValue)
+                              )
+                              ?.districts.find(
+                                (district) =>
+                                  String(district.id) === String(districtValue)
+                              )
+                              ?.areas?.map((area) => (
+                                <CommandItem
+                                  key={area.id}
+                                  value={String(area.id)}
+                                  onSelect={() => {
+                                    form.setValue('area', area.id);
+                                  }}
+                                >
+                                  {area.name}
+                                  <CheckIcon
+                                    className={cn(
+                                      'ml-auto h-4 w-4',
+                                      field.value === area.id
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </FormItem>
                 )}
               />
@@ -260,12 +479,16 @@ const EditShopPage = () => {
                 variant="secondary"
               />
             </Card>
-
+            {form.formState.errors.root?.message?.length && (
+              <Text title="No changes made" variant="error" />
+            )}
             <div className="flex justify-end gap-space12 mt-space16">
               <Button variant={'secondary'} className="!px-space40">
                 Cancel
               </Button>
-              <Button type="submit">Change Shop</Button>
+              <Button type="submit" disabled={!form.formState.isValid}>
+                Change Shop
+              </Button>
             </div>
           </form>
         </Form>
