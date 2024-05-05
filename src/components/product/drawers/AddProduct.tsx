@@ -113,7 +113,7 @@ export const AddProduct = ({
       vat_applicable: data.vat_check,
       vat_percent: Number(data.vat_percentage),
       unique_id: uuid + shopId + Date.now(),
-      selling_price: Number(data.purchase_price),
+      selling_price: Number(data.sell_price),
       updated_at: formatDate(DATE_FORMATS.default),
       unit: Number(data.unit),
     });

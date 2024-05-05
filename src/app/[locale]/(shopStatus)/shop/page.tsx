@@ -62,6 +62,7 @@ const SwitchShopPage = () => {
     };
     getShops();
   }, []);
+  console.log(shops);
 
   return (
     <div className="space-y-space16">

@@ -67,6 +67,7 @@ const formSchema = z.object({
   employee: z.string().optional(),
   date: z.date(),
   customer_address: z.string().optional(),
+  sms: z.boolean().optional(),
 });
 
 const ConfirmPayment = () => {
@@ -77,6 +78,7 @@ const ConfirmPayment = () => {
   const [customers, setCustomers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
   const tkn = getCookie('access_token');
+  const cookie = getCookie('shop');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -93,6 +95,7 @@ const ConfirmPayment = () => {
       employee_number: '',
       employee: '',
       date: new Date(),
+      sms: false,
     },
   });
 
@@ -105,11 +108,20 @@ const ConfirmPayment = () => {
   }, [calculatedProducts, form]);
 
   useEffect(() => {
+    console.log(selectedSupplier.split('-'));
+    const supplierNameArray = selectedSupplier.split('-');
+    const employeeNameArray = selectedEmployee?.split('-');
     if (selectedSupplier) {
-      form.setValue('customer_number', selectedSupplier.split('-')[1]);
+      form.setValue(
+        'customer_number',
+        supplierNameArray[supplierNameArray.length - 1]
+      );
     }
-    if (selectedEmployee) {
-      form.setValue('employee_number', selectedEmployee.split('-')[1]);
+    if (employeeNameArray) {
+      form.setValue(
+        'employee_number',
+        employeeNameArray[employeeNameArray?.length - 1]
+      );
     }
   }, [selectedSupplier, form, selectedEmployee]);
   async function onSubmit(data: z.infer<typeof formSchema>) {
@@ -158,8 +170,8 @@ const ConfirmPayment = () => {
           version: DEFAULT_STARTING_VERSION,
         });
       });
-      // closeDrawer({ open: false });
-      // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+      closeDrawer({ open: false });
+      openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
     }
     if (responseCreateSell?.error) {
       toast.error('Something went wrong');
@@ -438,14 +450,26 @@ const ConfirmPayment = () => {
 
         <DrawerFooter height="14rem" className="flex-col !gap-space12">
           <div className="flex items-center gap-space8 justify-center">
-            <Switch id="airplane-mode" />
+            <FormField
+              control={form.control}
+              name="sms"
+              render={({ field }) => (
+                <FormItem>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    id="airplane-mode"
+                  />
+                </FormItem>
+              )}
+            />
             <Text title="Send SMS" className="text-sm font-medium" />
             <Text
               variant="success"
               className="text-sm font-medium flex items-center gap-space4 bg-success-10 py-space4 px-space12 rounded-full"
             >
               <Icon icon="material-symbols:sms" />
-              SMS Balance 27
+              SMS Balance {cookie ? JSON.parse(cookie).sms_count : 0}
             </Text>
           </div>
 

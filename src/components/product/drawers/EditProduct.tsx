@@ -99,7 +99,7 @@ export const EditProduct = ({
       vat_applicable: data.vat_check,
       vat_percent: Number(data.vat_percentage),
       unique_id: product.unique_id,
-      selling_price: Number(data.purchase_price),
+      selling_price: Number(data.sell_price),
       unit: Number(data.unit),
     });
     if (res?.success) {

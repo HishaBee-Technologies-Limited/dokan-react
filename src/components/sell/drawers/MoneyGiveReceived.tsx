@@ -493,14 +493,26 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
 
           <DrawerFooter height="14rem" className="flex-col !gap-space12">
             <div className="flex items-center gap-space8 justify-center">
-              <Switch id="airplane-mode" />
+              <FormField
+                control={form.control}
+                name="sms"
+                render={({ field }) => (
+                  <FormItem>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      id="sms"
+                    />
+                  </FormItem>
+                )}
+              />
               <Text title="Send SMS" className="text-sm font-medium" />
               <Text
                 variant="success"
                 className="text-sm font-medium flex items-center gap-space4 bg-success-10 dark:bg-primary-80 py-space4 px-space12 rounded-full"
               >
                 <Icon icon="material-symbols:sms" />
-                SMS Balance 27
+                SMS Balance {cookie ? JSON.parse(cookie).sms_count : 0}
               </Text>
             </div>
 

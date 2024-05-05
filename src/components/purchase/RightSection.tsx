@@ -10,12 +10,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePurchaseStore } from '@/stores/usePurchase';
 import { ArrowForwardIcon } from '@/components/common/icons';
 
-import ProductSellCalculation from '@/components/sell/ProductSellCalculation';
+// import ProductSellCalculation from '@/components//ProductSellCalculation';
 import { ScrollArea } from '../ui/scroll-area';
 import { IProductState, usePurchase } from '@/stores/usePurchaseStore';
 import { IProduct } from '@/types/product';
 import { PurchaseEnum } from '@/enum/purchase';
 import ProductFiledRow, { IProductPurchase } from './ProductFiledRow';
+import ProductSellCalculation from './ProductSellCalculation';
 
 const formSchema = z.object({
   quantity: z.string(),

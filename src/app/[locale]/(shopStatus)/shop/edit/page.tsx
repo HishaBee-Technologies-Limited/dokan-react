@@ -112,7 +112,7 @@ const EditShopPage = () => {
       const res = await getAreasAndTypes();
       if (res?.success) {
         setDivisions(res?.data?.areaData);
-        setTypes(res?.data?.typesData);
+        setTypes(res?.data?.typesData.data);
       }
     };
     getAllAreasAndTypes();
@@ -435,7 +435,7 @@ const EditShopPage = () => {
               Cancel
             </Button>
             <Button type="submit" disabled={!form.formState.isValid}>
-              Change Shop
+              Edit Shop Info
             </Button>
           </div>
         </form>

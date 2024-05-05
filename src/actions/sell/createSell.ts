@@ -4,6 +4,7 @@ import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
 import { IProductPurchasePayload } from '@/types/purchase';
 import { IProductSellPayload } from '@/types/sell';
+import { revalidatePath } from 'next/cache';
 
 export const createSell = async ({
   created_at,
@@ -64,6 +65,7 @@ export const createSell = async ({
 
     const res = await authApi.post(`/transaction`, payload);
     const data = await res.json();
+    revalidatePath('/sell/history');
 
     if (res.ok) {
       return {

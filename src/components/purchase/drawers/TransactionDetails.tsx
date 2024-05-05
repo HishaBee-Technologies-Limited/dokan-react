@@ -1,5 +1,5 @@
 import { SellEnum } from '@/enum/sell';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/common/Image';
@@ -18,6 +18,8 @@ import { calculateTotal, formatDate, percentage } from '@/lib/utils';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { format } from 'date-fns';
 import { PAYMENT_STATUS } from '@/lib/constants/purchase';
+import { authApi } from '@/lib/api';
+import { getPurchaseItems } from '@/actions/purchase/getPurchaseItems';
 
 const productList = [
   {
@@ -66,6 +68,18 @@ const TransactionDetails = () => {
       )
     );
   }, [currentPurchase]);
+
+  useEffect(() => {
+    const getPurchaseProducts = async () => {
+      const res = await getPurchaseItems(
+        currentPurchase?.unique_id ? currentPurchase?.unique_id : ''
+      );
+      console.log(res);
+    };
+    getPurchaseProducts();
+  }, [currentPurchase]);
+
+  console.log(currentPurchase);
 
   return (
     <div className="space-y-space12">
