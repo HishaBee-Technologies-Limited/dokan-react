@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { DISCOUNT_TYPE } from '@/lib/constants/product';
 import { calculateGrandTotal } from '@/lib/utils';
-import { usePurchase } from '@/stores/usePurchaseStore';
+import { useSellStore } from '@/stores/useSellStore';
 
 type IProps = {
   form: UseFormReturn<any>;
@@ -22,7 +22,7 @@ type IProps = {
 
 const ProductSellCalculation = (props: IProps) => {
   const { form } = props;
-  const productList = usePurchase((state) => state.products);
+  const productList = useSellStore((state) => state.products);
 
   /**
    * values reading from the hook form

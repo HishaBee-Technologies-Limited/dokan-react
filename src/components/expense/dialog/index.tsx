@@ -9,20 +9,21 @@ import ExpenseDetails from '@/components/expense/dialog/ExpenseDetails';
 import AddNewCategory from '@/components/expense/dialog/AddNewCategory';
 import DeleteTransaction from '@/components/expense/dialog/DeleteTransaction';
 import DeleteExpenseCategory from '@/components/expense/dialog/DeleteExpenseCategory';
+import { IExpense } from '@/types/expense';
 
-const ExpenseDialogs = () => {
+const ExpenseDialogs = ({ expense }: { expense: IExpense }) => {
   const dialogState = useExpenseStore((state) => state.expenseDialogState);
   const handleClose = useExpenseStore((state) => state.setExpenseDialogState);
 
   const renderedDrawers = (activeDialog: string | undefined) => {
     if (ExpenseEnum.EXPENSE_DETAILS === activeDialog) {
-      return <ExpenseDetails />;
+      return <ExpenseDetails expense={expense} />;
     } else if (ExpenseEnum.ADD_NEW_CATEGORY === activeDialog) {
       return <AddNewCategory />;
     } else if (ExpenseEnum.EDIT_CATEGORY === activeDialog) {
       return <EditCategory />;
     } else if (ExpenseEnum.DELETE_TRANSACTION === activeDialog) {
-      return <DeleteTransaction />;
+      return <DeleteTransaction expense={expense} />;
     } else if (ExpenseEnum.DELETE_EXPENSE_CATEGORY === activeDialog) {
       return <DeleteExpenseCategory />;
     }

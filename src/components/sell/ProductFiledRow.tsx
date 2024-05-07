@@ -15,6 +15,7 @@ import {
 import { IProduct } from '@/types/product';
 import { DEFAULT_PRODUCT_QUANTITY } from '@/lib/constants/purchase';
 import { usePurchase } from '@/stores/usePurchaseStore';
+import { useSellStore } from '@/stores/useSellStore';
 
 export interface IProductPurchase extends IProduct {
   calculatedAmount?: { quantity: number; total: number };
@@ -26,8 +27,8 @@ type IProps = {
 };
 
 const ProductFiledRow = (props: IProps) => {
-  const setProducts = usePurchase((state) => state.setProducts);
-  const products = usePurchase((state) => state.products);
+  const setProducts = useSellStore((state) => state.setProducts);
+  const products = useSellStore((state) => state.products);
 
   /**
    * This watch controls the onchange calculation on the viewport

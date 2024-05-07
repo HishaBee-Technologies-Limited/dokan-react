@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { SellEnum } from '@/enum/sell';
+import { IUserResponse } from '@/types/contact/partyResponse';
 
 const cashType = [
   { value: 'cash', label: 'নগদ টাকা' },
@@ -45,7 +46,7 @@ const formSchema = z.object({
   cash_type: z.string(),
 });
 
-const QuickSellEdit = () => {
+const QuickSellEdit = ({ customers }: { customers?: IUserResponse[] }) => {
   const closeDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 

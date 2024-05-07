@@ -34,13 +34,14 @@ import {
   WARRANTY_TYPE,
 } from '@/lib/constants/product';
 import { createProductOrUpdate } from '@/actions/product/createProductOrUpdate';
-import { format } from 'date-fns';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFileUpload } from '@/hooks/uploadMultipleFile';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { formatDate } from '@/lib/utils';
+import { useProductStore } from '@/stores/useProductStore';
+import { toast } from 'sonner';
 
 export const AddProduct = ({
   units,
@@ -76,6 +77,7 @@ export const AddProduct = ({
   const router = useRouter();
   const [selectedFiles, setSelectedFiles] = useState<FileList>();
   const [imageUrls, loading] = useFileUpload(selectedFiles);
+  const handleClose = useProductStore((state) => state.setDrawerState);
 
   const shopId = getCookie('shopId');
   const uuid = uuidv4();
@@ -111,14 +113,20 @@ export const AddProduct = ({
       vat_applicable: data.vat_check,
       vat_percent: Number(data.vat_percentage),
       unique_id: uuid + shopId + Date.now(),
-      selling_price: Number(data.purchase_price),
+      selling_price: Number(data.sell_price),
       updated_at: formatDate(DATE_FORMATS.default),
       unit: Number(data.unit),
     });
     if (res?.success) {
+      toast.success('Product added');
+      handleClose({ open: false });
       router.refresh();
     }
-    console.log(res);
+    if (res?.error) {
+      toast.error('Something went wrong');
+
+      handleClose({ open: false });
+    }
   }
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {

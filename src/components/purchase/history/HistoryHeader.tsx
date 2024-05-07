@@ -41,10 +41,10 @@ const HistoryHeader = () => {
             </div>
           </SelectContent>
         </Select> */}
-        <Button variant={'secondary'} className="hidden sm:flex">
+        {/* <Button variant={'secondary'} className="hidden sm:flex">
           <DownloadIcon />
           PDF Download
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

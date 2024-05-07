@@ -14,6 +14,7 @@ export interface IProductState {
     discountType?: string;
     date?: string;
     paymentAmount?: number;
+    due?: number;
   };
   currentPurchase?: IPurchaseHistoryResponse;
 }

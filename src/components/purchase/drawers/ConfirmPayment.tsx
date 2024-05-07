@@ -32,7 +32,6 @@ import { getCookie } from 'cookies-next';
 import { IUserResponse } from '@/types/contact/partyResponse';
 import { getAllEmployee } from '@/actions/contacts/getAllEmployee';
 import { createPurchase } from '@/actions/purchase/createPurchase';
-import { IProductPurchasePayload } from '@/types/purchase';
 import {
   Popover,
   PopoverContent,
@@ -68,6 +67,7 @@ const formSchema = z.object({
   employee_number: z.string().optional(),
   employee: z.string().optional(),
   date: z.date(),
+  sms: z.boolean().optional(),
 });
 
 const ConfirmPayment = () => {
@@ -77,6 +77,10 @@ const ConfirmPayment = () => {
   const [suppliers, setSuppliers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
   const tkn = getCookie('access_token');
+  const setCalculatedProducts = usePurchase(
+    (state) => state.setCalculatedProducts
+  );
+  const cookie = getCookie('shop');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -93,6 +97,7 @@ const ConfirmPayment = () => {
       employee_number: '',
       employee: '',
       date: new Date(),
+      sms: false,
     },
   });
 
@@ -103,12 +108,21 @@ const ConfirmPayment = () => {
       form.setValue('amount', String(calculatedProducts.totalPrice));
     }
   }, [calculatedProducts, form]);
+
   useEffect(() => {
-    if (selectedSupplier) {
-      form.setValue('supplier_number', selectedSupplier.split('-')[1]);
+    const supplierNameArray = selectedSupplier.split('-');
+    const employeeNameArray = selectedEmployee?.split('-');
+    if (supplierNameArray) {
+      form.setValue(
+        'supplier_number',
+        supplierNameArray[supplierNameArray.length - 1]
+      );
     }
-    if (selectedEmployee) {
-      form.setValue('employee_number', selectedEmployee.split('-')[1]);
+    if (employeeNameArray) {
+      form.setValue(
+        'employee_number',
+        employeeNameArray[employeeNameArray.length - 1]
+      );
     }
   }, [selectedSupplier, form, selectedEmployee]);
 
@@ -138,15 +152,16 @@ const ConfirmPayment = () => {
     });
 
     if (responseCreatePurchase?.success) {
+      console.log(responseCreatePurchase);
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
-          created_at: formatDate(DATE_FORMATS.default),
+          created_at: formatDate(DATE_FORMATS.default, data.date),
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
-
-          purchase_unique_id: responseCreatePurchase.data.unique_id,
+          purchase_id: responseCreatePurchase.data.data.id,
+          purchase_unique_id: responseCreatePurchase.data.data.unique_id,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,
@@ -156,13 +171,16 @@ const ConfirmPayment = () => {
           version: DEFAULT_STARTING_VERSION,
         });
       });
+      setCalculatedProducts({
+        ...calculatedProducts,
+        paymentAmount: Number(data.amount),
+        date: formatDate(DATE_FORMATS.default, data.date),
+      });
       closeDrawer({ open: false });
       openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
     }
     if (responseCreatePurchase?.error) {
       toast.error('Something went wrong');
-
-      console.log('error-------', responseCreatePurchase?.error);
     }
   }
 
@@ -189,11 +207,6 @@ const ConfirmPayment = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
-        {/* <DatePicker
-          onChange={() => {}}
-          contentAlign={'center'}
-          triggerClasses={'w-full justify-center'}
-        /> */}
         <FormField
           control={form.control}
           name="date"
@@ -436,14 +449,26 @@ const ConfirmPayment = () => {
 
         <DrawerFooter height="14rem" className="flex-col !gap-space12">
           <div className="flex items-center gap-space8 justify-center">
-            <Switch id="airplane-mode" />
+            <FormField
+              control={form.control}
+              name="sms"
+              render={({ field }) => (
+                <FormItem>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    id="airplane-mode"
+                  />
+                </FormItem>
+              )}
+            />
             <Text title="Send SMS" className="text-sm font-medium" />
             <Text
               variant="success"
               className="text-sm font-medium flex items-center gap-space4 bg-success-10 py-space4 px-space12 rounded-full"
             >
               <Icon icon="material-symbols:sms" />
-              SMS Balance 27
+              SMS Balance {cookie ? JSON.parse(cookie).sms_count : 0}
             </Text>
           </div>
 

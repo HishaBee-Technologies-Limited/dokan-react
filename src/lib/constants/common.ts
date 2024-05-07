@@ -1,5 +1,7 @@
 export const DATE_FORMATS = {
   default: 'yyyy-MM-dd HH:mm:ss',
+  dateWithOutTime: 'yyyy-MM-dd',
+  dateOnlyTime: 'HH:mm:ss',
 };
 
 export enum PAYMENT_METHODS {
@@ -23,4 +25,9 @@ export const PAYMENT_METHOD_NAMES = {
 export enum PAYMENT_STATUS {
   'PAID' = 'PAID',
   'UNPAID' = 'UNPAID',
+}
+
+export enum TRANSACTION_TYPE {
+  'PRODUCT_SELL' = 'PRODUCT_SELL',
+  'QUICK_SELL' = 'QUICK_SELL',
 }

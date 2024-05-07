@@ -31,33 +31,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { generateQueryString } from '@/lib/queryString';
 import { usePurchase } from '@/stores/usePurchaseStore';
 
-const invoices = [
-  {
-    id: '#9875834',
-    item: '2 items',
-    contact: 'Md. Ariful Islam',
-    amount: '৳200',
-    date: '23 May 2023',
-    transactionType: 'buy',
-  },
-  {
-    id: '#9895834',
-    item: '2 items',
-    contact: 'Md. Ariful Islam',
-    amount: '৳200',
-    date: '23 May 2023',
-    transactionType: 'due',
-  },
-  {
-    id: '#9895894',
-    item: '2 items',
-    contact: 'Md. Ariful Islam',
-    amount: '৳200',
-    date: '23 May 2023',
-    transactionType: 'buy',
-  },
-];
-
 const HistoryTable = ({
   purchaseHistory,
 }: {

@@ -23,6 +23,9 @@ const ContactPage = async ({
   searchParams,
 }: IContactProps) => {
   const shopId = cookies().get('shopId')?.value;
+  let customerDetails;
+  let supplierDetails;
+  let employeeDetails;
 
   const tab = searchParams.tab?.split('-')[0];
   const userID = searchParams.active_user?.split('-')[0];
@@ -30,10 +33,12 @@ const ContactPage = async ({
   const customers = await getAllCustomer(Number(shopId));
   const suppliers = await getAllSupplier(Number(shopId));
   const employees = await getAllEmployee(Number(shopId));
-  const customerDetails = await getSingleCustomer(Number(userID));
-  const supplierDetails = await getSingleSupplier(Number(userID));
-  const employeeDetails = await getSingleEmployee(Number(userID));
-
+  if (userID) {
+    customerDetails = await getSingleCustomer(Number(userID));
+    supplierDetails = await getSingleSupplier(Number(userID));
+    employeeDetails = await getSingleEmployee(Number(userID));
+  }
+  console.log(supplierDetails);
   const userList =
     tab === ContactType.CUSTOMER
       ? customers?.data

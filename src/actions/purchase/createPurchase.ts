@@ -4,6 +4,7 @@ import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
 import { IProductPayload } from '@/types/product';
 import { IProductPurchasePayload } from '@/types/purchase';
+import { revalidatePath } from 'next/cache';
 
 export const createPurchase = async ({
   batch,
@@ -59,6 +60,7 @@ export const createPurchase = async ({
 
     const res = await authApi.post(`/purchase`, payload);
     const data = await res.json();
+    revalidatePath('/purchase/history');
 
     if (res.ok) {
       return {

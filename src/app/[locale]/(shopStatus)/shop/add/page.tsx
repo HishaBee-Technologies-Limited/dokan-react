@@ -85,7 +85,7 @@ const AddShopPage = () => {
     const getAllAreas = async () => {
       const res = await getAreasAndTypes();
       setDivisions(res?.data?.areaData);
-      setTypes(res?.data?.typesData);
+      setTypes(res?.data?.typesData.data);
     };
     getAllAreas();
   }, []);

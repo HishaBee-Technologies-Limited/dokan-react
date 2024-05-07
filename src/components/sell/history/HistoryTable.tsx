@@ -21,6 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { ICommonGetResponse } from '@/types/common';
+import { IPurchaseHistoryResponse } from '@/types/purchase';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import Pagination from '@/components/common/CustomPagination';
 
 const invoices = [
   {
@@ -49,14 +54,23 @@ const invoices = [
   },
 ];
 
-const HistoryTable = () => {
+const HistoryTable = ({
+  transactions,
+}: {
+  transactions?: ICommonGetResponse<IPurchaseHistoryResponse>;
+}) => {
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
   const setSellDetails = useSellStore((state) => state.setSellDetails);
 
-  const handleRowClick = (row: any) => {
-    setSellDetails(row);
+  const pathname = usePathname();
+  const router = useRouter();
+  const { setQueryString } = useCreateQueryString();
+  const setCurrentPurchase = useSellStore((state) => state.setCurrentSell);
+  const handleRowClick = (row: IPurchaseHistoryResponse) => {
     handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_DETAILS });
+    console.log(row);
+    setCurrentPurchase(row);
   };
 
   const handleEditClick = (item: any) => {
@@ -72,7 +86,7 @@ const HistoryTable = () => {
   ): 'warning' | 'success' | 'error' => {
     if (type === 'quick sell') {
       return 'warning';
-    } else if (type === 'sell') {
+    } else if (type !== 'UNPAID') {
       return 'success';
     } else {
       return 'error';
@@ -81,7 +95,7 @@ const HistoryTable = () => {
   const transactionTypeTextBG = (type: string): string => {
     if (type === 'quick sell') {
       return 'bg-warning-20';
-    } else if (type === 'sell') {
+    } else if (type !== 'UNPAID') {
       return 'bg-success-20';
     } else {
       return 'bg-error-20';
@@ -104,18 +118,23 @@ const HistoryTable = () => {
         </TableHeader>
 
         <TableBody>
-          {invoices.map((item, i) => (
-            <TableRow key={item.id} onClick={() => handleRowClick(item)}>
-              <TableCell>{item.id}</TableCell>
-              <TableCell>{item.item}</TableCell>
-              <TableCell>{item.contact}</TableCell>
-              <TableCell>{item.amount}</TableCell>
-              <TableCell>{item.date}</TableCell>
+          {transactions?.data?.map((transaction, i) => (
+            <TableRow
+              key={transaction.id}
+              onClick={() => handleRowClick(transaction)}
+            >
+              <TableCell>{transaction.id}</TableCell>
+              <TableCell>{transaction.total_item}</TableCell>
+              <TableCell>{transaction.supplier_name}</TableCell>
+              <TableCell>{transaction.total_price}</TableCell>
+              <TableCell>{transaction.updated_at}</TableCell>
               <TableCell>
                 <Text
-                  title={item.transactionType}
-                  variant={transactionTypeTextVariant(item.transactionType)}
-                  className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(item.transactionType)}`}
+                  title={transaction.payment_status}
+                  variant={transactionTypeTextVariant(
+                    transaction.payment_status
+                  )}
+                  className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(transaction.payment_status)}`}
                 />
               </TableCell>
               <TableCell className={`text-right`}>
@@ -144,7 +163,7 @@ const HistoryTable = () => {
                         className="w-full justify-start"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleEditClick(item);
+                          handleEditClick(transaction);
                         }}
                       >
                         <EditIcon />
@@ -184,6 +203,22 @@ const HistoryTable = () => {
         </TableFooter>
       </Table>
       <ScrollBar orientation="horizontal" />
+      <Pagination
+        pageCount={
+          transactions?.data.length === 0
+            ? transactions?.last_page
+            : transactions
+              ? Math.ceil(
+                  transactions?.total ?? 0 / transactions?.per_page ?? 0
+                )
+              : 0
+        }
+        currentPage={transactions?.current_page ?? 0}
+        lastPage={transactions?.last_page ?? 0}
+        onChanage={(page) => {
+          router.push(`${pathname}?${setQueryString('page', page)}`);
+        }}
+      />
     </ScrollArea>
   );
 };

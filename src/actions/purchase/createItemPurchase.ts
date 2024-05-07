@@ -43,6 +43,8 @@ export const createItemPurchase = async ({
       version,
     };
 
+    console.log(payload);
+
     const res = await authApi.post(`/purchase_item`, payload);
     const data = await res.json();
 

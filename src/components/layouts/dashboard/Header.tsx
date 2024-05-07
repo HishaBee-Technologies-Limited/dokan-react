@@ -17,8 +17,11 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { logout } from '@/actions/logout';
+import { getCookies } from 'cookies-next';
 
 const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
+  const cookies = getCookies();
+  console.log(cookies);
   return (
     <header className="sticky top-0 bg-white dark:bg-primary-90 shadow-sm z-40">
       <nav className="h-[7.2rem] flex justify-between items-center gap-2 border-b border-primary-10 dark:border-primary-80 py-space12 px-space16">
@@ -78,7 +81,13 @@ const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
                             <DropdownMenuItem>Team</DropdownMenuItem>
                             <DropdownMenuItem>Subscription</DropdownMenuItem> */}
               <DropdownMenuItem asChild>
-                <div onClick={() => logout()} className="w-full cursor-pointer">
+                <div
+                  onClick={() => {
+                    console.log(getCookies());
+                    logout();
+                  }}
+                  className="w-full cursor-pointer"
+                >
                   Logout
                 </div>
               </DropdownMenuItem>

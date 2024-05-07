@@ -7,14 +7,10 @@ import { Image } from '@/components/common/Image';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ProductListQueries from '@/components/sell/ProductListQueries';
 import { IProduct } from '@/types/product';
-import { useCreateQueryString } from '@/hooks/useCreateQueryString';
-import { usePathname, useRouter } from 'next/navigation';
+
 import { usePurchase } from '@/stores/usePurchaseStore';
 
 export const LeftSection = ({ productData }: { productData: any }) => {
-  const { setQueryString } = useCreateQueryString();
-  const pathname = usePathname();
-  const router = useRouter();
   const setProducts = usePurchase((state) => state.setProducts);
   const products = usePurchase((state) => state.products);
   return (

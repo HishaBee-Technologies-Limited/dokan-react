@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
@@ -10,7 +9,7 @@ import { Text } from '@/components/common/text';
 import { Image } from '@/components/common/Image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DrawerFooter } from '@/components/common/Drawer';
-import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'sonner';
 
 import {
   Select,
@@ -27,22 +26,17 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
-import { IProduct, IProductPayload, IUnits } from '@/types/product';
+import { IProduct, IUnits } from '@/types/product';
 import { ProductFormDef, ProductSchema } from '@/schemas/products';
 import { useRouter } from 'next/navigation';
-import { getCookie } from 'cookies-next';
 import { createProductOrUpdate } from '@/actions/product/createProductOrUpdate';
-import {
-  DEFAULT_STARTING_VERSION,
-  DISCOUNT_TYPE,
-  WARRANTY_TYPE,
-} from '@/lib/constants/product';
-import { format } from 'date-fns';
-import { filesUpload } from '@/actions/upload';
+import { DISCOUNT_TYPE, WARRANTY_TYPE } from '@/lib/constants/product';
+
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFileUpload } from '@/hooks/uploadMultipleFile';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { formatDate } from '@/lib/utils';
+import { useProductStore } from '@/stores/useProductStore';
 
 export const EditProduct = ({
   product,
@@ -63,6 +57,7 @@ export const EditProduct = ({
   const [initialSubCategory, setInitialSubCategory] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<FileList>();
   const [imageUrls, loading, saveImageUrls] = useFileUpload(selectedFiles);
+  const handleClose = useProductStore((state) => state.setDrawerState);
 
   const selectedCategory = form.watch('category');
   const category = useMemo(() => {
@@ -104,12 +99,18 @@ export const EditProduct = ({
       vat_applicable: data.vat_check,
       vat_percent: Number(data.vat_percentage),
       unique_id: product.unique_id,
-      selling_price: Number(data.purchase_price),
+      selling_price: Number(data.sell_price),
       unit: Number(data.unit),
     });
-    console.log(res);
     if (res?.success) {
+      toast.success('Product added');
+      handleClose({ open: false });
       router.refresh();
+    }
+    if (res?.error) {
+      toast.error('Something went wrong');
+
+      handleClose({ open: false });
     }
   }
 

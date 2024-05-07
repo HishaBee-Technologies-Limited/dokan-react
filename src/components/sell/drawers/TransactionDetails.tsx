@@ -1,5 +1,5 @@
 import { SellEnum } from '@/enum/sell';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/common/Image';
@@ -12,6 +12,10 @@ import {
   EditIcon,
   ExpandMoreIcon,
 } from '@/components/common/icons';
+import { calculateTotal } from '@/lib/utils';
+import { PAYMENT_STATUS } from '@/lib/constants/common';
+import { getTransactionItems } from '@/actions/sell/getTransactionItems';
+import { IPurchaseProducts } from '@/types/purchase';
 
 const productList = [
   {
@@ -43,9 +47,25 @@ const productList = [
 const TransactionDetails = () => {
   const [accordion, setAccordion] = useState<boolean>(false);
   const transactionDetails = useSellStore((state) => state.sellDetails);
+  const [purchaseProducts, setPurchaseProducts] = useState<IPurchaseProducts>();
 
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
+  const currentPurchase = useSellStore((state) => state.currentSell);
+
+  const total = useMemo(() => {
+    return (
+      currentPurchase?.total_price &&
+      Math.round(
+        calculateTotal(
+          currentPurchase?.total_price,
+          currentPurchase?.extra_charge ?? 0,
+          currentPurchase?.discount ?? 0,
+          currentPurchase?.discount_type
+        ) ?? 0
+      )
+    );
+  }, [currentPurchase]);
 
   const handleEditClick = () => {
     if (transactionDetails.transactionType === 'quick sell') {
@@ -55,36 +75,53 @@ const TransactionDetails = () => {
     }
   };
 
+  useEffect(() => {
+    const getPurchaseProducts = async () => {
+      const res = await getTransactionItems({
+        id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
+      });
+      console.log(res, currentPurchase);
+      if (res?.success) {
+        setPurchaseProducts(res?.data.data);
+      }
+    };
+    getPurchaseProducts();
+  }, [currentPurchase]);
+
   return (
     <div className="space-y-space12">
       <section className="bg-secondary rounded-lg p-space12 space-y-space16 ">
         <Text title="Total Item: 03" className="font-semibold" />
 
-        <div className="flex items-center gap-space8">
-          <Text title="Customer" />
-          <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
-            <FallBackImage
-              src=""
-              fallback="M"
-              className="w-space24 h-space24 mr-space8"
-            />
-            <span> মতিউর রহমান</span>
+        {currentPurchase?.supplier_name && (
+          <div className="flex items-center gap-space8">
+            <Text title="Customer" />
+            <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
+              <FallBackImage
+                src=""
+                fallback="M"
+                className="w-space24 h-space24 mr-space8"
+              />
+              <span> {currentPurchase?.supplier_name}</span>
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-space8">
-          <Text title="Employee" />
-          <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
-            <FallBackImage
-              src=""
-              fallback="M"
-              className="w-space24 h-space24 mr-space8"
-            />
-            <span> মতি ভাই</span>
+        )}
+        {currentPurchase?.employee_name && (
+          <div className="flex items-center gap-space8">
+            <Text title="Employee" />
+            <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
+              <FallBackImage
+                src=""
+                fallback="M"
+                className="w-space24 h-space24 mr-space8"
+              />
+              <span> {currentPurchase.employee_name}</span>
+            </div>
           </div>
-        </div>
+        )}
 
         <Text
-          title={`Transaction date  2/3/2023  |  12:30pm `}
+          title={`Transaction date  ${currentPurchase?.created_at} `}
           className="font-semibold"
         />
       </section>
@@ -94,40 +131,49 @@ const TransactionDetails = () => {
           <Text title="Payment: ৳ 1,200" className="text-lg font-semibold" />
 
           <article className="flex gap-space8">
-            <Text
-              title="Due"
-              className="text-sm !text-white uppercase px-space8 py-space4 rounded-md bg-error-100"
-            />
-            <Text
-              title="Cash"
-              className="text-sm !text-white uppercase px-space8 py-space4 rounded-md bg-blue-500"
-            />
+            {currentPurchase?.payment_status === PAYMENT_STATUS.UNPAID ? (
+              <Text
+                title="Due"
+                className="text-sm !text-white uppercase px-space8 py-space4 rounded-md bg-error-100"
+              />
+            ) : (
+              <Text
+                title="Cash"
+                className="text-sm !text-white uppercase px-space8 py-space4 rounded-md bg-blue-500"
+              />
+            )}
           </article>
         </article>
 
         <article className="flex justify-between items-center gap-space8">
           <Text title="Total" />
-          <Text title="৳ 1180" />
+          <Text title={`৳ ${total ?? 0}`} />
         </article>
         <article className="flex justify-between items-center gap-space8">
           <Text title="Delivery Charge" />
-          <Text title="৳ 1180" />
+          <Text title={`৳ ${currentPurchase?.extra_charge ?? 0}`} />
         </article>
         <article className="flex justify-between items-center gap-space8">
           <Text title="Discount" />
-          <Text title="৳ 1180" />
+          {currentPurchase?.discount_type === 'PERCENT' ? (
+            <Text title={`${currentPurchase?.discount ?? 0}%`} />
+          ) : (
+            <Text title={`৳ ${currentPurchase?.discount ?? 0}`} />
+          )}
         </article>
-        <article className="flex justify-between items-center gap-space8">
+        {/* <article className="flex justify-between items-center gap-space8">
           <Text title="Due" />
           <Text title="৳ 1180" />
-        </article>
+        </article> */}
 
         <article className="flex justify-between items-center gap-space8 border-t border-color pt-space12">
           <Text title="Grand Total" className="text-lg font-semibold" />
-          <Text title="৳ 1260" className="text-lg font-semibold" />
+          <Text
+            title={`৳ ${currentPurchase?.total_price}`}
+            className="text-lg font-semibold"
+          />
         </article>
       </article>
-
       <section>
         <div
           onClick={() => setAccordion(!accordion)}
@@ -137,46 +183,54 @@ const TransactionDetails = () => {
 
           <ExpandMoreIcon />
         </div>
+        <Text title="Sold Products" className="text-lg font-medium" />
 
-        <div
-          className={`grid ${accordion ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} duration-500`}
-        >
-          <WrapperOddList className={`overflow-hidden`}>
-            {productList.map((product) => (
-              <div key={product.id} className="rounded p-space8">
+        <div className={`grid 'grid-rows-[1fr]'`}>
+          {purchaseProducts?.transaction_items &&
+            purchaseProducts?.transaction_items.map((product) => (
+              <div key={product.unique_id} className="rounded p-space8">
                 <div className="flex items-center gap-space8">
-                  <Image src={product.img} height={32} width={32} alt="" />
+                  <Image
+                    src={product.product.image_url}
+                    height={32}
+                    width={32}
+                    alt=""
+                  />
 
                   <Text title={product.name} />
                 </div>
 
                 <article className="flex flex-wrap justify-between gap-space8 pl-space40">
                   <Text>
-                    Sell: <span className="font-semibold">5</span>
+                    Quantity:{' '}
+                    <span className="font-semibold">{product.quantity}</span>
                   </Text>
                   <Text>
-                    Unit Price: <span className="font-semibold">5</span>
+                    Unit Price:{' '}
+                    <span className="font-semibold">
+                      {product.product.cost_price}
+                    </span>
                   </Text>
                   <Text>
-                    Total: <span className="font-semibold">5</span>
+                    Total:{' '}
+                    <span className="font-semibold">{product.price}</span>
                   </Text>
                 </article>
               </div>
             ))}
-          </WrapperOddList>
         </div>
       </section>
+      {currentPurchase?.note && (
+        <article className="space-y-space8">
+          <Text title="Notes" />
 
-      <article className="space-y-space8">
-        <Text title="Notes" />
-
-        <Text
-          title="This is a sample note for sample things"
-          variant="secondary"
-          className="text-lg"
-        />
-      </article>
-
+          <Text
+            title={currentPurchase.note}
+            variant="secondary"
+            className="text-lg"
+          />
+        </article>
+      )}
       <div className="grid grid-cols-2 gap-space16">
         <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
           <Image
@@ -199,7 +253,6 @@ const TransactionDetails = () => {
           <Text title="Share receipt " className="text-sm font-medium" />
         </Button>
       </div>
-
       <DrawerFooter>
         <Button
           className="w-full"
@@ -213,7 +266,15 @@ const TransactionDetails = () => {
         >
           <DeleteIcon color="#fff" /> Delete
         </Button>
-        <Button onClick={handleEditClick} className="w-full">
+        <Button
+          className="w-full"
+          onClick={() =>
+            handleDrawerOpen({
+              open: true,
+              header: SellEnum.TRANSACTION_EDIT,
+            })
+          }
+        >
           <EditIcon /> Edit
         </Button>
       </DrawerFooter>

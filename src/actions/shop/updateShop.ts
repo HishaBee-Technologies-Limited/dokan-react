@@ -10,11 +10,19 @@ export const updateShop = async ({
   address,
   name,
   number,
+  shop_image,
 }: shopPayload) => {
   try {
-    const res = await authApi.get(
-      `/shop/edit?shop_id=${shopId}&name=${name}&type=${type}&address=${address}&public_number=${number}&area=${area}`
-    );
+    const payload = {
+      shop_id: shopId,
+      area,
+      type,
+      address,
+      name,
+      number,
+      shop_image,
+    };
+    const res = await authApi.put(`/shop/edit/${shopId}`, payload);
     const data = await res.json();
 
     if (res.ok) {
@@ -25,6 +33,7 @@ export const updateShop = async ({
       };
     }
     if (!res.ok) {
+      console.log(data);
       return { success: false, error: data };
     }
   } catch {

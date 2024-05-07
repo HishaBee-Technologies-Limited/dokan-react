@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
 import { ExpenseEnum } from '@/enum/expense';
@@ -25,21 +25,49 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import { ICommonGetResponse } from '@/types/common';
+import { ICategory } from '@/types/expense';
+import { useFileUpload } from '@/hooks/uploadMultipleFile';
+import { format } from 'date-fns';
+import { cn, formatDate, generateUlid } from '@/lib/utils';
+import { DATE_FORMATS } from '@/lib/constants/common';
+import { toast } from 'sonner';
+import { getCategories } from '@/actions/category/getCategories';
+import { DEFAULT_MIN_VERSION } from 'tls';
+import { addExpense } from '@/actions/expense/addExpense';
+import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Image } from '@/components/common/Image';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   category_name: z.string().min(2, {
     message: 'this field is required.',
   }),
-  amount: z.string().max(11).min(11, {
-    message: 'this field is required.',
-  }),
+  amount: z.string(),
   reason: z.string(),
   details: z.string(),
   images: z.string(),
+  image_changed: z.boolean().optional(),
+  date: z.date(),
 });
 
 const AddExpense = () => {
+  const router = useRouter();
+
   const closeDrawer = useExpenseStore((state) => state.setExpenseDrawerState);
+  const [categories, setCategories] = useState<
+    ICommonGetResponse<ICategory> | undefined
+  >();
+  const [selectedFiles, setSelectedFiles] = useState<FileList>();
+  const [imageUrls, loading] = useFileUpload(selectedFiles);
   const handleAddNewCategory = useExpenseStore(
     (state) => state.setExpenseDialogState
   );
@@ -55,19 +83,101 @@ const AddExpense = () => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     closeDrawer({ open: false });
     console.log('data------------', data);
+
+    const res = await addExpense({
+      type: data.category_name,
+      amount: Number(data.amount),
+      details: data.details,
+      purpose: data.reason,
+      image: data.images ?? '',
+      created_at: format(data.date, DATE_FORMATS.default),
+      updated_at: formatDate(DATE_FORMATS.default),
+      version: DEFAULT_STARTING_VERSION,
+      unique_id: generateUlid(),
+    });
+
+    console.log('expense------------', res);
+    if (res?.success) {
+      router.refresh();
+      toast.success('Edited Successfully');
+      closeDrawer({ open: false });
+    }
+
+    if (res?.error) {
+      toast.error('Something went wrong');
+
+      console.log('error-------', res?.error);
+    }
   }
+
+  useEffect(() => {
+    //get categories
+    const fetchCategories = async () => {
+      const res = await getCategories();
+      console.log(res);
+      if (res?.success) {
+        setCategories(res?.data);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    const selectedFiles = files as FileList;
+    setSelectedFiles(selectedFiles);
+  };
+  console.log(imageUrls);
+  useEffect(() => {
+    form.setValue('images', imageUrls[0]);
+  }, [imageUrls]);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
-        <DatePicker
-          presets
-          onChange={() => {}}
-          contentAlign={'center'}
-          triggerClasses={'w-full justify-center'}
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date of Expense</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'w-[240px] pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, 'PPP')
+                      ) : (
+                        <span>Pick a Date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    initialFocus
+                    className="bg-white"
+                    weekStartsOn={0}
+                  />
+                </PopoverContent>
+              </Popover>
+
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
         <FormField
@@ -86,9 +196,12 @@ const AddExpense = () => {
                 </FormControl>
                 <SelectContent>
                   <div className="max-h-[24rem] overflow-y-scroll">
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {categories &&
+                      categories.data?.map((category) => (
+                        <SelectItem key={category.id} value={category.name}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
                   </div>
 
                   <Button
@@ -160,7 +273,7 @@ const AddExpense = () => {
                       id="image"
                       type="file"
                       className="hidden"
-                      {...field}
+                      onChange={handleImageUpload}
                     />
                     <Label
                       htmlFor="image"
@@ -174,6 +287,12 @@ const AddExpense = () => {
             )}
           />
         </div>
+        {imageUrls.length ? (
+          <div className="w-14">
+            <Image src={imageUrls[0]} alt="" height={60} width={60} />
+            {loading && <Skeleton className="h-2 w-full rounded-none" />}
+          </div>
+        ) : null}
 
         <DrawerFooter>
           <Button

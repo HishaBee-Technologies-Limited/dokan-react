@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { DeleteIcon } from '@/components/common/icons';
 import { DialogFooter } from '@/components/common/Dialog';
 import { useExpenseStore } from '@/stores/useExpenseStore';
+import { IExpense } from '@/types/expense';
 
-const DeleteTransaction = () => {
+const DeleteTransaction = ({ expense }: { expense: IExpense }) => {
   const closeDialog = useExpenseStore((state) => state.setExpenseDialogState);
 
   return (

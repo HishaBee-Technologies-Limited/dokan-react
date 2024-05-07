@@ -65,6 +65,8 @@ import { createPurchase } from '@/actions/purchase/createPurchase';
 import { useSession } from 'next-auth/react';
 import { jwtDecode } from 'jwt-decode';
 import { createDueItem } from '@/actions/due/createDueItem';
+import { toast } from 'sonner';
+import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 
 const partyList = ['customer', 'supplier'];
 
@@ -141,10 +143,38 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       version: DEFAULT_STARTING_VERSION,
     });
 
+    if (responseCreatePurchase?.success) {
+      console.log(responseCreatePurchase);
+      calculatedProducts.products.forEach(async (product) => {
+        createItemPurchase({
+          created_at: formatDate(DATE_FORMATS.default, data.date),
+          name: product.name,
+          quantity: product.calculatedAmount?.quantity,
+          unit_price: product.selling_price,
+          unit_cost: product.cost_price,
+          purchase_id: responseCreatePurchase.data.data.id,
+
+          purchase_unique_id: responseCreatePurchase.data.data.unique_id,
+
+          shop_product_id: product.id,
+          shop_product_variance_id: 1,
+          price: product.calculatedAmount?.total,
+          unique_id: generateUlid(),
+          updated_at: formatDate(DATE_FORMATS.default),
+          version: DEFAULT_STARTING_VERSION,
+        });
+      });
+    }
+    if (responseCreatePurchase?.error) {
+      toast.error('Something went wrong');
+
+      console.log('error-------', responseCreatePurchase?.error);
+    }
+
     const payload = {
       amount: Number(data.amount),
       unique_id: generateUlid(),
-      due_left: -Number(data.amount),
+      due_left: Number(data.amount),
       version: DEFAULT_STARTING_VERSION,
       updated_at: formatDate(DATE_FORMATS.default),
       created_at: formatDate(DATE_FORMATS.default),
@@ -156,16 +186,15 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     };
 
     const res = await createDueItem(payload);
-    setCalculatedProducts({
-      ...calculatedProducts,
-      paymentAmount: Number(data.amount),
-      date: formatDate(DATE_FORMATS.default, data.date),
-    });
-    console.log(res, responseCreatePurchase);
-
-    handleSellDrawer({ open: false });
-    openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
-    console.log('data------------', data);
+    if (res?.success) {
+      setCalculatedProducts({
+        ...calculatedProducts,
+        paymentAmount: 0,
+        date: formatDate(DATE_FORMATS.default, data.date),
+      });
+      handleSellDrawer({ open: false });
+      openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
+    }
   }
 
   const activeCashColor = (active: string): string => {
