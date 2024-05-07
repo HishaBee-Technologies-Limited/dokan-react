@@ -1,5 +1,5 @@
 import { SellEnum } from '@/enum/sell';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/common/Image';
@@ -14,6 +14,8 @@ import {
 } from '@/components/common/icons';
 import { calculateTotal } from '@/lib/utils';
 import { PAYMENT_STATUS } from '@/lib/constants/common';
+import { getTransactionItems } from '@/actions/sell/getTransactionItems';
+import { IPurchaseProducts } from '@/types/purchase';
 
 const productList = [
   {
@@ -45,6 +47,7 @@ const productList = [
 const TransactionDetails = () => {
   const [accordion, setAccordion] = useState<boolean>(false);
   const transactionDetails = useSellStore((state) => state.sellDetails);
+  const [purchaseProducts, setPurchaseProducts] = useState<IPurchaseProducts>();
 
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
@@ -71,6 +74,19 @@ const TransactionDetails = () => {
       handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_EDIT });
     }
   };
+
+  useEffect(() => {
+    const getPurchaseProducts = async () => {
+      const res = await getTransactionItems({
+        id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
+      });
+      console.log(res, currentPurchase);
+      if (res?.success) {
+        setPurchaseProducts(res?.data.data);
+      }
+    };
+    getPurchaseProducts();
+  }, [currentPurchase]);
 
   return (
     <div className="space-y-space12">
@@ -167,33 +183,41 @@ const TransactionDetails = () => {
 
           <ExpandMoreIcon />
         </div>
-        ----TODO----
-        <div
-          className={`grid ${accordion ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} duration-500`}
-        >
-          <WrapperOddList className={`overflow-hidden`}>
-            {productList.map((product) => (
-              <div key={product.id} className="rounded p-space8">
+        <Text title="Sold Products" className="text-lg font-medium" />
+
+        <div className={`grid 'grid-rows-[1fr]'`}>
+          {purchaseProducts?.transaction_items &&
+            purchaseProducts?.transaction_items.map((product) => (
+              <div key={product.unique_id} className="rounded p-space8">
                 <div className="flex items-center gap-space8">
-                  <Image src={product.img} height={32} width={32} alt="" />
+                  <Image
+                    src={product.product.image_url}
+                    height={32}
+                    width={32}
+                    alt=""
+                  />
 
                   <Text title={product.name} />
                 </div>
 
                 <article className="flex flex-wrap justify-between gap-space8 pl-space40">
                   <Text>
-                    Sell: <span className="font-semibold">5</span>
+                    Quantity:{' '}
+                    <span className="font-semibold">{product.quantity}</span>
                   </Text>
                   <Text>
-                    Unit Price: <span className="font-semibold">5</span>
+                    Unit Price:{' '}
+                    <span className="font-semibold">
+                      {product.product.cost_price}
+                    </span>
                   </Text>
                   <Text>
-                    Total: <span className="font-semibold">5</span>
+                    Total:{' '}
+                    <span className="font-semibold">{product.price}</span>
                   </Text>
                 </article>
               </div>
             ))}
-          </WrapperOddList>
         </div>
       </section>
       {currentPurchase?.note && (

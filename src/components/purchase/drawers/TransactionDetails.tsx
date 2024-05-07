@@ -1,56 +1,21 @@
-import { SellEnum } from '@/enum/sell';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/common/Image';
 import { usePurchaseStore } from '@/stores/usePurchase';
 import { DrawerFooter } from '@/components/common/Drawer';
 import FallBackImage from '@/components/common/FallBackImage';
-import WrapperOddList from '@/components/common/WrapperOddList';
-import {
-  DeleteIcon,
-  EditIcon,
-  ExpandMoreIcon,
-} from '@/components/common/icons';
+import { DeleteIcon, EditIcon } from '@/components/common/icons';
 import { PurchaseEnum } from '@/enum/purchase';
 import { usePurchase } from '@/stores/usePurchaseStore';
-import { calculateTotal, formatDate, percentage } from '@/lib/utils';
-import { DATE_FORMATS } from '@/lib/constants/common';
-import { format } from 'date-fns';
-import { PAYMENT_STATUS } from '@/lib/constants/purchase';
-import { authApi } from '@/lib/api';
-import { getPurchaseItems } from '@/actions/purchase/getPurchaseItems';
+import { calculateTotal } from '@/lib/utils';
 
-const productList = [
-  {
-    id: 1,
-    img: '',
-    sell: '5',
-    total: '10',
-    unit_price: '10',
-    name: 'কোকাকোলা ৬০০ মিলি',
-  },
-  {
-    id: 2,
-    img: '',
-    sell: '5',
-    total: '10',
-    unit_price: '10',
-    name: 'কোকাকোলা ৬০০ মিলি',
-  },
-  {
-    id: 3,
-    img: '',
-    sell: '5',
-    total: '10',
-    unit_price: '10',
-    name: 'কোকাকোলা ৬০০ মিলি',
-  },
-];
+import { PAYMENT_STATUS } from '@/lib/constants/purchase';
+import { getPurchaseItems } from '@/actions/purchase/getPurchaseItems';
+import { IPurchaseProducts } from '@/types/purchase';
 
 const TransactionDetails = () => {
-  const [accordion, setAccordion] = useState<boolean>(false);
-
+  const [purchaseProducts, setPurchaseProducts] = useState<IPurchaseProducts>();
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
   const currentPurchase = usePurchase((state) => state.currentPurchase);
@@ -71,10 +36,13 @@ const TransactionDetails = () => {
 
   useEffect(() => {
     const getPurchaseProducts = async () => {
-      const res = await getPurchaseItems(
-        currentPurchase?.unique_id ? currentPurchase?.unique_id : ''
-      );
-      console.log(res);
+      const res = await getPurchaseItems({
+        id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
+      });
+      console.log(currentPurchase);
+      if (res?.success) {
+        setPurchaseProducts(res?.data.data);
+      }
     };
     getPurchaseProducts();
   }, [currentPurchase]);
@@ -167,41 +135,49 @@ const TransactionDetails = () => {
         </article>
       </article>
       <section>
-        <div
+        {/* <div
           onClick={() => setAccordion(!accordion)}
           className="flex justify-between items-center gap-space8 py-space8"
         >
           <Text title="Sold Product" className="text-lg font-medium" />
 
           <ExpandMoreIcon />
-        </div>
-        ----TODO----
-        <div
-          className={`grid ${accordion ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} duration-500`}
-        >
-          <WrapperOddList className={`overflow-hidden`}>
-            {productList.map((product) => (
-              <div key={product.id} className="rounded p-space8">
+        </div> */}
+        <Text title="Sold Products" className="text-lg font-medium" />
+
+        <div className={`grid 'grid-rows-[1fr]'`}>
+          {purchaseProducts?.items &&
+            purchaseProducts?.items.map((product) => (
+              <div key={product.unique_id} className="rounded p-space8">
                 <div className="flex items-center gap-space8">
-                  <Image src={product.img} height={32} width={32} alt="" />
+                  <Image
+                    src={product.product.image_url}
+                    height={32}
+                    width={32}
+                    alt=""
+                  />
 
                   <Text title={product.name} />
                 </div>
 
                 <article className="flex flex-wrap justify-between gap-space8 pl-space40">
                   <Text>
-                    Sell: <span className="font-semibold">5</span>
+                    Quantity:{' '}
+                    <span className="font-semibold">{product.quantity}</span>
                   </Text>
                   <Text>
-                    Unit Price: <span className="font-semibold">5</span>
+                    Unit Price:{' '}
+                    <span className="font-semibold">
+                      {product.product.cost_price}
+                    </span>
                   </Text>
                   <Text>
-                    Total: <span className="font-semibold">5</span>
+                    Total:{' '}
+                    <span className="font-semibold">{product.price}</span>
                   </Text>
                 </article>
               </div>
             ))}
-          </WrapperOddList>
         </div>
       </section>
       {currentPurchase?.note && (

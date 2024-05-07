@@ -144,6 +144,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     });
 
     if (responseCreatePurchase?.success) {
+      console.log(responseCreatePurchase);
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
           created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -151,8 +152,9 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
+          purchase_id: responseCreatePurchase.data.data.id,
 
-          purchase_unique_id: responseCreatePurchase.data.unique_id,
+          purchase_unique_id: responseCreatePurchase.data.data.unique_id,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,

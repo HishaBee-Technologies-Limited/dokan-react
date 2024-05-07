@@ -212,7 +212,7 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
                   <div className="max-h-[24rem] overflow-y-scroll">
                     {categories &&
                       categories.data?.map((category) => (
-                        <SelectItem value={category.name}>
+                        <SelectItem key={category.id} value={category.name}>
                           {category.name}
                         </SelectItem>
                       ))}

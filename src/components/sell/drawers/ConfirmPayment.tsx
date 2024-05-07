@@ -34,6 +34,7 @@ import {
   DATE_FORMATS,
   PAYMENT_METHODS,
   PAYMENT_STATUS,
+  TRANSACTION_TYPE,
 } from '@/lib/constants/common';
 import { cn, formatDate, generateUlid } from '@/lib/utils';
 import { jwtDecode } from 'jwt-decode';
@@ -146,6 +147,7 @@ const ConfirmPayment = () => {
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
       total_discount: 0,
+      transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
     });
     console.log('res----', responseCreateSell);
 
@@ -157,8 +159,7 @@ const ConfirmPayment = () => {
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
-
-          transaction_unique_id: responseCreateSell.data.transaction.unique_id,
+          transaction_unique_id: responseCreateSell.data.data.unique_id,
           profit: 0,
           status: 'PAID',
 

@@ -13,11 +13,10 @@ const Successful = () => {
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
   const clearProductArray = usePurchase((state) => state.setProducts);
   const methods = useFormContext();
+
   const due =
-    (calculatedProducts?.totalPrice &&
-      calculatedProducts?.paymentAmount &&
-      calculatedProducts?.totalPrice - calculatedProducts?.paymentAmount) ??
-    0;
+    calculatedProducts?.totalPrice! - calculatedProducts?.paymentAmount!;
+
   console.log(due, calculatedProducts);
   return (
     <>

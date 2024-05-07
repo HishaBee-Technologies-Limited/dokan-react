@@ -1,19 +1,17 @@
 'use server';
 
 import { authApi } from '@/lib/api';
-import { IUserResponse } from '@/types/contact/partyResponse';
 
-export const getSingleSupplier = async (id: number) => {
+export const getTransactionItems = async ({ id }: { id: string }) => {
   try {
-    const res = await authApi.get(`/supplier/purchase/0${id}`);
+    const res = await authApi.get(`/transaction/items?unique_id=${id}`);
     const data = await res.json();
 
     if (res.ok) {
       return {
         success: true,
-        message: data.message,
-        status: data.status_code,
-        data: data.data,
+        status: data?.status_code,
+        data: data,
       };
     }
     if (!res.ok) {

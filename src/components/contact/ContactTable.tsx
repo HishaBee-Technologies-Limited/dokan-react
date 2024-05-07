@@ -6,35 +6,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { DATE_FORMATS } from '@/lib/constants/common';
+import { ICommonGetResponse } from '@/types/common';
+import { IPurchaseProducts } from '@/types/purchase';
+import { IProductSellPayload } from '@/types/sell';
+import { format } from 'date-fns';
 
-const invoices = [
-  {
-    invoice: '#123456',
-    time: 'Aug 12, 2020 08:45 PM',
-    details: 'Name or number',
-    items: '2 items',
-    transactType: 'QUICK SELL',
-    amount: ' ৳ 2,000',
-  },
-  {
-    invoice: '#123d56',
-    time: 'Aug 12, 2020 08:45 PM',
-    details: 'Name or number',
-    items: '2 items',
-    transactType: 'DUE',
-    amount: ' ৳ 2,000',
-  },
-  {
-    invoice: '#121456',
-    time: 'Aug 12, 2020 08:45 PM',
-    details: '',
-    items: '2 items',
-    transactType: 'PURCHASE',
-    amount: ' ৳ 2,000',
-  },
-];
-
-export const ContactTable = () => {
+export const ContactTable = ({
+  userTransaction,
+}: {
+  userTransaction: ICommonGetResponse<IProductSellPayload & IPurchaseProducts>;
+}) => {
+  console.log(userTransaction);
   return (
     <Table wrapperClass="min-w-[60rem]">
       <TableHeader>
@@ -48,21 +31,23 @@ export const ContactTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell>{invoice.invoice}</TableCell>
-            <TableCell>{invoice.time}</TableCell>
-            <TableCell>{invoice.details}</TableCell>
-            <TableCell>{invoice.items}</TableCell>
+        {userTransaction?.data?.map((invoice) => (
+          <TableRow key={invoice.id}>
+            <TableCell>{invoice.id}</TableCell>
+            <TableCell>
+              {format(invoice.created_at, DATE_FORMATS.dateWithOutTime)}
+            </TableCell>
+            <TableCell>{invoice.supplier_name}</TableCell>
+            <TableCell>{invoice.total_item}</TableCell>
             <TableCell
-              className={`${invoice.transactType === 'DUE' ? 'text-error-100' : ''}`}
+              className={`${invoice.payment_status === 'UNPAID' ? 'text-error-100' : 'text-success-100'}`}
             >
-              {invoice.transactType}
+              {invoice.payment_status}
             </TableCell>
             <TableCell
-              className={`${invoice.transactType === 'DUE' ? 'text-error-100' : ''} text-right`}
+              className={`${invoice.payment_status === 'UNPAID' ? 'text-error-100' : 'text-success-100'} text-right`}
             >
-              {invoice.amount}
+              {invoice.total_price}
             </TableCell>
           </TableRow>
         ))}

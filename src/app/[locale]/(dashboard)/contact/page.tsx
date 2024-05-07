@@ -38,7 +38,7 @@ const ContactPage = async ({
     supplierDetails = await getSingleSupplier(Number(userID));
     employeeDetails = await getSingleEmployee(Number(userID));
   }
-
+  console.log(supplierDetails);
   const userList =
     tab === ContactType.CUSTOMER
       ? customers?.data

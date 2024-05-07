@@ -57,7 +57,7 @@ const invoices = [
 const HistoryTable = ({
   transactions,
 }: {
-  transactions: ICommonGetResponse<IPurchaseHistoryResponse>;
+  transactions?: ICommonGetResponse<IPurchaseHistoryResponse>;
 }) => {
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
@@ -205,12 +205,16 @@ const HistoryTable = ({
       <ScrollBar orientation="horizontal" />
       <Pagination
         pageCount={
-          transactions.data.length === 0
-            ? transactions.last_page
-            : Math.ceil(transactions.total ?? 0 / transactions.per_page ?? 0)
+          transactions?.data.length === 0
+            ? transactions?.last_page
+            : transactions
+              ? Math.ceil(
+                  transactions?.total ?? 0 / transactions?.per_page ?? 0
+                )
+              : 0
         }
-        currentPage={transactions.current_page ?? 0}
-        lastPage={transactions.last_page ?? 0}
+        currentPage={transactions?.current_page ?? 0}
+        lastPage={transactions?.last_page ?? 0}
         onChanage={(page) => {
           router.push(`${pathname}?${setQueryString('page', page)}`);
         }}

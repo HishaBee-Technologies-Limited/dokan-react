@@ -41,7 +41,7 @@ export const LeftSection = ({
   const activeTab = getQueryString('tab') ?? '';
   const activeUser = getQueryString('active_user') ?? '';
 
-  const { setContactDrawerState } = useContactStore((state) => state);
+  const { setContactDrawerState, setParty } = useContactStore((state) => state);
 
   useEffect(() => {
     router.push(
@@ -71,11 +71,12 @@ export const LeftSection = ({
             <CardWithSideIndicator
               key={item.id}
               active={item.id.toString() === activeUser}
-              onClick={() =>
+              onClick={() => {
                 router.push(
-                  `${pathname}?${setQueryString('active_user', item.id)}`
-                )
-              }
+                  `${pathname}?${setQueryString('active_user', item.mobile)}`
+                );
+                setParty(item);
+              }}
             >
               <div className="flex items-center gap-space8">
                 <FallBackImage
