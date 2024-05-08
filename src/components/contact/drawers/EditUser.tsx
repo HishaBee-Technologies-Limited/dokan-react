@@ -22,6 +22,7 @@ import { editCustomer } from '@/actions/contacts/editCustomer';
 import { editSupplier } from '@/actions/contacts/editSupplier';
 import { editEmployee } from '@/actions/contacts/editEmployee';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 const EditUser = () => {
   const router = useRouter();
@@ -50,7 +51,7 @@ const EditUser = () => {
       mobile: data.number,
       email: data.email as string,
       address: data.address as string,
-      id: userID,
+      id: party?.unique_id,
     };
 
     const updateParty = () => {
@@ -68,8 +69,8 @@ const EditUser = () => {
       if (response?.success) {
         router.refresh();
         closeDrawer({ open: false });
-        console.log('response true', response);
       } else {
+        toast.error('Something went wrong');
         console.log('error', response?.error);
       }
     };

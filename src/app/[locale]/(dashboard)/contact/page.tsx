@@ -27,17 +27,17 @@ const ContactPage = async ({
   let customerDetails;
   let supplierDetails;
   let employeeDetails;
-
+  console.log(searchParams);
   const tab = searchParams.tab?.split('-')[0];
   const userID = searchParams.active_user?.split('-')[0];
 
   const customers = await getAllCustomer(Number(shopId));
   const suppliers = await getAllSupplier(Number(shopId));
   const employees = await getAllEmployee(Number(shopId));
-  if (userID) {
-    customerDetails = await getSingleCustomer(Number(userID));
-    supplierDetails = await getSingleSupplier(Number(userID));
-    employeeDetails = await getSingleEmployee(Number(userID));
+  if (searchParams.active_user) {
+    customerDetails = await getSingleCustomer(Number(searchParams.active_user));
+    supplierDetails = await getSingleSupplier(Number(searchParams.active_user));
+    employeeDetails = await getSingleEmployee(Number(searchParams.active_user));
   }
   console.log(shop);
   const userList =

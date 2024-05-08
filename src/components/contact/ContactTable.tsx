@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { ICommonGetResponse } from '@/types/common';
 import { IPurchaseProducts } from '@/types/purchase';
@@ -18,6 +19,11 @@ export const ContactTable = ({
   userTransaction: ICommonGetResponse<IProductSellPayload & IPurchaseProducts>;
 }) => {
   console.log(userTransaction);
+  const { getQueryString } = useCreateQueryString();
+
+  const activeTab = getQueryString('tab') ?? '';
+  console.log(activeTab);
+
   return (
     <Table wrapperClass="min-w-[60rem]">
       <TableHeader>
@@ -26,8 +32,12 @@ export const ContactTable = ({
           <TableHead>TIME</TableHead>
           <TableHead>Details</TableHead>
           <TableHead>Items</TableHead>
-          <TableHead>Transact type</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          {activeTab !== 'Supplier' && <TableHead>Transact type</TableHead>}
+          {activeTab !== 'Supplier' ? (
+            <TableHead className="text-right">Buy Amount</TableHead>
+          ) : (
+            <TableHead className="text-right">Amount</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -39,11 +49,13 @@ export const ContactTable = ({
             </TableCell>
             <TableCell>{invoice.supplier_name}</TableCell>
             <TableCell>{invoice.total_item}</TableCell>
-            <TableCell
-              className={`${invoice.payment_status === 'UNPAID' ? 'text-error-100' : 'text-success-100'}`}
-            >
-              {invoice.payment_status}
-            </TableCell>
+            {activeTab !== 'Supplier' && (
+              <TableCell
+                className={`${invoice.payment_status === 'UNPAID' ? 'text-error-100' : 'text-success-100'}`}
+              >
+                {invoice.payment_status}
+              </TableCell>
+            )}
             <TableCell
               className={`${invoice.payment_status === 'UNPAID' ? 'text-error-100' : 'text-success-100'} text-right`}
             >

@@ -44,10 +44,29 @@ export const LeftSection = ({
   const { setContactDrawerState, setParty } = useContactStore((state) => state);
 
   useEffect(() => {
-    router.push(
-      `${pathname}?${setQueryString('tab', activeTab ? activeTab : 'Customer')}`
-    );
+    if (userList) {
+      setParty(userList[0]);
+    }
+
+    const params = {
+      tab: activeTab ? activeTab : 'Customer',
+      active_user: userList ? userList[0].mobile : '',
+    };
+    router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
   }, [activeTab]);
+
+  useEffect(() => {
+    const params = {
+      tab: 'Customer',
+      active_user: userList ? userList[0].mobile : '',
+    };
+    router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
+  }, []);
+  useEffect(() => {
+    if (userList) {
+      setParty(userList[0]);
+    }
+  }, [userList]);
 
   return (
     <Card className="h-full lg:w-4/12 flex flex-col gap-space16">
