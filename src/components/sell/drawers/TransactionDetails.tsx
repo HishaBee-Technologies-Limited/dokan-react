@@ -15,7 +15,7 @@ import {
 import { calculateTotal } from '@/lib/utils';
 import { PAYMENT_STATUS } from '@/lib/constants/common';
 import { getTransactionItems } from '@/actions/sell/getTransactionItems';
-import { IPurchaseProducts } from '@/types/purchase';
+import { IProducts, IPurchaseProducts } from '@/types/purchase';
 
 const productList = [
   {
@@ -47,7 +47,7 @@ const productList = [
 const TransactionDetails = () => {
   const [accordion, setAccordion] = useState<boolean>(false);
   const transactionDetails = useSellStore((state) => state.sellDetails);
-  const [purchaseProducts, setPurchaseProducts] = useState<IPurchaseProducts>();
+  const [purchaseProducts, setPurchaseProducts] = useState<IProducts[]>([]);
 
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
@@ -175,49 +175,47 @@ const TransactionDetails = () => {
         </article>
       </article>
       <section>
-        <div
+        {/* <div
           onClick={() => setAccordion(!accordion)}
           className="flex justify-between items-center gap-space8 py-space8"
         >
           <Text title="Sold Product" className="text-lg font-medium" />
 
           <ExpandMoreIcon />
-        </div>
+        </div> */}
         <Text title="Sold Products" className="text-lg font-medium" />
 
         <div className={`grid 'grid-rows-[1fr]'`}>
-          {purchaseProducts?.transaction_items &&
-            purchaseProducts?.transaction_items.map((product) => (
-              <div key={product.unique_id} className="rounded p-space8">
-                <div className="flex items-center gap-space8">
-                  <Image
-                    src={product.product.image_url}
-                    height={32}
-                    width={32}
-                    alt=""
-                  />
+          {purchaseProducts?.map((product) => (
+            <div key={product.unique_id} className="rounded p-space8">
+              <div className="flex items-center gap-space8">
+                <Image
+                  src={product.shop_product?.image_url}
+                  height={32}
+                  width={32}
+                  alt=""
+                />
 
-                  <Text title={product.name} />
-                </div>
-
-                <article className="flex flex-wrap justify-between gap-space8 pl-space40">
-                  <Text>
-                    Quantity:{' '}
-                    <span className="font-semibold">{product.quantity}</span>
-                  </Text>
-                  <Text>
-                    Unit Price:{' '}
-                    <span className="font-semibold">
-                      {product.product.cost_price}
-                    </span>
-                  </Text>
-                  <Text>
-                    Total:{' '}
-                    <span className="font-semibold">{product.price}</span>
-                  </Text>
-                </article>
+                <Text title={product.shop_product?.name} />
               </div>
-            ))}
+
+              <article className="flex flex-wrap justify-between gap-space8 pl-space40">
+                <Text>
+                  Quantity:{' '}
+                  <span className="font-semibold">{product.quantity}</span>
+                </Text>
+                <Text>
+                  Unit Price:{' '}
+                  <span className="font-semibold">
+                    {product.shop_product?.cost_price}
+                  </span>
+                </Text>
+                <Text>
+                  Total: <span className="font-semibold">{product.price}</span>
+                </Text>
+              </article>
+            </div>
+          ))}
         </div>
       </section>
       {currentPurchase?.note && (

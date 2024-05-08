@@ -72,8 +72,9 @@ export interface IPurchaseHistoryResponse {
   version: number;
 }
 
-interface IProducts extends IProductItemPurchasePayload {
+export interface IProducts extends IProductItemPurchasePayload {
   product: IProductPayload;
+  shop_product?: IProductPayload;
 }
 export interface IPurchaseProducts extends IPurchaseHistoryResponse {
   items?: IProducts[];
