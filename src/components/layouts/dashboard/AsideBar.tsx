@@ -1,17 +1,40 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { IMenuOpenProps } from '.';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import SidebarLinks from '@/config/sidebarLinks';
+import SidebarLinks, {
+  SidebarLinksFree,
+  SidebarLinksStandard,
+} from '@/config/sidebarLinks';
 import { IAsideBarMenuItem } from '@/types/SidebarLinks';
 import { CancelIcon, ExpandMoreIcon } from '@/components/common/icons';
+import { getCookie } from 'cookies-next';
+import { SUBSCRIPTION_PACKAGES } from '@/lib/constants/common';
+import { LockClosedIcon } from '@radix-ui/react-icons';
 
 const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
   const pathname = usePathname();
 
   const [active, setActive] = useState<number | null>(null);
+  const shop = getCookie('shop');
+  const [link, setLink] = useState<IAsideBarMenuItem[]>([]);
+  useEffect(() => {
+    if (
+      JSON.parse(shop as string).subscription.package ===
+      SUBSCRIPTION_PACKAGES.advanced
+    ) {
+      setLink(SidebarLinks);
+    } else if (
+      JSON.parse(shop as string).subscription.package ===
+      SUBSCRIPTION_PACKAGES.standard
+    ) {
+      setLink(SidebarLinksStandard);
+    } else {
+      setLink(SidebarLinksFree);
+    }
+  }, [shop]);
 
   return (
     <aside
@@ -50,7 +73,7 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
         className={`h-[calc(100vh-7.2rem)] overflow-y-scroll scroll_hidden px-space12 pt-space24 `}
       >
         <ul className="space-y-space8">
-          {SidebarLinks.map((menu) => {
+          {link?.map((menu) => {
             const menuLinkItem = (
               menu: IAsideBarMenuItem,
               subMenu: boolean
@@ -72,7 +95,20 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                 >
                   {menu.title}
                 </span>
-
+                {['Standard', 'Advanced'].includes(menu.title) &&
+                JSON.parse(shop as string).subscription.package !==
+                  SUBSCRIPTION_PACKAGES.standard ? (
+                  <div className={`absolute right-space12   `}>
+                    <LockClosedIcon width={24} height={24} />
+                  </div>
+                ) : null}
+                {['Standard', 'Advanced'].includes(menu.title) &&
+                JSON.parse(shop as string).subscription.package !==
+                  SUBSCRIPTION_PACKAGES.advanced ? (
+                  <div className={`absolute right-space12   `}>
+                    <LockClosedIcon width={24} height={24} />
+                  </div>
+                ) : null}
                 {menu.children && (
                   <div
                     className={`absolute right-space12 top-1/2 transform -translate-y-1/2 ease-in ${active === menu.id ? 'rotate-180 duration-300' : 'duration-300'} ${menuOpen ? 'opacity-100 duration-1000' : 'xl:opacity-0 w-0 hd:opacity-100 hd:w-auto'}  `}

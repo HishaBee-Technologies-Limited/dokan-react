@@ -11,11 +11,13 @@ import { getAllShops } from '@/actions/shop/getAllShops';
 import { IShopResponse } from '@/types/shop';
 import { setCookie } from 'cookies-next';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
   const router = useRouter();
   const [selectShop, setSelectShop] = useState<IShopResponse>();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -39,17 +41,18 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
   };
 
   const handleContinue = async () => {
-    console.log(selectShop);
+    setLoading(true);
+
     if (selectShop) {
-      const shop = JSON.stringify({ sms_count: selectShop.sms_count });
-      console.log(shop);
+      const shop = JSON.stringify({
+        sms_count: selectShop.sms_count,
+        subscription: selectShop.subscription,
+      });
       setCookie('shopId', selectShop?.id);
       setCookie('shop', shop);
       router.push('/contact');
     }
   };
-
-  console.log(shops);
 
   return (
     <div className="space-y-space16">
@@ -79,7 +82,6 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
                   className="text-sm"
                 />
 
-                {/* <Link href={"/shop/edit"}> */}
                 <Button
                   size={'sm'}
                   variant="secondary"
@@ -89,7 +91,6 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
                   <Icon icon="mdi:store-edit-outline" height={24} width={24} />
                   <Text title="Edit Shop" className="text-sm font-semibold" />
                 </Button>
-                {/* </Link> */}
               </div>
             </Card>
           ))}
@@ -116,6 +117,7 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
 
       <div className="gap-space12 mt-space16 flex justify-end">
         <Button disabled={!selectShop} onClick={handleContinue}>
+          {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
           Continue
         </Button>
       </div>

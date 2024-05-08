@@ -31,3 +31,10 @@ export enum TRANSACTION_TYPE {
   'PRODUCT_SELL' = 'PRODUCT_SELL',
   'QUICK_SELL' = 'QUICK_SELL',
 }
+
+export const SUBSCRIPTION_PACKAGES = {
+  free: 'FREE',
+  standard: 'STANDARD',
+  advanced: 'ADVANCED',
+  trial: 'TRIAL',
+};

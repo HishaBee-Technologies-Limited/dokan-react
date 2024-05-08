@@ -23,6 +23,7 @@ const ContactPage = async ({
   searchParams,
 }: IContactProps) => {
   const shopId = cookies().get('shopId')?.value;
+  const shop = cookies().get('shop')?.value;
   let customerDetails;
   let supplierDetails;
   let employeeDetails;
@@ -38,7 +39,7 @@ const ContactPage = async ({
     supplierDetails = await getSingleSupplier(Number(userID));
     employeeDetails = await getSingleEmployee(Number(userID));
   }
-  console.log(supplierDetails);
+  console.log(shop);
   const userList =
     tab === ContactType.CUSTOMER
       ? customers?.data

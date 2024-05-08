@@ -4,6 +4,12 @@ export interface IShopResponse {
   address: string;
   active: number;
   sms_count: number;
+  subscription: {
+    id: number;
+    package: string;
+    end_date: string;
+    plus_package: string;
+  };
 }
 
 export interface IArea {

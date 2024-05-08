@@ -13,7 +13,7 @@ export const getAllShops = async () => {
     // }
     console.log('----', res);
     const data = await res.json();
-    console.log(data);
+    console.log(data.data[0]);
 
     if (res.ok) {
       return {

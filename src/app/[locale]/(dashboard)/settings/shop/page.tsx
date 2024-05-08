@@ -43,7 +43,10 @@ const SwitchShopPage = () => {
   const handleContinue = async () => {
     console.log(selectShop);
     if (selectShop) {
-      const shop = JSON.stringify({ sms_count: selectShop.sms_count });
+      const shop = JSON.stringify({
+        sms_count: selectShop.sms_count,
+        subscription: selectShop.subscription,
+      });
       console.log(shop);
       setCookie('shopId', selectShop?.id);
       setCookie('shop', shop);
