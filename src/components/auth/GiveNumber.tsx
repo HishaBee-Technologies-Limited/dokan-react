@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/form';
 import { checkNumber } from '@/actions/checkNumber';
 import { useRouter } from 'next/navigation';
+import { getCookie, setCookie } from 'cookies-next';
 
 const formSchema = z.object({
   mobile_number: z.string().max(11).min(11, {
@@ -25,7 +26,8 @@ const formSchema = z.object({
 
 const GiveNumber = () => {
   const router = useRouter();
-
+  const mobileNumber = getCookie('mobile_number');
+  console.log(mobileNumber);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,25 +39,31 @@ const GiveNumber = () => {
     // closeDrawer({ open: false })
     const response = await checkNumber({ mobile_number });
     console.log('data------------', response);
-    if (response?.success) {
-      if (response.data?.status_code === 200) {
-        router.push('/auth/pin');
-      } else if (response?.data?.status_code === 206) {
-        router.push('/auth/signup');
-      } else if (response?.data?.status_code === 208) {
-        router.push('/auth/setup-pin');
-      } else {
-        router.push('/auth/error');
+    console.log(mobileNumber);
+    await setCookie('mobile_number', mobile_number);
+
+    if (mobile_number.length) {
+      if (response?.success) {
+        if (response.data?.status_code === 200) {
+          router.push('/auth/pin');
+        } else if (response?.data?.status_code === 206) {
+          router.push('/auth/signup');
+        } else if (response?.data?.status_code === 208) {
+          router.push('/auth/setup-pin');
+        } else {
+          router.push('/auth/error');
+        }
       }
-    }
-    if (!response?.success) {
-      if (
-        response?.error?.status_code === 403 ||
-        response?.error?.status_code === 404
-      ) {
-        router.push('/auth/otp');
-      } else {
-        router.push('/auth/error');
+
+      if (!response?.success) {
+        if (
+          response?.error?.status_code === 403 ||
+          response?.error?.status_code === 404
+        ) {
+          router.push('/auth/otp');
+        } else {
+          router.push('/auth/error');
+        }
       }
     }
   }
