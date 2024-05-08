@@ -2,20 +2,19 @@
 
 import { authApi } from '@/lib/api';
 import { IShopResponse } from '@/types/shop';
-import { logout } from '../logout';
-import { signOut } from '@/auth';
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 
 export const getAllShops = async () => {
+  console.log('----');
   try {
     const res = await authApi.get('/shop/all');
-    if (res.status === 401) {
-      cookies().delete('authjs.session-token');
-      redirect('/');
-    }
-
+    // if (res.status === 401) {
+    //   cookies().delete('authjs.session-token');
+    //   redirect('/');
+    // }
+    console.log('----', res);
     const data = await res.json();
+    console.log(data);
+
     if (res.ok) {
       return {
         success: true,

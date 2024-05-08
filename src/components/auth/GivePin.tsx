@@ -8,15 +8,20 @@ import { StatefulPinInput } from 'react-input-pin-code';
 import { authenticate } from '@/actions/auth';
 import { signIn } from '@/auth';
 import { useRouter } from 'next/navigation';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 const GivePin = ({ mobile_number }: { mobile_number: string }) => {
   const router = useRouter();
   const [showPin, setShowPin] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const [pin, setPin] = useState<string>('');
 
   const login = async () => {
+    setLoading(true);
+
     await authenticate(undefined, { mobile_number, pin });
+    setLoading(false);
   };
 
   return (
@@ -74,6 +79,7 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
       </div>
 
       <Button onClick={login} className="w-full" disabled={pin.length !== 5}>
+        {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
         Confirm
       </Button>
       <Button className="w-full" variant={'transparent'}>

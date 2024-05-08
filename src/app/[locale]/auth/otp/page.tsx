@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 
 export default function Home() {
   const cookie = cookies().get('mobile_number');
-  console.log(cookie);
   if (!cookie?.value) {
     redirect('/auth');
   }

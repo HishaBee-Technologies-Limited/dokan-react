@@ -1,6 +1,6 @@
 'use client';
 import { z } from 'zod';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/form';
 import { checkNumber } from '@/actions/checkNumber';
 import { useRouter } from 'next/navigation';
-import { getCookie, setCookie } from 'cookies-next';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 const formSchema = z.object({
   mobile_number: z.string().max(11).min(11, {
@@ -26,8 +26,8 @@ const formSchema = z.object({
 
 const GiveNumber = () => {
   const router = useRouter();
-  const mobileNumber = getCookie('mobile_number');
-  console.log(mobileNumber);
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,34 +36,29 @@ const GiveNumber = () => {
   });
 
   async function onSubmit({ mobile_number }: z.infer<typeof formSchema>) {
-    // closeDrawer({ open: false })
+    setLoading(true);
     const response = await checkNumber({ mobile_number });
-    console.log('data------------', response);
-    console.log(mobileNumber);
-    await setCookie('mobile_number', mobile_number);
+    setLoading(false);
 
-    if (mobile_number.length) {
-      if (response?.success) {
-        if (response.data?.status_code === 200) {
-          router.push('/auth/pin');
-        } else if (response?.data?.status_code === 206) {
-          router.push('/auth/signup');
-        } else if (response?.data?.status_code === 208) {
-          router.push('/auth/setup-pin');
-        } else {
-          router.push('/auth/error');
-        }
+    if (response?.success) {
+      if (response.data?.status_code === 200) {
+        router.push('/auth/pin');
+      } else if (response?.data?.status_code === 206) {
+        router.push('/auth/signup');
+      } else if (response?.data?.status_code === 208) {
+        router.push('/auth/setup-pin');
+      } else {
+        router.push('/auth/error');
       }
-
-      if (!response?.success) {
-        if (
-          response?.error?.status_code === 403 ||
-          response?.error?.status_code === 404
-        ) {
-          router.push('/auth/otp');
-        } else {
-          router.push('/auth/error');
-        }
+    }
+    if (!response?.success) {
+      if (
+        response?.error?.status_code === 403 ||
+        response?.error?.status_code === 404
+      ) {
+        router.push('/auth/otp');
+      } else {
+        router.push('/auth/error');
       }
     }
   }
@@ -98,6 +93,7 @@ const GiveNumber = () => {
             className="w-full"
             disabled={form.watch('mobile_number').length !== 11}
           >
+            {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
             Save
           </Button>
         </form>
