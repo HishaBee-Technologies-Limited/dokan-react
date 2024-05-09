@@ -46,7 +46,7 @@ export interface IDueItemsResponse {
   due: IDueListResponse;
 }
 
-export interface IDueCreate {
+export interface IDueCreateItem {
   shop_id?: number;
   amount: number;
   unique_id: string;
@@ -55,8 +55,22 @@ export interface IDueCreate {
   updated_at: string;
   created_at: string;
   message?: string;
+  due_unique_id: string;
+  sms: boolean;
+  transaction_unique_id: string;
+}
+
+export interface IDueCreate {
+  shop_id?: number;
+  amount: number;
+  unique_id: string;
+  version: number;
+  updated_at: string;
+  created_at: string;
+  message?: string;
   contact_mobile: string;
   contact_type: string;
   contact_name: string;
   sms: boolean;
+  transaction_unique_id: string;
 }

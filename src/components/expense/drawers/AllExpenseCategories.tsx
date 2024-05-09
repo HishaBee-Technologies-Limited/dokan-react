@@ -30,7 +30,9 @@ const AllExpenseCategories = ({
   const setExpenseDialog = useExpenseStore(
     (state) => state.setExpenseDialogState
   );
-
+  const setCurrentCategory = useExpenseStore(
+    (state) => state.setCurrentCategory
+  );
   return (
     <div>
       <div className="flex justify-between items-center gap-space12 flex-wrap py-space12 px-space6 border-b border-color mb-space16">
@@ -140,12 +142,13 @@ const AllExpenseCategories = ({
                       size={'sm'}
                       variant={'transparent'}
                       className="w-full justify-start"
-                      onClick={() =>
+                      onClick={() => {
                         setExpenseDialog({
                           open: true,
                           header: ExpenseEnum.EDIT_CATEGORY,
-                        })
-                      }
+                        });
+                        setCurrentCategory(category.name);
+                      }}
                     >
                       <EditIcon />
                       Edit
@@ -156,12 +159,13 @@ const AllExpenseCategories = ({
                       size={'sm'}
                       variant={'transparent'}
                       className="w-full justify-start text-error-100"
-                      onClick={() =>
+                      onClick={() => {
                         setExpenseDialog({
                           open: true,
                           header: ExpenseEnum.DELETE_EXPENSE_CATEGORY,
-                        })
-                      }
+                        });
+                        setCurrentCategory(category.name);
+                      }}
                     >
                       <DeleteIcon />
                       Delete

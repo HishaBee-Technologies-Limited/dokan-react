@@ -72,7 +72,7 @@ const ExpenseDetails = ({ expense }: { expense: IExpense }) => {
             <Text title={expense?.details ?? ''} />
           </li>
 
-          {expense.image ? (
+          {expense?.image ? (
             <li className="space-y-space6">
               <Text title="Images" variant="secondary" className="text-sm" />
               <div className="flex gap-4">

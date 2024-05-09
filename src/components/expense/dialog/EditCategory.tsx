@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,18 +15,25 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { editExpenseCategory } from '@/actions/category/editExpenseCategory';
+import { toast } from 'sonner';
+import { ICategory, IExpense } from '@/types/expense';
+import { ICommonGetResponse } from '@/types/common';
 
 const formSchema = z.object({
   name: z.string().min(2, {
     message: 'Name must be at least 2 characters.',
   }),
-  category_id: z.string().min(1, {
-    message: 'this field is requeued',
-  }),
+  category_id: z.string().optional(),
 });
 
-const EditCategory = () => {
+const EditCategory = ({
+  categories,
+}: {
+  categories: ICommonGetResponse<ICategory>;
+}) => {
   const closeDialog = useExpenseStore((state) => state.setExpenseDialogState);
+  const currentCategory = useExpenseStore((state) => state.currentCategory);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,10 +43,23 @@ const EditCategory = () => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('data------------', data);
-    closeDialog({ open: false });
+    const res = await editExpenseCategory({ name: data.name });
+    console.log(res);
+    if (res?.success) {
+      toast.success('Expense category added');
+      closeDialog({ open: false });
+    }
+    if (!res?.success) {
+      toast.error('Expense category not added');
+      closeDialog({ open: false });
+    }
   }
+
+  useEffect(() => {
+    form.setValue('name', currentCategory);
+  }, [currentCategory]);
 
   return (
     <Form {...form}>
@@ -61,7 +81,7 @@ const EditCategory = () => {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="category_id"
             render={({ field }) => (
@@ -94,7 +114,7 @@ const EditCategory = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
 
         <DialogFooter className="flex justify-end gap-space16">

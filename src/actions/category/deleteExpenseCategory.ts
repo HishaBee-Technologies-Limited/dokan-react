@@ -13,7 +13,7 @@ export const deleteExpenseCategory = async ({
   try {
     const shopId = cookies().get('shopId')?.value;
 
-    const res = await authApi.delete(`/expense_category/${id}`);
+    const res = await authApi.delete(`/expense_category/${name}`);
     const data = await res.json();
 
     if (res.ok) {

@@ -52,8 +52,8 @@ const formSchema = z.object({
   }),
   amount: z.string(),
   reason: z.string(),
-  details: z.string(),
-  images: z.string(),
+  details: z.string().optional(),
+  images: z.string().optional(),
   image_changed: z.boolean().optional(),
   date: z.date(),
 });
@@ -84,7 +84,7 @@ const AddExpense = ({
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    closeDrawer({ open: false });
+    // closeDrawer({ open: false });
     console.log('data------------', data);
 
     const res = await addExpense({
@@ -113,24 +113,11 @@ const AddExpense = ({
     }
   }
 
-  // useEffect(() => {
-  //   //get categories
-  //   const fetchCategories = async () => {
-  //     const res = await getCategories();
-  //     console.log(res);
-  //     if (res?.success) {
-  //       setCategories(res?.data);
-  //     }
-  //   };
-  //   fetchCategories();
-  // }, []);
-
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     const selectedFiles = files as FileList;
     setSelectedFiles(selectedFiles);
   };
-  console.log(imageUrls);
   useEffect(() => {
     form.setValue('images', imageUrls[0]);
   }, [imageUrls]);
@@ -203,7 +190,7 @@ const AddExpense = ({
                     ))}
                     {categories &&
                       categories.data?.map((category) => (
-                        <SelectItem key={category.id} value={category.name}>
+                        <SelectItem key={category.name} value={category.name}>
                           {category.name}
                         </SelectItem>
                       ))}

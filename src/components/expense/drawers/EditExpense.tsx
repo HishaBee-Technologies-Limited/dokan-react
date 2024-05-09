@@ -44,6 +44,7 @@ import { editExpense } from '@/actions/expense/editExpense';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { EXPENSE_DEFAULT_CATEGORIES } from '@/lib/constants/expense';
 
 const formSchema = z.object({
   category_name: z.string().min(2, {
@@ -210,9 +211,14 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
                 </FormControl>
                 <SelectContent>
                   <div className="max-h-[24rem] overflow-y-scroll">
+                    {EXPENSE_DEFAULT_CATEGORIES.map((category) => (
+                      <SelectItem key={category.name} value={category.name}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
                     {categories &&
                       categories.data?.map((category) => (
-                        <SelectItem key={category.id} value={category.name}>
+                        <SelectItem key={category.name} value={category.name}>
                           {category.name}
                         </SelectItem>
                       ))}

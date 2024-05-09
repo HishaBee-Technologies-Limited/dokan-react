@@ -15,6 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { createExpenseCategory } from '@/actions/category/createExpenseCategory';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -34,9 +36,18 @@ const AddNewCategory = () => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('data------------', data);
-    closeDialog({ open: false });
+    const res = await createExpenseCategory({ name: data.name });
+    console.log(res);
+    if (res?.success) {
+      toast.success('Expense category added');
+      closeDialog({ open: false });
+    }
+    if (!res?.success) {
+      toast.error('Expense category not added');
+      closeDialog({ open: false });
+    }
   }
 
   return (

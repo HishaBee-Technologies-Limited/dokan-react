@@ -10,6 +10,7 @@ type ExpenseState = {
     open: boolean;
     header?: string;
   };
+  currentCategory: string;
 };
 
 type ExpenseActions = {
@@ -21,14 +22,18 @@ type ExpenseActions = {
     open: boolean;
     header?: string | undefined;
   }) => void;
+  setCurrentCategory: (category: string) => void;
 };
 
 export const useExpenseStore = create<ExpenseState & ExpenseActions>()(
   immer((set) => ({
     expenseDrawerState: { open: false, header: undefined },
     expenseDialogState: { open: false, header: undefined },
+    currentCategory: '',
 
     // Update state-------------------------------------
+    setCurrentCategory: (category: string) =>
+      set({ currentCategory: category }),
     setExpenseDrawerState: (params) => set({ expenseDrawerState: params }),
     setExpenseDialogState: (params) => set({ expenseDialogState: params }),
   }))

@@ -50,16 +50,16 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
           <div className="flex items-center gap-space8">
             <FallBackImage
               src={''}
-              fallback={dueItems[0].due.contact_name.charAt(0)}
+              fallback={dueItems && dueItems[0]?.due.contact_name.charAt(0)}
             />
             <article>
               <Text
-                title={dueItems[0].due.contact_name}
+                title={dueItems && dueItems[0]?.due.contact_name}
                 className="!text-lg font-medium"
               />
               <Text variant="muted">
-                {dueItems[0].due.contact_type} |{' '}
-                {dueItems[0].due.contact_mobile}
+                {dueItems && dueItems[0]?.due.contact_type} |{' '}
+                {dueItems && dueItems[0]?.due.contact_mobile}
               </Text>
             </article>
           </div>
@@ -71,7 +71,7 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
               className="text-sm font-medium"
             />
             <Text
-              title={`৳ ${dueItems[0].due.due_amount}`}
+              title={`৳ ${dueItems && dueItems[0]?.due.due_amount}`}
               className="font-semibold text-lg"
               variant="success"
             />

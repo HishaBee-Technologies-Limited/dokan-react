@@ -80,13 +80,8 @@ const TransactionEdit = ({ customers }: { customers?: IUserResponse[] }) => {
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 
   const [contact, setContact] = useState<IUserResponse>();
-  const calculatedProducts = useSellStore((state) => state.calculatedProducts);
-  const setCalculatedProducts = useSellStore(
-    (state) => state.setCalculatedProducts
-  );
-  const session = useSession();
+
   const cookie = getCookie('shop');
-  const tkn = getCookie('access_token');
   const currentPurchase = useSellStore((state) => state.currentSell);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -128,11 +123,6 @@ const TransactionEdit = ({ customers }: { customers?: IUserResponse[] }) => {
     if (!form.watch('cash_type')) {
       form.setValue('cash_type', 'given');
     }
-    // if (form.watch('cash_type') === 'given') {
-    //     handleSellDrawer({ open: true, header: SellEnum.MONEY_GIVEN_ENTRY })
-    // } else {
-    //     handleSellDrawer({ open: true, header: SellEnum.MONEY_RECEIVED_ENTRY })
-    // }
   }, [form.watch('cash_type')]);
 
   useEffect(() => {
@@ -171,7 +161,7 @@ const TransactionEdit = ({ customers }: { customers?: IUserResponse[] }) => {
       </Tabs>
 
       <Text
-        title="Payable Amount  ৳ 12,০০০"
+        title={`Payable Amount  ৳ ${currentPurchase?.total_price}`}
         className="text-lg font-medium bg-primary-10 dark:bg-primary-80 text-center rounded-md py-space8"
       />
 

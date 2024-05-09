@@ -6,7 +6,7 @@ export interface IExpense {
   shop_id?: number;
   type: string;
   purpose: string;
-  details: null | string;
+  details?: null | string;
   amount: number;
   created_at: string;
   updated_at: string;

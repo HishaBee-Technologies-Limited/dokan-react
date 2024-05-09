@@ -18,14 +18,14 @@ import { PurchaseEnum } from '@/enum/purchase';
 import ProductFiledRow, { IProductPurchase } from './ProductFiledRow';
 import ProductSellCalculation from './ProductSellCalculation';
 
-const formSchema = z.object({
-  quantity: z.string(),
-  unit_price: z.string().optional(),
-  total: z.string(),
-  delivery_charge: z.string(),
-  discount: z.string(),
-  discount_type: z.string(),
-});
+// const formSchema = z.object({
+//   quantity: z.string(),
+//   unit_price: z.string().optional(),
+//   total: z.string(),
+//   delivery_charge: z.string(),
+//   discount: z.string(),
+//   discount_type: z.string(),
+// });
 
 export const RightSection = () => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);

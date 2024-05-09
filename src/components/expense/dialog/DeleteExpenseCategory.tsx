@@ -4,9 +4,25 @@ import { Button } from '@/components/ui/button';
 import { DeleteIcon } from '@/components/common/icons';
 import { DialogFooter } from '@/components/common/Dialog';
 import { useExpenseStore } from '@/stores/useExpenseStore';
+import { deleteExpenseCategory } from '@/actions/category/deleteExpenseCategory';
+import { toast } from 'sonner';
 
 const DeleteExpenseCategory = () => {
   const closeDialog = useExpenseStore((state) => state.setExpenseDialogState);
+  const currentCategory = useExpenseStore((state) => state.currentCategory);
+
+  const handleDelete = async () => {
+    const res = await deleteExpenseCategory({ name: currentCategory });
+    console.log(res);
+    if (res?.success) {
+      toast.success('Category deleted successfully');
+      closeDialog({ open: false });
+    }
+    if (!res?.success) {
+      toast.error('something went wrong');
+      closeDialog({ open: false });
+    }
+  };
 
   return (
     <div className="relative">
@@ -23,7 +39,7 @@ const DeleteExpenseCategory = () => {
       </article>
 
       <DialogFooter className="flex justify-end gap-space16">
-        <Button variant={'danger'} onClick={() => closeDialog({ open: false })}>
+        <Button variant={'danger'} onClick={() => handleDelete()}>
           <DeleteIcon color="#fff" />
           Delete
         </Button>

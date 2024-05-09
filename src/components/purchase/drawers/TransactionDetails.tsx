@@ -143,7 +143,7 @@ const TransactionDetails = () => {
 
           <ExpandMoreIcon />
         </div> */}
-        <Text title="Sold Products" className="text-lg font-medium" />
+        <Text title="Buy Products" className="text-lg font-medium" />
 
         <div className={`grid 'grid-rows-[1fr]'`}>
           {purchaseProducts?.items &&

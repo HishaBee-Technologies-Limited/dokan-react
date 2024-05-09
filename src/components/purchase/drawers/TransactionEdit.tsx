@@ -13,13 +13,8 @@ import { usePurchaseStore } from '@/stores/usePurchase';
 import { DrawerFooter } from '@/components/common/Drawer';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Image } from '@/components/common/Image';
+
 import {
   Form,
   FormItem,
@@ -65,6 +60,11 @@ import { createPurchase } from '@/actions/purchase/createPurchase';
 import { useSession } from 'next-auth/react';
 import { jwtDecode } from 'jwt-decode';
 import { createDueItem } from '@/actions/due/createDueItem';
+import { IPurchaseProducts } from '@/types/purchase';
+import { getPurchaseItems } from '@/actions/purchase/getPurchaseItems';
+import ProductListCard from '../ProductListCard';
+import { Cross1Icon, Pencil1Icon } from '@radix-ui/react-icons';
+import ProductListCardEdit from '../ProductListCardEdit';
 
 const partyList = ['customer', 'supplier'];
 
@@ -103,11 +103,13 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   const cookie = getCookie('shop');
   const tkn = getCookie('access_token');
   const currentPurchase = usePurchase((state) => state.currentPurchase);
+  const [purchaseProducts, setPurchaseProducts] = useState<IPurchaseProducts>();
+  const [edit, setEdit] = useState(false);
 
   // const shop =cookie &&  JSON.parse(cookie) as IShopResponse;
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    // resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       amount: '',
@@ -120,7 +122,7 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: any) {
     // const responseCreatePurchase = await createPurchase({
     //   batch: '',
     //   created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -219,6 +221,19 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     form.setValue('details', currentPurchase?.note ?? '');
   }, [currentPurchase]);
   console.log(currentPurchase);
+
+  useEffect(() => {
+    const getPurchaseProducts = async () => {
+      const res = await getPurchaseItems({
+        id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
+      });
+      console.log(currentPurchase);
+      if (res?.success) {
+        setPurchaseProducts(res?.data.data);
+      }
+    };
+    getPurchaseProducts();
+  }, [currentPurchase]);
   return (
     <div className="space-y-space12">
       <Tabs onChange={(value) => {}} defaultValue={partyList[1]}>
@@ -340,6 +355,43 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
               </FormItem>
             )}
           />
+          <div className="flex justify-between">
+            <Text title="Buy Products" className="text-lg font-medium" />
+            {!edit ? (
+              <div
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={() => setEdit(!edit)}
+              >
+                <Text title="Edit" className="text-lg font-medium" />
+                <Pencil1Icon />
+              </div>
+            ) : (
+              <div
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={() => setEdit(!edit)}
+              >
+                <Text title="Close" className="text-lg font-medium" />
+                <Cross1Icon />
+              </div>
+            )}
+          </div>
+
+          <div className={`grid 'grid-rows-[1fr]'`}>
+            {purchaseProducts?.items &&
+              purchaseProducts?.items.map((product, index) => (
+                <>
+                  {edit ? (
+                    <ProductListCardEdit
+                      product={product}
+                      {...{ index, form }}
+                    />
+                  ) : (
+                    <ProductListCard product={product} />
+                  )}
+                </>
+              ))}
+          </div>
+
           <FormField
             control={form.control}
             name="name"

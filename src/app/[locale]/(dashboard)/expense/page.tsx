@@ -31,7 +31,10 @@ const ExpansePage = async ({ searchParams }: any) => {
         categories={categoriesRes?.data}
         expense={singleExpense?.data}
       />
-      <ExpenseDialogs expense={singleExpense?.data} />
+      <ExpenseDialogs
+        categories={categoriesRes?.data}
+        expense={singleExpense?.data}
+      />
     </>
   );
 };
