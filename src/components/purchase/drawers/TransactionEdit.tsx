@@ -234,6 +234,17 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     };
     getPurchaseProducts();
   }, [currentPurchase]);
+
+  // const products = form.watch('products');
+
+  //  /**
+  //  * calculating the total price from the selected and entered product quantity
+  //  */
+  //  const totalPrice =  products?.reduce((prev: number, p: { total: string }[]) => {
+  //      prev = prev + Number(Object.values(p)[0].total);
+  //      return prev;
+  //    }, 0)
+
   return (
     <div className="space-y-space12">
       <Tabs onChange={(value) => {}} defaultValue={partyList[1]}>

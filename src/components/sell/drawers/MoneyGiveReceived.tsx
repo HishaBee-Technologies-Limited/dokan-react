@@ -221,8 +221,8 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
 
       console.log('---', payload);
 
-      const res = await createDueItem(payload);
-      console.log('res----', res);
+      // const res = await createDueItem(payload);
+      // console.log('res----', res);
     }
 
     setCalculatedProducts({

@@ -185,16 +185,15 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       sms: data.sms ?? false,
     };
 
-    const res = await createDueItem(payload);
-    if (res?.success) {
-      setCalculatedProducts({
-        ...calculatedProducts,
-        paymentAmount: 0,
-        date: formatDate(DATE_FORMATS.default, data.date),
-      });
-      handleSellDrawer({ open: false });
-      openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
-    }
+    // const res = await createDueItem(payload);
+
+    setCalculatedProducts({
+      ...calculatedProducts,
+      paymentAmount: 0,
+      date: formatDate(DATE_FORMATS.default, data.date),
+    });
+    handleSellDrawer({ open: false });
+    openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
   }
 
   const activeCashColor = (active: string): string => {
