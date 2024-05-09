@@ -20,10 +20,10 @@ export interface IExpense {
 }
 
 export interface ICategory {
-  id: number;
-  shop_id: number;
+  id?: number;
+  shop_id?: number;
   name: string;
-  created_at: string;
-  updated_at: string;
-  unique_id: null | string;
+  created_at?: string;
+  updated_at?: string;
+  unique_id?: null | string;
 }

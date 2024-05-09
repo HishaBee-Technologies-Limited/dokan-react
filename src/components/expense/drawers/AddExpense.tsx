@@ -32,8 +32,6 @@ import { format } from 'date-fns';
 import { cn, formatDate, generateUlid } from '@/lib/utils';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { toast } from 'sonner';
-import { getCategories } from '@/actions/category/getCategories';
-import { DEFAULT_MIN_VERSION } from 'tls';
 import { addExpense } from '@/actions/expense/addExpense';
 import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
 import {
@@ -46,6 +44,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Image } from '@/components/common/Image';
 import { useRouter } from 'next/navigation';
+import { EXPENSE_DEFAULT_CATEGORIES } from '@/lib/constants/expense';
 
 const formSchema = z.object({
   category_name: z.string().min(2, {
@@ -59,13 +58,14 @@ const formSchema = z.object({
   date: z.date(),
 });
 
-const AddExpense = () => {
+const AddExpense = ({
+  categories,
+}: {
+  categories: ICommonGetResponse<ICategory>;
+}) => {
   const router = useRouter();
 
   const closeDrawer = useExpenseStore((state) => state.setExpenseDrawerState);
-  const [categories, setCategories] = useState<
-    ICommonGetResponse<ICategory> | undefined
-  >();
   const [selectedFiles, setSelectedFiles] = useState<FileList>();
   const [imageUrls, loading] = useFileUpload(selectedFiles);
   const handleAddNewCategory = useExpenseStore(
@@ -113,17 +113,17 @@ const AddExpense = () => {
     }
   }
 
-  useEffect(() => {
-    //get categories
-    const fetchCategories = async () => {
-      const res = await getCategories();
-      console.log(res);
-      if (res?.success) {
-        setCategories(res?.data);
-      }
-    };
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   //get categories
+  //   const fetchCategories = async () => {
+  //     const res = await getCategories();
+  //     console.log(res);
+  //     if (res?.success) {
+  //       setCategories(res?.data);
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -196,6 +196,11 @@ const AddExpense = () => {
                 </FormControl>
                 <SelectContent>
                   <div className="max-h-[24rem] overflow-y-scroll">
+                    {EXPENSE_DEFAULT_CATEGORIES.map((category) => (
+                      <SelectItem key={category.name} value={category.name}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
                     {categories &&
                       categories.data?.map((category) => (
                         <SelectItem key={category.id} value={category.name}>

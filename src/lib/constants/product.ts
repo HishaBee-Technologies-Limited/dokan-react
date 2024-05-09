@@ -10,3 +10,4 @@ export const DISCOUNT_TYPE = [
   { name: '৳ TAKA', value: 'AMOUNT' },
 ] as const;
 export const DEFAULT_STARTING_VERSION = 1;
+export const DEFAULT_DELETE_VERSION = -1;

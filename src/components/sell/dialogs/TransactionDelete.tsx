@@ -4,9 +4,39 @@ import { useSellStore } from '@/stores/useSellStore';
 import { DeleteIcon } from '@/components/common/icons';
 import { DialogFooter } from '@/components/common/Dialog';
 import { Text } from '@/components/common/text';
+import { formatDate } from '@/lib/utils';
+import { DATE_FORMATS } from '@/lib/constants/common';
+import { DEFAULT_DELETE_VERSION } from '@/lib/constants/product';
+import { toast } from 'sonner';
+import { deleteTransaction } from '@/actions/sell/deleteTransaction';
 
 const TransactionDelete = () => {
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
+  const currentPurchase = useSellStore((state) => state.currentSell);
+
+  const handleDelete = async () => {
+    if (currentPurchase) {
+      const res = await deleteTransaction({
+        unique_id: currentPurchase.unique_id,
+        created_at: currentPurchase.created_at,
+        updated_at: formatDate(DATE_FORMATS.default),
+        version: DEFAULT_DELETE_VERSION,
+        total_item: currentPurchase.total_item,
+        total_price: currentPurchase.total_price,
+        payment_method: currentPurchase.payment_method,
+        user_id: currentPurchase.user_id,
+      });
+      console.log(res);
+      if (res?.success) {
+        toast.success('Purchase was successfully deleted');
+        handleDialogOpen({ open: false });
+      }
+      if (!res?.success) {
+        toast.error('Something went wrong');
+        handleDialogOpen({ open: false });
+      }
+    }
+  };
 
   return (
     <div className="relative">
@@ -23,10 +53,7 @@ const TransactionDelete = () => {
       </article>
 
       <DialogFooter className="flex justify-end gap-space16">
-        <Button
-          variant={'danger'}
-          onClick={() => handleDialogOpen({ open: false })}
-        >
+        <Button variant={'danger'} onClick={() => handleDelete()}>
           <DeleteIcon color="#fff" />
           Delete
         </Button>

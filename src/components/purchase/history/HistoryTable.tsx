@@ -52,6 +52,7 @@ const HistoryTable = ({
 
   const handleEditClick = (item: any) => {
     handleDrawerOpen({ open: true, header: PurchaseEnum.TRANSACTION_EDIT });
+    setCurrentPurchase(item);
   };
 
   const transactionTypeTextVariant = (type: string): 'success' | 'error' => {
@@ -151,6 +152,7 @@ const HistoryTable = ({
                             open: true,
                             header: PurchaseEnum.TRANSACTION_DELETE,
                           });
+                          setCurrentPurchase(purchase);
                         }}
                       >
                         <DeleteIcon />

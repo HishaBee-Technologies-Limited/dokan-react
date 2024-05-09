@@ -218,8 +218,7 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     form.setValue('date', new Date(currentPurchase?.created_at ?? ''));
     form.setValue('details', currentPurchase?.note ?? '');
   }, [currentPurchase]);
-  console.log(new Date(currentPurchase?.created_at ?? ''));
-  console.log(suppliers);
+  console.log(currentPurchase);
   return (
     <div className="space-y-space12">
       <Tabs onChange={(value) => {}} defaultValue={partyList[1]}>

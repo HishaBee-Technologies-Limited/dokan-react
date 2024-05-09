@@ -20,9 +20,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: 'Name must be at least 2 characters.',
   }),
-  category_id: z.string().min(1, {
-    message: 'this field is requeued',
-  }),
+  category_id: z.string().optional(),
 });
 
 const AddNewCategory = () => {
@@ -61,7 +59,7 @@ const AddNewCategory = () => {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="category_id"
             render={({ field }) => (
@@ -94,7 +92,7 @@ const AddNewCategory = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
 
         <DialogFooter className="flex justify-end gap-space16">

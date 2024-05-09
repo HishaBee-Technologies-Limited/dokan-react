@@ -60,7 +60,7 @@ const ExpenseTable = ({
         </TableHeader>
 
         <TableBody>
-          {expenseList.data.map((expense, i) => (
+          {expenseList?.data.map((expense, i) => (
             <TableRow key={i} onClick={() => handleRowClick(expense)}>
               <TableCell>
                 <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">

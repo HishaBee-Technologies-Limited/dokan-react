@@ -28,6 +28,7 @@ export const getPurchaseHistory = async (
         format(sub(new Date(), { days: 30 }), DATE_FORMATS.default),
       end_date: endDate ?? formatDate(DATE_FORMATS.default),
       per_page: DEFAULT_PAGE_ITEMS,
+      exclude_deleted: 'true',
     });
     const res = await authApi.get(`/purchase?${params}`);
     const data = await res.json();

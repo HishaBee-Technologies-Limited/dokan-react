@@ -27,33 +27,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import Pagination from '@/components/common/CustomPagination';
 
-const invoices = [
-  {
-    id: '#9875834',
-    item: '2 items',
-    contact: 'Md. Ariful Islam',
-    amount: '৳200',
-    date: '23 May 2023',
-    transactionType: 'quick sell',
-  },
-  {
-    id: '#9895834',
-    item: '2 items',
-    contact: 'Md. Ariful Islam',
-    amount: '৳200',
-    date: '23 May 2023',
-    transactionType: 'sell',
-  },
-  {
-    id: '#9895894',
-    item: '2 items',
-    contact: 'Md. Ariful Islam',
-    amount: '৳200',
-    date: '23 May 2023',
-    transactionType: 'due',
-  },
-];
-
 const HistoryTable = ({
   transactions,
 }: {
@@ -78,6 +51,7 @@ const HistoryTable = ({
       handleDrawerOpen({ open: true, header: SellEnum.QUICK_SELL_EDIT });
     } else {
       handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_EDIT });
+      setCurrentPurchase(item);
     }
   };
 
@@ -181,6 +155,7 @@ const HistoryTable = ({
                             open: true,
                             header: SellEnum.TRANSACTION_DELETE,
                           });
+                          setCurrentPurchase(transaction);
                         }}
                       >
                         <DeleteIcon />

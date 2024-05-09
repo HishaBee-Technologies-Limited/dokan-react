@@ -7,6 +7,7 @@ import ExpenseHeader from '@/components/expense/ExpenseHeader';
 import ExpenseQueries from '@/components/expense/ExpenseQueries';
 import { getAllExpense } from '@/actions/expense/getAllExpense';
 import { getSingleExpense } from '@/actions/expense/getSingleExpense';
+import { getCategories } from '@/actions/category/getCategories';
 
 const ExpansePage = async ({ searchParams }: any) => {
   const expenseList = await getAllExpense(searchParams.page);
@@ -15,6 +16,8 @@ const ExpansePage = async ({ searchParams }: any) => {
     singleExpense = await getSingleExpense(searchParams.expense);
     console.log(singleExpense);
   }
+  const categoriesRes = await getCategories();
+
   return (
     <>
       <div className="space-y-space16 h-full w-full">
@@ -24,7 +27,10 @@ const ExpansePage = async ({ searchParams }: any) => {
         <ExpenseTable expenseList={expenseList?.data} />
       </div>
 
-      <ExpenseDrawers expense={singleExpense?.data} />
+      <ExpenseDrawers
+        categories={categoriesRes?.data}
+        expense={singleExpense?.data}
+      />
       <ExpenseDialogs expense={singleExpense?.data} />
     </>
   );
