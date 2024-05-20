@@ -19,7 +19,7 @@ export const getDueItemByUniqueID = async (
         success: true,
         status_code: data.status_code,
         message: data.message,
-        data: data.data as IDueItemsResponse[],
+        data: data as IDueItemsResponse[],
         metadata: data.metadata,
       };
     }

@@ -109,20 +109,28 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
 
           <article className="sm:w-1/2 md:pl-space16 flex justify-between gap-space16">
             <Text
-              title={`৳ ${totalValues.total_get}`}
+              title={`৳ ${dueItems
+                ?.filter((item) => item.amount > 0)
+                .reduce((acc, item) => {
+                  return acc + item.amount;
+                }, 0)}`}
               variant="success"
               className="text-sm font-bold"
             />
             <Text
-              title={`৳ ${totalValues.total_give}`}
+              title={`৳ ${dueItems
+                ?.filter((item) => item.amount < 0)
+                .reduce((acc, item) => {
+                  return acc + item.amount;
+                }, 0)}`}
               variant="error"
               className="text-sm font-bold"
             />
             <Text
               className="text-sm font-bold"
-              title={`৳ ${totalValues.total_give - totalValues.total_get}`}
+              title={`৳ ${dueItems && dueItems[0]?.due.due_amount}`}
               variant={
-                totalValues.total_give - totalValues.total_get < 0
+                dueItems && dueItems[0]?.due.due_amount > 0
                   ? 'success'
                   : 'error'
               }

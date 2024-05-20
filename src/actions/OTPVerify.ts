@@ -11,7 +11,7 @@ export const verifyOTP = async ({
 }) => {
   const cookieStore = cookies();
   const res = await api.post(
-    `/otp/verify?mobile_number=${mobile_number}&code=${otp}&type=MANUAL`
+    `/otp/send?mobile_number=${mobile_number}&code=${otp}&type=MANUAL`
   );
   const data = await res.json();
   console.log(data);

@@ -13,12 +13,8 @@ import { IPurchaseProducts } from '@/types/purchase';
 import { IProductSellPayload } from '@/types/sell';
 import { format } from 'date-fns';
 
-export const ContactTable = ({
-  userTransaction,
-}: {
-  userTransaction: ICommonGetResponse<IProductSellPayload & IPurchaseProducts>;
-}) => {
-  console.log(userTransaction);
+export const ContactTable = ({ userTransaction }: { userTransaction: any }) => {
+  console.log('transss', userTransaction);
   const { getQueryString } = useCreateQueryString();
 
   const activeTab = getQueryString('tab') ?? '';
@@ -41,13 +37,13 @@ export const ContactTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {userTransaction?.data?.map((invoice) => (
+        {userTransaction?.map((invoice: IProductSellPayload) => (
           <TableRow key={invoice.id}>
             <TableCell>{invoice.id}</TableCell>
             <TableCell>
               {format(invoice.created_at, DATE_FORMATS.dateWithOutTime)}
             </TableCell>
-            <TableCell>{invoice.supplier_name}</TableCell>
+            <TableCell>{invoice.customer_name}</TableCell>
             <TableCell>{invoice.total_item}</TableCell>
             {activeTab !== 'Supplier' && (
               <TableCell

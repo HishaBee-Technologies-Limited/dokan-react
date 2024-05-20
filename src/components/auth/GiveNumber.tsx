@@ -40,22 +40,21 @@ const GiveNumber = () => {
     const response = await checkNumber({ mobile_number });
     setLoading(false);
 
+    console.log(response);
+
     if (response?.success) {
-      if (response.data?.status_code === 200) {
+      if (response.data?.code === 200) {
         router.push('/auth/pin');
-      } else if (response?.data?.status_code === 206) {
+      } else if (response?.data?.code === 206) {
         router.push('/auth/signup');
-      } else if (response?.data?.status_code === 208) {
+      } else if (response?.data?.code === 208) {
         router.push('/auth/setup-pin');
       } else {
         router.push('/auth/error');
       }
     }
     if (!response?.success) {
-      if (
-        response?.error?.status_code === 403 ||
-        response?.error?.status_code === 404
-      ) {
+      if (response?.error?.code === 403 || response?.error?.code === 404) {
         router.push('/auth/otp');
       } else {
         router.push('/auth/error');

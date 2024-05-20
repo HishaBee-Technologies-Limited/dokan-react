@@ -29,27 +29,28 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { getDivisions } from '@/actions/publicData';
-import { Skeleton } from '@/components/ui/skeleton';
 import { saveSignupInfo } from '@/actions/saveSignupInfo';
 import { useRouter } from 'next/navigation';
+import { getAreasAndTypes } from '@/actions/shop/getAreaAndTypes';
+import { IAllArea } from '@/types/shop';
 
 const formSchema = z.object({
   brand_name: z.string(),
-  area: z.string(),
+  area: z.number(),
   address: z.string(),
-  division: z.string(),
-  district: z.string(),
+  division: z.string().optional(),
+  district: z.string().optional(),
   user_intent: z.string(),
 });
 
 const Information = () => {
-  const [divisions, setDivisions] = useState<{ division: string }[] | null>(
-    null
-  );
-  const [districts, setDistricts] = useState<{ district: string }[] | null>(
-    null
-  );
+  const [divisions, setDivisions] = useState<IAllArea[]>();
+
+  const [open, setOpen] = React.useState(false);
+  const [divisionValue, setDivisionValue] = React.useState('');
+
+  const [openDistrict, setOpenDistrict] = React.useState(false);
+  const [districtValue, setDistrictValue] = React.useState('');
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -57,10 +58,7 @@ const Information = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       brand_name: '',
-      area: '',
       address: '',
-      division: '',
-      district: '',
     },
   });
 
@@ -80,21 +78,15 @@ const Information = () => {
   }
 
   useEffect(() => {
-    const getBdPublicDaa = async () => {
-      setLoading(true);
-      const res = await getDivisions();
-      if (res?.success) {
-        setLoading(true);
-
-        setDivisions(res?.data?.division.data);
-        setDistricts(res?.data?.district.data);
-      } else {
-        setError(res?.error);
-        setLoading(false);
-      }
+    const getAllAreas = async () => {
+      const res = await getAreasAndTypes();
+      console.log(res?.data?.typesData);
+      setDivisions(res?.data?.areaData);
     };
-    getBdPublicDaa();
+    getAllAreas();
   }, []);
+
+  console.log(form.formState.errors);
   return (
     <div>
       <Text
@@ -128,151 +120,194 @@ const Information = () => {
             )}
           />
 
-          <div className="gap-space8 sm:gap-space16 grid grid-cols-2">
-            <FormField
-              control={form.control}
-              name="division"
-              render={({ field }) => (
-                <FormItem className="flex flex-col ">
-                  <FormLabel>Division</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
+          <div className="gap-space8 sm:gap-space16 flex ">
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-[350px] justify-between"
+                >
+                  {divisionValue
+                    ? divisions?.find(
+                        (division) => String(division.id) === divisionValue
+                      )?.name
+                    : 'Select Divisions...'}
+                  <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[350px] p-0">
+                <Command>
+                  <CommandInput
+                    placeholder="Search framework..."
+                    className="h-12"
+                  />
+                  <CommandEmpty>No framework found.</CommandEmpty>
+                  <CommandGroup>
+                    {divisions?.map((division) => (
+                      <CommandItem
+                        key={division.id}
+                        value={String(division.id)}
+                        onSelect={(currentValue) => {
+                          setDivisionValue(
+                            currentValue === String(divisionValue)
+                              ? ''
+                              : currentValue
+                          );
+                          setOpen(false);
+                        }}
+                      >
+                        {division.name}
+                        <CheckIcon
                           className={cn(
-                            'h-16 w-[200px] justify-between bg-white',
-                            !field.value && 'text-muted-foreground'
+                            'ml-auto h-4 w-4',
+                            divisionValue === String(division.id)
+                              ? 'opacity-100'
+                              : 'opacity-0'
                           )}
-                        >
-                          {field.value
-                            ? divisions?.find(
-                                (division) => division.division === field.value
-                              )?.division
-                            : 'Select Division'}
-                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput
-                          placeholder="Search Division..."
-                          className="h-12"
                         />
-                        <CommandEmpty className="h-12 p-2">
-                          No division found.
-                        </CommandEmpty>
-                        <CommandGroup className="max-h-80 overflow-scroll">
-                          {loading ? (
-                            divisions?.map((division) => (
-                              <CommandItem
-                                value={division.division}
-                                key={division.division}
-                                onSelect={() => {
-                                  form.setValue('division', division.division);
-                                }}
-                              >
-                                {division.division}
-                                <CheckIcon
-                                  className={cn(
-                                    'ml-auto h-4 w-4',
-                                    division.division === field.value
-                                      ? 'opacity-100'
-                                      : 'opacity-0'
-                                  )}
-                                />
-                              </CommandItem>
-                            ))
-                          ) : (
-                            <div className="flex flex-col gap-2 p-2">
-                              <Skeleton className="h-8 w-full" />
-                              <Skeleton className="h-6 w-full" />
-                              <Skeleton className="h-4 w-full" />
-                            </div>
-                          )}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="district"
-              render={({ field }) => (
-                <FormItem className="flex flex-col ">
-                  <FormLabel>District</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            'h-16 w-[200px] justify-between bg-white',
-                            !field.value && 'text-muted-foreground'
-                          )}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+            <Popover open={openDistrict} onOpenChange={setOpenDistrict}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={openDistrict}
+                  className="w-[320px] justify-between"
+                >
+                  {districtValue
+                    ? divisions
+                        ?.find(
+                          (division) => String(division.id) === divisionValue
+                        )
+                        ?.districts.find(
+                          (district) => String(district.id) === districtValue
+                        )?.name
+                    : 'Select Districts...'}
+                  <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[320px] p-0">
+                <Command>
+                  <CommandInput
+                    placeholder="Search Districts..."
+                    className="h-12"
+                  />
+                  <CommandEmpty>No district found.</CommandEmpty>
+                  <CommandGroup>
+                    {divisions
+                      ?.find(
+                        (division) => String(division.id) === divisionValue
+                      )
+                      ?.districts.map((district) => (
+                        <CommandItem
+                          key={district.id}
+                          value={String(district.id)}
+                          onSelect={(currentValue) => {
+                            setDistrictValue(
+                              currentValue === String(districtValue)
+                                ? ''
+                                : currentValue
+                            );
+                            setOpenDistrict(false);
+                          }}
                         >
-                          {field.value
-                            ? districts?.find(
-                                (district) => district.district === field.value
-                              )?.district
-                            : 'Select District'}
-                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput
-                          placeholder="Search District..."
-                          className="h-12"
-                        />
-                        <CommandEmpty>No district found.</CommandEmpty>
-                        <CommandGroup className="max-h-80 overflow-scroll">
-                          {loading ? (
-                            districts?.map((district) => (
-                              <CommandItem
-                                value={district.district}
-                                key={district.district}
-                                onSelect={() => {
-                                  form.setValue('district', district.district);
-                                }}
-                              >
-                                {district.district}
-                                <CheckIcon
-                                  className={cn(
-                                    'ml-auto h-4 w-4',
-                                    district.district === field.value
-                                      ? 'opacity-100'
-                                      : 'opacity-0'
-                                  )}
-                                />
-                              </CommandItem>
-                            ))
-                          ) : (
-                            <div className="flex flex-col gap-2 p-2">
-                              <Skeleton className="h-8 w-full" />
-                              <Skeleton className="h-6 w-full" />
-                              <Skeleton className="h-4 w-full" />
-                            </div>
-                          )}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  {/* <FormDescription>
-                    This is the language that will be used in the dashboard.
-                  </FormDescription> */}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          {district.name}
+                          <CheckIcon
+                            className={cn(
+                              'ml-auto h-4 w-4',
+                              districtValue === String(district.id)
+                                ? 'opacity-100'
+                                : 'opacity-0'
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
+
+          <FormField
+            control={form.control}
+            name="area"
+            render={({ field }) => (
+              <FormItem>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={openDistrict}
+                      className={cn(
+                        'h-16 w-full justify-between bg-white',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      {field.value
+                        ? divisions
+                            ?.find(
+                              (division) =>
+                                String(division.id) === divisionValue
+                            )
+                            ?.districts.find(
+                              (district) =>
+                                String(district.id) === districtValue
+                            )
+                            ?.areas?.find((area) => area.id === field.value)
+                            ?.name
+                        : 'Select Area...'}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[600px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search Districts..."
+                        className="h-12"
+                      />
+                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandGroup className="max-h-80 overflow-scroll">
+                        {divisions
+                          ?.find(
+                            (division) => String(division.id) === divisionValue
+                          )
+                          ?.districts.find(
+                            (district) => String(district.id) === districtValue
+                          )
+                          ?.areas?.map((area) => (
+                            <CommandItem
+                              key={area.id}
+                              value={String(area.id)}
+                              onSelect={() => {
+                                form.setValue('area', area.id);
+                              }}
+                            >
+                              {area.name}
+                              <CheckIcon
+                                className={cn(
+                                  'ml-auto h-4 w-4',
+                                  field.value === area.id
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -282,19 +317,6 @@ const Information = () => {
                 <FormLabel>Address</FormLabel>
                 <FormControl>
                   <Input placeholder="Address" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="area"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Area</FormLabel>
-                <FormControl>
-                  <Input placeholder="Area" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -343,7 +365,7 @@ const Information = () => {
           <Button
             type="submit"
             className="w-full"
-            disabled={!form.formState.isValid}
+            // disabled={!form.formState.isValid}
           >
             Save
           </Button>

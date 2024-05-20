@@ -7,8 +7,6 @@ export const getSingleProduct = async (uniqueId: string) => {
   try {
     const shopId = cookies().get('shopId')?.value;
 
-    console.log(uniqueId);
-
     const res = await authApi.get(`/product/${uniqueId}?shop_id=${1885}`);
     const data = await res.json();
 

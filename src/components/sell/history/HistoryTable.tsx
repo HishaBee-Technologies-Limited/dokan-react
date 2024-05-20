@@ -30,7 +30,7 @@ import Pagination from '@/components/common/CustomPagination';
 const HistoryTable = ({
   transactions,
 }: {
-  transactions?: ICommonGetResponse<IPurchaseHistoryResponse>;
+  transactions?: IPurchaseHistoryResponse[];
 }) => {
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
@@ -92,7 +92,7 @@ const HistoryTable = ({
         </TableHeader>
 
         <TableBody>
-          {transactions?.data?.map((transaction, i) => (
+          {transactions?.map((transaction, i) => (
             <TableRow
               key={transaction.id}
               onClick={() => handleRowClick(transaction)}
@@ -178,9 +178,9 @@ const HistoryTable = ({
         </TableFooter>
       </Table>
       <ScrollBar orientation="horizontal" />
-      <Pagination
+      {/* <Pagination
         pageCount={
-          transactions?.data.length === 0
+          transactions?.length === 0
             ? transactions?.last_page
             : transactions
               ? Math.ceil(
@@ -193,7 +193,7 @@ const HistoryTable = ({
         onChanage={(page) => {
           router.push(`${pathname}?${setQueryString('page', page)}`);
         }}
-      />
+      /> */}
     </ScrollArea>
   );
 };

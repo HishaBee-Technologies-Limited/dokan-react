@@ -21,14 +21,13 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
   const shop = getCookie('shop');
   const [link, setLink] = useState<IAsideBarMenuItem[]>([]);
   useEffect(() => {
+    console.log(shop);
     if (
-      JSON.parse(shop as string).subscription.package ===
-      SUBSCRIPTION_PACKAGES.advanced
+      JSON.parse(shop as string).subscription === SUBSCRIPTION_PACKAGES.advanced
     ) {
       setLink(SidebarLinks);
     } else if (
-      JSON.parse(shop as string).subscription.package ===
-      SUBSCRIPTION_PACKAGES.standard
+      JSON.parse(shop as string).subscription === SUBSCRIPTION_PACKAGES.standard
     ) {
       setLink(SidebarLinksStandard);
     } else {
@@ -96,14 +95,14 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                   {menu.title}
                 </span>
                 {['Standard', 'Advanced'].includes(menu.title) &&
-                JSON.parse(shop as string).subscription.package !==
+                JSON.parse(shop as string).subscription !==
                   SUBSCRIPTION_PACKAGES.standard ? (
                   <div className={`absolute right-space12   `}>
                     <LockClosedIcon width={24} height={24} />
                   </div>
                 ) : null}
                 {['Standard', 'Advanced'].includes(menu.title) &&
-                JSON.parse(shop as string).subscription.package !==
+                JSON.parse(shop as string).subscription !==
                   SUBSCRIPTION_PACKAGES.advanced ? (
                   <div className={`absolute right-space12   `}>
                     <LockClosedIcon width={24} height={24} />

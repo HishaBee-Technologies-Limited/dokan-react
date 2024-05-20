@@ -6,38 +6,16 @@ import { IProductPayload } from '@/types/product';
 import { IProductPurchasePayload } from '@/types/purchase';
 import { IDueCreate } from '@/types/due/dueResponse';
 
-export const createDue = async ({
-  amount,
-  unique_id,
-  version,
-  updated_at,
-  created_at,
-  message,
-  contact_mobile,
-  contact_type,
-  contact_name,
-  sms,
-  transaction_unique_id,
-}: IDueCreate) => {
+export const createDue = async (payload: any) => {
   try {
     const shopId = cookies().get('shopId')?.value;
 
-    const payload: IDueCreate = {
-      shop_id: Number(shopId),
-      amount,
-      unique_id,
-      version,
-      updated_at,
-      created_at,
-      message,
-      contact_mobile,
-      contact_type,
-      contact_name,
-      sms,
-      transaction_unique_id,
-    };
-
-    const res = await authApi.post(`/due/add`, payload);
+    const params = new URLSearchParams({
+      shop_id: shopId,
+      ...payload,
+    });
+    console.log(params);
+    const res = await authApi.post(`/due/add?${params}`);
     const data = await res.json();
 
     if (res.ok) {

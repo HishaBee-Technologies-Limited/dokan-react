@@ -67,6 +67,7 @@ import { jwtDecode } from 'jwt-decode';
 import { createDueItem } from '@/actions/due/createDueItem';
 import { toast } from 'sonner';
 import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
+import { createDue } from '@/actions/due/createDue';
 
 const partyList = ['customer', 'supplier'];
 
@@ -152,9 +153,9 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
-          purchase_id: responseCreatePurchase.data.data.id,
+          purchase_id: responseCreatePurchase.data.purchase.id,
 
-          purchase_unique_id: responseCreatePurchase.data.data.unique_id,
+          purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,
@@ -164,36 +165,59 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
           version: DEFAULT_STARTING_VERSION,
         });
       });
+
+      const payload = {
+        // shop_id: Number(shop_id),
+        amount: -Number(data.amount),
+        unique_id: generateUlid(),
+        due_left: -Number(data.amount),
+        version: DEFAULT_STARTING_VERSION,
+        updated_at: formatDate(DATE_FORMATS.default),
+        created_at: formatDate(DATE_FORMATS.default),
+        message: data.details,
+        contact_mobile: data.number,
+        contact_type: 'CUSTOMER',
+        contact_name: data.name,
+        sms: data.sms ?? false,
+        purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+      };
+
+      const dueRes = await createDue(payload);
+      console.log('dueRes----', dueRes);
+
+      const payloadForDueItem = {
+        amount: Number(data.amount),
+        unique_id: generateUlid(),
+        due_left: Number(data.amount),
+        version: DEFAULT_STARTING_VERSION,
+        updated_at: formatDate(DATE_FORMATS.default),
+        created_at: formatDate(DATE_FORMATS.default),
+        message: data.details,
+        contact_mobile: data.number,
+        contact_type: 'SUPPLIER',
+        contact_name: data.name,
+        sms: data.sms ?? false,
+        due_unique_id: dueRes?.data.due.unique_id,
+        purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+      };
+
+      const res = await createDueItem(payloadForDueItem);
+
+      console.log(res);
+
+      setCalculatedProducts({
+        ...calculatedProducts,
+        paymentAmount: 0,
+        date: formatDate(DATE_FORMATS.default, data.date),
+      });
+      handleSellDrawer({ open: false });
+      openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
     }
     if (responseCreatePurchase?.error) {
       toast.error('Something went wrong');
 
       console.log('error-------', responseCreatePurchase?.error);
     }
-
-    const payload = {
-      amount: Number(data.amount),
-      unique_id: generateUlid(),
-      due_left: Number(data.amount),
-      version: DEFAULT_STARTING_VERSION,
-      updated_at: formatDate(DATE_FORMATS.default),
-      created_at: formatDate(DATE_FORMATS.default),
-      message: data.details,
-      contact_mobile: data.number,
-      contact_type: 'SUPPLIER',
-      contact_name: data.name,
-      sms: data.sms ?? false,
-    };
-
-    // const res = await createDueItem(payload);
-
-    setCalculatedProducts({
-      ...calculatedProducts,
-      paymentAmount: 0,
-      date: formatDate(DATE_FORMATS.default, data.date),
-    });
-    handleSellDrawer({ open: false });
-    openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
   }
 
   const activeCashColor = (active: string): string => {

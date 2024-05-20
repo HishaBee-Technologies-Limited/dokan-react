@@ -13,13 +13,13 @@ export const getAllShops = async () => {
     // }
     console.log('----', res);
     const data = await res.json();
-    console.log(data.data[0]);
+    console.log('shop', data);
 
     if (res.ok) {
       return {
         success: true,
         status: data?.code,
-        data: data.data as IShopResponse[],
+        data: data as IShopResponse[],
       };
     }
     if (!res.ok) {

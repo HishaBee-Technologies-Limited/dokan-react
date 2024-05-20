@@ -5,15 +5,15 @@ import { IUserResponse } from '@/types/contact/partyResponse';
 
 export const getSingleCustomer = async (id: number) => {
   try {
-    const res = await authApi.get(`/customer/transaction/0${id}`);
+    const res = await authApi.get(`/customer/${id}`);
     const data = await res.json();
-
+    console.log(data);
     if (res.ok) {
       return {
         success: true,
         message: data.message,
         status: data.status_code,
-        data: data.data,
+        data: data as IUserResponse,
       };
     }
     if (!res.ok) {

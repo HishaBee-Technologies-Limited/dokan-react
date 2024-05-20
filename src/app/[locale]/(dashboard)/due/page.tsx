@@ -20,7 +20,26 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
   const dueList = await getAllDue();
   const dueItems = await getDueItemByUniqueID(`${userID}`);
 
-  console.log();
+  // console.log(dueList);
+
+  const positiveValue = dueList?.data?.data
+    ?.filter((item) => item.due_amount > 0)
+    .reduce((acc, item) => {
+      return acc + item.due_amount;
+    }, 0);
+
+  const negativeValue = dueList?.data?.data
+    ?.filter((item) => item.due_amount < 0)
+    .reduce((acc, item) => {
+      return acc + item.due_amount;
+    }, 0);
+
+  const metaData = {
+    total_get: negativeValue ?? 0,
+    total_give: positiveValue ?? 0,
+  };
+
+  // console.log(positiveValue, negativeValue);
 
   return (
     <>
@@ -28,10 +47,7 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
         <DueHeader />
 
         <Card className="space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]">
-          <LeftSection
-            dueList={dueList?.data as any}
-            totalValues={dueList?.metadata}
-          />
+          <LeftSection dueList={dueList?.data as any} totalValues={metaData} />
           {dueItems?.data ? (
             <RightSection
               dueItems={dueItems?.data as IDueItemsResponse[]}

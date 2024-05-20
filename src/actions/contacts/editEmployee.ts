@@ -4,16 +4,16 @@ import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
 import { IUserRequest } from '@/types/contact/partyRequest';
 
-export const editEmployee = async ({ id, ...payload }: IUserRequest) => {
+export const editEmployee = async (payload: any) => {
   const shopId = cookies().get('shopId')?.value;
 
-  const updatedPayload = {
+  const updatedPayload = new URLSearchParams({
     ...payload,
     shop_id: Number(shopId),
-  };
+  });
 
   try {
-    const res = await authApi.put(`/employees/${id}`, updatedPayload);
+    const res = await authApi.get(`/employee/edit?${updatedPayload}`);
     const data = await res.json();
 
     if (res.ok) {

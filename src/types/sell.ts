@@ -17,6 +17,7 @@ export interface IProductSellPayload {
   updated_at: string;
   user_id?: number;
   version: number;
+  id?: number;
   discount_type?: string;
   total_discount: number;
   change_amount?: number;

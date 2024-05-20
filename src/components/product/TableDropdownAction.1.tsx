@@ -48,13 +48,13 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
             className="w-full justify-start"
             onClick={(e) => {
               e.stopPropagation();
+              router.push(
+                `${pathname}?${setQueryString('product', product?.unique_id)}`
+              );
               handleDialogOpen({
                 open: true,
                 header: ProductEnum.PRODUCT_DETAILS,
               });
-              router.push(
-                `${pathname}?${setQueryString('product', product?.unique_id)}`
-              );
             }}
           >
             <Icon icon="carbon:folder-details" />
@@ -68,13 +68,12 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
             className="w-full justify-start"
             onClick={(e) => {
               e.stopPropagation();
+              console.log(product);
+              router.push(`${pathname}?product=${product?.unique_id}`);
               handleDrawerOpen({
                 open: true,
                 header: ProductEnum.EDIT_PRODUCT,
               });
-              router.push(
-                `${pathname}?${setQueryString('product', product?.unique_id)}`
-              );
             }}
           >
             <EditIcon />

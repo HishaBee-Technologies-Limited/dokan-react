@@ -133,10 +133,8 @@ export const EditProduct = ({
       form.setValue('vat_percentage', String(product?.wholesale_price ?? '')),
       form.setValue('warranty_duration', String(product?.warranty ?? '')),
       form.setValue('discount', String(product?.discount ?? '')),
-      product?.warranty_type &&
-        form.setValue('warranty_type', product.warranty_type),
-      product?.discount_type &&
-        form.setValue('discount_type', product.discount_type),
+      form.setValue('warranty_type', product?.warranty_type),
+      form.setValue('discount_type', product?.discount_type),
       form.setValue('sub_category', String(product?.sub_category?.id)),
       form.setValue('unit', String(product?.unit)),
       // boolean
@@ -148,10 +146,11 @@ export const EditProduct = ({
       form.setValue('bulk_sell_check', true);
     form.setValue('category', String(category?.id));
     setInitialSubCategory(String(product?.sub_category?.id));
-    saveImageUrls(
-      product.gallery?.substring(1, product.gallery.length - 1).split(',')
-    );
+    // saveImageUrls(
+    //   product?.gallery?.substring(1, product?.gallery.length - 1).split(',')
+    // );
   }, [product, category]);
+  console.log(product);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
@@ -199,6 +198,7 @@ export const EditProduct = ({
                 {loading && <Skeleton className="h-2 w-full rounded-none" />}
               </div>
             ))}
+            <Image src={product?.image_url} alt="" height={60} width={60} />
           </div>
         </div>
 

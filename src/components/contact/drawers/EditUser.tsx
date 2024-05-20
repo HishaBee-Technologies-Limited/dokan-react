@@ -51,8 +51,11 @@ const EditUser = () => {
       mobile: data.number,
       email: data.email as string,
       address: data.address as string,
-      id: party?.unique_id,
+      unique_id: party?.unique_id,
+      id: party?.id,
     };
+
+    console.log(party);
 
     const updateParty = () => {
       if (activeTab === 'Customer') {

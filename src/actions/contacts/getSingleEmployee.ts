@@ -5,7 +5,7 @@ import { IUserResponse } from '@/types/contact/partyResponse';
 
 export const getSingleEmployee = async (id: number) => {
   try {
-    const res = await authApi.get(`/employee/transaction/0${id}`);
+    const res = await authApi.get(`/employee/${id}`);
     const data = await res.json();
 
     if (res.ok) {
@@ -13,7 +13,7 @@ export const getSingleEmployee = async (id: number) => {
         success: true,
         message: data.message,
         status: data.status_code,
-        data: data.data as IUserResponse,
+        data: data as IUserResponse,
       };
     }
     if (!res.ok) {

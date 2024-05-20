@@ -78,7 +78,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
           }}
         />
 
-        <Card className="grid grid-cols-2  px-space12 sm:px-space16">
+        {/* <Card className="grid grid-cols-2  px-space12 sm:px-space16">
           <article className="border-r border-color text-center">
             <Text
               title="You’ll Give"
@@ -88,7 +88,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
             <Text
               title={`৳ ${totalValues?.total_give}`}
               className="font-semibold text-lg"
-              variant="error"
+              variant="success"
             />
           </article>
           <article className=" text-center">
@@ -100,14 +100,14 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
             <Text
               title={`৳ ${totalValues?.total_get}`}
               className="font-semibold text-lg"
-              variant="success"
+              variant="error"
             />
           </article>
-        </Card>
+        </Card> */}
 
-        <div className=" px-space12 sm:px-space16">
+        {/* <div className=" px-space12 sm:px-space16">
           <Input placeholder="Search contact" />
-        </div>
+        </div> */}
       </div>
 
       <ScrollArea className="h-[calc(100%-20.6rem)] overflow-y-scroll  px-space12 sm:px-space16">

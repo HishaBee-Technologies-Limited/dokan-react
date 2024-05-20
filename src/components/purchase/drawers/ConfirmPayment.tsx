@@ -160,8 +160,8 @@ const ConfirmPayment = () => {
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
-          purchase_id: responseCreatePurchase.data.data.id,
-          purchase_unique_id: responseCreatePurchase.data.data.unique_id,
+          purchase_id: responseCreatePurchase.data.id,
+          purchase_unique_id: responseCreatePurchase.data.unique_id,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,

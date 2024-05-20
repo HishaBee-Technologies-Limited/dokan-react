@@ -4,18 +4,18 @@ import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
 import { IUserRequest } from '@/types/contact/partyRequest';
 
-export const addSupplier = async (payload: IUserRequest) => {
+export const addSupplier = async (payload: any) => {
   const shopId = cookies().get('shopId')?.value;
 
-  const updatedPayload = {
+  const updatedPayload = new URLSearchParams({
     ...payload,
     shop_id: Number(shopId),
-  };
+  });
   console.log(updatedPayload);
   console.log(shopId);
 
   try {
-    const res = await authApi.post(`/suppliers`, updatedPayload);
+    const res = await authApi.get(`/supplier/add?${updatedPayload}`);
     const data = await res.json();
     console.log(res);
 

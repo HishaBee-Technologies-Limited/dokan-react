@@ -26,7 +26,7 @@ export interface IProduct {
   vat_applicable?: boolean;
   unit?: number;
   published: boolean;
-  gallery?: string;
+  gallery?: string[];
 }
 
 export interface IProductPayload {
@@ -40,7 +40,7 @@ export interface IProductPayload {
   description?: string;
   vat_applicable?: boolean;
   vat_percent?: number;
-  gallery?: string; // An array of strings (empty in this case)
+  // An array of strings (empty in this case)
   product_type?: 'SIMPLE';
   barcode?: null | string; // Can be null or a string
   sell_online?: boolean;
@@ -61,6 +61,7 @@ export interface IProductPayload {
   weight?: string; // Represented as a string (e.g., "0.0")
   image_url?: string;
   unit?: number;
+  gallery?: string[];
 }
 
 export interface IUnits {

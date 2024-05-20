@@ -50,7 +50,7 @@ export const LeftSection = ({
 
     const params = {
       tab: activeTab ? activeTab : 'Customer',
-      active_user: userList ? userList[0].mobile : '',
+      active_user: userList ? String(userList[0].id) : '',
     };
     router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
   }, [activeTab]);
@@ -58,15 +58,15 @@ export const LeftSection = ({
   useEffect(() => {
     const params = {
       tab: 'Customer',
-      active_user: userList ? userList[0].mobile : '',
+      active_user: userList ? String(userList[0].id) : '',
     };
     router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
   }, []);
-  useEffect(() => {
-    if (userList) {
-      setParty(userList[0]);
-    }
-  }, [userList]);
+  // useEffect(() => {
+  //   if (userList) {
+  //     setParty(userList[0]);
+  //   }
+  // }, [userList]);
 
   return (
     <Card className="h-full lg:w-4/12 flex flex-col gap-space16">
@@ -92,7 +92,7 @@ export const LeftSection = ({
               active={item.id.toString() === activeUser}
               onClick={() => {
                 router.push(
-                  `${pathname}?${setQueryString('active_user', item.mobile)}`
+                  `${pathname}?${setQueryString('active_user', item.id)}`
                 );
                 setParty(item);
               }}

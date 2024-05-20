@@ -66,8 +66,10 @@ export const signup = async (payload: z.infer<typeof RegisterSchema>) => {
   );
 
   const data = await res.json();
-  console.log(data);
+  console.log('register', data);
   if (res.ok) {
+    cookies().set('access_token', data?.access_token);
+
     return { success: true, status: data.code, data: data };
   }
   if (!res.ok) {

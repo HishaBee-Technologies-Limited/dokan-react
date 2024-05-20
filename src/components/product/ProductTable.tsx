@@ -51,7 +51,7 @@ export const ProductTable = ({
         </TableHeader>
 
         <TableBody>
-          {productData?.data.data?.map((product: IProduct) => (
+          {productData?.data?.map((product: IProduct) => (
             <TableRow key={product?.id} onClick={() => handleRowClick(product)}>
               <TableCell>
                 <div className="gap-space8 flex items-center">

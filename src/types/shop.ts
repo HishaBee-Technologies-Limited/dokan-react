@@ -4,6 +4,7 @@ export interface IShopResponse {
   address: string;
   active: number;
   sms_count: number;
+  package: string;
   subscription: {
     id: number;
     package: string;

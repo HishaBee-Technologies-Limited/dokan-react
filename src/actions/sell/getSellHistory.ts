@@ -7,6 +7,7 @@ import { IPurchaseHistoryResponse } from '@/types/purchase';
 import { format, sub } from 'date-fns';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { formatDate } from '@/lib/utils';
+import { IProductSellPayload } from '@/types/sell';
 
 export const getSellHistory = async (
   page?: number,
@@ -14,7 +15,6 @@ export const getSellHistory = async (
   endDate?: string
 ) => {
   const pageCount = page ? page : 1;
-  console.log('sss');
   try {
     const shopId = cookies().get('shopId')?.value;
     const DEFAULT_PAGE_ITEMS = '10';
@@ -32,14 +32,13 @@ export const getSellHistory = async (
     });
     const res = await authApi.get(`/transaction/all?${params}`);
     const data = await res.json();
-    console.log(data);
 
     if (res.ok) {
       return {
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data.data as IPurchaseHistoryResponse[],
+        data: data.data as IProductSellPayload[],
       };
     }
     if (!res.ok) {

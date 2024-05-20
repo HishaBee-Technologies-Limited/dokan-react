@@ -20,8 +20,14 @@ export const createShops = async ({
       publicData,
       shop_image,
     };
-    const res = await authApi.post(`/shop/create`, payload);
+    const res = await authApi.get(
+      `/shop/create?name=${name}&type=${type}&address=${address}&area=${area}&public=${publicData}`
+    );
+    console.log('shop-create------', res);
+
     const data = await res.json();
+
+    console.log('shop-create------', data);
 
     if (res.ok) {
       return {

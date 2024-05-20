@@ -72,5 +72,6 @@ export interface IDueCreate {
   contact_type: string;
   contact_name: string;
   sms: boolean;
-  transaction_unique_id: string;
+  transaction_unique_id?: string;
+  purchase_unique_id?: string;
 }

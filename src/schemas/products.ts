@@ -1,14 +1,18 @@
 import { z } from 'zod';
 
-const WarrantyTypeSchema = z.union([
-  z.literal('DAY'),
-  z.literal('WEEK'),
-  z.literal('MONTH'),
-  z.literal('YEAR'),
-]);
+const WarrantyTypeSchema = z
+  .union([
+    z.literal('DAY'),
+    z.literal('WEEK'),
+    z.literal('MONTH'),
+    z.literal('YEAR'),
+  ])
+  .optional();
 export type WarrantyType = z.infer<typeof WarrantyTypeSchema>;
 
-const DiscountTypeSchema = z.union([z.literal('PERCENT'), z.literal('AMOUNT')]);
+const DiscountTypeSchema = z
+  .union([z.literal('PERCENT'), z.literal('AMOUNT')])
+  .optional();
 
 export type DiscountType = z.infer<typeof DiscountTypeSchema>;
 
@@ -39,6 +43,7 @@ export const ProductSchema = z.object({
   warranty_check: z.boolean(),
   discount_check: z.boolean(),
   bulk_sell_check: z.boolean(),
+  image_url: z.string().optional(),
 });
 
 export type ProductFormDef = z.infer<typeof ProductSchema>;

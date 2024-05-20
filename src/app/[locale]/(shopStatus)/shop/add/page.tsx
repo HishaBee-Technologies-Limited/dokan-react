@@ -84,8 +84,9 @@ const AddShopPage = () => {
   useEffect(() => {
     const getAllAreas = async () => {
       const res = await getAreasAndTypes();
+      console.log(res?.data?.typesData);
       setDivisions(res?.data?.areaData);
-      setTypes(res?.data?.typesData.data);
+      setTypes(res?.data?.typesData);
     };
     getAllAreas();
   }, []);
@@ -98,7 +99,6 @@ const AddShopPage = () => {
         </Link>
         <PageSubTitle title="Create shop" />
       </div>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="space-y-space12 px-space16 py-space16">
@@ -253,7 +253,7 @@ const AddShopPage = () => {
                       placeholder="Search Districts..."
                       className="h-12"
                     />
-                    <CommandEmpty>No framework found.</CommandEmpty>
+                    <CommandEmpty>No district found.</CommandEmpty>
                     <CommandGroup>
                       {divisions
                         ?.find(

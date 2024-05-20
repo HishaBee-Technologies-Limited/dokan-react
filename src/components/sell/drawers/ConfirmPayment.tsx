@@ -159,7 +159,7 @@ const ConfirmPayment = () => {
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
-          transaction_unique_id: responseCreateSell.data.data.unique_id,
+          transaction_unique_id: responseCreateSell.data.unique_id,
           profit: 0,
           status: 'PAID',
 

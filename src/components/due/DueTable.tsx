@@ -11,12 +11,14 @@ import { IDueItemsResponse } from '@/types/due/dueResponse';
 export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
   let totalBalance = 0;
 
+  console.log(dueItems);
+
   const calculateBalance = (amount: number, index: number) => {
     if (index === 1) {
       totalBalance =
         amount > 0
           ? amount + dueItems[index - 1]?.amount
-          : dueItems[index - 1]?.amount - amount;
+          : dueItems[index - 1]?.amount + amount;
 
       return totalBalance;
     } else {
@@ -47,14 +49,14 @@ export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
                   {row?.note ? row.note : '---'}
                 </TableCell>
                 <TableCell className={`text-success-100`}>
-                  {row.amount < 0 ? row.amount : ''}
+                  {row.amount > 0 ? row.amount : ''}
                 </TableCell>
                 <TableCell className={`text-error-100`}>
-                  {row.amount > 0 ? row.amount : ''}
+                  {row.amount < 0 ? row.amount : ''}
                 </TableCell>
                 <TableCell
                   className={`${
-                    row.amount < 0 ? 'text-success-100' : 'text-error-100'
+                    row.amount > 0 ? 'text-success-100' : 'text-error-100'
                   } text-right`}
                 >
                   {row.amount}
@@ -67,14 +69,17 @@ export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
                 <TableCell>{row.created_at}</TableCell>
                 <TableCell>{row?.note ? row.note : '---'}</TableCell>
                 <TableCell className={`text-success-100`}>
-                  {row.amount < 0 ? row.amount : ''}
+                  {row.amount > 0 ? row.amount : ''}
                 </TableCell>
                 <TableCell className={`text-error-100`}>
-                  {row.amount > 0 ? row.amount : ''}
+                  {row.amount < 0 ? row.amount : ''}
                 </TableCell>
                 <TableCell
                   className={`${
-                    row.amount < 0 ? 'text-success-100' : 'text-error-100'
+                    row.amount + dueItems[i - 1]?.amount ||
+                    dueItems[i - 1]?.amount + row.amount > 0
+                      ? 'text-success-100'
+                      : 'text-error-100'
                   } text-right`}
                 >
                   {calculateBalance(row.amount, i)}

@@ -25,7 +25,7 @@ const ProductPage = async ({ searchParams }: ProductPagePropsDef) => {
   const allProductsResponse = await getShopsProducts({ params: searchParams });
   const categories = await getCategories(session?.user?.id as string);
 
-  const productCategories = categories?.data.data.data;
+  const productCategories = categories?.data;
 
   const productId = searchParams.product;
   let singleProduct;
@@ -33,7 +33,6 @@ const ProductPage = async ({ searchParams }: ProductPagePropsDef) => {
     singleProduct = await getSingleProduct(productId);
   }
 
-  console.log('User-----', session?.user?.id);
   return (
     <>
       <div className="space-y-space16">
@@ -43,11 +42,11 @@ const ProductPage = async ({ searchParams }: ProductPagePropsDef) => {
       </div>
 
       <ProductDrawers
-        product={singleProduct?.data?.data as IProduct}
-        units={productUnits?.data.data as IUnits[]}
+        product={singleProduct?.data as IProduct}
+        units={productUnits?.data as IUnits[]}
         {...{ productCategories }}
       />
-      <ProductDialogs product={singleProduct?.data?.data as IProduct} />
+      <ProductDialogs product={singleProduct?.data as IProduct} />
     </>
   );
 };

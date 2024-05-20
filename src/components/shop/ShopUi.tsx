@@ -46,13 +46,15 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
     if (selectShop) {
       const shop = JSON.stringify({
         sms_count: selectShop.sms_count,
-        subscription: selectShop.subscription,
+        subscription: selectShop.package,
       });
       setCookie('shopId', selectShop?.id);
       setCookie('shop', shop);
       router.push('/contact');
     }
   };
+
+  console.log(shops);
 
   return (
     <div className="space-y-space16">
