@@ -17,12 +17,28 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Form,
   FormItem,
-  FormLabel,
   FormField,
   FormControl,
   FormMessage,
+  FormLabel,
+  FormDescription,
 } from '@/components/ui/form';
 import FallBackImage from '@/components/common/FallBackImage';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { cn, formatDate, generateUlid } from '@/lib/utils';
+import { CalendarIcon } from '@radix-ui/react-icons';
+import { Calendar } from '@/components/ui/calendar';
+import { DATE_FORMATS } from '@/lib/constants/common';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import { createDue } from '@/actions/due/createDue';
+import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
+import { createDueItem } from '@/actions/due/createDueItem';
+import { useRouter } from 'next/navigation';
 
 const cashType = [
   { value: 'given', label: 'Given', dis: 'You give money' },
@@ -36,10 +52,17 @@ const formSchema = z.object({
   details: z.string(),
   images: z.string(),
   cash_type: z.string(),
+  date: z.date().optional(),
 });
 
 const MoneyGiveReceived = () => {
   const handleDrawerOpen = useDueStore((state) => state.setDrawerState);
+  const due = useDueStore((state) => state.due);
+  const cashStatus = useDueStore((state) => state.cashStatus);
+  const { getQueryString } = useCreateQueryString();
+  const router = useRouter();
+
+  const activeTab = getQueryString('tab') ?? '';
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,10 +71,53 @@ const MoneyGiveReceived = () => {
       details: '',
       images: '',
       cash_type: '',
+      date: new Date(),
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const amountPos = Number(due?.due_amount) + Number(data.amount);
+    const amountNeg = Number(due?.due_amount) - Number(data.amount);
+
+    const amount = data.cash_type === 'given' ? amountNeg : amountPos;
+
+    const payload = {
+      // shop_id: Number(shop_id),
+      amount: amount,
+      unique_id: due?.unique_id,
+      due_left: amount,
+      version: Number(due?.version) + 1,
+      updated_at: formatDate(DATE_FORMATS.default),
+      created_at: formatDate(DATE_FORMATS.default),
+      message: data.details,
+      contact_mobile: due?.contact_mobile,
+      contact_type: activeTab.toLocaleUpperCase(),
+      contact_name: due?.contact_name,
+      // sms: data.sms ?? false,
+      // purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+    };
+    const dueRes = await createDue(payload);
+    console.log('dueRes----', dueRes);
+    const payloadForDueItem = {
+      amount:
+        cashStatus === 'Given' ? -Number(data.amount) : Number(data.amount),
+      unique_id: generateUlid(),
+      due_left: Number(data.amount),
+      version: DEFAULT_STARTING_VERSION,
+      updated_at: formatDate(DATE_FORMATS.default),
+      created_at: formatDate(DATE_FORMATS.default),
+      message: data.details,
+      contact_mobile: due?.contact_mobile,
+      contact_type: activeTab.toLocaleUpperCase(),
+      contact_name: due?.contact_name,
+      // sms: data.sms ?? false,
+      due_unique_id: dueRes?.data.due.unique_id,
+      // purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+    };
+
+    const res = await createDueItem(payloadForDueItem);
+    console.log(res);
+    router.refresh();
     handleDrawerOpen({ open: false });
     console.log('data------------', data);
   }
@@ -83,21 +149,17 @@ const MoneyGiveReceived = () => {
     }
   }, [form.watch('cash_type')]);
 
+  console.log(cashStatus, due);
+
   return (
     <div className="space-y-space12">
       <div className="flex items-center gap-space8 border-b border-color pb-space16">
-        <FallBackImage src="" fallback="MM" />
+        <FallBackImage src="" fallback={due?.contact_name[0] ?? 'FF'} />
         <article>
-          <Text title="নিজাম উদ্দিন" className="!text-lg font-medium" />
-          <Text title="Customer  ।  01514252525" variant="muted" />
+          <Text title={due?.contact_name} className="!text-lg font-medium" />
+          <Text title={due?.contact_mobile} variant="muted" />
         </article>
       </div>
-
-      <DatePicker
-        onChange={() => {}}
-        contentAlign={'center'}
-        triggerClasses={'w-full justify-center'}
-      />
 
       <Form {...form}>
         <form
@@ -105,6 +167,48 @@ const MoneyGiveReceived = () => {
           className="space-y-space12"
         >
           <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={'outline'}
+                        className={cn(
+                          'w-[240px] pl-3 text-left font-normal',
+                          !field.value && 'text-muted-foreground'
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, 'PPP')
+                        ) : (
+                          <span>{format(new Date(), 'PPP')}</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date('1900-01-01')
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <FormField
             control={form.control}
             name="cash_type"
             render={({ field }) => (
@@ -135,7 +239,7 @@ const MoneyGiveReceived = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}

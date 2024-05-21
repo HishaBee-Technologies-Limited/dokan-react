@@ -26,8 +26,15 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
 
   const handleDialogOpen = useDueStore((state) => state.setDialogState);
   const handleDrawerOpen = useDueStore((state) => state.setDrawerState);
+  const setDue = useDueStore((state) => state.setDue);
+  const setCashStatus = useDueStore((state) => state.setCashStatue);
 
   const handleGivenClick = () => {
+    setCashStatus('Given');
+    if (dueItems.length) {
+      setDue(dueItems[0].due);
+    }
+
     if (activeTab === DueEnum.CUSTOMER) {
       handleDialogOpen({ open: true, header: DueEnum.SELECT_DUE_TYPE });
     } else if (activeTab === DueEnum.SUPPLIER) {
@@ -36,6 +43,10 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
   };
 
   const handleReceivedClick = () => {
+    setCashStatus('Received');
+    if (dueItems.length) {
+      setDue(dueItems[0].due);
+    }
     if (activeTab === DueEnum.CUSTOMER) {
       handleDrawerOpen({ open: true, header: DueEnum.MONEY_GIVEN_ENTRY });
     } else if (activeTab === DueEnum.SUPPLIER) {

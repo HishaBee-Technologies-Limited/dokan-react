@@ -25,10 +25,10 @@ const tabData = [
     label: 'Supplier',
     value: 'Supplier',
   },
-  {
-    label: 'Employee',
-    value: 'Employee',
-  },
+  // {
+  //   label: 'Employee',
+  //   value: 'Employee',
+  // },
 ];
 
 interface IProps {

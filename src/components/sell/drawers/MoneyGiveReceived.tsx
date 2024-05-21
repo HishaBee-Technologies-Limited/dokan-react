@@ -94,7 +94,7 @@ const MoneyGiveReceived = ({
   dueList,
 }: {
   customers?: IUserResponse[];
-  dueList: IDueListResponse[];
+  dueList?: IDueListResponse[];
 }) => {
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
@@ -273,7 +273,7 @@ const MoneyGiveReceived = ({
 
   useEffect(() => {
     const cus_mobile = form.watch('number');
-    const due = dueList.find((due) => due.contact_mobile === cus_mobile);
+    const due = dueList?.find((due) => due.contact_mobile === cus_mobile);
     console.log(due);
     due ? form.setValue('due', due) : due;
   }, [dueList, form.watch('number')]);

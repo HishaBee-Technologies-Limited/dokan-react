@@ -12,7 +12,7 @@ const SellHistory = () => {
         <HistoryTable />
       </div>
 
-      <SellDrawers />
+      {/* <SellDrawers /> */}
       <SellDialogs />
     </>
   );

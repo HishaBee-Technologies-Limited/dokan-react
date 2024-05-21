@@ -334,7 +334,10 @@ const AddMoneyGiveReceived = ({
                     <div className="max-h-[24rem] text-wrap max-w-[500px] overflow-y-scroll">
                       {contacts &&
                         contacts.map((contact) => (
-                          <SelectItem value={JSON.stringify(contact)}>
+                          <SelectItem
+                            key={contact.unique_id}
+                            value={JSON.stringify(contact)}
+                          >
                             {contact.name} | {contact.mobile}
                           </SelectItem>
                         ))}

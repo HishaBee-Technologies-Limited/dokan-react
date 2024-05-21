@@ -10,7 +10,6 @@ import MoneyGiveReceived from '@/components/due/drawers/MoneyGiveReceived';
 import AddMoneyGiveReceived from '@/components/due/drawers/AddMoneyGiveReceived';
 
 const DueDrawers = (dueList: any) => {
-  console.log(dueList);
   const drawerState = useDueStore((state) => state.drawerState);
   const handleClose = useDueStore((state) => state.setDrawerState);
 

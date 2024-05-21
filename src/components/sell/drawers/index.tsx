@@ -19,7 +19,7 @@ const SellDrawers = ({
 }: {
   customers?: IUserResponse[];
 
-  dueList: IDueListResponse[];
+  dueList?: IDueListResponse[];
 }) => {
   const drawerState = useSellStore((state) => state.sellDrawerState);
   const handleClose = useSellStore((state) => state.setSellDrawerState);
