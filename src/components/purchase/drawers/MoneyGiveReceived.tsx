@@ -395,7 +395,12 @@ const MoneyGiveReceived = ({
                   Amount <span className="text-error-100">*</span>{' '}
                 </FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Amount" {...field} />
+                  <Input
+                    disabled
+                    type="number"
+                    placeholder="Amount"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

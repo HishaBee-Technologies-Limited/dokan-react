@@ -1,6 +1,8 @@
 'use server';
 
 import { authApi } from '@/lib/api';
+import { DATE_FORMATS } from '@/lib/constants/common';
+import { formatDate } from '@/lib/utils';
 import { IProductPayload } from '@/types/product';
 
 export const deleteProduct = async ({
@@ -9,7 +11,9 @@ export const deleteProduct = async ({
   unique_id: IProductPayload['unique_id'];
 }) => {
   try {
-    const res = await authApi.delete(`/product${unique_id}`);
+    const res = await authApi.delete(
+      `/product${unique_id}?version=${-1}&updated_at=${formatDate(DATE_FORMATS.default)}`
+    );
     const data = await res.json();
 
     if (res.ok) {

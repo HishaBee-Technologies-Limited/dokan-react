@@ -89,7 +89,7 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
           </article>
         </div>
 
-        <div className="flex gap-space16 items-center justify-between py-space8 border-t border-color">
+        {/* <div className="flex gap-space16 items-center justify-between py-space8 border-t border-color">
           <Text
             title="When will the Customer Return your Due?"
             className="text-sm"
@@ -105,7 +105,7 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
             <Icon icon="mdi:alarm-clock-add" />
             Set due Reminder
           </Button>
-        </div>
+        </div> */}
       </div>
 
       <ScrollArea className="h-[calc(100%-9rem)] pb-space16 px-space16">

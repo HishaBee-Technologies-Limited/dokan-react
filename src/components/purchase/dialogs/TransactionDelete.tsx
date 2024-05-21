@@ -13,6 +13,7 @@ import {
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { formatDate } from '@/lib/utils';
 import { toast } from 'sonner';
+import { deleteTransaction } from '@/actions/sell/deleteTransaction';
 
 const TransactionDelete = () => {
   const handleClose = usePurchaseStore((state) => state.setDialogState);
