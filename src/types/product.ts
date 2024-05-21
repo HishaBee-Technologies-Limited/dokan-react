@@ -61,7 +61,7 @@ export interface IProductPayload {
   weight?: string; // Represented as a string (e.g., "0.0")
   image_url?: string;
   unit?: number;
-  gallery?: string[];
+  gallery?: string;
 }
 
 export interface IUnits {

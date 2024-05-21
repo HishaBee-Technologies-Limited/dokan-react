@@ -9,6 +9,7 @@ import { ICommonGetResponse } from '@/types/common';
 import { cookies } from 'next/headers';
 import { getAllSupplier } from '@/actions/contacts/getAllSupplier';
 import { IUserResponse } from '@/types/contact/partyResponse';
+import { getAllDue } from '@/actions/due/getAllDue';
 
 const PurchaseHistory = async ({ searchParams }: any) => {
   console.log(searchParams);
@@ -20,6 +21,12 @@ const PurchaseHistory = async ({ searchParams }: any) => {
   const shopId = cookies().get('shopId')?.value;
   const allSupplier = await getAllSupplier(Number(shopId));
 
+  const dueList = await getAllDue();
+
+  const supplierDueList = dueList?.data?.data.filter(
+    (item) => item.contact_type === 'SUPPLIER'
+  );
+
   return (
     <>
       <div className="space-y-space16 h-full w-full">
@@ -27,7 +34,10 @@ const PurchaseHistory = async ({ searchParams }: any) => {
         <HistoryTable purchaseHistory={purchaseHistory?.data as any} />
       </div>
 
-      <PurchaseDrawers suppliers={allSupplier?.data as IUserResponse[]} />
+      <PurchaseDrawers
+        suppliers={allSupplier?.data as IUserResponse[]}
+        dueList={supplierDueList!}
+      />
       <PurchaseDialogs />
     </>
   );
