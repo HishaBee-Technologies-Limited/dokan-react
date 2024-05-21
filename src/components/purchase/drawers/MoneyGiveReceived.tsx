@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { string, z } from 'zod';
 import { SellEnum } from '@/enum/sell';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -68,6 +68,7 @@ import { createDueItem } from '@/actions/due/createDueItem';
 import { toast } from 'sonner';
 import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 import { createDue } from '@/actions/due/createDue';
+import { IDueListResponse } from '@/types/due/dueResponse';
 
 const partyList = ['customer', 'supplier'];
 
@@ -92,9 +93,16 @@ const formSchema = z.object({
   contact: z.any(),
   sms: z.boolean().optional(),
   date: z.date(),
+  due: z.any(),
 });
 
-const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
+const MoneyGiveReceived = ({
+  suppliers,
+  dueList,
+}: {
+  suppliers?: IUserResponse[];
+  dueList: IDueListResponse[];
+}) => {
   const handleSellDrawer = usePurchaseStore((state) => state.setDrawerState);
   const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
   const [contact, setContact] = useState<IUserResponse>();
@@ -102,10 +110,8 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
   );
-  const session = useSession();
   const cookie = getCookie('shop');
   const tkn = getCookie('access_token');
-  // const shop =cookie &&  JSON.parse(cookie) as IShopResponse;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -168,15 +174,19 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
 
       const payload = {
         // shop_id: Number(shop_id),
-        amount: -Number(data.amount),
-        unique_id: generateUlid(),
+        amount: data.due
+          ? Number(Number(data.amount) + Number(data.due.due_amount))
+          : Number(data.amount),
+        unique_id: data.due ? data.due.unique_id : generateUlid(),
         due_left: -Number(data.amount),
-        version: DEFAULT_STARTING_VERSION,
+        version: data.due
+          ? Number(data.due.version) + 1
+          : DEFAULT_STARTING_VERSION,
         updated_at: formatDate(DATE_FORMATS.default),
         created_at: formatDate(DATE_FORMATS.default),
         message: data.details,
         contact_mobile: data.number,
-        contact_type: 'CUSTOMER',
+        contact_type: 'SUPPLIER',
         contact_name: data.name,
         sms: data.sms ?? false,
         purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
@@ -252,15 +262,22 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
 
   useEffect(() => {
     if (contact) {
-      console.log(contact);
       form.setValue('name', contact.name);
       form.setValue('number', contact.mobile);
     }
   }, [contact]);
+  useEffect(() => {
+    const sup_mobile = form.watch('number');
+    const due = dueList.find((due) => due.contact_mobile === sup_mobile);
+    console.log(due?.due_amount);
+    due ? form.setValue('due', due) : due;
+  }, [dueList, form.watch('number')]);
 
   useEffect(() => {
     form.setValue('amount', String(calculatedProducts.totalPrice));
   }, [calculatedProducts]);
+
+  console.log(form.formState.errors);
   return (
     <div className="space-y-space12">
       <Tabs onChange={(value) => {}} defaultValue={partyList[1]}>
@@ -281,7 +298,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       </Tabs>
 
       <Text
-        title={`Payable Amount  ৳ ${calculatedProducts.totalPrice}`}
+        title={`Paya'ble Amount  ৳ ${calculatedProducts.totalPrice}`}
         className="text-lg font-medium bg-primary-10 dark:bg-primary-80 text-center rounded-md py-space8"
       />
 

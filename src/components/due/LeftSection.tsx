@@ -14,6 +14,7 @@ import WrapperOddList from '@/components/common/WrapperOddList';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator';
 import { ICommonGetResponse } from '@/types/common';
+import { useDueStore } from '@/stores/useDueStore';
 
 const tabData = [
   {
@@ -31,7 +32,7 @@ const tabData = [
 ];
 
 interface IProps {
-  dueList: ICommonGetResponse<IDueListResponse> | undefined;
+  dueList: IDueListResponse[] | undefined;
   totalValues:
     | {
         total_get: number;
@@ -44,6 +45,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const { getQueryString, setQueryString } = useCreateQueryString();
+  const setDueList = useDueStore((state) => state.setDueList);
 
   const activeTab = getQueryString('tab') ?? '';
   const activeUser = getQueryString('active_user') ?? '';
@@ -56,9 +58,9 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
     }
   };
 
-  const filteredDueList = dueList?.data?.filter(
-    (item) => item.contact_type === activeTab.toUpperCase()
-  );
+  // const filteredDueList = dueList?.data?.filter(
+  //   (item) => item.contact_type === activeTab.toUpperCase()
+  // );
 
   useEffect(() => {
     router.replace(
@@ -111,20 +113,21 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
       </div>
 
       <ScrollArea className="h-[calc(100%-20.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
-        {filteredDueList?.length ? (
+        {dueList?.length ? (
           <WrapperOddList>
-            {filteredDueList?.map((item, index) => (
+            {dueList?.map((item, index) => (
               <CardWithSideIndicator
                 key={index}
                 active={item.unique_id === activeUser}
-                onClick={() =>
+                onClick={() => {
                   router.push(
                     `${pathname}?${setQueryString(
                       'active_user',
                       item.unique_id
                     )}`
-                  )
-                }
+                  );
+                  setDueList(dueList);
+                }}
               >
                 <div className="w-full flex items-center gap-space8">
                   <FallBackImage

@@ -34,7 +34,7 @@ import { usePurchase } from '@/stores/usePurchaseStore';
 const HistoryTable = ({
   purchaseHistory,
 }: {
-  purchaseHistory: ICommonGetResponse<IPurchaseHistoryResponse>;
+  purchaseHistory: IPurchaseHistoryResponse[];
 }) => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
@@ -91,7 +91,7 @@ const HistoryTable = ({
         </TableHeader>
 
         <TableBody>
-          {purchaseHistory.data?.map((purchase) => (
+          {purchaseHistory?.map((purchase) => (
             <TableRow
               key={purchase.id}
               onClick={() => handleRowClick(purchase)}
@@ -175,9 +175,9 @@ const HistoryTable = ({
         </TableFooter>
       </Table>
       <ScrollBar orientation="horizontal" />
-      <Pagination
+      {/* <Pagination
         pageCount={
-          purchaseHistory.data.length === 0
+          purchaseHistory.length === 0
             ? purchaseHistory.last_page
             : Math.ceil(
                 purchaseHistory.total ?? 0 / purchaseHistory.per_page ?? 0
@@ -188,7 +188,7 @@ const HistoryTable = ({
         onChanage={(page) => {
           router.push(`${pathname}?${setQueryString('page', page)}`);
         }}
-      />
+      /> */}
     </ScrollArea>
   );
 };

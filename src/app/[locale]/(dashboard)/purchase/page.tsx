@@ -8,12 +8,19 @@ import { getShopsProducts } from '@/actions/product/getShopProducts';
 import { getAllSupplier } from '@/actions/contacts/getAllSupplier';
 import { cookies } from 'next/headers';
 import { IUserResponse } from '@/types/contact/partyResponse';
+import { getAllDue } from '@/actions/due/getAllDue';
 
 const PurchasePage = async () => {
   const shopId = cookies().get('shopId')?.value;
 
   const allProductsResponse = await getShopsProducts({});
   const allSupplier = await getAllSupplier(Number(shopId));
+
+  const dueList = await getAllDue();
+
+  const supplierDueList = dueList?.data?.data.filter(
+    (item) => item.contact_type === 'SUPPLIER'
+  );
 
   return (
     <>
@@ -26,7 +33,10 @@ const PurchasePage = async () => {
         </div>
       </div>
 
-      <PurchaseDrawers suppliers={allSupplier?.data as IUserResponse[]} />
+      <PurchaseDrawers
+        suppliers={allSupplier?.data as IUserResponse[]}
+        dueList={supplierDueList!}
+      />
       <PurchaseDialogs />
     </>
   );

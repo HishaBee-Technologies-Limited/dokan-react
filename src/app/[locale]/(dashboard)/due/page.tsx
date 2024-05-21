@@ -16,9 +16,30 @@ type IContactProps = {
 
 const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
   const userID = searchParams.active_user || '';
+  const tab = searchParams.tab || '';
 
   const dueList = await getAllDue();
   const dueItems = await getDueItemByUniqueID(`${userID}`);
+
+  const customerDueList = dueList?.data?.data.filter(
+    (item) => item.contact_type === 'CUSTOMER'
+  );
+
+  const supplierDueList = dueList?.data?.data.filter(
+    (item) => item.contact_type === 'SUPPLIER'
+  );
+
+  let filteredDueList;
+  if (tab === 'Customer') {
+    filteredDueList = customerDueList;
+  }
+
+  if (tab === 'Supplier') {
+    filteredDueList = supplierDueList;
+  }
+  // const employeeDueList = dueList?.data?.data.filter(
+  //   (item) => item.employee === "SUPPLIER"
+  // );
 
   // console.log(dueList);
 
@@ -47,7 +68,10 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
         <DueHeader />
 
         <Card className="space-y-space16 lg:space-y-0 lg:flex h-[calc(100%-6.4rem)]">
-          <LeftSection dueList={dueList?.data as any} totalValues={metaData} />
+          <LeftSection
+            dueList={filteredDueList as any}
+            totalValues={metaData}
+          />
           {dueItems?.data ? (
             <RightSection
               dueItems={dueItems?.data as IDueItemsResponse[]}
