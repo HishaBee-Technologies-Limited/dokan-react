@@ -2,9 +2,6 @@
 
 import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
-import { IProductPayload } from '@/types/product';
-import { IProductPurchasePayload } from '@/types/purchase';
-import { IDueCreate } from '@/types/due/dueResponse';
 
 export const createDue = async (payload: any) => {
   try {

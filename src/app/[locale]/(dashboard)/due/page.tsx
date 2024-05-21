@@ -84,7 +84,7 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
       </div>
 
       <DueDialogs />
-      <DueDrawers />
+      <DueDrawers dueList={{ supplierDueList, customerDueList }} />
     </>
   );
 };

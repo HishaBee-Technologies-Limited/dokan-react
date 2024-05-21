@@ -31,7 +31,6 @@ const ContactPage = async ({
   searchParams,
 }: IContactProps) => {
   const shopId = cookies().get('shopId')?.value;
-  const shop = cookies().get('shop')?.value;
   let customerDetails: IUserResponse | undefined;
   let supplierDetails: IUserResponse | undefined;
   let employeeDetails: IUserResponse | undefined;

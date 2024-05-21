@@ -60,6 +60,7 @@ import {
 } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { createDue } from '@/actions/due/createDue';
+import { IDueListResponse } from '@/types/due/dueResponse';
 
 const partyList = ['customer', 'supplier'];
 
@@ -83,11 +84,18 @@ const formSchema = z.object({
   cash_type: z.string(),
   sms: z.boolean().optional(),
   date: z.date(),
+  due: z.any(),
 
   customer_address: z.string().optional(),
 });
 
-const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
+const MoneyGiveReceived = ({
+  customers,
+  dueList,
+}: {
+  customers?: IUserResponse[];
+  dueList: IDueListResponse[];
+}) => {
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 
@@ -96,7 +104,6 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
   const setCalculatedProducts = useSellStore(
     (state) => state.setCalculatedProducts
   );
-  const session = useSession();
   const cookie = getCookie('shop');
   const tkn = getCookie('access_token');
   const form = useForm<z.infer<typeof formSchema>>({
@@ -168,12 +175,17 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
     }
     const shop_id = getCookie('shopId') as string;
     console.log('shopId----', shop_id);
+    const amount = data.due
+      ? Number(data.due.due_amount) - Number(data.amount)
+      : -Number(data.amount);
     const payload = {
       shop_id: Number(shop_id),
-      amount: -Number(data.amount),
-      unique_id: generateUlid(),
-      due_left: -Number(data.amount),
-      version: DEFAULT_STARTING_VERSION,
+      amount: amount,
+      unique_id: data.due ? data.due.unique_id : generateUlid(),
+      due_left: amount,
+      version: data.due
+        ? Number(data.due.version) + 1
+        : DEFAULT_STARTING_VERSION,
       updated_at: formatDate(DATE_FORMATS.default),
       created_at: formatDate(DATE_FORMATS.default),
       message: data.details,
@@ -187,21 +199,6 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
     const dueRes = await createDue(payload);
     console.log('dueRes----', dueRes);
 
-    // const res = await fetch(
-    //   'https://api-dev.hishabee.business/api/V2/due_item/add',
-    //   {
-    //     method: 'POST',
-
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Accept: 'application/json',
-    //       Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNmViOWM2YmUyNWFjZmVmOGZiNTA4MDQ1OTBmMjIxZjVjZDAyNTRmODIxMDczOGE0NTU5YjFkYTgyMzY3NDg4YjY2NDcwOGFmZTgwZWY2ZGMiLCJpYXQiOjE3MTUyNTgwMTUuMTk5NzUyLCJuYmYiOjE3MTUyNTgwMTUuMTk5NzU1LCJleHAiOjE3NDY3OTQwMTUuMTkyNzYxLCJzdWIiOiI5Iiwic2NvcGVzIjpbXX0.UnuoOfVhBk0jk3fnUwJ9gEv2JxzKI8iz4g8m6us8JyhOSSyVSg0jMMHw3pBW5rq5nph-6uZBywHrxzcGzMT940IrTWq8d-0SUwIpNW-Gt65IcxdBTFqoDzZlkeheXAEqHga-zOgY9aB70Qok1NWhuD9Piwu_aa3-DVHkobSgT1PYKUpNBrFa_aTcYHRsJkDx9ianqqqGetRxIJF1zaeHlaJ2BeUZQaBqV0TqaavAzKzNgWFIEg_gyCMHIaHdhee_qpneB0JITPJuMPZ7Ys9PC4_HES5D3UMWntHrxLeA4lSTZ1PNLH3wIMdEpDz_TxXeRLk5mYleq2YrrSgEGxKxIZULhE3Q1Z0kq3AFUkfQcDElxPDgRoDBP1ViqLt5vFm2YF1lON4VWYFAgbOIdfiRBLoiTe5PsAITctLk37ckG_lWdDCM_x_s3YucHoyZf2ZWu2c9p3v6F4afv1l4NO7i9Zj-dSOyWn9ndCWx6VreZdxAbdZW7nW4sQITkMzheEWC97a1F_7FVYySyZrGYUUq8Aw3SI4RHmSBUyxnpqcrP4Kv9j7BdwicNmRSotGrWjxIZnylqpkVW6r-BCdXvbuPGKxZzvAL3tkcD51qnLsEUoRRDQd53OvDzaFm8likv3hBIRImsKoSAOwAe2yDmPAG6ctCYVRN3uRrlIpQjlQclhM`,
-    //     },
-    //     body: JSON.stringify({ ...payload }),
-    //   }
-    // );
-    // const datas = await res.json();
-    // console.log('res----Item', datas);
     if (dueRes?.success) {
       const payload = {
         amount: -Number(data.amount),
@@ -273,6 +270,13 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
   useEffect(() => {
     form.setValue('amount', String(calculatedProducts.totalPrice));
   }, [calculatedProducts]);
+
+  useEffect(() => {
+    const cus_mobile = form.watch('number');
+    const due = dueList.find((due) => due.contact_mobile === cus_mobile);
+    console.log(due);
+    due ? form.setValue('due', due) : due;
+  }, [dueList, form.watch('number')]);
 
   return (
     <div className="space-y-space12">

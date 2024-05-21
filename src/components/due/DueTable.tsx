@@ -41,6 +41,7 @@ export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
       </TableHeader>
       <TableBody>
         {dueItems.map((row, i) => {
+          console.log(row);
           if (i === 0) {
             return (
               <TableRow key={i}>

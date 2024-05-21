@@ -172,13 +172,15 @@ const MoneyGiveReceived = ({
         });
       });
 
+      const amount = data.due
+        ? Number(data.due.due_amount) + Number(data.amount)
+        : Number(data.amount);
+
       const payload = {
         // shop_id: Number(shop_id),
-        amount: data.due
-          ? Number(Number(data.amount) + Number(data.due.due_amount))
-          : Number(data.amount),
+        amount: amount,
         unique_id: data.due ? data.due.unique_id : generateUlid(),
-        due_left: -Number(data.amount),
+        due_left: amount,
         version: data.due
           ? Number(data.due.version) + 1
           : DEFAULT_STARTING_VERSION,

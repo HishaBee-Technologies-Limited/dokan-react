@@ -9,15 +9,16 @@ import AddNewUser from '@/components/contact/drawers/AddNewUser';
 import MoneyGiveReceived from '@/components/due/drawers/MoneyGiveReceived';
 import AddMoneyGiveReceived from '@/components/due/drawers/AddMoneyGiveReceived';
 
-const DueDrawers = () => {
+const DueDrawers = (dueList: any) => {
+  console.log(dueList);
   const drawerState = useDueStore((state) => state.drawerState);
   const handleClose = useDueStore((state) => state.setDrawerState);
 
   const renderedDrawers = (activeDrawer: string | undefined) => {
     if (DueEnum.ADD_MONEY_GIVEN_ENTRY === activeDrawer) {
-      return <AddMoneyGiveReceived />;
+      return <AddMoneyGiveReceived dueList={{ ...dueList }} />;
     } else if (DueEnum.ADD_MONEY_RECEIVED_ENTRY === activeDrawer) {
-      return <AddMoneyGiveReceived />;
+      return <AddMoneyGiveReceived dueList={{ ...dueList }} />;
     } else if (DueEnum.MONEY_GIVEN_ENTRY === activeDrawer) {
       return <MoneyGiveReceived />;
     } else if (DueEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
