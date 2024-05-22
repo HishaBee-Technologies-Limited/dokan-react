@@ -29,6 +29,9 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
     (item) => item.contact_type === 'SUPPLIER'
   );
 
+  const employeeDueList = dueList?.data?.data.filter(
+    (item) => item.contact_type === 'EMPLOYEE'
+  );
   let filteredDueList;
   if (tab === 'Customer') {
     filteredDueList = customerDueList;
@@ -37,9 +40,10 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
   if (tab === 'Supplier') {
     filteredDueList = supplierDueList;
   }
-  // const employeeDueList = dueList?.data?.data.filter(
-  //   (item) => item.employee === "SUPPLIER"
-  // );
+
+  if (tab === 'Employee') {
+    filteredDueList = employeeDueList;
+  }
 
   // console.log(dueList);
 
@@ -84,7 +88,9 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
       </div>
 
       <DueDialogs />
-      <DueDrawers dueList={{ supplierDueList, customerDueList }} />
+      <DueDrawers
+        dueList={{ supplierDueList, customerDueList, employeeDueList }}
+      />
     </>
   );
 };

@@ -8,7 +8,7 @@ export interface IDueListResponse {
   due_alert: string;
   contact_mobile: string;
   contact_name: string;
-  contact_type: 'CUSTOMER' | 'SUPPLIER';
+  contact_type: 'CUSTOMER' | 'SUPPLIER' | 'EMPLOYEE';
   version: number;
   unique_id: string;
   alert_shop_sms: boolean;

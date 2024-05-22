@@ -26,11 +26,7 @@ import Pagination from '@/components/common/CustomPagination';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 
-const ExpenseTable = ({
-  expenseList,
-}: {
-  expenseList: ICommonGetResponse<IExpense>;
-}) => {
+const ExpenseTable = ({ expenseList }: { expenseList: IExpense[] }) => {
   const setExpenseDialog = useExpenseStore(
     (state) => state.setExpenseDialogState
   );
@@ -60,7 +56,7 @@ const ExpenseTable = ({
         </TableHeader>
 
         <TableBody>
-          {expenseList?.data.map((expense, i) => (
+          {expenseList?.map((expense, i) => (
             <TableRow key={i} onClick={() => handleRowClick(expense)}>
               <TableCell>
                 <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
@@ -141,7 +137,7 @@ const ExpenseTable = ({
       </Table>
 
       <ScrollBar orientation="horizontal" />
-      <Pagination
+      {/* <Pagination
         pageCount={
           expenseList.data.length === 0
             ? expenseList.last_page
@@ -152,7 +148,7 @@ const ExpenseTable = ({
         onChanage={(page) => {
           router.push(`${pathname}?${setQueryString('page', page)}`);
         }}
-      />
+      /> */}
     </ScrollArea>
   );
 };

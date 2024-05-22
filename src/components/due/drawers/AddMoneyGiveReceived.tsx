@@ -41,6 +41,7 @@ import { DATE_FORMATS } from '@/lib/constants/common';
 import { createDueItem } from '@/actions/due/createDueItem';
 import { createDue } from '@/actions/due/createDue';
 import { useRouter } from 'next/navigation';
+import { getAllEmployee } from '@/actions/contacts/getAllEmployee';
 
 const partyList = ['customer', 'supplier', 'employee'];
 
@@ -74,6 +75,7 @@ const AddMoneyGiveReceived = ({
     dueList: {
       supplierDueList: IDueListResponse[];
       customerDueList: IDueListResponse[];
+      employeeDueList: IDueListResponse[];
     };
   };
 }) => {
@@ -83,6 +85,7 @@ const AddMoneyGiveReceived = ({
   // const [customer, setContactType] = useState('CUSTOMER');
   const [suppliers, setSuppliers] = useState<IUserResponse[] | undefined>();
   const [customers, setCustomers] = useState<IUserResponse[] | undefined>();
+  const [employees, setEmployee] = useState<IUserResponse[] | undefined>();
   const [contacts, setContacts] = useState<IUserResponse[] | undefined>();
   const [selectedContact, setSelectedContact] = useState<
     IUserResponse[] | undefined
@@ -197,10 +200,18 @@ const AddMoneyGiveReceived = ({
       (due) => due.contact_mobile === sup_mobile
     );
 
+    const dueEmployee = dueList.dueList.employeeDueList?.find(
+      (due) => due.contact_mobile === sup_mobile
+    );
+
     console.log(dueList.dueList.customerDueList);
 
-    const due = contactType === 'CUSTOMER' ? dueCustomer : dueSupplier;
-    console.log(due, contactType, dueCustomer, dueSupplier, sup_mobile);
+    const due =
+      contactType === 'CUSTOMER'
+        ? dueCustomer
+        : contactType === 'SUPPLIER'
+          ? dueSupplier
+          : dueEmployee;
     due ? form.setValue('due', due) : due;
   }, [dueList, form.watch('number'), contactType]);
 
@@ -212,6 +223,9 @@ const AddMoneyGiveReceived = ({
       setContacts(customer?.data);
       const supplier = await getAllSupplier(Number(shopId));
       setSuppliers(supplier?.data);
+      const employee = await getAllEmployee(Number(shopId));
+
+      setEmployee(employee?.data);
     };
     fetchShops();
   }, []);
@@ -227,8 +241,10 @@ const AddMoneyGiveReceived = ({
   useEffect(() => {
     if (contactType === 'CUSTOMER') {
       setContacts(customers);
-    } else {
+    } else if (contactType === 'SUPPLIER') {
       setContacts(suppliers);
+    } else {
+      setCustomers(employees);
     }
   }, [contactType]);
 

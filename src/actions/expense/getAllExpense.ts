@@ -10,19 +10,18 @@ export const getAllExpense = async (page?: number) => {
   try {
     const shopId = cookies().get('shopId')?.value;
     const params = `shop_id=${shopId}&per_page=${pageCount}&page=${currentPage}`;
-    const res = await authApi.get(`/expenses?${params}`);
+    const res = await authApi.get(`/expense/all?${params}`);
     const data = await res.json();
-
     if (res.ok) {
       return {
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data.data,
-        metadata: {
-          total_get: data.metadata.total_get,
-          total_give: data.metadata.total_give,
-        },
+        data: data,
+        // metadata: {
+        //   total_get: data.metadata.total_get,
+        //   total_give: data.metadata.total_give,
+        // },
       };
     }
     if (!res.ok) {
