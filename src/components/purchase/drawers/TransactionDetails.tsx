@@ -152,7 +152,7 @@ const TransactionDetails = () => {
         <div className={`grid 'grid-rows-[1fr]'`}>
           {purchaseProducts?.items &&
             purchaseProducts?.items.map((product) => (
-              <ProductListCard product={product} />
+              <ProductListCard key={product.unique_id} product={product} />
             ))}
         </div>
       </section>

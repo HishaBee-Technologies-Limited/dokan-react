@@ -257,7 +257,7 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     );
 
     purchaseProdClone!.items = filterProducts;
-    form.unregister(`products.${index}.product-${product.unique_id}`);
+    // form.unregister(`products.${index}.product-${product.unique_id}`);
     setPurchaseProducts(purchaseProdClone);
     // console.log(
     //   purchaseProducts?.items?.filter(
@@ -422,7 +422,7 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
                 //       {...{ index, form }}
                 //     />
                 //   ) : (
-                <ProductListCard product={product} />
+                <ProductListCard key={product.unique_id} product={product} />
                 //   )}
                 // </>
               ))}
