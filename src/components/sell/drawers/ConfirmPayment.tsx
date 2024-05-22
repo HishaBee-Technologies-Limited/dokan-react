@@ -227,7 +227,7 @@ const ConfirmPayment = () => {
                       {field.value ? (
                         format(field.value, 'PPP')
                       ) : (
-                        <span>Pick a Date</span>
+                        <span>{format(new Date(), 'PPP')}</span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>

@@ -13,6 +13,7 @@ import { calculateTotal } from '@/lib/utils';
 import { PAYMENT_STATUS } from '@/lib/constants/purchase';
 import { getPurchaseItems } from '@/actions/purchase/getPurchaseItems';
 import { IPurchaseProducts } from '@/types/purchase';
+import ProductListCard from '../ProductListCard';
 
 const TransactionDetails = () => {
   const [purchaseProducts, setPurchaseProducts] = useState<IPurchaseProducts>();
@@ -88,7 +89,10 @@ const TransactionDetails = () => {
       </section>
       <article className="bg-secondary rounded-lg p-space12 space-y-space16 ">
         <article className="flex justify-between items-center gap-space8 border-b border-color pb-space12">
-          <Text title="Payment: ৳ 1,200" className="text-lg font-semibold" />
+          <Text
+            title={`Payment: ৳ ${currentPurchase?.total_price}`}
+            className="text-lg font-semibold"
+          />
 
           <article className="flex gap-space8">
             {currentPurchase?.payment_status === PAYMENT_STATUS.unpaid ? (
@@ -148,35 +152,7 @@ const TransactionDetails = () => {
         <div className={`grid 'grid-rows-[1fr]'`}>
           {purchaseProducts?.items &&
             purchaseProducts?.items.map((product) => (
-              <div key={product.unique_id} className="rounded p-space8">
-                <div className="flex items-center gap-space8">
-                  <Image
-                    src={product.product.image_url}
-                    height={32}
-                    width={32}
-                    alt=""
-                  />
-
-                  <Text title={product.name} />
-                </div>
-
-                <article className="flex flex-wrap justify-between gap-space8 pl-space40">
-                  <Text>
-                    Quantity:{' '}
-                    <span className="font-semibold">{product.quantity}</span>
-                  </Text>
-                  <Text>
-                    Unit Price:{' '}
-                    <span className="font-semibold">
-                      {product.product.cost_price}
-                    </span>
-                  </Text>
-                  <Text>
-                    Total:{' '}
-                    <span className="font-semibold">{product.price}</span>
-                  </Text>
-                </article>
-              </div>
+              <ProductListCard product={product} />
             ))}
         </div>
       </section>
@@ -226,7 +202,7 @@ const TransactionDetails = () => {
         >
           <DeleteIcon color="#fff" /> Delete
         </Button>
-        <Button
+        {/* <Button
           className="w-full"
           onClick={() =>
             handleDrawerOpen({
@@ -236,7 +212,7 @@ const TransactionDetails = () => {
           }
         >
           <EditIcon /> Edit
-        </Button>
+        </Button> */}
       </DrawerFooter>
     </div>
   );

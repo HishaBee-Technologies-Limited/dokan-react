@@ -62,6 +62,7 @@ export interface IProductPayload {
   image_url?: string;
   unit?: number;
   gallery?: string;
+  image?: string;
 }
 
 export interface IUnits {

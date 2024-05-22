@@ -34,7 +34,6 @@ export const RightSection = () => {
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
   );
-
   const form = useForm({
     // resolver: zodResolver(formSchema),
     defaultValues: {

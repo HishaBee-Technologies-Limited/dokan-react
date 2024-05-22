@@ -23,6 +23,21 @@ export const getShopsProducts = async ({ params }: GetShopsProductsDef) => {
     return 'asc';
   };
 
+  console.log(
+    new URLSearchParams({
+      shop_id: shopId?.value ?? '',
+      order_by:
+        params?.sorted_by === SORT_OPTIONS_TYPES.HIGHEST_AMOUNT ||
+        params?.sorted_by === SORT_OPTIONS_TYPES.LOWEST_AMOUNT
+          ? 'selling_price'
+          : 'id',
+      order_type: getOrderType(params?.sorted_by),
+      page: params?.page?.toString() ?? '1',
+      per_page: '10',
+      category: 'true',
+      s_query: params?.search ?? '',
+    })
+  );
   try {
     const res = await authApi.get(
       `/product/all/?` +
@@ -33,8 +48,8 @@ export const getShopsProducts = async ({ params }: GetShopsProductsDef) => {
             params?.sorted_by === SORT_OPTIONS_TYPES.LOWEST_AMOUNT
               ? 'selling_price'
               : 'id',
-          order_type: getOrderType(params?.sorted_by),
-          page: params?.page?.toString() ?? '',
+          order_type: 'desc',
+          page: params?.page?.toString() ?? '1',
           per_page: '10',
           category: 'true',
           s_query: params?.search ?? '',

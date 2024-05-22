@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Image } from '@/components/common/Image';
 import { IProducts } from '@/types/purchase';
 import { Text } from '@/components/common/text';
@@ -11,43 +11,80 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { DEFAULT_PRODUCT_QUANTITY } from '@/lib/constants/purchase';
+import { Button } from '../ui/button';
+import { CancelIcon } from '@/components/common/icons';
+import { calculateGrandTotal, calculateTotal } from '@/lib/utils';
+import { usePurchase } from '@/stores/usePurchaseStore';
 
 function ProductListCardEdit(props: {
-  product: IProducts;
+  data: IProducts;
   form: any;
   index: number;
+  removeItemFromProduct: () => void;
 }) {
-  console.log(props);
+  const currentPurchase = usePurchase((state) => state.currentPurchase);
+
   /**
    * This watch controls the onchange calculation on the viewport
    */
   const quantityWatch = props.form?.watch(
-    `products.${props.index}.product-${props.product.product.id}.quantity`
+    `products.${props.index}.product-${props.data?.unique_id}.quantity`
   );
+
+  const products = props.form?.watch('products');
+
+  /**
+   * calculating the total price from the selected and entered product quantity
+   */
+  const totalPrice = products?.reduce(
+    (prev: number, p: { total: string }[]) => {
+      prev = prev + Number(Object.values(p)[0].total);
+      return prev;
+    },
+    0
+  );
+
+  // const handleDelete = () => {
+  //   const filteredProducts = products.filter((prod) => console.log(prod));
+  // };
+
+  useEffect(() => {
+    const priceAmount = Math.round(
+      calculateGrandTotal(
+        currentPurchase?.discount_type,
+        totalPrice,
+        currentPurchase?.extra_charge!,
+        currentPurchase?.discount!
+      ) ?? 0
+    );
+    console.log(currentPurchase, totalPrice, priceAmount);
+    props.form.setValue('amount', priceAmount);
+  }, [totalPrice]);
+  console.log(products, totalPrice);
 
   useEffect(() => {
     /**
      * set the Default values of the form
      */
     props.form?.setValue(
-      `products.${props.index}.product-${props.product.product.id}.quantity`,
-      DEFAULT_PRODUCT_QUANTITY
+      `products.${props.index}.product-${props.data?.unique_id}.quantity`,
+      props.data.quantity
     );
     props.form?.setValue(
-      `products.${props.index}.product-${props.product?.product.id}.unit_price`,
-      String(props.product.product.cost_price)
+      `products.${props.index}.product-${props.data?.unique_id}.unit_cost`,
+      String(props.data.unit_cost)
     );
-  }, [props.product, props.form]);
+  }, [props.data, props.form]);
 
   useEffect(() => {
     /**
      * get the required values for the total price calculation for every product
      */
     const quantityValue = props.form?.getValues(
-      `products.${props.index}.product-${props.product.product.id}.quantity`
+      `products.${props.index}.product-${props.data?.unique_id}.quantity`
     );
     const unitPrice = props.form?.getValues(
-      `products.${props.index}.product-${props.product.product.id}.unit_price`
+      `products.${props.index}.product-${props.data?.unique_id}.unit_cost`
     );
 
     if (quantityValue && unitPrice) {
@@ -55,28 +92,43 @@ function ProductListCardEdit(props: {
        * set the total value base on the change of the quantity
        */
       props.form?.setValue(
-        `products.${props.index}.product-${props.product.product.id}.total`,
+        `products.${props.index}.product-${props.data?.unique_id}.total`,
         Number(quantityValue) * Number(unitPrice)
       );
     }
   }, [quantityWatch]);
   return (
-    <div key={props.product.unique_id} className="rounded p-space8">
-      <div className="flex items-center gap-space8">
-        <Image
-          src={props.product.product.image_url}
-          height={32}
-          width={32}
-          alt=""
-        />
+    <div key={props.data?.unique_id} className="rounded p-space8">
+      <div className="flex justify-between">
+        <div className="flex items-center gap-space8">
+          <Image
+            src={props.data.product?.image_url}
+            height={32}
+            width={32}
+            alt=""
+          />
 
-        <Text title={props.product.name} />
+          <Text title={props.data?.name} />
+        </div>
+
+        <Button
+          type="button"
+          onClick={() => {
+            console.log('dd');
+            props.removeItemFromProduct();
+          }}
+          className="h-[20px]"
+          size={'icon'}
+          variant={'danger'}
+        >
+          <CancelIcon />
+        </Button>
       </div>
 
       <div className="flex gap-space12">
         <FormField
           control={props.form?.control}
-          name={`products.${props.index}.product-${props.product.product.id}.quantity`}
+          name={`products.${props.index}.product-${props.data?.unique_id}.quantity`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
@@ -91,7 +143,7 @@ function ProductListCardEdit(props: {
         />
         <FormField
           control={props.form?.control}
-          name={`products.${props.index}.product-${props.product.product.id}.unit_price`}
+          name={`products.${props.index}.product-${props.data?.unique_id}.unit_cost`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>
@@ -106,7 +158,7 @@ function ProductListCardEdit(props: {
         />
         <FormField
           control={props.form?.control}
-          name={`products.${props.index}.product-${props.product.product.id}.total`}
+          name={`products.${props.index}.product-${props.data?.unique_id}.total`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>Total</FormLabel>

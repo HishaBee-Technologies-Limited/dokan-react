@@ -52,17 +52,17 @@ const ProductFiledRow = (props: IProps) => {
     const quantityValue = props.form.getValues(
       `products.${props.index}.product-${props.data?.id}.quantity`
     );
-    const unitPrice = props.form.getValues(
-      `products.${props.index}.product-${props.data?.id}.unit_price`
+    const unitCost = props.form.getValues(
+      `products.${props.index}.product-${props.data?.id}.unit_cost`
     );
 
-    if (quantityValue && unitPrice) {
+    if (quantityValue && unitCost) {
       /**
        * set the total value base on the change of the quantity
        */
       props.form.setValue(
         `products.${props.index}.product-${props.data?.id}.total`,
-        Number(quantityValue) * Number(unitPrice)
+        Number(quantityValue) * Number(unitCost)
       );
     }
   }, [quantityWatch]);
@@ -76,7 +76,7 @@ const ProductFiledRow = (props: IProps) => {
       DEFAULT_PRODUCT_QUANTITY
     );
     props.form.setValue(
-      `products.${props.index}.product-${props.data?.id}.unit_price`,
+      `products.${props.index}.product-${props.data?.id}.unit_cost`,
       String(props.data?.cost_price)
     );
   }, [props.data, props.form]);
@@ -129,7 +129,7 @@ const ProductFiledRow = (props: IProps) => {
         />
         <FormField
           control={props.form.control}
-          name={`products.${props.index}.product-${props.data?.id}.unit_price`}
+          name={`products.${props.index}.product-${props.data?.id}.unit_cost`}
           render={({ field }) => (
             <FormItem className="space-y-0 w-full">
               <FormLabel>

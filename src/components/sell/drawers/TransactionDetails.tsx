@@ -264,7 +264,7 @@ const TransactionDetails = () => {
         >
           <DeleteIcon color="#fff" /> Delete
         </Button>
-        <Button
+        {/* <Button
           className="w-full"
           onClick={() =>
             handleDrawerOpen({
@@ -274,7 +274,7 @@ const TransactionDetails = () => {
           }
         >
           <EditIcon /> Edit
-        </Button>
+        </Button> */}
       </DrawerFooter>
     </div>
   );

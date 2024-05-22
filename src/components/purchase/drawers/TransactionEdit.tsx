@@ -60,11 +60,12 @@ import { createPurchase } from '@/actions/purchase/createPurchase';
 import { useSession } from 'next-auth/react';
 import { jwtDecode } from 'jwt-decode';
 import { createDueItem } from '@/actions/due/createDueItem';
-import { IPurchaseProducts } from '@/types/purchase';
+import { IProducts, IPurchaseProducts } from '@/types/purchase';
 import { getPurchaseItems } from '@/actions/purchase/getPurchaseItems';
 import ProductListCard from '../ProductListCard';
 import { Cross1Icon, Pencil1Icon } from '@radix-ui/react-icons';
 import ProductListCardEdit from '../ProductListCardEdit';
+import { filteringOptions } from '@/config/orders';
 
 const partyList = ['customer', 'supplier'];
 
@@ -123,55 +124,54 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   });
 
   async function onSubmit(data: any) {
-    // const responseCreatePurchase = await createPurchase({
-    //   batch: '',
-    //   created_at: formatDate(DATE_FORMATS.default, data.date),
-    //   date: formatDate(DATE_FORMATS.default, data.date),
-    //   discount: Number(currentPurchase?.discount),
-    //   discount_type: currentPurchase?.discount_type ?? '',
-    //   extra_charge: Number(currentPurchase?.extra_charge),
-    //   note: data.details,
-    //   payment_method: PAYMENT_METHODS['Due Payment'],
-    //   payment_status: PAYMENT_STATUS.unpaid,
-    //   purchase_barcode: currentPurchase?.purchase_barcode ?? '',
-    //   received_amount: Number(data.amount),
-    //   supplier_mobile: data.name,
-    //   supplier_name: data.number,
-    //   total_item: currentPurchase?.total_item ?? 0,
-    //   total_price: Number(data.amount),
-    //   unique_id: generateUlid(),
-    //   updated_at: formatDate(DATE_FORMATS.default),
-    //   user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
-    //   version: currentPurchase?.version ? currentPurchase?.version + 1 : 0,
-    // });
+    const responseCreatePurchase = await createPurchase({
+      batch: '',
+      created_at: formatDate(DATE_FORMATS.default, data.date),
+      date: formatDate(DATE_FORMATS.default, data.date),
+      discount: Number(currentPurchase?.discount),
+      discount_type: currentPurchase?.discount_type ?? '',
+      extra_charge: Number(currentPurchase?.extra_charge),
+      note: data.details,
+      payment_method: PAYMENT_METHODS['Due Payment'],
+      payment_status: PAYMENT_STATUS.unpaid,
+      purchase_barcode: currentPurchase?.purchase_barcode ?? '',
+      received_amount: Number(data.amount),
+      supplier_mobile: data.name,
+      supplier_name: data.number,
+      total_item: currentPurchase?.total_item ?? 0,
+      total_price: Number(data.amount),
+      unique_id: generateUlid(),
+      updated_at: formatDate(DATE_FORMATS.default),
+      user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
+      version: currentPurchase?.version ? currentPurchase?.version + 1 : 0,
+    });
 
-    // if (currentPurchase?.payment_status === PAYMENT_STATUS.unpaid) {
-    //   const payload = {
-    //     amount: Number(data.amount),
-    //     unique_id: generateUlid(),
-    //     due_left: -Number(data.amount),
-    //     version: DEFAULT_STARTING_VERSION,
-    //     updated_at: formatDate(DATE_FORMATS.default),
-    //     created_at: formatDate(DATE_FORMATS.default),
-    //     message: data.details,
-    //     contact_mobile: data.number,
-    //     contact_type: 'SUPPLIER',
-    //     contact_name: data.name,
-    //     sms: data.sms ?? false,
-    //   };
+    if (currentPurchase?.payment_status === PAYMENT_STATUS.unpaid) {
+      const payload = {
+        amount: Number(data.amount),
+        unique_id: generateUlid(),
+        due_left: -Number(data.amount),
+        version: DEFAULT_STARTING_VERSION,
+        updated_at: formatDate(DATE_FORMATS.default),
+        created_at: formatDate(DATE_FORMATS.default),
+        message: data.details,
+        contact_mobile: data.number,
+        contact_type: 'SUPPLIER',
+        contact_name: data.name,
+        sms: data.sms ?? false,
+      };
 
-    //   const res = await createDueItem(payload);
-    // }
+      const res = await createDueItem(payload);
+    }
 
-    // setCalculatedProducts({
-    //   ...calculatedProducts,
-    //   paymentAmount: Number(data.amount),
-    //   date: formatDate(DATE_FORMATS.default, data.date),
-    // });
-    // // console.log(res, responseCreatePurchase);
+    setCalculatedProducts({
+      ...calculatedProducts,
+      paymentAmount: Number(data.amount),
+      date: formatDate(DATE_FORMATS.default, data.date),
+    });
 
-    // handleSellDrawer({ open: false });
-    // openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
+    handleSellDrawer({ open: false });
+    openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
     console.log('data------------', data);
   }
 
@@ -220,16 +220,14 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     form.setValue('date', new Date(currentPurchase?.created_at ?? ''));
     form.setValue('details', currentPurchase?.note ?? '');
   }, [currentPurchase]);
-  console.log(currentPurchase);
 
   useEffect(() => {
     const getPurchaseProducts = async () => {
       const res = await getPurchaseItems({
         id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
       });
-      console.log(currentPurchase);
       if (res?.success) {
-        setPurchaseProducts(res?.data.data);
+        setPurchaseProducts(res?.data);
       }
     };
     getPurchaseProducts();
@@ -244,6 +242,29 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   //      prev = prev + Number(Object.values(p)[0].total);
   //      return prev;
   //    }, 0)
+
+  const removeItemFromProduct = (product: IProducts, index: number) => {
+    /**
+     * unregister product item from the form array to maintain the calculation
+     * Set the filtered products to update the current view
+     */
+    // props.form.unregister(`products.${props.index}.product-${props.data?.id}`);
+    // setProducts(products.filter((product) => product.id !== props.data?.id));
+
+    let purchaseProdClone = purchaseProducts && { ...purchaseProducts };
+    let filterProducts = purchaseProducts?.items?.filter(
+      (prod) => prod.unique_id !== product.unique_id
+    );
+
+    purchaseProdClone!.items = filterProducts;
+    form.unregister(`products.${index}.product-${product.unique_id}`);
+    setPurchaseProducts(purchaseProdClone);
+    // console.log(
+    //   purchaseProducts?.items?.filter(
+    //     (prod) => prod.unique_id !== product.unique_id
+    //   )
+    // );
+  };
 
   return (
     <div className="space-y-space12">
@@ -368,15 +389,15 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
           />
           <div className="flex justify-between">
             <Text title="Buy Products" className="text-lg font-medium" />
-            {!edit ? (
-              <div
-                className="flex items-center gap-3 cursor-pointer"
-                onClick={() => setEdit(!edit)}
-              >
-                <Text title="Edit" className="text-lg font-medium" />
-                <Pencil1Icon />
-              </div>
-            ) : (
+            {/* {!edit ? ( */}
+            <div
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => setEdit(!edit)}
+            >
+              <Text title="Edit" className="text-lg font-medium" />
+              <Pencil1Icon />
+            </div>
+            {/* ) : (
               <div
                 className="flex items-center gap-3 cursor-pointer"
                 onClick={() => setEdit(!edit)}
@@ -384,22 +405,26 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
                 <Text title="Close" className="text-lg font-medium" />
                 <Cross1Icon />
               </div>
-            )}
+            )
+            } */}
           </div>
 
           <div className={`grid 'grid-rows-[1fr]'`}>
             {purchaseProducts?.items &&
               purchaseProducts?.items.map((product, index) => (
-                <>
-                  {edit ? (
-                    <ProductListCardEdit
-                      product={product}
-                      {...{ index, form }}
-                    />
-                  ) : (
-                    <ProductListCard product={product} />
-                  )}
-                </>
+                // <>
+                //   {edit ? (
+                //     <ProductListCardEdit
+                //       removeItemFromProduct={() =>
+                //         removeItemFromProduct(product, index)
+                //       }
+                //       data={product}
+                //       {...{ index, form }}
+                //     />
+                //   ) : (
+                <ProductListCard product={product} />
+                //   )}
+                // </>
               ))}
           </div>
 

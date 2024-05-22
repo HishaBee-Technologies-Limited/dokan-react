@@ -4,10 +4,11 @@ import { IProducts } from '@/types/purchase';
 import { Text } from '@/components/common/text';
 import { Pencil1Icon } from '@radix-ui/react-icons';
 function ProductListCard({ product }: { product: IProducts }) {
+  console.log(product);
   return (
     <div key={product.unique_id} className="rounded p-space8">
       <div className="flex items-center gap-space8">
-        <Image src={product.product.image_url} height={32} width={32} alt="" />
+        <Image src={product.product?.image_url} height={32} width={32} alt="" />
 
         <Text title={product.name} />
       </div>
@@ -18,10 +19,13 @@ function ProductListCard({ product }: { product: IProducts }) {
         </Text>
         <Text>
           Unit Price:{' '}
-          <span className="font-semibold">{product.product.cost_price}</span>
+          <span className="font-semibold">{product?.unit_cost}</span>
         </Text>
         <Text>
-          Total: <span className="font-semibold">{product.price}</span>
+          Total:{' '}
+          <span className="font-semibold">
+            {product?.unit_cost * product?.quantity!}
+          </span>
         </Text>
       </article>
     </div>

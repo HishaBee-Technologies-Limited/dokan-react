@@ -160,8 +160,8 @@ const ConfirmPayment = () => {
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
-          purchase_id: responseCreatePurchase.data.id,
-          purchase_unique_id: responseCreatePurchase.data.unique_id,
+          purchase_id: responseCreatePurchase.data.purchase.id,
+          purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,
@@ -226,7 +226,7 @@ const ConfirmPayment = () => {
                       {field.value ? (
                         format(field.value, 'PPP')
                       ) : (
-                        <span>Pick a Date</span>
+                        <span>{format(new Date(), 'PPP')}</span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
