@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { DayPicker } from 'react-day-picker';
+import { DateAfter, DayPicker } from 'react-day-picker';
 
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
@@ -15,9 +15,12 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const afterMatcher: DateAfter = { after: new Date() };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      disabled={afterMatcher}
       className={cn(
         'p-space8 rounded-md border border-primary-10 dark:border-primary-80 dark:bg-primary-100',
         className
