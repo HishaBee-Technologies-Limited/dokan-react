@@ -17,7 +17,7 @@ export const getCategories = async (page?: number) => {
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data.data,
+        data: data,
       };
     }
     if (!res.ok) {

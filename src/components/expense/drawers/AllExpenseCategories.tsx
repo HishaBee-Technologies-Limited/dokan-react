@@ -22,11 +22,7 @@ import { ICategory } from '@/types/expense';
 import { getCategories } from '@/actions/category/getCategories';
 import { EXPENSE_DEFAULT_CATEGORIES } from '@/lib/constants/expense';
 
-const AllExpenseCategories = ({
-  categories,
-}: {
-  categories: ICommonGetResponse<ICategory>;
-}) => {
+const AllExpenseCategories = ({ categories }: { categories: ICategory[] }) => {
   const setExpenseDialog = useExpenseStore(
     (state) => state.setExpenseDialogState
   );
@@ -45,7 +41,7 @@ const AllExpenseCategories = ({
           <Text
             title={String(
               EXPENSE_DEFAULT_CATEGORIES.length +
-                (categories?.data.length ? categories?.data.length : 0)
+                (categories.length ? categories?.length : 0)
             )}
             className="font-semibold text-xl"
           />
@@ -114,7 +110,7 @@ const AllExpenseCategories = ({
           </div>
         ))}
         {categories &&
-          categories.data?.map((category, i) => (
+          categories?.map((category, i) => (
             <div
               key={i}
               className="border border-color rounded-md p-space12 flex items-center justify-between gap-space12"
@@ -147,7 +143,7 @@ const AllExpenseCategories = ({
                           open: true,
                           header: ExpenseEnum.EDIT_CATEGORY,
                         });
-                        setCurrentCategory(category.name);
+                        setCurrentCategory(JSON.stringify(category));
                       }}
                     >
                       <EditIcon />
@@ -164,7 +160,7 @@ const AllExpenseCategories = ({
                           open: true,
                           header: ExpenseEnum.DELETE_EXPENSE_CATEGORY,
                         });
-                        setCurrentCategory(category.name);
+                        setCurrentCategory(String(category.id));
                       }}
                     >
                       <DeleteIcon />

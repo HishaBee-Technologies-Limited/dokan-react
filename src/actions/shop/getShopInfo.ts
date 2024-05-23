@@ -1,7 +1,7 @@
 'use server';
 
 import { authApi } from '@/lib/api';
-import { IGetShopInfoResponse } from '@/types/shop';
+import { GetShopInfoDataDef, IGetShopInfoResponse } from '@/types/shop';
 
 export const getShopInfo = async (shopId: string) => {
   try {
@@ -12,7 +12,7 @@ export const getShopInfo = async (shopId: string) => {
       return {
         success: true,
         status: data.code,
-        data: data as IGetShopInfoResponse,
+        data: data as GetShopInfoDataDef,
       };
     }
     if (!res?.ok) {

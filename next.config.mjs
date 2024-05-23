@@ -35,6 +35,11 @@ const nextConfig = {
         hostname: 'dashboard.hishabee.io',
         pathname: '/storage/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'dev.hishabee.market',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };

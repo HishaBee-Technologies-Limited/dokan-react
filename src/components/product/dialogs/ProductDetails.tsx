@@ -236,7 +236,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
         </Button>
 
         <div className="gap-space12 flex">
-          <Button
+          {/* <Button
             variant={'secondary'}
             className="w-full !font-medium"
             onClick={() =>
@@ -248,8 +248,8 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
           >
             <Icon icon="lucide:share" />
             Share Product
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             variant={'secondary'}
             className="w-full !font-medium"
             onClick={() =>
@@ -261,7 +261,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
           >
             <HistoryIcon />
             Product History
-          </Button>
+          </Button> */}
         </div>
       </DialogFooter>
     </div>

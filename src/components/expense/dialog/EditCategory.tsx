@@ -45,7 +45,10 @@ const EditCategory = ({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('data------------', data);
-    const res = await editExpenseCategory({ name: data.name });
+    const res = await editExpenseCategory({
+      name: data.name,
+      id: JSON.parse(currentCategory).id,
+    });
     console.log(res);
     if (res?.success) {
       toast.success('Expense category added');
@@ -58,7 +61,7 @@ const EditCategory = ({
   }
 
   useEffect(() => {
-    form.setValue('name', currentCategory);
+    form.setValue('name', JSON.parse(currentCategory).name);
   }, [currentCategory]);
 
   return (

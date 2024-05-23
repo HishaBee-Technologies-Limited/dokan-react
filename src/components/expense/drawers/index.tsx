@@ -15,7 +15,7 @@ const ExpenseDrawers = ({
   categories,
 }: {
   expense: IExpense;
-  categories: ICommonGetResponse<ICategory>;
+  categories: ICategory[];
 }) => {
   const drawerState = useExpenseStore((state) => state.expenseDrawerState);
   const handleClose = useExpenseStore((state) => state.setExpenseDrawerState);

@@ -11,6 +11,7 @@ export interface IShopResponse {
     end_date: string;
     plus_package: string;
   };
+  logo_url: string;
 }
 
 export interface IArea {
@@ -48,6 +49,7 @@ export interface shopPayload {
   shopId?: number;
   number?: string;
   shop_image?: string;
+  logo_url?: string;
 }
 
 export type OverviewDef = {

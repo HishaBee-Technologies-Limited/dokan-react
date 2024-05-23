@@ -9,12 +9,17 @@ import { authenticate } from '@/actions/auth';
 import { signIn } from '@/auth';
 import { useRouter } from 'next/navigation';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import { Input } from '../ui/input';
+import { PasswordInput } from '@/components/password-input';
+
+// import { EyeIcon } from 'lucide-react';
 
 const GivePin = ({ mobile_number }: { mobile_number: string }) => {
   const router = useRouter();
   const [showPin, setShowPin] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
-
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [pin, setPin] = useState<string>('');
 
   const login = async () => {
@@ -40,7 +45,13 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
         <Text title="Enter PIN Number" />
 
         <div className="relative">
-          <StatefulPinInput
+          <PasswordInput
+            id="current_password"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            autoComplete="current-password"
+          />
+          {/* <StatefulPinInput
             length={5}
             placeholder="-"
             autoFocus={true}
@@ -59,7 +70,6 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
               borderBottom: '2px solid #CCCCCC',
             }}
           />
-
           <button
             type="button"
             onClick={() => setShowPin(!showPin)}
@@ -74,7 +84,7 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
                 height={30}
               />
             )}
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -90,3 +100,23 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
 };
 
 export default GivePin;
+
+function EyeIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}

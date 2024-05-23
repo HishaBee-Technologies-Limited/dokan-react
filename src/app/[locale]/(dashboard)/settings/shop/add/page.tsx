@@ -59,6 +59,8 @@ const AddShopPage = () => {
   const [open, setOpen] = React.useState(false);
   const [divisionValue, setDivisionValue] = React.useState('');
   const [openDistrict, setOpenDistrict] = React.useState(false);
+  const [openArea, setOpenArea] = React.useState(false);
+  const [openTypes, setOpenTypes] = React.useState(false);
   const [districtValue, setDistrictValue] = React.useState('');
   const [types, setTypes] = useState<any[]>([]);
   const searchParams = useSearchParams();
@@ -74,7 +76,7 @@ const AddShopPage = () => {
     address,
     number,
     area,
-    shop_image,
+    logo_url,
   }: z.infer<typeof ShopSchema>) {
     console.log(shopId, address);
     const res = await createShops({
@@ -84,7 +86,7 @@ const AddShopPage = () => {
       address,
       area,
       number,
-      shop_image,
+      logo_url,
     });
     if (res?.success) {
       router.push('/settings/shop');
@@ -99,7 +101,7 @@ const AddShopPage = () => {
     const getAllAreas = async () => {
       const res = await getAreasAndTypes();
       setDivisions(res?.data?.areaData);
-      setTypes(res?.data?.typesData.data);
+      setTypes(res?.data?.typesData);
     };
     getAllAreas();
   }, []);
@@ -111,7 +113,7 @@ const AddShopPage = () => {
   };
 
   useEffect(() => {
-    form.setValue('shop_image', imageUrls[0]);
+    form.setValue('logo_url', imageUrls[0]);
   }, [imageUrls]);
 
   return (
@@ -129,7 +131,7 @@ const AddShopPage = () => {
             <Card className="space-y-space12 px-space16 py-space16">
               <FormField
                 control={form.control}
-                name="shop_image"
+                name="logo_url"
                 render={({ field }) => (
                   <FormItem className="flex flex-col items-center justify-center gap-space16 py-space12">
                     <div className="h-[10rem] w-[10rem] bg-primary-5 dark:bg-primary-80 border border-color rounded-full flex items-center justify-center">
@@ -176,7 +178,7 @@ const AddShopPage = () => {
                 name="shop_type"
                 render={({ field }) => (
                   <FormItem>
-                    <Popover>
+                    <Popover open={openTypes} onOpenChange={setOpenTypes}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -207,6 +209,7 @@ const AddShopPage = () => {
                                 value={String(type.id)}
                                 onSelect={() => {
                                   form.setValue('shop_type', type.id);
+                                  setOpenTypes(false);
                                 }}
                               >
                                 {type.name}
@@ -352,7 +355,7 @@ const AddShopPage = () => {
                 name="area"
                 render={({ field }) => (
                   <FormItem>
-                    <Popover>
+                    <Popover open={openArea} onOpenChange={setOpenArea}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -403,6 +406,7 @@ const AddShopPage = () => {
                                   value={String(area.id)}
                                   onSelect={() => {
                                     form.setValue('area', area.id);
+                                    setOpenArea(false);
                                   }}
                                 >
                                   {area.name}

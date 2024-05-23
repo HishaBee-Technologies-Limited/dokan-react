@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Card from '@/components/common/Card';
 import { Image } from '@/components/common/Image';
 import { PageSubTitle, Text } from '@/components/common/text';
@@ -34,6 +34,7 @@ import {
   FormField,
   FormControl,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form';
 import { getAreasAndTypes } from '@/actions/shop/getAreaAndTypes';
 import { IAllArea } from '@/types/shop';
@@ -41,6 +42,14 @@ import { cashType } from '@/lib/constants/shop';
 import { createShops } from '@/actions/shop/createShop';
 import { useRouter } from 'next/navigation';
 import { ShopSchema } from '@/schemas/shop';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useFileUpload } from '@/hooks/uploadMultipleFile';
 
 const AddShopPage = () => {
   const form = useForm<z.infer<typeof ShopSchema>>({
@@ -53,11 +62,15 @@ const AddShopPage = () => {
   });
   const [divisions, setDivisions] = useState<IAllArea[]>();
   const [open, setOpen] = React.useState(false);
+  const [openTypes, setOpenTypes] = React.useState(false);
   const [divisionValue, setDivisionValue] = React.useState('');
 
   const [openDistrict, setOpenDistrict] = React.useState(false);
   const [districtValue, setDistrictValue] = React.useState('');
+  const [openArea, setOpenArea] = React.useState(false);
   const [types, setTypes] = useState<any[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<FileList>();
+  const [imageUrls, loading] = useFileUpload(selectedFiles);
 
   const router = useRouter();
 
@@ -67,6 +80,7 @@ const AddShopPage = () => {
     area,
     shop_type,
     sell_type,
+    logo_url,
   }: z.infer<typeof ShopSchema>) {
     const res = await createShops({
       name,
@@ -74,6 +88,7 @@ const AddShopPage = () => {
       area,
       type: shop_type,
       publicData: Number(sell_type),
+      logo_url,
     });
     if (res?.success) {
       router.push('/shop');
@@ -90,7 +105,15 @@ const AddShopPage = () => {
     };
     getAllAreas();
   }, []);
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    const selectedFiles = files as FileList;
+    setSelectedFiles(selectedFiles);
+  };
 
+  useEffect(() => {
+    form.setValue('logo_url', imageUrls[0]);
+  }, [imageUrls]);
   return (
     <div className="space-y-space16 pb-space16">
       <div className="gap-space16 flex items-center">
@@ -102,6 +125,34 @@ const AddShopPage = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="space-y-space12 px-space16 py-space16">
+            <FormField
+              control={form.control}
+              name="logo_url"
+              render={({ field }) => (
+                <FormItem className="flex flex-col items-center justify-center gap-space16 py-space12">
+                  <div className="h-[10rem] w-[10rem] bg-primary-5 dark:bg-primary-80 border border-color rounded-full flex items-center justify-center">
+                    <Image
+                      src={`${field.value ? field.value : '/images/update_shop.svg'}`}
+                      alt=""
+                      height={54}
+                      width={54}
+                    />
+                  </div>
+
+                  <label className="cursor-pointer">
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+
+                    <p className="text-blue-600 text-sm font-medium text-center">
+                      Add a logo of your Shop
+                    </p>
+                  </label>
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"
@@ -123,7 +174,7 @@ const AddShopPage = () => {
               name="shop_type"
               render={({ field }) => (
                 <FormItem>
-                  <Popover>
+                  <Popover open={openTypes} onOpenChange={setOpenTypes}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -153,6 +204,7 @@ const AddShopPage = () => {
                               value={String(type.id)}
                               onSelect={() => {
                                 form.setValue('shop_type', type.id);
+                                setOpenTypes(false);
                               }}
                             >
                               {type.name}
@@ -294,7 +346,7 @@ const AddShopPage = () => {
               name="area"
               render={({ field }) => (
                 <FormItem>
-                  <Popover>
+                  <Popover open={openArea} onOpenChange={setOpenArea}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -344,6 +396,7 @@ const AddShopPage = () => {
                                 value={String(area.id)}
                                 onSelect={() => {
                                   form.setValue('area', area.id);
+                                  setOpenArea(false);
                                 }}
                               >
                                 {area.name}
@@ -420,7 +473,10 @@ const AddShopPage = () => {
             <Button variant={'secondary'} className="!px-space40">
               Cancel
             </Button>
-            <Button type="submit" disabled={!form.formState.isValid}>
+            <Button
+              type="submit"
+              disabled={!form.formState.isValid || form.formState.isSubmitting}
+            >
               Create Shop
             </Button>
           </div>

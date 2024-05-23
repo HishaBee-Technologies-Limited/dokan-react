@@ -12,7 +12,7 @@ const DeleteExpenseCategory = () => {
   const currentCategory = useExpenseStore((state) => state.currentCategory);
 
   const handleDelete = async () => {
-    const res = await deleteExpenseCategory({ name: currentCategory });
+    const res = await deleteExpenseCategory({ id: currentCategory });
     console.log(res);
     if (res?.success) {
       toast.success('Category deleted successfully');

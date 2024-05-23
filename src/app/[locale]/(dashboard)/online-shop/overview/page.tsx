@@ -17,22 +17,22 @@ const Overview = async () => {
     <div className="w-full h-full flex flex-col gap-space16">
       <div className="flex items-center justify-between gap-space16 flex-wrap">
         <article className="space-y-space4">
-          <PageTitle title={shopInfo?.data?.data?.overview?.name} />
+          <PageTitle title={shopInfo?.data?.overview?.name} />
           <Text
-            title={shopInfo?.data?.data?.overview?.address}
+            title={shopInfo?.data?.overview?.address}
             className="text-sm"
             variant="secondary"
           />
         </article>
 
-        <ShopActions slug={shopInfo?.data?.data?.overview?.slug ?? ''} />
+        <ShopActions slug={shopInfo?.data?.overview?.slug ?? ''} />
       </div>
 
       <div className="flex justify-center flex-wrap gap-space12">
         <Card className="w-full max-w-[14rem] h-[12rem] flex flex-col items-center justify-center gap-space8">
           <Text title="Active order" variant="secondary" />
           <Text
-            title={shopInfo?.data?.data?.overview?.active_orders?.toString()}
+            title={shopInfo?.data?.overview?.active_orders?.toString()}
             className="font-bold text-xl"
           />
         </Card>
@@ -40,7 +40,7 @@ const Overview = async () => {
         <Card className="w-full max-w-[14rem] h-[12rem] flex flex-col items-center justify-center gap-space8">
           <Text title="Processing" variant="secondary" />
           <Text
-            title={shopInfo?.data?.data?.overview?.processing_orders?.toString()}
+            title={shopInfo?.data?.overview?.processing_orders?.toString()}
             className="font-bold text-xl"
           />
         </Card>
@@ -48,7 +48,7 @@ const Overview = async () => {
         <Card className="w-full max-w-[14rem] h-[12rem] flex flex-col items-center justify-center gap-space8">
           <Text title="Delivered" variant="secondary" />
           <Text
-            title={shopInfo?.data?.data?.overview?.delivered_orders?.toString()}
+            title={shopInfo?.data?.overview?.delivered_orders?.toString()}
             className="font-bold text-xl"
           />
         </Card>
@@ -56,7 +56,7 @@ const Overview = async () => {
         <Card className="w-full max-w-[14rem] h-[12rem] flex flex-col items-center justify-center gap-space8">
           <Text title="Total Income" variant="secondary" />
           <Text
-            title={shopInfo?.data?.data?.overview?.total_earning?.toString()}
+            title={shopInfo?.data?.overview?.total_earning?.toString()}
             className="font-bold text-xl"
           />
         </Card>
@@ -64,7 +64,7 @@ const Overview = async () => {
         <Card className="w-full max-w-[14rem] h-[12rem] flex flex-col items-center justify-center gap-space8">
           <Text title="Online Product" variant="secondary" />
           <Text
-            title={shopInfo?.data?.data?.overview?.online_products?.toString()}
+            title={shopInfo?.data?.overview?.online_products?.toString()}
             className="font-bold text-xl"
           />
         </Card>

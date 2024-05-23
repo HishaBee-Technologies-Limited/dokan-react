@@ -9,16 +9,17 @@ export const editExpenseCategory = async ({
   id,
 }: {
   name: string;
-  id?: string;
+  id: string;
 }) => {
   try {
-    const shopId = cookies().get('shopId')?.value;
-    const payload = {
-      shop_id: Number(shopId),
+    const shopId = cookies().get('shopId')?.value ?? '';
+    const payload = new URLSearchParams({
+      shop_id: shopId,
       name,
       id,
-    };
-    const res = await authApi.put(`/expense_category/${id}`, payload);
+    });
+    console.log(payload);
+    const res = await authApi.put(`/expense_category?${payload}`);
     const data = await res.json();
     revalidatePath('/expense');
     if (res.ok) {

@@ -70,8 +70,8 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
                         `}
             >
               <div className="mt-space32 gap-space12 flex flex-col items-center">
-                <Image
-                  src={`/images/shop_view.svg`}
+                <img
+                  src={shop.logo_url ? shop.logo_url : `/images/shop_view.svg`}
                   alt=""
                   height={84}
                   width={84}

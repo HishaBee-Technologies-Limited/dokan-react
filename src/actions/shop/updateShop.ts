@@ -10,19 +10,22 @@ export const updateShop = async ({
   address,
   name,
   number,
-  shop_image,
-}: shopPayload) => {
+  logo_url,
+}: any) => {
   try {
-    const payload = {
+    const payload = new URLSearchParams({
       shop_id: shopId,
       area,
       type,
       address,
       name,
       number,
-      shop_image,
-    };
-    const res = await authApi.put(`/shop/edit/${shopId}`, payload);
+      logo_url,
+    });
+    console.log(payload);
+
+    const res = await authApi.get(`/shop/edit?${payload}`);
+    console.log(res);
     const data = await res.json();
 
     if (res.ok) {

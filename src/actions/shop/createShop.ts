@@ -9,7 +9,7 @@ export const createShops = async ({
   address,
   name,
   publicData,
-  shop_image,
+  logo_url,
 }: shopPayload) => {
   try {
     const payload = {
@@ -18,10 +18,10 @@ export const createShops = async ({
       area,
       type,
       publicData,
-      shop_image,
+      logo_url,
     };
     const res = await authApi.get(
-      `/shop/create?name=${name}&type=${type}&address=${address}&area=${area}&public=${publicData}`
+      `/shop/create?name=${name}&type=${type}&address=${address}&area=${area}&public=${publicData}&logo_url=${logo_url}`
     );
     console.log('shop-create------', res);
 

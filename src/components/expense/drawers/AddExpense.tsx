@@ -58,11 +58,7 @@ const formSchema = z.object({
   date: z.date(),
 });
 
-const AddExpense = ({
-  categories,
-}: {
-  categories: ICommonGetResponse<ICategory>;
-}) => {
+const AddExpense = ({ categories }: { categories: ICategory[] }) => {
   const router = useRouter();
 
   const closeDrawer = useExpenseStore((state) => state.setExpenseDrawerState);
@@ -189,7 +185,7 @@ const AddExpense = ({
                       </SelectItem>
                     ))}
                     {categories &&
-                      categories.data?.map((category) => (
+                      categories?.map((category) => (
                         <SelectItem key={category.name} value={category.name}>
                           {category.name}
                         </SelectItem>

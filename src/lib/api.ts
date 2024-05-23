@@ -95,7 +95,7 @@ export const authApi = {
     await authFetchAPI(url, 'GET', tags),
   post: (url: string, payload?: any, tags?: string[]) =>
     authFetchAPI(url, 'POST', payload, tags),
-  put: (url: string, payload: any, tags?: string[]) =>
+  put: (url: string, payload?: any, tags?: string[]) =>
     authFetchAPI(url, 'PUT', payload, tags),
   delete: (url: string, tags?: string[]) => authFetchAPI(url, 'DELETE', tags),
 };

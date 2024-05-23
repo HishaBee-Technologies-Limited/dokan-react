@@ -58,6 +58,8 @@ const EditShopPage = () => {
   const [open, setOpen] = React.useState(false);
   const [divisionValue, setDivisionValue] = React.useState('');
   const [openDistrict, setOpenDistrict] = React.useState(false);
+  const [openArea, setOpenArea] = React.useState(false);
+  const [openTypes, setOpenTypes] = React.useState(false);
   const [districtValue, setDistrictValue] = React.useState('');
   const [types, setTypes] = useState<any[]>([]);
   const searchParams = useSearchParams();
@@ -73,7 +75,7 @@ const EditShopPage = () => {
     address,
     number,
     area,
-    shop_image,
+    logo_url,
   }: z.infer<typeof ShopSchema>) {
     console.log(shopId, address);
     if (shopId) {
@@ -84,7 +86,7 @@ const EditShopPage = () => {
         address,
         area,
         number,
-        shop_image,
+        logo_url,
       });
       if (res?.success) {
         router.push('/settings/shop');
@@ -99,20 +101,15 @@ const EditShopPage = () => {
   useEffect(() => {
     const getAllAreasAndTypes = async () => {
       const shopInfo = await getShopInfo(shopId as string);
-
+      console.log(shopInfo);
       if (shopInfo?.success) {
-        form.setValue('address', shopInfo?.data?.data?.shop?.address ?? '');
-        form.setValue('name', shopInfo?.data?.data?.shop?.name ?? '');
-        form.setValue(
-          'number',
-          shopInfo?.data?.data?.shop?.public_number ?? ''
-        );
-        form.setValue('shop_type', shopInfo?.data?.data?.shop?.type ?? 0);
-        form.setValue('shop_image', shopInfo?.data?.data?.shop?.logo_url);
+        form.setValue('address', shopInfo?.data?.shop?.address ?? '');
+        form.setValue('name', shopInfo?.data?.shop?.name ?? '');
+        form.setValue('number', shopInfo?.data?.shop?.public_number ?? '');
+        form.setValue('shop_type', shopInfo?.data?.shop?.type ?? 0);
+        form.setValue('logo_url', shopInfo?.data?.shop?.logo_url);
 
-        const areaData = await getAreaInfo(
-          `${shopInfo?.data?.data?.shop?.area}`
-        );
+        const areaData = await getAreaInfo(`${shopInfo?.data?.shop?.area}`);
 
         if (areaData?.success) {
           setDivisionValue(areaData?.data?.division.id);
@@ -123,7 +120,7 @@ const EditShopPage = () => {
       const res = await getAreasAndTypes();
       if (res?.success) {
         setDivisions(res?.data?.areaData);
-        setTypes(res?.data?.typesData.data);
+        setTypes(res?.data?.typesData);
       }
     };
     getAllAreasAndTypes();
@@ -136,7 +133,7 @@ const EditShopPage = () => {
   };
 
   useEffect(() => {
-    form.setValue('shop_image', imageUrls[0]);
+    form.setValue('logo_url', imageUrls[0]);
   }, [imageUrls]);
 
   return (
@@ -154,12 +151,12 @@ const EditShopPage = () => {
             <Card className="space-y-space12 px-space16 py-space16">
               <FormField
                 control={form.control}
-                name="shop_image"
+                name="logo_url"
                 render={({ field }) => (
                   <FormItem className="flex flex-col items-center justify-center gap-space16 py-space12">
                     <div className="h-[10rem] w-[10rem] bg-primary-5 dark:bg-primary-80 border border-color rounded-full flex items-center justify-center">
-                      <Image
-                        src={`${field.value ? field.value : '/images/update_shop.svg'}`}
+                      <img
+                        src={`${field.value ?? '/images/update_shop.svg'}`}
                         alt=""
                         height={54}
                         width={54}
@@ -201,7 +198,7 @@ const EditShopPage = () => {
                 name="shop_type"
                 render={({ field }) => (
                   <FormItem>
-                    <Popover>
+                    <Popover open={openTypes} onOpenChange={setOpenTypes}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -232,6 +229,7 @@ const EditShopPage = () => {
                                 value={String(type.id)}
                                 onSelect={() => {
                                   form.setValue('shop_type', type.id);
+                                  setOpenTypes(false);
                                 }}
                               >
                                 {type.name}
@@ -377,7 +375,7 @@ const EditShopPage = () => {
                 name="area"
                 render={({ field }) => (
                   <FormItem>
-                    <Popover>
+                    <Popover open={openArea} onOpenChange={setOpenArea}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -428,6 +426,7 @@ const EditShopPage = () => {
                                   value={String(area.id)}
                                   onSelect={() => {
                                     form.setValue('area', area.id);
+                                    setOpenArea(false);
                                   }}
                                 >
                                   {area.name}
