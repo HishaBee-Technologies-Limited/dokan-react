@@ -142,6 +142,7 @@ const MoneyGiveReceived = ({
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
       total_discount: 0,
+      transaction_type: 'PRODUCT_SELL',
     });
     console.log('res----', responseCreateSell);
 

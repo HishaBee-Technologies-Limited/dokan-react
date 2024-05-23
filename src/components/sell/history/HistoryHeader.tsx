@@ -26,15 +26,15 @@ const HistoryHeader = () => {
       </Button>
 
       <div className="flex flex-wrap gap-space8 sm:gap-space12">
-        <DatePicker
+        {/* <DatePicker
           onChange={(date) => console.log(date)}
           triggerClasses="!h-[4.8rem]"
-        />
+        /> */}
         <Select onValueChange={handleSort} defaultValue={value}>
-          <SelectTrigger className="max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400">
+          {/* <SelectTrigger className="max-w-max h-[4.8rem] dark:border- border-color dark:bg-primary-90 gap-space8 dark:text-text400">
             <SortIcon />
             <SelectValue placeholder="Employee" />
-          </SelectTrigger>
+          </SelectTrigger> */}
           {/* <SelectContent>
             <div className="max-h-[24rem] overflow-y-scroll">
               <SelectItem value="m@example.com">m@example.com</SelectItem>

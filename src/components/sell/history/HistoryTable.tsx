@@ -130,7 +130,7 @@ const HistoryTable = ({
                     side="bottom"
                     className="w-56 "
                   >
-                    <DropdownMenuItem asChild>
+                    {/* <DropdownMenuItem asChild>
                       <Button
                         size={'sm'}
                         variant={'transparent'}
@@ -143,7 +143,7 @@ const HistoryTable = ({
                         <EditIcon />
                         Edit
                       </Button>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                     <DropdownMenuItem asChild>
                       <Button
                         size={'sm'}

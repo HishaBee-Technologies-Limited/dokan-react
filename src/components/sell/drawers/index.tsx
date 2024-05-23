@@ -26,7 +26,7 @@ const SellDrawers = ({
 
   const renderedDrawers = (activeDrawer: string | undefined) => {
     if (SellEnum.QUICK_SELL === activeDrawer) {
-      return <QuickSell customers={customers} />;
+      return <QuickSell dueList={dueList} customers={customers} />;
     } else if (SellEnum.CONFIRM_PAYMENT === activeDrawer) {
       return <ConfirmPayment />;
     } else if (SellEnum.MONEY_GIVEN_ENTRY === activeDrawer) {

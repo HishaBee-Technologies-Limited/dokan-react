@@ -1,6 +1,6 @@
 export interface IProductSellPayload {
   created_at: string;
-  discount: number;
+  discount?: number;
   employee_mobile?: string;
   employee_name?: string;
   note?: string;
@@ -11,7 +11,7 @@ export interface IProductSellPayload {
   shop_id?: number;
   customer_mobile?: string;
   customer_name?: string;
-  total_item: number;
+  total_item?: number;
   total_price: number;
   unique_id: string;
   updated_at: string;
@@ -19,7 +19,7 @@ export interface IProductSellPayload {
   version: number;
   id?: number;
   discount_type?: string;
-  total_discount: number;
+  total_discount?: number;
   change_amount?: number;
   customer_address?: string;
   total_profit?: number;
