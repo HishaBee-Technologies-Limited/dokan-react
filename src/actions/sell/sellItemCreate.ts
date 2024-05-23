@@ -49,7 +49,7 @@ export const sellItemCreate = async ({
       status,
     };
 
-    const res = await authApi.post(`/transaction_item`, payload);
+    const res = await authApi.post(`/transaction_item?${payload}`);
     const data = await res.json();
 
     if (res.ok) {

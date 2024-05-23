@@ -74,7 +74,9 @@ const formSchema = z.object({
 const ConfirmPayment = () => {
   const closeDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
-
+  const setCalculatedProducts = useSellStore(
+    (state) => state.setCalculatedProducts
+  );
   const calculatedProducts = useSellStore((state) => state.calculatedProducts);
   const [customers, setCustomers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
@@ -170,6 +172,11 @@ const ConfirmPayment = () => {
           updated_at: formatDate(DATE_FORMATS.default),
           version: DEFAULT_STARTING_VERSION,
         });
+      });
+      setCalculatedProducts({
+        ...calculatedProducts,
+        paymentAmount: Number(data.amount),
+        date: formatDate(DATE_FORMATS.default, data.date),
       });
       closeDrawer({ open: false });
       openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
@@ -317,7 +324,7 @@ const ConfirmPayment = () => {
                           <SelectValue placeholder="Customer" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="w-[500px]">
                         <div className="max-h-[24rem] overflow-y-scroll">
                           {customers?.map((customer, i) => (
                             <SelectItem
