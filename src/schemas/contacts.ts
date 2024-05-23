@@ -10,4 +10,5 @@ export const contactSchema = z.object({
   address: z.string().optional(),
   email: z.string().optional(),
   salary: z.string().optional(),
+  image_src: z.string().optional(),
 });

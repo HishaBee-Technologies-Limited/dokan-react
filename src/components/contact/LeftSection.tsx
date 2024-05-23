@@ -50,7 +50,7 @@ export const LeftSection = ({
 
     const params = {
       tab: activeTab ? activeTab : 'Customer',
-      active_user: userList ? String(userList[0].id) : '',
+      active_user: userList?.length ? String(userList[0].id) : '',
     };
     router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
   }, [activeTab]);
@@ -58,7 +58,7 @@ export const LeftSection = ({
   useEffect(() => {
     const params = {
       tab: 'Customer',
-      active_user: userList ? String(userList[0].id) : '',
+      active_user: userList?.length ? String(userList[0].id) : '',
     };
     router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
   }, []);
