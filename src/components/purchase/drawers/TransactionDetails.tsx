@@ -40,9 +40,9 @@ const TransactionDetails = () => {
       const res = await getPurchaseItems({
         id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
       });
-      console.log(currentPurchase);
+      console.log(res);
       if (res?.success) {
-        setPurchaseProducts(res?.data.data);
+        setPurchaseProducts(res?.data);
       }
     };
     getPurchaseProducts();
@@ -53,7 +53,10 @@ const TransactionDetails = () => {
   return (
     <div className="space-y-space12">
       <section className="bg-secondary rounded-lg p-space12 space-y-space16 ">
-        <Text title="Total Item: 03" className="font-semibold" />
+        <Text
+          title={`Total Item: ${purchaseProducts?.items?.length ?? 0}`}
+          className="font-semibold"
+        />
 
         {currentPurchase?.supplier_name && (
           <div className="flex items-center gap-space8">
@@ -148,7 +151,6 @@ const TransactionDetails = () => {
           <ExpandMoreIcon />
         </div> */}
         <Text title="Buy Products" className="text-lg font-medium" />
-
         <div className={`grid 'grid-rows-[1fr]'`}>
           {purchaseProducts?.items &&
             purchaseProducts?.items.map((product) => (

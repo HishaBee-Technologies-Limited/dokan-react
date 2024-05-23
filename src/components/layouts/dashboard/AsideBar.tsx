@@ -35,7 +35,7 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
       setLink(SidebarLinksFree);
     }
   }, [shop]);
-  console.log(JSON.parse(shop as string).subscription);
+  // console.log(JSON.parse(shop as string).subscription);
   return (
     <aside
       className={`bg-white dark:bg-primary-90 h-screen fixed hd:relative ${menuOpen ? 'w-[30rem] xl:w-[34.4rem] left-0' : '-left-[30rem] xl:left-0 w-[30rem] xl:w-[8rem] hd:w-[34.4rem]'} duration-500 z-50`}
@@ -82,7 +82,7 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                 subMenu: boolean
               ) => (
                 <>
-                  {![9, 10, 11, 12, 13].includes(i) && (
+                  {![9, 10, 11, 12, 13, 0].includes(i) && (
                     <Link
                       href={`${menu.link}`}
                       onClick={() => {

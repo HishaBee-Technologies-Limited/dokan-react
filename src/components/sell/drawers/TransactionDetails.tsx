@@ -82,7 +82,7 @@ const TransactionDetails = () => {
       });
       console.log(res, currentPurchase);
       if (res?.success) {
-        setPurchaseProducts(res?.data.data);
+        setPurchaseProducts(res?.data);
       }
     };
     getPurchaseProducts();
@@ -91,7 +91,10 @@ const TransactionDetails = () => {
   return (
     <div className="space-y-space12">
       <section className="bg-secondary rounded-lg p-space12 space-y-space16 ">
-        <Text title="Total Item: 03" className="font-semibold" />
+        <Text
+          title={`Total Item: ${purchaseProducts?.length ?? 0}`}
+          className="font-semibold"
+        />
 
         {currentPurchase?.supplier_name && (
           <div className="flex items-center gap-space8">
@@ -128,7 +131,10 @@ const TransactionDetails = () => {
 
       <article className="bg-secondary rounded-lg p-space12 space-y-space16 ">
         <article className="flex justify-between items-center gap-space8 border-b border-color pb-space12">
-          <Text title="Payment: ৳ 1,200" className="text-lg font-semibold" />
+          <Text
+            title={`Payment: ৳ ${currentPurchase?.total_price}`}
+            className="text-lg font-semibold"
+          />
 
           <article className="flex gap-space8">
             {currentPurchase?.payment_status === PAYMENT_STATUS.UNPAID ? (

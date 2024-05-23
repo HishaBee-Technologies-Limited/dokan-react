@@ -36,7 +36,7 @@ export const authConfig = {
       if (isAuthRoute) {
         if (isLoggedIn) {
           if (cookies.get('shopId')?.value) {
-            return Response.redirect(new URL('/home', nextUrl));
+            return Response.redirect(new URL('/contact', nextUrl));
           }
           return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
@@ -47,7 +47,7 @@ export const authConfig = {
       if (isLoggedIn) {
         if (nextUrl.pathname === '/shop') {
           if (cookies.get('shopId')?.value) {
-            return Response.redirect(new URL('/home', nextUrl));
+            return Response.redirect(new URL('/contact', nextUrl));
           } else {
             return;
           }

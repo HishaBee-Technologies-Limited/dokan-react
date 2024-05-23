@@ -88,7 +88,7 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
         </div>
       </div>
 
-      <Button onClick={login} className="w-full" disabled={pin.length !== 5}>
+      <Button onClick={login} className="w-full">
         {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
         Confirm
       </Button>

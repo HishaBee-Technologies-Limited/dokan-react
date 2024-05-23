@@ -101,7 +101,7 @@ const HistoryTable = ({
               <TableCell>{transaction.total_item}</TableCell>
               <TableCell>{transaction.supplier_name}</TableCell>
               <TableCell>{transaction.total_price}</TableCell>
-              <TableCell>{transaction.updated_at}</TableCell>
+              <TableCell>{transaction.created_at}</TableCell>
               <TableCell>
                 <Text
                   title={transaction.payment_status}

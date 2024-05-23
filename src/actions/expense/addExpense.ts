@@ -32,7 +32,9 @@ export const addExpense = async ({
       unique_id,
       updated_at,
     };
-    const res = await authApi.post(`/expenses`, payload);
+    const res = await authApi.post(`/expense/add?${payload}`);
+
+    console.log(res);
     const data = await res.json();
 
     if (res.ok) {
