@@ -45,17 +45,17 @@ const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
         {/* right side */}
         <div className="w-6/12 h-full flex justify-end items-center gap-space24 md:gap-space32 ">
           <ModeToggle />
-          <Button size={'icon'} variant={'transparent'}>
+          {/* <Button size={'icon'} variant={'transparent'}>
             <Icon icon="material-symbols:help-outline" width="24" height="24" />
-          </Button>
+          </Button> */}
 
-          <Button size={'icon'} variant={'transparent'}>
+          {/* <Button size={'icon'} variant={'transparent'}>
             <div
               className={`relative after:absolute  after:h-[1.2rem] after:w-[1.2rem] after:rounded-full after:right-0 after:top-1/4 after:transform after:-translate-y-1/2 after:bg-red-400`}
             >
               <Icon icon="mi:notification" width="24" height="24" />
             </div>
-          </Button>
+          </Button> */}
 
           <DropdownMenu>
             <DropdownMenuTrigger className="flex gap-space8 items-center text-md focus:outline-none">
