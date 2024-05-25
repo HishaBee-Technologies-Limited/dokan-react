@@ -101,7 +101,7 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
             Duplicate
           </Button>
         </DropdownMenuItem> */}
-        <DropdownMenuItem asChild>
+        {/* <DropdownMenuItem asChild>
           <Button
             size={'sm'}
             variant={'transparent'}
@@ -120,9 +120,9 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
             <Image src={'/images/update.svg'} alt="" height={16} width={16} />
             Update Stock
           </Button>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
+        {/* <DropdownMenuItem asChild>
           <Button
             size={'sm'}
             variant={'transparent'}
@@ -138,7 +138,7 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
             <Icon icon="ri:links-line" />
             Share Product Link
           </Button>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

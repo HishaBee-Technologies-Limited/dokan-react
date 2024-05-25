@@ -51,7 +51,7 @@ export interface IProductPayload {
   warranty?: number;
   warranty_type?: WarrantyType;
   discount?: string;
-  discount_type?: DiscountType;
+  discount_type?: string;
   created_at?: string; // Date and time in ISO format
   updated_at?: string; // Date and time in ISO format
   version?: number;

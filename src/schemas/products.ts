@@ -35,14 +35,14 @@ export const ProductSchema = z.object({
   warranty_duration: z.string().optional(),
   warranty_type: WarrantyTypeSchema.optional(),
   discount: z.string().optional(),
-  discount_type: DiscountTypeSchema,
+  discount_type: z.string().optional(),
   // boolean
-  online_sell: z.boolean(),
-  low_stock_check: z.boolean(),
+  online_sell: z.boolean().optional(),
+  low_stock_check: z.boolean().optional(),
   vat_check: z.boolean(),
-  warranty_check: z.boolean(),
-  discount_check: z.boolean(),
-  bulk_sell_check: z.boolean(),
+  warranty_check: z.boolean().optional(),
+  discount_check: z.boolean().optional(),
+  bulk_sell_check: z.boolean().optional(),
   image_url: z.string().optional(),
 });
 

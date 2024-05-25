@@ -145,7 +145,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(product?.discount)}
+                title={String(Number(product?.discount))}
                 className="font-semibold"
               />
             </article>
@@ -197,7 +197,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(product?.stock_alert)}
+                title={String(Number(product?.stock_alert))}
                 className="font-semibold"
               />
             </article>
@@ -212,7 +212,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
             <Text
               variant="secondary"
               className="text-sm"
-              title={product?.description ?? ''}
+              title={product?.description ? product?.description : ''}
             />
           </ScrollArea>
         </div>

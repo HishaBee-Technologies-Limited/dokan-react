@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Text } from '@/components/common/text';
 import { Button } from '@/components/ui/button';
@@ -15,22 +15,11 @@ import { ProductEnum } from '@/enum/product';
 import { toast } from 'sonner';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 
-export const UpdateStock = ({
-  product,
-}: {
-  product: {
-    uniqueId: IProduct['unique_id'];
-    stock: IProduct['stock'];
-    sellingPrice: IProduct['selling_price'];
-    name: IProduct['name'];
-    image: IProduct['image_url'];
-    version: IProduct['version'];
-    createdAt: IProduct['created_at'];
-  };
-}) => {
+export const UpdateStock = ({ product }: { product: any }) => {
   const form = useForm<{ stock: IProductPayload['stock'] }>({
-    defaultValues: { stock: product.stock ?? 0 },
+    defaultValues: { stock: 0 },
   });
+  const [changedStock, setChangedStock] = useState<number>(product.stock);
   const router = useRouter();
   const handleClose = useProductStore((state) => state.setDialogState);
   const pathname = usePathname();
@@ -42,13 +31,29 @@ export const UpdateStock = ({
     stock: IProductPayload['stock'];
   }) => {
     const res = await createProductOrUpdate({
-      stock,
+      stock: changedStock,
       unique_id: product.uniqueId,
       name: product.name,
       selling_price: product.sellingPrice,
       ...(product.version && { version: product.version + 1 }),
       updated_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
       created_at: product?.createdAt,
+      cost_price: product.purchase_price!,
+      sell_online: product.online_sell,
+      gallery: product.gallery,
+      image_url: product.image_url,
+      sub_category: Number(product.sub_category),
+      wholesale_amount: Number(product.bulk_quantity),
+      wholesale_price: Number(product.bulk_price),
+      stock_alert: Number(product.low_stock),
+      warranty: Number(product.warranty_duration),
+      warranty_type: product.warranty_type,
+      discount: product.discount,
+      discount_type: product.discount_type,
+      // description: ,
+      vat_applicable: product.vat_check,
+      vat_percent: Number(product.vat_percentage),
+      unit: Number(product.unit),
     });
 
     if (res?.success) {
@@ -61,7 +66,15 @@ export const UpdateStock = ({
     }
   };
 
-  const stock = form.watch('stock');
+  useEffect(() => {
+    // form.setValue('stock', product.stock);
+    // setChangedStock(product.stock);
+  }, []);
+  useEffect(() => {
+    form.setValue('stock', changedStock);
+  }, [changedStock]);
+
+  console.log('ll', product);
 
   return (
     <div className="space-y-space16 pt-space16">
@@ -83,7 +96,7 @@ export const UpdateStock = ({
           <Button
             variant={'danger'}
             className="!text-xl !font-bold"
-            onClick={() => form.setValue('stock', stock ? stock - 1 : stock)}
+            onClick={() => setChangedStock(Number(changedStock) - 1)}
             type="button"
           >
             -
@@ -92,13 +105,16 @@ export const UpdateStock = ({
           <Input
             type="number"
             className="h-[4.8rem] text-center text-xl"
-            {...form.register('stock')}
+            value={changedStock}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setChangedStock(Number(event.target.value))
+            }
           />
 
           <Button
             variant={'success'}
             className="!text-xl !font-bold"
-            onClick={() => form.setValue('stock', stock ? stock + 1 : stock)}
+            onClick={() => setChangedStock(Number(changedStock) + 1)}
             type="button"
           >
             +
