@@ -53,13 +53,11 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 
 const formSchema = z.object({
-  amount: z.string().min(1, {
-    message: 'this field is required.',
-  }),
+  amount: z.string(),
   note: z.string(),
-  details: z.string(),
-  images: z.string(),
-  cash_type: z.string(),
+  details: z.string().optional(),
+  images: z.string().optional(),
+  cash_type: z.string().optional(),
   customer_info: z.boolean().default(false).optional(),
   customer_number: z.string().optional(),
   customer: z.string(),
@@ -86,17 +84,11 @@ const ConfirmPayment = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: '',
-      details: '',
-      note: '',
-      images: '',
-      cash_type: '',
       customer_info: true,
       customer_number: '',
       customer: '',
       employee_info: false,
-      employee_number: '',
-      employee: '',
+
       date: new Date(),
       sms: false,
     },
@@ -152,6 +144,9 @@ const ConfirmPayment = () => {
       transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
     });
     console.log('res----', responseCreateSell);
+
+    if (!responseCreateSell?.success)
+      return toast.error('Something went wrong');
 
     if (responseCreateSell?.success) {
       calculatedProducts.products.forEach(async (product) => {
@@ -211,7 +206,7 @@ const ConfirmPayment = () => {
     };
     fetchSuppliersAndEmployees();
   }, []);
-
+  console.log(form.formState.errors);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
@@ -262,9 +257,9 @@ const ConfirmPayment = () => {
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
+              {/* <FormLabel>
                 Amount <span className="text-error-100">*</span>{' '}
-              </FormLabel>
+              </FormLabel> */}
               <FormControl>
                 <Input type="number" placeholder="Amount" {...field} />
               </FormControl>
@@ -328,7 +323,7 @@ const ConfirmPayment = () => {
                         <div className="max-h-[24rem] overflow-y-scroll">
                           {customers?.map((customer, i) => (
                             <SelectItem
-                              key={String(i + 1)}
+                              key={i + 1}
                               value={`${customer.name}-${customer.mobile}`}
                             >
                               {customer.name}
@@ -418,9 +413,9 @@ const ConfirmPayment = () => {
                       </FormControl>
                       <SelectContent>
                         <div className="max-h-[24rem] overflow-y-scroll">
-                          {employees?.map((employee) => (
+                          {employees?.map((employee, i) => (
                             <SelectItem
-                              key={employee.unique_id}
+                              key={i + 1}
                               value={`${employee.name}-${employee.mobile}`}
                             >
                               {employee.name}

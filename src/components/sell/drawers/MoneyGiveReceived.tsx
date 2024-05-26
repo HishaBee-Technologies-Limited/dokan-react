@@ -200,6 +200,7 @@ const MoneyGiveReceived = ({
 
     const dueRes = await createDue(payload);
     console.log('dueRes----', dueRes);
+    if (!dueRes?.success) return toast.error('Something went wrong');
 
     if (dueRes?.success) {
       const payload = {

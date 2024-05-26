@@ -67,12 +67,18 @@ export const createSell = async ({
     const data = await res.json();
     revalidatePath('/sell/history');
 
+    console.log(res, data);
+
     if (res.ok) {
-      return {
-        success: true,
-        status: data?.status_code,
-        data: data,
-      };
+      if (data.code !== 200) {
+        return { success: false, error: data };
+      } else {
+        return {
+          success: true,
+          status: data?.code,
+          data: data,
+        };
+      }
     }
     if (!res.ok) {
       return { success: false, error: data };

@@ -132,7 +132,7 @@ export const RightSection = () => {
               >
                 বাকি <ArrowForwardIcon />
               </Button>
-              <Button
+              {/* <Button
                 size="sm"
                 type="submit"
                 className="w-full"
@@ -141,7 +141,7 @@ export const RightSection = () => {
                 }
               >
                 নিজস্ব QR কোড <ArrowForwardIcon />
-              </Button>
+              </Button> */}
             </div>
           </Card>
         </div>

@@ -235,18 +235,18 @@ export const SidebarLinksFree = [
     link: '/purchase',
   },
   {
-    id: 201,
-    title: 'Purchase list',
-    bn_title: 'স্টক ইতিহাস',
-    image: '/images/features/purchase_list.svg',
-    link: '/purchase/history',
-  },
-  {
     id: 202,
     title: 'Sell',
     bn_title: 'স্টক ইতিহাস',
     image: '/images/features/sell.svg',
     link: '/sell',
+  },
+  {
+    id: 201,
+    title: 'Purchase list',
+    bn_title: 'স্টক ইতিহাস',
+    image: '/images/features/purchase_list.svg',
+    link: '/purchase/history',
   },
   {
     id: 203,

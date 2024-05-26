@@ -16,12 +16,12 @@ export const addExpense = async ({
   version,
   updated_at,
   unique_id,
-}: IExpense) => {
+}: any) => {
   try {
     const shopId = cookies().get('shopId')?.value;
 
-    const payload = {
-      shop_id: Number(shopId),
+    const payload = new URLSearchParams({
+      shop_id: shopId!,
       amount,
       type,
       purpose,
@@ -32,7 +32,7 @@ export const addExpense = async ({
       version,
       unique_id,
       updated_at,
-    };
+    });
     const res = await authApi.post(`/expense/add?${payload}`);
 
     console.log(res);
