@@ -1,6 +1,6 @@
 'use client';
 import { z } from 'zod';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Card from '@/components/common/Card';
 import { Form } from '@/components/ui/form';
@@ -16,6 +16,7 @@ import { useSellStore } from '@/stores/useSellStore';
 import { SellEnum } from '@/enum/sell';
 import { ScrollArea } from '../ui/scroll-area';
 import { IProduct } from '@/types/product';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   quantity: z.string().min(1, {
@@ -33,11 +34,12 @@ const formSchema = z.object({
 export const RightSection = () => {
   const handleSellDialog = useSellStore((state) => state.setSellDialogState);
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
-
+  const [sellType, setSellType] = useState('');
   const products = useSellStore((state) => state.products);
   const setCalculatedProducts = useSellStore(
     (state) => state.setCalculatedProducts
   );
+  const calculatedProducts = useSellStore((state) => state.calculatedProducts);
 
   const form = useForm({
     // resolver: zodResolver(formSchema),
@@ -67,13 +69,29 @@ export const RightSection = () => {
       }
     });
 
-    setCalculatedProducts({
-      products: updatedProducts as IProductPurchase[],
-      deliveryCharge: data.delivery_charge,
-      discount: data.discount,
-      totalPrice: data.totalPrice,
-      discountType: data.discount_type,
-    });
+    console.log(updatedProducts.length);
+
+    if (!updatedProducts.length) {
+      toast.warning('No Product Selected or Total is 0');
+    }
+    if (updatedProducts.length) {
+      sellType == 'cash'
+        ? handleSellDrawer({
+            open: true,
+            header: SellEnum.CONFIRM_PAYMENT,
+          })
+        : handleSellDrawer({
+            open: true,
+            header: SellEnum.MONEY_GIVEN_ENTRY,
+          });
+      setCalculatedProducts({
+        products: updatedProducts as IProductPurchase[],
+        deliveryCharge: data.delivery_charge,
+        discount: data.discount,
+        totalPrice: data.totalPrice,
+        discountType: data.discount_type,
+      });
+    }
   }
 
   return (
@@ -110,12 +128,9 @@ export const RightSection = () => {
                 size="sm"
                 type="submit"
                 className="w-full"
-                onClick={() =>
-                  handleSellDrawer({
-                    open: true,
-                    header: SellEnum.CONFIRM_PAYMENT,
-                  })
-                }
+                onClick={() => {
+                  setSellType('cash');
+                }}
               >
                 নগদ টাকা <ArrowForwardIcon />
               </Button>
@@ -123,12 +138,10 @@ export const RightSection = () => {
                 size="sm"
                 type="submit"
                 className="w-full"
-                onClick={() =>
-                  handleSellDrawer({
-                    open: true,
-                    header: SellEnum.MONEY_GIVEN_ENTRY,
-                  })
-                }
+                onClick={() => {
+                  console.log('ccc', calculatedProducts);
+                  setSellType('due');
+                }}
               >
                 বাকি <ArrowForwardIcon />
               </Button>

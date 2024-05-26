@@ -1,6 +1,6 @@
 'use client';
 import { z } from 'zod';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Card from '@/components/common/Card';
 import { Form } from '@/components/ui/form';
@@ -17,6 +17,7 @@ import { IProduct } from '@/types/product';
 import { PurchaseEnum } from '@/enum/purchase';
 import ProductFiledRow, { IProductPurchase } from './ProductFiledRow';
 import ProductSellCalculation from './ProductSellCalculation';
+import { toast } from 'sonner';
 
 // const formSchema = z.object({
 //   quantity: z.string(),
@@ -31,6 +32,8 @@ export const RightSection = () => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
   const products = usePurchase((state) => state.products);
+  const [sellType, setSellType] = useState('');
+
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
   );
@@ -61,14 +64,27 @@ export const RightSection = () => {
         };
       }
     });
-
-    setCalculatedProducts({
-      products: updatedProducts as IProductPurchase[],
-      deliveryCharge: data.delivery_charge,
-      discount: data.discount,
-      totalPrice: data.totalPrice,
-      discountType: data.discount_type,
-    });
+    if (!updatedProducts.length) {
+      toast.warning('No Product Selected or Total is 0');
+    }
+    if (updatedProducts.length) {
+      sellType == 'cash'
+        ? handleDrawerOpen({
+            open: true,
+            header: PurchaseEnum.CONFIRM_PAYMENT,
+          })
+        : handleDrawerOpen({
+            open: true,
+            header: PurchaseEnum.MONEY_GIVEN_ENTRY,
+          });
+      setCalculatedProducts({
+        products: updatedProducts as IProductPurchase[],
+        deliveryCharge: data.delivery_charge,
+        discount: data.discount,
+        totalPrice: data.totalPrice,
+        discountType: data.discount_type,
+      });
+    }
   }
   return (
     <Form {...form}>
@@ -105,10 +121,7 @@ export const RightSection = () => {
                 type="submit"
                 className="w-full"
                 onClick={() => {
-                  handleDrawerOpen({
-                    open: true,
-                    header: PurchaseEnum.CONFIRM_PAYMENT,
-                  });
+                  setSellType('cash');
                 }}
               >
                 নগদ টাকা <ArrowForwardIcon />
@@ -117,12 +130,9 @@ export const RightSection = () => {
                 size="sm"
                 type="submit"
                 className="w-full"
-                onClick={() =>
-                  handleDrawerOpen({
-                    open: true,
-                    header: PurchaseEnum.MONEY_GIVEN_ENTRY,
-                  })
-                }
+                onClick={() => {
+                  setSellType('due');
+                }}
               >
                 বাকি <ArrowForwardIcon />
               </Button>

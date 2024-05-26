@@ -22,12 +22,12 @@ export const createItemPurchase = async ({
   unique_id,
   updated_at,
   version,
-}: IProductItemPurchasePayload) => {
+}: any) => {
   try {
     const shopId = cookies().get('shopId')?.value;
 
-    const payload: IProductItemPurchasePayload = {
-      shop_id: Number(shopId),
+    const payload = new URLSearchParams({
+      shop_id: shopId!,
       created_at,
       name,
       quantity,
@@ -41,7 +41,7 @@ export const createItemPurchase = async ({
       unique_id,
       updated_at,
       version,
-    };
+    });
 
     console.log(payload);
 

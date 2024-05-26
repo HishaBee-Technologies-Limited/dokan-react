@@ -128,7 +128,7 @@ const AddShopPage = () => {
   useEffect(() => {
     form.setValue('logo_url', imageUrls[0]);
   }, [imageUrls]);
-  // console.log(types, districtValue, divisionValue);
+  console.log(form.formState.errors);
 
   return (
     <div className="space-y-space16 pb-space16">
@@ -485,9 +485,7 @@ const AddShopPage = () => {
               <Button variant={'secondary'} className="!px-space40">
                 Cancel
               </Button>
-              <Button type="submit" disabled={!form.formState.isValid}>
-                Create Shop
-              </Button>
+              <Button type="submit">Create Shop</Button>
             </div>
           </form>
         </Form>

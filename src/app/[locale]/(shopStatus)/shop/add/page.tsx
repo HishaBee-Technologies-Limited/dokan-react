@@ -95,7 +95,7 @@ const AddShopPage = () => {
       router.refresh();
     }
   }
-
+  console.log(form.formState.errors);
   useEffect(() => {
     const getAllAreas = async () => {
       const res = await getAreasAndTypes();
@@ -473,12 +473,7 @@ const AddShopPage = () => {
             <Button variant={'secondary'} className="!px-space40">
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={!form.formState.isValid || form.formState.isSubmitting}
-            >
-              Create Shop
-            </Button>
+            <Button type="submit">Create Shop</Button>
           </div>
         </form>
       </Form>

@@ -54,7 +54,7 @@ import { format } from 'date-fns';
 
 const formSchema = z.object({
   amount: z.string(),
-  note: z.string(),
+  note: z.string().optional(),
   details: z.string().optional(),
   images: z.string().optional(),
   cash_type: z.string().optional(),
@@ -120,6 +120,14 @@ const ConfirmPayment = () => {
     }
   }, [selectedSupplier, form, selectedEmployee]);
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log('sss', !data.amount);
+    if (!data.amount) {
+      form.setError('amount', {
+        type: 'required',
+        message: 'Amount is required',
+      });
+      return;
+    }
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
@@ -149,6 +157,7 @@ const ConfirmPayment = () => {
       return toast.error('Something went wrong');
 
     if (responseCreateSell?.success) {
+      console.log(responseCreateSell);
       calculatedProducts.products.forEach(async (product) => {
         sellItemCreate({
           created_at: formatDate(DATE_FORMATS.default),
@@ -156,7 +165,7 @@ const ConfirmPayment = () => {
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
-          transaction_unique_id: responseCreateSell.data.unique_id,
+          transaction_unique_id: responseCreateSell.data.transaction.unique_id,
           profit: 0,
           status: 'PAID',
 
@@ -206,7 +215,7 @@ const ConfirmPayment = () => {
     };
     fetchSuppliersAndEmployees();
   }, []);
-  console.log(form.formState.errors);
+  console.log('ee', form.formState.errors);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
@@ -312,7 +321,7 @@ const ConfirmPayment = () => {
                   <FormItem>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      // defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="">

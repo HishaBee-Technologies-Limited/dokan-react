@@ -67,7 +67,7 @@ export const createSell = async ({
     const data = await res.json();
     revalidatePath('/sell/history');
 
-    console.log(res, data);
+    console.log(data);
 
     if (res.ok) {
       if (data.code !== 200) {

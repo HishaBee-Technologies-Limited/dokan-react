@@ -13,6 +13,7 @@ export const fetchAPI = (
     method,
     headers: {
       'Content-Type': 'application/json',
+      Platform: 'WEB',
     },
     ...(method === 'POST' && {
       body: JSON.stringify({
@@ -36,6 +37,7 @@ export const authFetchAPI = (
       'Content-Type': 'application/json',
       Accept: 'application/json',
       Authorization: `Bearer ${token?.value}`,
+      Platform: 'WEB',
     },
     ...(method === 'POST' && {
       body: JSON.stringify({

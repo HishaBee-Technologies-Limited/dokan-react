@@ -76,9 +76,7 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: 'this field is required.',
   }),
-  number: z.string().min(11).max(11, {
-    message: 'this field is required.',
-  }),
+  number: z.string(),
   details: z.string(),
   images: z.string(),
   cash_type: z.string(),
@@ -99,13 +97,14 @@ const MoneyGiveReceived = ({
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 
-  const [contact, setContact] = useState<IUserResponse>();
+  const [customer, setContact] = useState<IUserResponse>();
   const calculatedProducts = useSellStore((state) => state.calculatedProducts);
   const setCalculatedProducts = useSellStore(
     (state) => state.setCalculatedProducts
   );
   const cookie = getCookie('shop');
   const tkn = getCookie('access_token');
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -119,6 +118,15 @@ const MoneyGiveReceived = ({
       date: new Date(),
     },
   });
+  const name = form.watch('name');
+  useEffect(() => {
+    // console.log(selectedSupplier.split('-'));
+    const customer = name?.split('-');
+    console.log('ccccc', customer[1]);
+    if (customer) {
+      form.setValue('number', customer[1]);
+    }
+  }, [form, name]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const responseCreateSell = await createSell({
@@ -262,13 +270,13 @@ const MoneyGiveReceived = ({
     }
   }, [form.watch('cash_type')]);
 
-  useEffect(() => {
-    if (contact) {
-      console.log(contact);
-      form.setValue('name', contact.name);
-      form.setValue('number', contact.mobile);
-    }
-  }, [contact]);
+  // useEffect(() => {
+  //   if (contact) {
+  //     console.log(contact);
+  //     form.setValue('name', contact.name);
+  //     form.setValue('number', contact.mobile);
+  //   }
+  // }, [contact]);
 
   useEffect(() => {
     form.setValue('amount', String(calculatedProducts.totalPrice));
@@ -402,84 +410,44 @@ const MoneyGiveReceived = ({
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem className="pb-8">
-                <FormLabel>
-                  Name <span className="text-error-100">*</span>{' '}
-                </FormLabel>
-                <FormControl>
-                  <div className="relative h-10 w-full">
-                    <Input
-                      type="text"
-                      placeholder=" Enter your comment here"
-                      className="pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent" // Add additional styling as needed
-                      {...field}
-                    />
+              <FormItem>
+                <Select
+                  onValueChange={field.onChange}
+                  // defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Customer" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="w-[500px]">
+                    <div className="max-h-[24rem] overflow-y-scroll">
+                      {customers?.map((customer, i) => (
+                        <SelectItem
+                          key={i + 1}
+                          value={`${customer.name}-${customer.mobile}`}
+                        >
+                          {customer.name}
+                        </SelectItem>
+                      ))}
+                    </div>
 
-                    <FormItem className="flex flex-col absolute right-2 top-8 transform -translate-y-1/2 text-gray-500 z-10">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="transparent"
-                              role="combobox"
-                              className={cn(
-                                'w-[50px] justify-between',
-                                !field.value && 'text-muted-foreground'
-                              )}
-                            >
-                              {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
-                              <UserSearch className="  shrink-0" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0 mr-10 ">
-                          <Command>
-                            <CommandInput placeholder="Search language..." />
-                            <CommandEmpty>No language found.</CommandEmpty>
-                            <CommandGroup>
-                              <ScrollArea className="h-[300px] scroll-p-4 rounded-md border">
-                                {customers?.map((customer) => (
-                                  <CommandItem
-                                    value={contact?.name}
-                                    key={customer.id}
-                                    onSelect={() => {
-                                      setContact(customer);
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        'mr-2 h-4 w-4',
-                                        customer.name === contact?.name
-                                          ? 'opacity-100'
-                                          : 'opacity-0'
-                                      )}
-                                    />
-                                    <div className="flex flex-col">
-                                      <p>{customer.name}</p>
-                                      <p>{customer.mobile}</p>
-                                    </div>
-                                    {/* {supplier.mobile} */}
-                                  </CommandItem>
-                                ))}
-                              </ScrollArea>
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-
-                      <FormMessage />
-                    </FormItem>
-                  </div>
-                </FormControl>
-                <FormMessage />
+                    {/* <Button
+                                        variant={'secondary'}
+                                        onClick={() => handleAddNewCategory({ open: true, header: ExpenseEnum.ADD_NEW_CATEGORY })}
+                                        className="border-x-0 border-b-0 rounded-none w-full sticky -bottom-space6" >
+                                        Add Customer
+                                    </Button> */}
+                  </SelectContent>
+                </Select>
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="number"

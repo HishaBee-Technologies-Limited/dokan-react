@@ -88,6 +88,8 @@ const TransactionDetails = () => {
     getPurchaseProducts();
   }, [currentPurchase]);
 
+  console.log(purchaseProducts);
+
   return (
     <div className="space-y-space12">
       <section className="bg-secondary rounded-lg p-space12 space-y-space16 ">
@@ -212,9 +214,7 @@ const TransactionDetails = () => {
                 </Text>
                 <Text>
                   Unit Price:{' '}
-                  <span className="font-semibold">
-                    {product.shop_product?.cost_price}
-                  </span>
+                  <span className="font-semibold">{product.unit_price}</span>
                 </Text>
                 <Text>
                   Total: <span className="font-semibold">{product.price}</span>
