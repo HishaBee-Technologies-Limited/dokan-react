@@ -22,6 +22,7 @@ export const createItemPurchase = async ({
   unique_id,
   updated_at,
   version,
+  shop_product_unique_id,
 }: any) => {
   try {
     const shopId = cookies().get('shopId')?.value;
@@ -41,6 +42,7 @@ export const createItemPurchase = async ({
       unique_id,
       updated_at,
       version,
+      shop_product_unique_id,
     });
 
     console.log(payload);

@@ -93,7 +93,7 @@ const GiveNumber = () => {
             disabled={form.watch('mobile_number').length !== 11}
           >
             {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-            Save
+            Next
           </Button>
         </form>
       </Form>

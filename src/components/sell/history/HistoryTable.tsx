@@ -75,6 +75,7 @@ const HistoryTable = ({
       return 'bg-error-20';
     }
   };
+  console.log(transactions);
 
   return (
     <ScrollArea className="pb-space8">
@@ -86,11 +87,10 @@ const HistoryTable = ({
             <TableHead>Contact</TableHead>
             <TableHead>Amount</TableHead>
             <TableHead>Date</TableHead>
-            <TableHead>Transaction Type</TableHead>
+            <TableHead>Payment Status</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
-
         <TableBody>
           {transactions?.map((transaction, i) => (
             <TableRow
@@ -99,7 +99,9 @@ const HistoryTable = ({
             >
               <TableCell>{transaction.id}</TableCell>
               <TableCell>{transaction.total_item}</TableCell>
-              <TableCell>{transaction.supplier_name}</TableCell>
+              <TableCell className="max-w-[400px]">
+                {transaction.customer_name}
+              </TableCell>
               <TableCell>{transaction.total_price}</TableCell>
               <TableCell>{transaction.created_at}</TableCell>
               <TableCell>

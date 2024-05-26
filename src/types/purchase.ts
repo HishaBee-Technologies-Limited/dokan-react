@@ -70,6 +70,9 @@ export interface IPurchaseHistoryResponse {
   updated_at: string;
   user_id: number;
   version: number;
+  transaction_type?: string;
+  customer_name?: string;
+  customer_mobie?: string;
 }
 
 export interface IProducts extends IProductItemPurchasePayload {

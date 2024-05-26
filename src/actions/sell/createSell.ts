@@ -26,7 +26,6 @@ export const createSell = async ({
   updated_at,
   user_id,
   version,
-
   total_discount,
   change_amount,
   customer_address,

@@ -85,7 +85,7 @@ const EditShopPage = () => {
         type: shop_type,
         address,
         area,
-        number,
+        public_number: number,
         logo_url,
       });
       if (res?.success) {
@@ -486,7 +486,7 @@ const EditShopPage = () => {
                 Cancel
               </Button>
               <Button type="submit" disabled={!form.formState.isValid}>
-                Change Shop
+                Save
               </Button>
             </div>
           </form>

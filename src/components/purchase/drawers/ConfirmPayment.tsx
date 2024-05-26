@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { SellEnum } from '@/enum/sell';
 import { useForm, useFormContext } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
@@ -143,7 +143,7 @@ const ConfirmPayment = () => {
       received_amount: Number(data.amount),
       supplier_mobile: data.supplier_number,
       supplier_name: data.supplier,
-      total_item: calculatedProducts.products.length,
+      total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: generateUlid(),
       updated_at: formatDate(DATE_FORMATS.default),
@@ -162,6 +162,7 @@ const ConfirmPayment = () => {
           unit_cost: product.cost_price,
           purchase_id: responseCreatePurchase.data.purchase.id,
           purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+          shop_product_unique_id: product.unique_id,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,
@@ -183,6 +184,16 @@ const ConfirmPayment = () => {
       toast.error('Something went wrong');
     }
   }
+
+  const totalItems = useMemo(
+    () =>
+      calculatedProducts.products.reduce((prev, current) => {
+        return prev + Number(current.calculatedAmount?.quantity!);
+      }, 0),
+    [calculatedProducts]
+  );
+
+  console.log(totalItems);
 
   useEffect(() => {
     const fetchSuppliersAndEmployees = async () => {

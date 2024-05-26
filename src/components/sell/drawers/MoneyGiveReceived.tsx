@@ -105,6 +105,18 @@ const MoneyGiveReceived = ({
   const cookie = getCookie('shop');
   const tkn = getCookie('access_token');
 
+  const totalProfit = useMemo(
+    () =>
+      calculatedProducts.products.reduce((prev, current) => {
+        return (
+          prev +
+          current.calculatedAmount?.quantity! *
+            (current.selling_price - current.cost_price)
+        );
+      }, 0),
+    [calculatedProducts]
+  );
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -143,7 +155,7 @@ const MoneyGiveReceived = ({
       customer_mobile: data.number,
       customer_name: data.name,
       customer_address: data.customer_address,
-      total_item: calculatedProducts.products.length,
+      total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: generateUlid(),
       updated_at: formatDate(DATE_FORMATS.default),
@@ -151,6 +163,7 @@ const MoneyGiveReceived = ({
       version: DEFAULT_STARTING_VERSION,
       total_discount: 0,
       transaction_type: 'PRODUCT_SELL',
+      total_profit: totalProfit,
     });
     console.log('res----', responseCreateSell);
 
@@ -164,8 +177,11 @@ const MoneyGiveReceived = ({
           unit_cost: product.cost_price,
 
           transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
-          profit: 0,
+          profit:
+            product.calculatedAmount?.quantity! *
+            (product.selling_price - product.cost_price),
           status: PAYMENT_STATUS.UNPAID,
+          shop_product_unique_id: product.unique_id,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,
@@ -288,6 +304,13 @@ const MoneyGiveReceived = ({
     console.log(due);
     due ? form.setValue('due', due) : due;
   }, [dueList, form.watch('number')]);
+  const totalItems = useMemo(
+    () =>
+      calculatedProducts.products.reduce((prev, current) => {
+        return prev + Number(current.calculatedAmount?.quantity!);
+      }, 0),
+    [calculatedProducts]
+  );
 
   return (
     <div className="space-y-space12">

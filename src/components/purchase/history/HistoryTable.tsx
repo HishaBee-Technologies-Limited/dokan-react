@@ -85,7 +85,7 @@ const HistoryTable = ({
             <TableHead>Contact</TableHead>
             <TableHead>Amount</TableHead>
             <TableHead>Date</TableHead>
-            <TableHead>Transaction Type</TableHead>
+            <TableHead>Payment Status</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -127,7 +127,7 @@ const HistoryTable = ({
                     side="bottom"
                     className="w-56 "
                   >
-                    <DropdownMenuItem asChild>
+                    {/* <DropdownMenuItem asChild>
                       <Button
                         size={'sm'}
                         variant={'transparent'}
@@ -140,7 +140,7 @@ const HistoryTable = ({
                         <EditIcon />
                         Edit
                       </Button>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                     <DropdownMenuItem asChild>
                       <Button
                         size={'sm'}

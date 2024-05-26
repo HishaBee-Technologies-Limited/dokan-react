@@ -9,7 +9,7 @@ export const updateShop = async ({
   type,
   address,
   name,
-  number,
+  public_number,
   logo_url,
 }: any) => {
   try {
@@ -19,7 +19,7 @@ export const updateShop = async ({
       type,
       address,
       name,
-      number,
+      public_number,
       logo_url,
     });
     console.log(payload);

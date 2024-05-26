@@ -1,6 +1,6 @@
 import { string, z } from 'zod';
 import { SellEnum } from '@/enum/sell';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
 import { Label } from '@/components/ui/label';
@@ -153,7 +153,7 @@ const MoneyGiveReceived = ({
       received_amount: Number(data.amount),
       supplier_mobile: data.name,
       supplier_name: data.number,
-      total_item: calculatedProducts.products.length,
+      total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: generateUlid(),
       updated_at: formatDate(DATE_FORMATS.default),
@@ -173,6 +173,7 @@ const MoneyGiveReceived = ({
           purchase_id: responseCreatePurchase.data.purchase.id,
 
           purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+          shop_product_unique_id: product.unique_id,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,
@@ -289,6 +290,14 @@ const MoneyGiveReceived = ({
   useEffect(() => {
     form.setValue('amount', String(calculatedProducts.totalPrice));
   }, [calculatedProducts]);
+
+  const totalItems = useMemo(
+    () =>
+      calculatedProducts.products.reduce((prev, current) => {
+        return prev + Number(current.calculatedAmount?.quantity!);
+      }, 0),
+    [calculatedProducts]
+  );
 
   console.log(form.formState.errors);
   return (

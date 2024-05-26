@@ -62,6 +62,7 @@ export const RightSection = () => {
             (prod: IProduct) => Object.keys(prod)[0] === `product-${product.id}`
           )
         )[0];
+        console.log(updatedProduct);
         return {
           ...product,
           calculatedAmount: updatedProduct,

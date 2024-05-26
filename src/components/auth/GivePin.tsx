@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Input } from '../ui/input';
 import { PasswordInput } from '@/components/password-input';
+import { toast } from 'sonner';
 
 // import { EyeIcon } from 'lucide-react';
 
@@ -25,7 +26,11 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
   const login = async () => {
     setLoading(true);
 
-    await authenticate(undefined, { mobile_number, pin });
+    const res = await authenticate(undefined, { mobile_number, pin });
+    console.log(res);
+    if (res === 'Something went wrong.') {
+      toast.error('You phone or pin is incorrect');
+    }
     setLoading(false);
   };
 
@@ -92,9 +97,9 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
         {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
         Confirm
       </Button>
-      <Button className="w-full" variant={'transparent'}>
+      {/* <Button className="w-full" variant={'transparent'}>
         Forgot pin?
-      </Button>
+      </Button> */}
     </div>
   );
 };

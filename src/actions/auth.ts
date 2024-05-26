@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { z } from 'zod';
 import { RegisterSchema } from '@/schemas/auth';
 import { cookies } from 'next/headers';
+import { toast } from 'sonner';
 
 export async function authenticate(
   prevState: string | undefined,
@@ -50,12 +51,12 @@ export const login = async (payload: any) => {
     payload
   );
   const data = await res.json();
-  console.log(data);
+  console.log('login', data);
   if (res.ok) {
     cookies().set('access_token', data?.access_token);
     return { success: true, status: data.code, data: data };
   }
-  if (!res.ok) {
+  if (data.code === 400) {
     return { success: false, error: data };
   }
 };

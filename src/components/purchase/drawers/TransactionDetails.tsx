@@ -169,7 +169,7 @@ const TransactionDetails = () => {
           />
         </article>
       )}
-      <div className="grid grid-cols-2 gap-space16">
+      {/* <div className="grid grid-cols-2 gap-space16">
         <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
           <Image
             src="/images/print_receipt.svg"
@@ -190,7 +190,7 @@ const TransactionDetails = () => {
 
           <Text title="Share receipt " className="text-sm font-medium" />
         </Button>
-      </div>
+      </div> */}
       <DrawerFooter>
         <Button
           className="w-full"

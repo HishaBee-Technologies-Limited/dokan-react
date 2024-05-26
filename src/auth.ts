@@ -49,8 +49,11 @@ export const {
         });
 
         const user = await response?.data;
+        console.log(user, response);
         if (response?.status === 200 && user.user.id) return user.user;
-        else return { errorMessage: user.message };
+        if (user.code === 400) {
+          return { success: false, status: user.code, data: user.message };
+        }
       },
     }),
     Credentials({
@@ -80,6 +83,7 @@ export const {
         });
 
         const user = await response?.data;
+        console.log(user, response);
         if (response?.status === 200 && user.user.id) return user;
         else return { errorMessage: user.message };
       },

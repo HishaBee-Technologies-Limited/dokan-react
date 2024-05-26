@@ -40,19 +40,17 @@ const SwitchShopPage = () => {
     );
   };
 
-  const handleContinue = async () => {
+  const handleContinue = async (shop: IShopResponse) => {
     console.log(selectShop);
-    if (selectShop) {
-      const shop = JSON.stringify({
-        sms_count: selectShop.sms_count,
-        subscription: selectShop.subscription,
-      });
-      console.log(shop);
-      setCookie('shopId', selectShop?.id);
-      setCookie('shop', shop);
-      window.location.reload();
-      router.refresh();
-    }
+    const shopString = JSON.stringify({
+      sms_count: shop.sms_count,
+      subscription: shop.subscription,
+    });
+    console.log(shop);
+    setCookie('shopId', shop?.id);
+    setCookie('shop', shopString);
+    window.location.reload();
+    router.refresh();
   };
 
   useEffect(() => {
@@ -92,7 +90,7 @@ const SwitchShopPage = () => {
           {shops?.map((shop) => (
             <Card
               key={shop.id + 'shop'}
-              onClick={() => setSelectShop(shop)}
+              onClick={() => handleContinue(shop)}
               className={`p-space16 border-color relative flex w-full cursor-pointer flex-col items-center shadow-sm
                         ${shopSelected(shop) ? 'border-[.3rem] border-green-400' : 'border'}
                         `}
@@ -155,7 +153,7 @@ const SwitchShopPage = () => {
           Continue
         </Button>
       </div> */}
-      <div className="flex justify-end gap-space12 mt-space16">
+      {/* <div className="flex justify-end gap-space12 mt-space16">
         <Button
           variant={'secondary'}
           className="!px-space40"
@@ -166,7 +164,7 @@ const SwitchShopPage = () => {
         <Button disabled={!selectShop} onClick={handleContinue}>
           Change Shop
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

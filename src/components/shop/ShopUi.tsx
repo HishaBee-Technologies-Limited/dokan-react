@@ -40,18 +40,16 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
     );
   };
 
-  const handleContinue = async () => {
+  const handleContinue = async (shop: IShopResponse) => {
     setLoading(true);
 
-    if (selectShop) {
-      const shop = JSON.stringify({
-        sms_count: selectShop.sms_count,
-        subscription: selectShop.package,
-      });
-      setCookie('shopId', selectShop?.id);
-      setCookie('shop', shop);
-      router.push('/contact');
-    }
+    const shopString = JSON.stringify({
+      sms_count: shop.sms_count,
+      subscription: shop.package,
+    });
+    setCookie('shopId', shop?.id);
+    setCookie('shop', shopString);
+    router.push('/contact');
   };
 
   console.log(shops);
@@ -64,7 +62,7 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
           {shops?.map((shop) => (
             <Card
               key={shop.id + 'shop'}
-              onClick={() => setSelectShop(shop)}
+              onClick={() => handleContinue(shop)}
               className={`p-space16 border-color relative flex w-full cursor-pointer flex-col items-center shadow-sm
                         ${selectShop?.id === shop.id ? 'border-[.3rem] border-green-400' : 'border'}
                         `}
@@ -88,7 +86,7 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
                   className="text-sm"
                 />
 
-                <Button
+                {/* <Button
                   size={'sm'}
                   variant="secondary"
                   className="sm:px-space32"
@@ -96,7 +94,7 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
                 >
                   <Icon icon="mdi:store-edit-outline" height={24} width={24} />
                   <Text title="Edit Shop" className="text-sm font-semibold" />
-                </Button>
+                </Button> */}
               </div>
             </Card>
           ))}
@@ -121,12 +119,12 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      <div className="gap-space12 mt-space16 flex justify-end">
+      {/* <div className="gap-space12 mt-space16 flex justify-end">
         <Button disabled={!selectShop} onClick={handleContinue}>
           {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
           Continue
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

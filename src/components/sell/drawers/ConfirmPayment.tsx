@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { SellEnum } from '@/enum/sell';
 import { useForm } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
@@ -88,7 +88,6 @@ const ConfirmPayment = () => {
       customer_number: '',
       customer: '',
       employee_info: false,
-
       date: new Date(),
       sms: false,
     },
@@ -120,7 +119,6 @@ const ConfirmPayment = () => {
     }
   }, [selectedSupplier, form, selectedEmployee]);
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log('sss', !data.amount);
     if (!data.amount) {
       form.setError('amount', {
         type: 'required',
@@ -142,7 +140,7 @@ const ConfirmPayment = () => {
       customer_mobile: data.customer_number,
       customer_name: data.customer,
       customer_address: data.customer_address,
-      total_item: calculatedProducts.products.length,
+      total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: generateUlid(),
       updated_at: formatDate(DATE_FORMATS.default),
@@ -150,6 +148,7 @@ const ConfirmPayment = () => {
       version: DEFAULT_STARTING_VERSION,
       total_discount: 0,
       transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
+      total_profit: totalProfit,
     });
     console.log('res----', responseCreateSell);
 
@@ -166,10 +165,13 @@ const ConfirmPayment = () => {
           unit_price: product.selling_price,
           unit_cost: product.cost_price,
           transaction_unique_id: responseCreateSell.data.transaction.unique_id,
-          profit: 0,
+          profit:
+            product.calculatedAmount?.quantity! *
+            (product.selling_price - product.cost_price),
           status: 'PAID',
 
           shop_product_id: product.id,
+          shop_product_unique_id: product.unique_id,
           shop_product_variance_id: 1,
           price: product.calculatedAmount?.total,
           unique_id: generateUlid(),
@@ -215,7 +217,28 @@ const ConfirmPayment = () => {
     };
     fetchSuppliersAndEmployees();
   }, []);
-  console.log('ee', form.formState.errors);
+  const totalProfit = useMemo(
+    () =>
+      calculatedProducts.products.reduce((prev, current) => {
+        return (
+          prev +
+          current.calculatedAmount?.quantity! *
+            (current.selling_price - current.cost_price)
+        );
+      }, 0),
+    [calculatedProducts]
+  );
+
+  const totalItems = useMemo(
+    () =>
+      calculatedProducts.products.reduce((prev, current) => {
+        return prev + Number(current.calculatedAmount?.quantity!);
+      }, 0),
+    [calculatedProducts]
+  );
+  console.log(totalItems);
+  console.log(calculatedProducts);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">

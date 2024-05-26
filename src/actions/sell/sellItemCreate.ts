@@ -25,6 +25,7 @@ export const sellItemCreate = async ({
   version,
   profit,
   status,
+  shop_product_unique_id,
 }: any) => {
   try {
     const shopId = cookies().get('shopId')?.value;
@@ -47,6 +48,7 @@ export const sellItemCreate = async ({
       version,
       profit,
       status,
+      shop_product_unique_id,
     });
     console.log(transaction_unique_id);
 

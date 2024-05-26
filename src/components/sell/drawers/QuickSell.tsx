@@ -78,6 +78,7 @@ const formSchema = z.object({
   cash_type: z.string(),
   date: z.date().optional(),
   due: z.any(),
+  profit: z.number(),
 });
 
 const QuickSell = ({
@@ -105,6 +106,7 @@ const QuickSell = ({
       number: '',
       images: '',
       cash_type: 'cash',
+      profit: 0,
     },
   });
 
@@ -129,6 +131,8 @@ const QuickSell = ({
       version: DEFAULT_STARTING_VERSION,
       total_discount: 0,
       transaction_type: 'QUICK_SELL',
+      total_profit: data.profit,
+      total_item: 1,
     });
     console.log('res----', responseCreateSell);
 
@@ -137,7 +141,6 @@ const QuickSell = ({
         created_at: formatDate(DATE_FORMATS.default),
 
         transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
-        profit: 0,
         status: 'PAID',
 
         price: data.amount,
@@ -328,19 +331,33 @@ const QuickSell = ({
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="profit"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Profit</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="Profit" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="customer"
           render={({ field }) => (
             <FormItem className="pb-8">
               <FormLabel>
-                Name <span className="text-error-100">*</span>{' '}
+                Customer Name <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
                 <div className="relative h-10 w-full">
                   <Input
                     type="text"
-                    placeholder=" Enter your comment here"
+                    placeholder=" Enter your name here"
                     className="pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent" // Add additional styling as needed
                     {...field}
                   />
@@ -411,7 +428,7 @@ const QuickSell = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Number <span className="text-error-100">*</span>{' '}
+                Mobile Number <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
                 <Input placeholder="Number" {...field} />

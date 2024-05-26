@@ -13,6 +13,7 @@ import { deleteTransaction } from '@/actions/sell/deleteTransaction';
 const TransactionDelete = () => {
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const currentPurchase = useSellStore((state) => state.currentSell);
+  const closeDrawer = useSellStore((state) => state.setSellDrawerState);
 
   const handleDelete = async () => {
     if (currentPurchase) {
@@ -28,12 +29,14 @@ const TransactionDelete = () => {
       });
       console.log(res);
       if (res?.success) {
-        toast.success('Purchase was successfully deleted');
+        toast.success('Transaction was successfully deleted');
         handleDialogOpen({ open: false });
+        closeDrawer({ open: false });
       }
       if (!res?.success) {
         toast.error('Something went wrong');
         handleDialogOpen({ open: false });
+        closeDrawer({ open: false });
       }
     }
   };

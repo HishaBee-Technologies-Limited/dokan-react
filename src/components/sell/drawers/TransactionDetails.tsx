@@ -55,15 +55,14 @@ const TransactionDetails = () => {
 
   const total = useMemo(() => {
     return (
-      currentPurchase?.total_price &&
-      Math.round(
+      (currentPurchase?.total_price &&
         calculateTotal(
           currentPurchase?.total_price,
           currentPurchase?.extra_charge ?? 0,
           currentPurchase?.discount ?? 0,
           currentPurchase?.discount_type
-        ) ?? 0
-      )
+        )) ??
+      0
     );
   }, [currentPurchase]);
 
@@ -88,7 +87,7 @@ const TransactionDetails = () => {
     getPurchaseProducts();
   }, [currentPurchase]);
 
-  console.log(purchaseProducts);
+  console.log(currentPurchase);
 
   return (
     <div className="space-y-space12">
@@ -98,7 +97,7 @@ const TransactionDetails = () => {
           className="font-semibold"
         />
 
-        {currentPurchase?.supplier_name && (
+        {currentPurchase?.customer_name && (
           <div className="flex items-center gap-space8">
             <Text title="Customer" />
             <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
@@ -107,7 +106,7 @@ const TransactionDetails = () => {
                 fallback="M"
                 className="w-space24 h-space24 mr-space8"
               />
-              <span> {currentPurchase?.supplier_name}</span>
+              <span> {currentPurchase?.customer_name}</span>
             </div>
           </div>
         )}
@@ -191,38 +190,45 @@ const TransactionDetails = () => {
 
           <ExpandMoreIcon />
         </div> */}
-        <Text title="Sold Products" className="text-lg font-medium" />
+        {currentPurchase?.transaction_type! !== 'QUICK_SELL' && (
+          <>
+            <Text title="Sold Products" className="text-lg font-medium" />
 
-        <div className={`grid 'grid-rows-[1fr]'`}>
-          {purchaseProducts?.map((product) => (
-            <div key={product.unique_id} className="rounded p-space8">
-              <div className="flex items-center gap-space8">
-                <Image
-                  src={product.shop_product?.image_url}
-                  height={32}
-                  width={32}
-                  alt=""
-                />
+            <div className={`grid 'grid-rows-[1fr]'`}>
+              {purchaseProducts?.map((product) => (
+                <div key={product.unique_id} className="rounded p-space8">
+                  <div className="flex items-center gap-space8">
+                    <Image
+                      src={product.shop_product?.image_url}
+                      height={32}
+                      width={32}
+                      alt=""
+                    />
 
-                <Text title={product.shop_product?.name} />
-              </div>
+                    <Text title={product.shop_product?.name} />
+                  </div>
 
-              <article className="flex flex-wrap justify-between gap-space8 pl-space40">
-                <Text>
-                  Quantity:{' '}
-                  <span className="font-semibold">{product.quantity}</span>
-                </Text>
-                <Text>
-                  Unit Price:{' '}
-                  <span className="font-semibold">{product.unit_price}</span>
-                </Text>
-                <Text>
-                  Total: <span className="font-semibold">{product.price}</span>
-                </Text>
-              </article>
+                  <article className="flex flex-wrap justify-between gap-space8 pl-space40">
+                    <Text>
+                      Quantity:{' '}
+                      <span className="font-semibold">{product.quantity}</span>
+                    </Text>
+                    <Text>
+                      Unit Price:{' '}
+                      <span className="font-semibold">
+                        {product.unit_price}
+                      </span>
+                    </Text>
+                    <Text>
+                      Total:{' '}
+                      <span className="font-semibold">{product.price}</span>
+                    </Text>
+                  </article>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
       </section>
       {currentPurchase?.note && (
         <article className="space-y-space8">
@@ -235,7 +241,7 @@ const TransactionDetails = () => {
           />
         </article>
       )}
-      <div className="grid grid-cols-2 gap-space16">
+      {/* <div className="grid grid-cols-2 gap-space16">
         <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
           <Image
             src="/images/print_receipt.svg"
@@ -256,7 +262,7 @@ const TransactionDetails = () => {
 
           <Text title="Share receipt " className="text-sm font-medium" />
         </Button>
-      </div>
+      </div> */}
       <DrawerFooter>
         <Button
           className="w-full"
