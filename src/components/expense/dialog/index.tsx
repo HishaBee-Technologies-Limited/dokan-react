@@ -7,7 +7,7 @@ import { useExpenseStore } from '@/stores/useExpenseStore';
 import EditCategory from '@/components/expense/dialog/EditCategory';
 import ExpenseDetails from '@/components/expense/dialog/ExpenseDetails';
 import AddNewCategory from '@/components/expense/dialog/AddNewCategory';
-import DeleteTransaction from '@/components/expense/dialog/DeleteTransaction';
+import DeleteExpense from '@/components/expense/dialog/DeleteExpense';
 import DeleteExpenseCategory from '@/components/expense/dialog/DeleteExpenseCategory';
 import { ICategory, IExpense } from '@/types/expense';
 import { ICommonGetResponse } from '@/types/common';
@@ -30,7 +30,7 @@ const ExpenseDialogs = ({
     } else if (ExpenseEnum.EDIT_CATEGORY === activeDialog) {
       return <EditCategory categories={categories} />;
     } else if (ExpenseEnum.DELETE_TRANSACTION === activeDialog) {
-      return <DeleteTransaction expense={expense} />;
+      return <DeleteExpense expense={expense} />;
     } else if (ExpenseEnum.DELETE_EXPENSE_CATEGORY === activeDialog) {
       return <DeleteExpenseCategory />;
     }

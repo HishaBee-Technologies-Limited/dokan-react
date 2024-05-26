@@ -51,7 +51,7 @@ const EditCategory = ({
     });
     console.log(res);
     if (res?.success) {
-      toast.success('Expense category added');
+      toast.success('Expense category edited');
       closeDialog({ open: false });
     }
     if (!res?.success) {

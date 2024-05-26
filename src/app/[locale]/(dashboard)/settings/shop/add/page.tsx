@@ -57,7 +57,7 @@ const AddShopPage = () => {
   });
   const [divisions, setDivisions] = useState<IAllArea[]>();
   const [open, setOpen] = React.useState(false);
-  const [divisionValue, setDivisionValue] = React.useState('');
+  // const [divisionValue, setDivisionValue] = React.useState('');
   const [openDistrict, setOpenDistrict] = React.useState(false);
   const [openArea, setOpenArea] = React.useState(false);
   const [openTypes, setOpenTypes] = React.useState(false);
@@ -69,6 +69,18 @@ const AddShopPage = () => {
   const [imageUrls, loading] = useFileUpload(selectedFiles);
 
   const shopId = searchParams.get('shopId');
+  const divisionValue = form.watch('division');
+  const languages = [
+    { label: 'English', id: 'en' },
+    { label: 'French', id: 'fr' },
+    { label: 'German', id: 'de' },
+    { label: 'Spanish', id: 'es' },
+    { label: 'Portuguese', id: 'pt' },
+    { label: 'Russian', id: 'ru' },
+    { label: 'Japanese', id: 'ja' },
+    { label: 'Korean', id: 'ko' },
+    { label: 'Chinese', id: 'zh' },
+  ] as const;
 
   async function onSubmit({
     name,
@@ -101,6 +113,7 @@ const AddShopPage = () => {
     const getAllAreas = async () => {
       const res = await getAreasAndTypes();
       setDivisions(res?.data?.areaData);
+      console.log(res);
       setTypes(res?.data?.typesData);
     };
     getAllAreas();
@@ -115,6 +128,7 @@ const AddShopPage = () => {
   useEffect(() => {
     form.setValue('logo_url', imageUrls[0]);
   }, [imageUrls]);
+  // console.log(types, districtValue, divisionValue);
 
   return (
     <div className="space-y-space16 pb-space16">
@@ -206,7 +220,7 @@ const AddShopPage = () => {
                             {types?.map((type) => (
                               <CommandItem
                                 key={type.id}
-                                value={String(type.id)}
+                                value={type.id}
                                 onSelect={() => {
                                   form.setValue('shop_type', type.id);
                                   setOpenTypes(false);
@@ -232,59 +246,65 @@ const AddShopPage = () => {
               />
 
               <div className="gap-space8 sm:gap-space16 grid grid-cols-2">
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="justify-between"
-                    >
-                      {divisionValue
-                        ? divisions?.find(
-                            (division) =>
-                              String(division.id) === String(divisionValue)
-                          )?.name
-                        : 'Select Divisions...'}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[350px] p-0">
-                    <Command>
-                      <CommandInput
-                        placeholder="Search framework..."
-                        className="h-12"
-                      />
-                      <CommandEmpty>No division found.</CommandEmpty>
-                      <CommandGroup>
-                        {divisions?.map((division) => (
-                          <CommandItem
-                            key={division.id}
-                            value={String(division.id)}
-                            onSelect={(currentValue) => {
-                              setDivisionValue(
-                                currentValue === String(divisionValue)
-                                  ? ''
-                                  : currentValue
-                              );
-                              setOpen(false);
-                            }}
+                <FormField
+                  control={form.control}
+                  name="division"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              'h-16 w-full justify-between bg-white',
+                              !field.value && 'text-muted-foreground'
+                            )}
                           >
-                            {division.name}
-                            <CheckIcon
-                              className={cn(
-                                'ml-auto h-4 w-4',
-                                String(divisionValue) === String(division.id)
-                                  ? 'opacity-100'
-                                  : 'opacity-0'
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
+                            {field.value
+                              ? divisions?.find(
+                                  (type) => type.id === field.value
+                                )?.name
+                              : 'Select division...'}
+                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[600px] p-0">
+                          <Command>
+                            {/* <CommandInput
+                              placeholder="Search Type..."
+                              className="h-12"
+                            /> */}
+                            <CommandEmpty>No type found.</CommandEmpty>
+                            <CommandGroup className="max-h-80 overflow-scroll">
+                              {divisions?.map((type) => (
+                                <CommandItem
+                                  key={type.id}
+                                  /*@ts-ignore*/
+                                  value={type.id}
+                                  onSelect={() => {
+                                    form.setValue('division', type.id);
+                                    setOpen(false);
+                                  }}
+                                >
+                                  {type.name}
+                                  <CheckIcon
+                                    className={cn(
+                                      'ml-auto h-4 w-4',
+                                      field.value === type.id
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  )}
+                />
                 <Popover open={openDistrict} onOpenChange={setOpenDistrict}>
                   <PopoverTrigger asChild>
                     <Button
@@ -309,10 +329,10 @@ const AddShopPage = () => {
                   </PopoverTrigger>
                   <PopoverContent className="w-[320px] p-0">
                     <Command>
-                      <CommandInput
+                      {/* <CommandInput
                         placeholder="Search Districts..."
                         className="h-12"
-                      />
+                      /> */}
                       <CommandEmpty>No districts found.</CommandEmpty>
                       <CommandGroup>
                         {divisions
@@ -385,10 +405,10 @@ const AddShopPage = () => {
                       </PopoverTrigger>
                       <PopoverContent className="w-[600px] p-0">
                         <Command>
-                          <CommandInput
+                          {/* <CommandInput
                             placeholder="Search Districts..."
                             className="h-12"
-                          />
+                          /> */}
                           <CommandEmpty>No area found.</CommandEmpty>
                           <CommandGroup className="max-h-80 overflow-scroll">
                             {divisions

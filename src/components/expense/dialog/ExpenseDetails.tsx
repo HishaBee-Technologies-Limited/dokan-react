@@ -22,6 +22,8 @@ const ExpenseDetails = ({ expense }: { expense: IExpense }) => {
     setExpenseDrawer({ open: true, header: ExpenseEnum.EDIT_EXPENSE });
   };
 
+  console.log(expense);
+
   return (
     <div className="relative">
       <div className="px-space16 py-space16">
@@ -42,7 +44,7 @@ const ExpenseDetails = ({ expense }: { expense: IExpense }) => {
 
           <li className="space-y-space6">
             <Text title="Amount" variant="secondary" className="text-sm" />
-            <Text title={`"৳ ${expense?.amount}"`} />
+            <Text title={`৳ ${expense?.amount}`} />
           </li>
 
           <li className="space-y-space6">

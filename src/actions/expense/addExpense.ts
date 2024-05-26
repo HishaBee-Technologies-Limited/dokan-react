@@ -2,6 +2,7 @@
 
 import { authApi } from '@/lib/api';
 import { IExpense } from '@/types/expense';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export const addExpense = async ({
@@ -36,6 +37,8 @@ export const addExpense = async ({
 
     console.log(res);
     const data = await res.json();
+
+    revalidatePath('/expense');
 
     if (res.ok) {
       return {

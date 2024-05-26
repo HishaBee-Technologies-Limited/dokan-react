@@ -5,7 +5,7 @@ export enum ExpenseEnum {
   EDIT_CATEGORY = 'Edit Category',
   EXPENSE_DETAILS = 'Expense Details',
   ADD_NEW_CATEGORY = 'Add New Category',
-  DELETE_TRANSACTION = 'Delete Transaction',
+  DELETE_TRANSACTION = 'Delete Expense',
   ALL_EXPENSE_CATEGORIES = 'All Expense Categories',
   DELETE_EXPENSE_CATEGORY = 'Delete Expense Category',
 }

@@ -157,7 +157,7 @@ const MoneyGiveReceived = ({
 
           transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
           profit: 0,
-          status: 'PAID',
+          status: PAYMENT_STATUS.UNPAID,
 
           shop_product_id: product.id,
           shop_product_variance_id: 1,

@@ -4,7 +4,7 @@ import { authApi } from '@/lib/api';
 
 export const getSingleExpense = async (id?: string) => {
   try {
-    const res = await authApi.get(`/expenses/${id}`);
+    const res = await authApi.get(`/expense/${id}`);
     const data = await res.json();
 
     if (res.ok) {
@@ -12,7 +12,7 @@ export const getSingleExpense = async (id?: string) => {
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data.data,
+        data: data,
       };
     }
     if (!res.ok) {

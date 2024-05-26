@@ -81,12 +81,13 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
       images: '',
     },
   });
+  console.log(expense);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     closeDrawer({ open: false });
-    console.log('data------------', data);
+    console.log('data------------', data, expense);
 
-    const res = await editExpense(expense.unique_id, {
+    const res = await editExpense({
       type: data.category_name,
       amount: Number(data.amount),
       details: data.details,
@@ -97,6 +98,7 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
       updated_at: formatDate(DATE_FORMATS.default),
       version: expense.version + 1,
       unique_id: expense.unique_id,
+      id: expense.id,
     });
 
     console.log('expense------------', res);
@@ -168,7 +170,7 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
                       {field.value ? (
                         format(field.value, 'PPP')
                       ) : (
-                        <span>Pick a Date</span>
+                        <span>{format(new Date(), 'PPP')}</span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>

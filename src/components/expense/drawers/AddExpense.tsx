@@ -98,8 +98,8 @@ const AddExpense = ({ categories }: { categories: ICategory[] }) => {
     console.log('expense------------', res);
     if (res?.success) {
       router.refresh();
-      toast.success('Edited Successfully');
       closeDrawer({ open: false });
+      toast.success('Expense Added Successfully');
     }
 
     if (res?.error) {

@@ -63,8 +63,8 @@ import { createDueItem } from '@/actions/due/createDueItem';
 
 const cashType = [
   { value: 'cash', label: 'নগদ টাকা' },
-  { value: 'due', label: 'বাকি' },
-  { value: 'bank', label: 'বিকাশ / নগদ ' },
+  // { value: 'due', label: 'বাকি' },
+  // { value: 'bank', label: 'বিকাশ / নগদ ' },
 ];
 
 const formSchema = z.object({
@@ -91,6 +91,10 @@ const QuickSell = ({
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
   const tkn = getCookie('access_token');
   const [contact, setContact] = useState<IUserResponse>();
+  const setCalculatedProducts = useSellStore(
+    (state) => state.setCalculatedProducts
+  );
+  const calculatedProducts = useSellStore((state) => state.calculatedProducts);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -100,7 +104,7 @@ const QuickSell = ({
       details: '',
       number: '',
       images: '',
-      cash_type: '',
+      cash_type: 'cash',
     },
   });
 
@@ -112,8 +116,8 @@ const QuickSell = ({
       // employee_mobile: data.employee_number,
       // employee_name: data.employee,
       note: data.details,
-      payment_method: PAYMENT_METHODS['Due Payment'],
-      payment_status: PAYMENT_STATUS.UNPAID,
+      payment_method: PAYMENT_METHODS['Cash'],
+      payment_status: PAYMENT_STATUS.PAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
       customer_mobile: data.number,
@@ -150,56 +154,70 @@ const QuickSell = ({
 
       console.log('error-------', responseCreateSell?.error);
     }
-    const shop_id = getCookie('shopId') as string;
-    console.log('shopId----', shop_id);
-    const amount = data.due
-      ? Number(data.due.due_amount) - Number(data.amount)
-      : -Number(data.amount);
-    const payload = {
-      shop_id: Number(shop_id),
-      amount: amount,
-      unique_id: data.due ? data.due.unique_id : generateUlid(),
-      due_left: amount,
-      version: data.due
-        ? Number(data.due.version) + 1
-        : DEFAULT_STARTING_VERSION,
-      updated_at: formatDate(DATE_FORMATS.default),
-      created_at: formatDate(DATE_FORMATS.default),
-      message: data.details,
-      contact_mobile: data.number,
-      contact_type: 'CUSTOMER',
-      contact_name: data.customer,
-      // sms: data.sms ?? false,
-      transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
-    };
+    // if (data.cash_type === 'due') {
+    //   const shop_id = getCookie('shopId') as string;
+    //   console.log('shopId----', shop_id);
+    //   const amount = data.due
+    //     ? Number(data.due.due_amount) - Number(data.amount)
+    //     : -Number(data.amount);
+    //   const payload = {
+    //     shop_id: Number(shop_id),
+    //     amount: amount,
+    //     unique_id: data.due ? data.due.unique_id : generateUlid(),
+    //     due_left: amount,
+    //     version: data.due
+    //       ? Number(data.due.version) + 1
+    //       : DEFAULT_STARTING_VERSION,
+    //     updated_at: formatDate(DATE_FORMATS.default),
+    //     created_at: formatDate(DATE_FORMATS.default),
+    //     message: data.details,
+    //     contact_mobile: data.number,
+    //     contact_type: 'CUSTOMER',
+    //     contact_name: data.customer,
+    //     // sms: data.sms ?? false,
+    //     transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
+    //   };
 
-    const dueRes = await createDue(payload);
-    console.log('dueRes----', dueRes);
+    //   const dueRes = await createDue(payload);
+    //   console.log('dueRes----', dueRes);
 
-    if (dueRes?.success) {
-      const payload = {
-        amount: -Number(data.amount),
-        unique_id: generateUlid(),
-        due_left: -Number(data.amount),
-        version: DEFAULT_STARTING_VERSION,
-        updated_at: formatDate(DATE_FORMATS.default),
-        created_at: formatDate(DATE_FORMATS.default),
-        message: data.details,
-        contact_mobile: data.number,
-        contact_type: 'CUSTOMER',
-        contact_name: data.customer,
-        // sms: data.sms ?? false,
-        transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
-        due_unique_id: dueRes?.data.due.unique_id,
-      };
+    //   if (!dueRes?.success) {
+    //     console.log(dueRes?.error);
+    //     toast.error('Something went wrong');
+    //   }
 
-      console.log('---', payload);
+    //   if (dueRes?.success) {
+    //     const payload = {
+    //       amount: -Number(data.amount),
+    //       unique_id: generateUlid(),
+    //       due_left: -Number(data.amount),
+    //       version: DEFAULT_STARTING_VERSION,
+    //       updated_at: formatDate(DATE_FORMATS.default),
+    //       created_at: formatDate(DATE_FORMATS.default),
+    //       message: data.details,
+    //       contact_mobile: data.number,
+    //       contact_type: 'CUSTOMER',
+    //       contact_name: data.customer,
+    //       // sms: data.sms ?? false,
+    //       transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
+    //       due_unique_id: dueRes?.data.due.unique_id,
+    //     };
 
-      const res = await createDueItem(payload);
-      console.log('res----', res);
-    }
+    //     console.log('---', payload);
+
+    //     const res = await createDueItem(payload);
+
+    //     console.log('res----', res);
+    //   }
+    // }
+    // setCalculatedProducts({
+    //   ...calculatedProducts,
+    //   paymentAmount: -Number(data.amount),
+    //   date: formatDate(DATE_FORMATS.default, data.date),
+    // });
     closeDrawer({ open: false });
-    openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+    toast.success('Quick Sell Added SuccessFully');
+    // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
     console.log('data------------', data);
   }
 

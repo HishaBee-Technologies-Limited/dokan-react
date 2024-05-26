@@ -1,6 +1,7 @@
 'use server';
 
 import { authApi } from '@/lib/api';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export const createExpenseCategory = async ({
@@ -19,6 +20,7 @@ export const createExpenseCategory = async ({
     };
     const res = await authApi.post(`/expense_category`, payload);
     const data = await res.json();
+    revalidatePath('/expense');
 
     if (res.ok) {
       return {

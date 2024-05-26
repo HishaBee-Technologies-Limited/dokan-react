@@ -443,8 +443,8 @@ const MoneyGiveReceived = ({
                         </PopoverTrigger>
                         <PopoverContent className="w-[200px] p-0 mr-10 ">
                           <Command>
-                            <CommandInput placeholder="Search language..." />
-                            <CommandEmpty>No language found.</CommandEmpty>
+                            <CommandInput placeholder="Search contact..." />
+                            <CommandEmpty>No contact found.</CommandEmpty>
                             <CommandGroup>
                               <ScrollArea className="h-[300px] scroll-p-4 rounded-md border">
                                 {suppliers?.map((supplier) => (

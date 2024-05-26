@@ -12,4 +12,7 @@ export const ShopSchema = z.object({
   sell_type: z.string().optional(),
   number: z.string().optional(),
   logo_url: z.string().optional(),
+  language: z.string(),
+  division: z.number().optional(),
+  district: z.number().optional(),
 });
