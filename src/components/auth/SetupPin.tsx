@@ -21,7 +21,7 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
   console.log('ccccc', JSON.parse(cookie ? cookie : ''));
 
   const signUpString = JSON.parse(cookie ? cookie : '');
-  const { address, brand_name, user_intent } = signUpString;
+  const { address, brand_name, use_intent } = signUpString;
 
   useEffect(() => {
     if (confirmPin.length === 5) {
@@ -38,7 +38,7 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
       mobile_number,
       pin,
       pin_confirmation: confirmPin,
-      user_intent,
+      use_intent,
       brand_name,
       address,
     });
@@ -154,9 +154,9 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
       >
         Confirm
       </Button>
-      <Button className="w-full" variant={'transparent'}>
+      {/* <Button className="w-full" variant={'transparent'}>
         Forgot pin?
-      </Button>
+      </Button> */}
     </div>
   );
 };

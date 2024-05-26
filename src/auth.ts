@@ -59,7 +59,7 @@ export const {
 
       async authorize(credentials) {
         const validatedFields = RegisterSchema.safeParse(credentials);
-        console.log(validatedFields);
+        console.log(credentials);
         if (!validatedFields.success) return null;
 
         const {
@@ -68,7 +68,7 @@ export const {
           pin_confirmation,
           brand_name,
           address,
-          user_intent,
+          use_intent,
         } = validatedFields.data;
         const response = await signup({
           mobile_number,
@@ -76,7 +76,7 @@ export const {
           pin_confirmation,
           brand_name,
           address,
-          user_intent,
+          use_intent,
         });
 
         const user = await response?.data;

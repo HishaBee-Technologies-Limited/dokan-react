@@ -36,11 +36,11 @@ import { IAllArea } from '@/types/shop';
 
 const formSchema = z.object({
   brand_name: z.string(),
-  area: z.number(),
+  // area: z.number(),
   address: z.string(),
-  division: z.string().optional(),
-  district: z.string().optional(),
-  user_intent: z.string(),
+  // division: z.string().optional(),
+  // district: z.string().optional(),
+  use_intent: z.string(),
 });
 
 const Information = () => {
@@ -56,24 +56,20 @@ const Information = () => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      brand_name: '',
-      address: '',
-    },
+    defaultValues: {},
   });
 
   async function onSubmit({
     brand_name,
     address,
-    area,
-    district,
-    division,
-    user_intent,
+
+    use_intent,
   }: z.infer<typeof formSchema>) {
     // closeDrawer({ open: false })
     // console.log("data------------", data);
-    const fullAddress = `${address}, ${area}, ${district}, ${division}}`;
-    await saveSignupInfo({ brand_name, address: fullAddress, user_intent });
+    // const fullAddress = `${address}, ${area}, ${district}, ${division}}`;/
+
+    await saveSignupInfo({ brand_name, address: address, use_intent });
     router.push('/auth/setup-pin');
   }
 
@@ -120,7 +116,7 @@ const Information = () => {
             )}
           />
 
-          <div className="gap-space8 sm:gap-space16 flex ">
+          {/* <div className="gap-space8 sm:gap-space16 flex ">
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
@@ -233,8 +229,8 @@ const Information = () => {
                 </Command>
               </PopoverContent>
             </Popover>
-          </div>
-
+          </div> */}
+          {/* 
           <FormField
             control={form.control}
             name="area"
@@ -307,7 +303,7 @@ const Information = () => {
                 </Popover>
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
@@ -325,7 +321,7 @@ const Information = () => {
 
           <FormField
             control={form.control}
-            name="user_intent"
+            name="use_intent"
             render={({ field }) => (
               <FormItem className="space-y-3">
                 <FormLabel>How do you want to use this app</FormLabel>

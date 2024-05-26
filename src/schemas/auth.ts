@@ -10,7 +10,7 @@ export const RegisterSchema = z.object({
   }),
   brand_name: z.string(),
   address: z.string(),
-  user_intent: z.string(),
+  use_intent: z.string(),
 });
 
 export type RegisterSchemaDef = z.infer<typeof RegisterSchema>;

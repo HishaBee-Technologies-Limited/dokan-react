@@ -62,7 +62,7 @@ export const login = async (payload: any) => {
 
 export const signup = async (payload: z.infer<typeof RegisterSchema>) => {
   const res = await api.post(
-    `/register?brand_name=${payload?.brand_name}&address=${payload?.address}&pin=${payload?.pin}&pin_confirmation=${payload?.pin_confirmation}&mobile_number=${payload?.mobile_number}&user_intent=${payload?.user_intent}`
+    `/register?brand_name=${payload?.brand_name}&address=${payload?.address}&pin=${payload?.pin}&pin_confirmation=${payload?.pin_confirmation}&mobile_number=${payload?.mobile_number}&use_intent=${payload?.use_intent}`
   );
 
   const data = await res.json();
