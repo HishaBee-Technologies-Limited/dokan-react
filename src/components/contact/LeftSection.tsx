@@ -57,6 +57,7 @@ export const LeftSection = ({
       active_user: userList?.length ? String(userList[0].id) : '',
     };
     router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
+    setUserSearch('');
   }, [activeTab]);
 
   useEffect(() => {
@@ -73,13 +74,13 @@ export const LeftSection = ({
     }
   }, [userList]);
   useEffect(() => {
-    let temArr = userFilterList && [...userFilterList];
+    let temArr = userList && [...userList];
 
     const temArr2 = temArr?.filter(
       (user) =>
         user.name.includes(userSearch) || user.mobile.includes(userSearch)
     );
-    console.log(temArr2);
+    setUserFilterList(temArr2);
   }, [userSearch]);
 
   return (
@@ -96,6 +97,7 @@ export const LeftSection = ({
         <div className="px-space16">
           <Input
             placeholder="Search contact"
+            value={userSearch}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setUserSearch(e.target.value)
             }
