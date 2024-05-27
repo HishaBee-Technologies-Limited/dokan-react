@@ -33,7 +33,7 @@ export const ProductSchema = z.object({
   low_stock: z.string().optional(),
   vat_percentage: z.string().optional(),
   warranty_duration: z.string().optional(),
-  warranty_type: WarrantyTypeSchema.optional(),
+  warranty_type: z.string().optional(),
   discount: z.string().optional(),
   discount_type: z.string().optional(),
   // boolean

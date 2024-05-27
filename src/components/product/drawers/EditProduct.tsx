@@ -51,6 +51,7 @@ export const EditProduct = ({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
       files: [],
+      discount_type: 'AMOUNT',
     },
   });
   const router = useRouter();
@@ -104,7 +105,7 @@ export const EditProduct = ({
       unit: Number(data.unit),
     });
     if (res?.success) {
-      toast.success('Product added');
+      toast.success('Product Edited Success');
       handleClose({ open: false });
       router.refresh();
     }
@@ -114,6 +115,8 @@ export const EditProduct = ({
       handleClose({ open: false });
     }
   }
+
+  console.log(form.formState.errors);
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -152,7 +155,7 @@ export const EditProduct = ({
     //   product?.gallery?.substring(1, product?.gallery.length - 1).split(',')
     // );
   }, [product, category]);
-  console.log(product);
+  // console.log(product);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">
@@ -316,7 +319,7 @@ export const EditProduct = ({
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category Name</FormLabel>
+                <FormLabel>Sub Category Name</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="">

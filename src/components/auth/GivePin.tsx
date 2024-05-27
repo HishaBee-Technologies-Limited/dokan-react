@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useState } from 'react';
 import Icon from '@/components/common/Icon';
 import { Text } from '@/components/common/text';
@@ -53,7 +53,10 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
           <PasswordInput
             id="current_password"
             value={pin}
-            onChange={(e) => setPin(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              const result = e.target?.value.replace(/\D/g, '');
+              setPin(result);
+            }}
             autoComplete="current-password"
           />
           {/* <StatefulPinInput

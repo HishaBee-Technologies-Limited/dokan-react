@@ -148,7 +148,7 @@ const ConfirmPayment = () => {
       version: DEFAULT_STARTING_VERSION,
       total_discount: 0,
       transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
-      total_profit: totalProfit,
+      total_profit: String(totalProfit),
     });
     console.log('res----', responseCreateSell);
 

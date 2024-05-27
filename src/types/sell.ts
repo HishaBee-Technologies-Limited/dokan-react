@@ -22,7 +22,7 @@ export interface IProductSellPayload {
   total_discount?: number;
   change_amount?: number;
   customer_address?: string;
-  total_profit?: number;
+  total_profit?: string;
   transaction_type?: 'PRODUCT_SELL' | 'QUICK_SELL'; //PRODUCT_SELL
 }
 

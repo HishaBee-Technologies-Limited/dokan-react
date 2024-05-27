@@ -44,7 +44,7 @@ export const ProductTable = ({
             <TableHead>Product Name</TableHead>
             <TableHead>Current Stock</TableHead>
             <TableHead>Price</TableHead>
-            <TableHead>Category</TableHead>
+            <TableHead>Sub Category</TableHead>
             {isStatusShow ? <TableHead>Status</TableHead> : <></>}
             <TableHead className="text-right">Action</TableHead>
           </TableRow>

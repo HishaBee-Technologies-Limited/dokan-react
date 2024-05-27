@@ -49,7 +49,7 @@ export interface IProductPayload {
   wholesale_amount?: number;
   stock_alert?: number;
   warranty?: number;
-  warranty_type?: WarrantyType;
+  warranty_type?: string;
   discount?: string;
   discount_type?: string;
   created_at?: string; // Date and time in ISO format

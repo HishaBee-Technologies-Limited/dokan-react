@@ -65,6 +65,7 @@ export const AddProduct = ({
       vat_percentage: '',
       warranty_duration: '',
       discount: '',
+      discount_type: 'AMOUNT',
       // boolean
       online_sell: false,
       low_stock_check: false,
@@ -217,6 +218,9 @@ export const AddProduct = ({
             name="purchase_price"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>
+                  Purchase Price <span className="text-error-100">*</span>{' '}
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Purchase Price" {...field} />
                 </FormControl>
@@ -228,6 +232,9 @@ export const AddProduct = ({
             name="sell_price"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>
+                  Sell Price <span className="text-error-100">*</span>{' '}
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Sell Price" {...field} />
                 </FormControl>
@@ -291,7 +298,7 @@ export const AddProduct = ({
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category Name</FormLabel>
+                <FormLabel>Sub Category Name</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={String(field.value)}

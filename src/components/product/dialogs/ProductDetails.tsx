@@ -28,6 +28,8 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
   const handleDrawerOpen = useProductStore((state) => state.setDrawerState);
 
+  console.log(product);
+
   return (
     <div>
       {product?.name ? (
@@ -97,7 +99,10 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 variant="secondary"
                 className="text-xs font-semibold uppercase"
               />
-              <Text title={String(product?.stock)} className="font-semibold" />
+              <Text
+                title={String(product?.stock ?? 'N/A')}
+                className="font-semibold"
+              />
             </article>
             <article className="px-space12 py-space8 space-y-space4 bg-primary-10 dark:bg-primary-80 rounded-lg">
               <Text
@@ -106,7 +111,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={`৳ ${String(product?.selling_price)}`}
+                title={`৳ ${String(product?.selling_price ?? 'N/A')}`}
                 className="font-semibold"
               />
             </article>
@@ -122,7 +127,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                     product?.cost_price,
                     product?.selling_price,
                     product?.stock
-                  )
+                  ) ?? 'N/A'
                 )}`}
                 className="font-semibold"
               />
@@ -134,7 +139,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={`৳ ${String(product?.cost_price)}`}
+                title={`৳ ${String(product?.cost_price ?? 'N/A')}`}
                 className="font-semibold"
               />
             </article>
@@ -145,13 +150,13 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(Number(product?.discount))}
+                title={String(Number(product?.discount) ?? 'N/A')}
                 className="font-semibold"
               />
             </article>
             <article className="px-space12 py-space8 space-y-space4 bg-primary-10 dark:bg-primary-80 rounded-lg">
               <Text
-                title={`category`}
+                title={`Sub Category`}
                 variant="secondary"
                 className="text-xs font-semibold uppercase"
               />
@@ -175,7 +180,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(product?.vat_percent)}
+                title={String(product?.vat_percent ?? 'N/A')}
                 className="font-semibold"
               />
             </article>
@@ -186,7 +191,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(product?.warranty)}
+                title={String(product?.warranty ?? 'N/A')}
                 className="font-semibold"
               />
             </article>
@@ -197,7 +202,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(Number(product?.stock_alert))}
+                title={String(Number(product?.stock_alert) ?? 'N/A')}
                 className="font-semibold"
               />
             </article>

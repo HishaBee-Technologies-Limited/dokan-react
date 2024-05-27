@@ -78,7 +78,7 @@ const formSchema = z.object({
   cash_type: z.string(),
   date: z.date().optional(),
   due: z.any(),
-  profit: z.number(),
+  profit: z.string(),
 });
 
 const QuickSell = ({
@@ -106,7 +106,7 @@ const QuickSell = ({
       number: '',
       images: '',
       cash_type: 'cash',
-      profit: 0,
+      profit: '',
     },
   });
 

@@ -72,7 +72,7 @@ export interface IPurchaseHistoryResponse {
   version: number;
   transaction_type?: string;
   customer_name?: string;
-  customer_mobie?: string;
+  customer_mobile?: string;
 }
 
 export interface IProducts extends IProductItemPurchasePayload {

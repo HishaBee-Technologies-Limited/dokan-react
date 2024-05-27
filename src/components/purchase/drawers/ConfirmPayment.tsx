@@ -149,6 +149,7 @@ const ConfirmPayment = () => {
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
+      // sms:
     });
 
     if (responseCreatePurchase?.success) {
