@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Card from '@/components/common/Card';
 import { Input } from '@/components/ui/input';
 import CustomTab from '@/components/common/Tab';
@@ -37,6 +37,10 @@ export const LeftSection = ({
   const router = useRouter();
   const pathname = usePathname();
   const { getQueryString, setQueryString } = useCreateQueryString();
+  const [userSearch, setUserSearch] = useState('');
+  const [userFilterList, setUserFilterList] = useState<
+    IUserResponse[] | undefined
+  >();
 
   const activeTab = getQueryString('tab') ?? '';
   const activeUser = getQueryString('active_user') ?? '';
@@ -62,11 +66,21 @@ export const LeftSection = ({
     };
     router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
   }, []);
-  // useEffect(() => {
-  //   if (userList) {
-  //     setParty(userList[0]);
-  //   }
-  // }, [userList]);
+
+  useEffect(() => {
+    if (userList) {
+      setUserFilterList(userList);
+    }
+  }, [userList]);
+  useEffect(() => {
+    let temArr = userFilterList && [...userFilterList];
+
+    const temArr2 = temArr?.filter(
+      (user) =>
+        user.name.includes(userSearch) || user.mobile.includes(userSearch)
+    );
+    console.log(temArr2);
+  }, [userSearch]);
 
   return (
     <Card className="h-full lg:w-4/12 flex flex-col gap-space16">
@@ -80,13 +94,18 @@ export const LeftSection = ({
           }}
         />
         <div className="px-space16">
-          <Input placeholder="Search contact" />
+          <Input
+            placeholder="Search contact"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setUserSearch(e.target.value)
+            }
+          />
         </div>
       </div>
 
       <ScrollArea className="h-[calc(100%-20.6rem)] px-space16">
         <WrapperOddList>
-          {userList?.map((item, index) => (
+          {userFilterList?.map((item, index) => (
             <CardWithSideIndicator
               key={item.id}
               active={item.id.toString() === activeUser}

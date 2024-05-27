@@ -9,12 +9,15 @@ export const editEmployee = async (payload: any) => {
 
   const updatedPayload = new URLSearchParams({
     ...payload,
+    monthly_salary: payload.salary_amount,
     shop_id: Number(shopId),
   });
 
   try {
+    console.log(updatedPayload);
     const res = await authApi.get(`/employee/edit?${updatedPayload}`);
     const data = await res.json();
+    console.log(data);
 
     if (res.ok) {
       return {

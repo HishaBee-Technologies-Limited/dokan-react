@@ -122,7 +122,8 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
     form.setValue('details', expense?.details ?? '');
     form.setValue('reason', expense?.purpose);
     form.setValue('images', expense?.image ?? '');
-    form.setValue('date', new Date(expense?.created_at ?? ''));
+    /* @ts-ignore */
+    expense?.created_at && form.setValue('date', expense?.created_at);
   }, [expense]);
   useEffect(() => {
     //get categories

@@ -76,6 +76,7 @@ const AddExpense = ({ categories }: { categories: ICategory[] }) => {
       details: '',
       reason: '',
       images: '',
+      date: new Date(),
     },
   });
 

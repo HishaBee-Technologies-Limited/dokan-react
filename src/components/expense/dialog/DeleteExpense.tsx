@@ -11,6 +11,7 @@ import { deleteExpense } from '@/actions/expense/deleteExpense';
 const DeleteTransaction = ({ expense }: { expense: IExpense }) => {
   const closeDialog = useExpenseStore((state) => state.setExpenseDialogState);
   console.log(expense);
+
   const handleDelete = async () => {
     const res = await deleteExpense(String(expense?.id!));
     console.log(res);

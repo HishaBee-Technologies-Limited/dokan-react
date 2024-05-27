@@ -11,7 +11,8 @@ export interface IUserResponse {
   updated_at: string;
   unique_id: string;
   other_info?: null | string;
-  salary?: string | undefined;
+  salary_amount?: string | undefined;
+  monthly_salary: string | undefined;
   // version: number;
   // supplied_items?: string | null,
 }

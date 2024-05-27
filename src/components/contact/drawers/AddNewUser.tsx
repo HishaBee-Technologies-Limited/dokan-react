@@ -51,6 +51,7 @@ const AddNewUser = () => {
       email: data.email as string,
       address: data.address as string,
       image_src: data.image_src,
+      salary_amount: data.salary,
     };
 
     const createNewUser = () => {
@@ -140,7 +141,22 @@ const AddNewUser = () => {
                 Phone Number <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Phone Number" {...field} />
+                <Input
+                  type="number"
+                  placeholder="Phone Number"
+                  maxLength={11}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    console.log(e.target.value.length);
+                    if (e.target.value.length <= 11) {
+                      const result = e.target?.value.replace(/\D/g, '');
+                      field.onChange(result);
+                    }
+                  }}
+                  ref={field.ref}
+                  value={field.value}
+
+                  // {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

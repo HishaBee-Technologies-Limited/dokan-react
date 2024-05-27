@@ -9,6 +9,8 @@ export const addEmployee = async (payload: any) => {
 
   const updatedPayload = new URLSearchParams({
     ...payload,
+    monthly_salary: payload.salary_amount,
+
     shop_id: Number(shopId),
   });
 

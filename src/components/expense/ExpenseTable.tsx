@@ -75,6 +75,7 @@ const ExpenseTable = ({ expenseList }: { expenseList: IExpense[] }) => {
                       variant={'transparent'}
                       onClick={(e) => {
                         e.stopPropagation();
+                        handleRowClick(expense);
                       }}
                     >
                       <MoreVertIcon />

@@ -43,7 +43,7 @@ const EditUser = () => {
       number: party?.mobile as string,
       address: party?.address ?? '',
       email: party?.email ?? '',
-      salary: party?.salary ?? '',
+      salary: party?.salary_amount ?? '',
     },
   });
 
@@ -53,7 +53,7 @@ const EditUser = () => {
     form.setValue('number', party?.mobile as string);
     form.setValue('address', party?.address as string);
     form.setValue('email', party?.email as string);
-    form.setValue('salary', party?.salary as string);
+    form.setValue('salary', party?.monthly_salary as string);
     form.setValue('image_src', party?.image_src as string);
   }, [party]);
 
@@ -66,6 +66,7 @@ const EditUser = () => {
       unique_id: party?.unique_id,
       id: party?.id,
       image_src: data.image_src,
+      salary_amount: data.salary,
     };
 
     console.log(party);

@@ -37,13 +37,8 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
   return (
     <div>
       <Text
-        title="Set up a PIN"
+        title="Welcome Back to Hishabee!"
         className="text-[2.8rem] font-semibold mb-space16"
-      />
-      <Text
-        title="Set up a 5 digit PIN number to keep your account secure."
-        variant="secondary"
-        className="mb-space32"
       />
 
       <div className="space-y-space8 mb-space24">
