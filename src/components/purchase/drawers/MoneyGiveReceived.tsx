@@ -141,7 +141,7 @@ const MoneyGiveReceived = ({
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const responseCreatePurchase = await createPurchase({
       batch: '',
-      created_at: formatDate(DATE_FORMATS.default),
+      created_at: formatDate(DATE_FORMATS.default, data.date),
       date: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
       discount_type: calculatedProducts.discountType ?? '',
@@ -163,7 +163,10 @@ const MoneyGiveReceived = ({
     });
 
     if (responseCreatePurchase?.success) {
-      console.log(responseCreatePurchase);
+      console.log(
+        formatDate(DATE_FORMATS.default, data.date),
+        formatDate(DATE_FORMATS.default)
+      );
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
           created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -186,8 +189,8 @@ const MoneyGiveReceived = ({
       });
 
       const amount = data.due
-        ? Number(data.due.due_amount) + Number(data.amount)
-        : Number(data.amount);
+        ? Number(data.due.due_amount) - Number(data.amount)
+        : -Number(data.amount);
 
       const payload = {
         // shop_id: Number(shop_id),
@@ -211,9 +214,9 @@ const MoneyGiveReceived = ({
       console.log('dueRes----', dueRes);
 
       const payloadForDueItem = {
-        amount: Number(data.amount),
+        amount: -Number(data.amount),
         unique_id: generateUlid(),
-        due_left: Number(data.amount),
+        due_left: -Number(data.amount),
         version: DEFAULT_STARTING_VERSION,
         updated_at: formatDate(DATE_FORMATS.default),
         created_at: formatDate(DATE_FORMATS.default),
@@ -416,12 +419,7 @@ const MoneyGiveReceived = ({
                   Amount <span className="text-error-100">*</span>{' '}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    disabled
-                    type="number"
-                    placeholder="Amount"
-                    {...field}
-                  />
+                  <Input type="number" placeholder="Amount" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

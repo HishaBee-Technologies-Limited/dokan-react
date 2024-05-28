@@ -31,14 +31,16 @@ export const authFetchAPI = (
 ) => {
   const cookieStore = cookies();
   const token = cookieStore.get('access_token');
+  const headers = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${token?.value}`,
+    Platform: 'WEB',
+  };
+  console.log('----header---', headers);
   return fetch(`${BaseURL}${url}`, {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: `Bearer ${token?.value}`,
-      Platform: 'WEB',
-    },
+    headers,
     ...(method === 'POST' && {
       body: JSON.stringify({
         ...payload,

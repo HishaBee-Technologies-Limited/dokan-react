@@ -23,7 +23,7 @@ export const getAllDueHistory = async (params: IGetAllDueHistory) => {
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data.data.data as IDueItemsResponse[],
+        data: data.data as IDueItemsResponse[],
         metadata: data.metadata,
       };
     }

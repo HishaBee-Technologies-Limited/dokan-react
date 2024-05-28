@@ -7,7 +7,7 @@ const HistoryReport = ({ totalValues }: { totalValues: any }) => {
 
   return (
     <div className="grid lg:grid-cols-2 gap-space16">
-      <div className="flex justify-between items-center gap-space12 bg-error-10 dark:bg-primary-90 border border-error-80 rounded-lg p-space12">
+      {/* <div className="flex justify-between items-center gap-space12 bg-error-10 dark:bg-primary-90 border border-error-80 rounded-lg p-space12">
         <article className="space-y-space4">
           <Text title="দিয়েছি" variant="error" className="text-xs sm:text-sm" />
           <Text
@@ -62,9 +62,9 @@ const HistoryReport = ({ totalValues }: { totalValues: any }) => {
             }
           />
         </article>
-      </div>
+      </div> */}
 
-      <div className="flex justify-between items-center gap-space12 bg-success-10 dark:bg-primary-90 border border-success-80 rounded-lg p-space12">
+      {/* <div className="flex justify-between items-center gap-space12 bg-success-10 dark:bg-primary-90 border border-success-80 rounded-lg p-space12">
         <article className="space-y-space4">
           <Text
             title="নিয়েছি"
@@ -119,7 +119,7 @@ const HistoryReport = ({ totalValues }: { totalValues: any }) => {
             }
           />
         </article>
-      </div>
+      </div> */}
     </div>
   );
 };

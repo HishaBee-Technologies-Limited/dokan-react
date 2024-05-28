@@ -79,7 +79,7 @@ const MoneyGiveReceived = () => {
     const amountPos = Number(due?.due_amount) + Number(data.amount);
     const amountNeg = Number(due?.due_amount) - Number(data.amount);
 
-    const amount = data.cash_type === 'given' ? amountNeg : amountPos;
+    const amount = cashStatus === 'Given' ? amountPos : amountNeg;
 
     const payload = {
       // shop_id: Number(shop_id),
@@ -100,7 +100,7 @@ const MoneyGiveReceived = () => {
     console.log('dueRes----', dueRes);
     const payloadForDueItem = {
       amount:
-        cashStatus === 'Given' ? -Number(data.amount) : Number(data.amount),
+        cashStatus === 'Given' ? Number(data.amount) : -Number(data.amount),
       unique_id: generateUlid(),
       due_left: Number(data.amount),
       version: DEFAULT_STARTING_VERSION,

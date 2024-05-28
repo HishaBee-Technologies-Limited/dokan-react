@@ -170,7 +170,7 @@ const MoneyGiveReceived = ({
     if (responseCreateSell?.success) {
       calculatedProducts.products.forEach(async (product) => {
         sellItemCreate({
-          created_at: formatDate(DATE_FORMATS.default),
+          created_at: formatDate(DATE_FORMATS.default, data.date),
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
@@ -202,8 +202,8 @@ const MoneyGiveReceived = ({
     const shop_id = getCookie('shopId') as string;
     console.log('shopId----', shop_id);
     const amount = data.due
-      ? Number(data.due.due_amount) - Number(data.amount)
-      : -Number(data.amount);
+      ? Number(data.due.due_amount) + Number(data.amount)
+      : Number(data.amount);
     const payload = {
       shop_id: Number(shop_id),
       amount: amount,
@@ -228,9 +228,9 @@ const MoneyGiveReceived = ({
 
     if (dueRes?.success) {
       const payload = {
-        amount: -Number(data.amount),
+        amount: Number(data.amount),
         unique_id: generateUlid(),
-        due_left: -Number(data.amount),
+        due_left: Number(data.amount),
         version: DEFAULT_STARTING_VERSION,
         updated_at: formatDate(DATE_FORMATS.default),
         created_at: formatDate(DATE_FORMATS.default),
@@ -251,7 +251,7 @@ const MoneyGiveReceived = ({
 
     setCalculatedProducts({
       ...calculatedProducts,
-      paymentAmount: -Number(data.amount),
+      paymentAmount: 0,
       date: formatDate(DATE_FORMATS.default, data.date),
     });
     handleSellDrawer({ open: false });
@@ -422,12 +422,7 @@ const MoneyGiveReceived = ({
                   Amount <span className="text-error-100">*</span>{' '}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    disabled
-                    type="number"
-                    placeholder="Amount"
-                    {...field}
-                  />
+                  <Input type="number" placeholder="Amount" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

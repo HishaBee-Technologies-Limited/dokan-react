@@ -16,12 +16,12 @@ const DueHeader = () => {
       <PageTitle title="Due List" />
 
       <div className="flex gap-space12 grow-[1] sm:grow-0">
-        {/* <Link href="/due/history">
+        <Link href="/due/history">
           <Button variant={'secondary'}>
             <HistoryIcon />
             <span>Due History</span>
           </Button>
-        </Link> */}
+        </Link>
 
         <Button
           className="grow"

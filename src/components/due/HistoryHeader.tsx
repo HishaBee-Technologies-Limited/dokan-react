@@ -71,16 +71,16 @@ const HistoryHeader = () => {
                     </SelectContent>
                 </Select> */}
 
-        <DateRangePicker
+        {/* <DateRangePicker
           onChange={(date) => handleDateRange(date)}
           triggerClasses="!h-[4.8rem]"
-        />
+        /> */}
 
-        <PDFDownloader name="Due_history_pdf">
+        {/* <PDFDownloader name="Due_history_pdf">
           <DueHistoryPDF />
-        </PDFDownloader>
+        </PDFDownloader> */}
 
-        <DueHistoryPDF />
+        {/* <DueHistoryPDF /> */}
       </div>
     </div>
   );

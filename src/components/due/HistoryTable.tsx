@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/table';
 
 const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
+  console.log(dueList);
   return (
     <ScrollArea className="pb-space8">
       <Table wrapperClass="rounded-md border border-color min-w-[80rem]">
@@ -30,7 +31,7 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
 
         <TableBody>
           {dueList?.map((item, i) => (
-            <TableRow key={item.id}>
+            <TableRow className="cursor-pointer" key={item.id}>
               <TableCell>
                 <div className="flex items-center gap-space8">
                   <FallBackImage
@@ -61,9 +62,9 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
 
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={5} className="text-center">
+            {/* <TableCell colSpan={5} className="text-center">
               Showing 10 of 100 Transactions
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         </TableFooter>
       </Table>

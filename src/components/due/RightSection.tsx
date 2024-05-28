@@ -53,6 +53,7 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
       handleDialogOpen({ open: true, header: DueEnum.SELECT_DUE_TYPE });
     }
   };
+  console.log(dueItems);
 
   return (
     <Card className="h-full lg:w-8/12 flex flex-col gap-space8">
@@ -82,9 +83,9 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
               className="text-sm font-medium"
             />
             <Text
-              title={`৳ ${dueItems && dueItems[0]?.due.due_amount}`}
+              title={`৳ ${dueItems && Math.abs(dueItems[0]?.due.due_amount)}`}
               className="font-semibold text-lg"
-              variant="success"
+              variant={dueItems[0]?.due.due_amount > 0 ? 'error' : 'success'}
             />
           </article>
         </div>
@@ -120,28 +121,20 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
 
           <article className="sm:w-1/2 md:pl-space16 flex justify-between gap-space16">
             <Text
-              title={`৳ ${dueItems
-                ?.filter((item) => item.amount > 0)
-                .reduce((acc, item) => {
-                  return acc + item.amount;
-                }, 0)}`}
+              title={`৳ ${Math.abs(dueItems[dueItems.length - 1].neg_balance)}`}
               variant="success"
               className="text-sm font-bold"
             />
             <Text
-              title={`৳ ${dueItems
-                ?.filter((item) => item.amount < 0)
-                .reduce((acc, item) => {
-                  return acc + item.amount;
-                }, 0)}`}
+              title={`৳ ${Math.abs(dueItems[dueItems.length - 1].pos_balance)}`}
               variant="error"
               className="text-sm font-bold"
             />
             <Text
               className="text-sm font-bold"
-              title={`৳ ${dueItems && dueItems[0]?.due.due_amount}`}
+              title={`৳ ${dueItems && Math.abs(dueItems[0]?.due.due_amount)}`}
               variant={
-                dueItems && dueItems[0]?.due.due_amount > 0
+                dueItems && dueItems[dueItems.length - 1]?.due.due_amount < 0
                   ? 'success'
                   : 'error'
               }

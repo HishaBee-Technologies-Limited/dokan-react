@@ -17,12 +17,13 @@ export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
     if (index === 1) {
       totalBalance =
         amount > 0
-          ? amount + dueItems[index - 1]?.amount
-          : dueItems[index - 1]?.amount + amount;
+          ? amount + dueItems[0]?.amount
+          : dueItems[0]?.amount + amount;
 
       return totalBalance;
     } else {
-      totalBalance = amount > 0 ? amount + totalBalance : totalBalance - amount;
+      console.log(amount);
+      totalBalance = amount > 0 ? amount - totalBalance : totalBalance + amount;
 
       return totalBalance;
     }
@@ -50,17 +51,17 @@ export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
                   {row?.note ? row.note : '---'}
                 </TableCell>
                 <TableCell className={`text-success-100`}>
-                  {row.amount > 0 ? row.amount : ''}
+                  {row.amount < 0 ? Math.abs(row.amount) : ''}
                 </TableCell>
                 <TableCell className={`text-error-100`}>
-                  {row.amount < 0 ? row.amount : ''}
+                  {row.amount > 0 ? row.amount : ''}
                 </TableCell>
                 <TableCell
                   className={`${
-                    row.amount > 0 ? 'text-success-100' : 'text-error-100'
+                    row.amount < 0 ? 'text-success-100' : 'text-error-100'
                   } text-right`}
                 >
-                  {row.amount}
+                  {Math.abs(row.amount)}
                 </TableCell>
               </TableRow>
             );
@@ -70,20 +71,19 @@ export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
                 <TableCell>{row.created_at}</TableCell>
                 <TableCell>{row?.note ? row.note : '---'}</TableCell>
                 <TableCell className={`text-success-100`}>
-                  {row.amount > 0 ? row.amount : ''}
+                  {row.amount < 0 ? Math.abs(row.amount) : ''}
                 </TableCell>
                 <TableCell className={`text-error-100`}>
-                  {row.amount < 0 ? row.amount : ''}
+                  {row.amount > 0 ? row.amount : ''}
                 </TableCell>
                 <TableCell
                   className={`${
-                    row.amount + dueItems[i - 1]?.amount ||
-                    dueItems[i - 1]?.amount + row.amount > 0
-                      ? 'text-success-100'
-                      : 'text-error-100'
+                    row.pos_balance + row.neg_balance > 0
+                      ? 'text-error-100'
+                      : 'text-success-100'
                   } text-right`}
                 >
-                  {calculateBalance(row.amount, i)}
+                  {Math.abs(row.pos_balance + row.neg_balance)}
                 </TableCell>
               </TableRow>
             );

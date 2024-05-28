@@ -114,7 +114,7 @@ const AddMoneyGiveReceived = ({
       ? Number(data.due.due_amount) - Number(data.amount)
       : -Number(data.amount);
 
-    const amount = data.cash_type === 'given' ? amountNeg : amountPos;
+    const amount = data.cash_type === 'given' ? amountPos : amountNeg;
 
     const payload = {
       // shop_id: Number(shop_id),

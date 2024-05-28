@@ -52,9 +52,9 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
 
   const checkDueValue = (value: number): 'success' | 'error' | undefined => {
     if (value > 0) {
-      return 'success';
-    } else if (value < 0) {
       return 'error';
+    } else if (value < 0) {
+      return 'success';
     }
   };
 
@@ -149,16 +149,13 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
                         <Text
                           className="font-medium"
                           variant={checkDueValue(item.due_amount)}
-                          title={`${
-                            checkDueValue(item.due_amount) === 'success'
-                              ? '+'
-                              : ''
-                          }${item.due_amount}`}
+                          title={`
+                          ${Math.abs(item.due_amount)}`}
                         />
                         <Text
                           title={
                             checkDueValue(item.due_amount) === 'success'
-                              ? 'Taken'
+                              ? 'Received'
                               : 'Given'
                           }
                           variant="white"
