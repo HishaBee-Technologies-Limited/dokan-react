@@ -1,9 +1,26 @@
 /** @type {import('next').NextConfig} */
 import createNextIntlPlugin from 'next-intl/plugin';
+import pino from 'pino';
+
+const logger = (defaultConfig) =>
+  pino({
+    ...defaultConfig,
+    messageKey: 'message',
+    mixin: () => ({ name: 'custom-pino-instance' }),
+    transport: {
+      options: {
+        colorize: true,
+      },
+    },
+  });
 
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ['pino', 'pino-pretty'],
+  },
+
   logging: {
     fetches: {
       fullUrl: true,

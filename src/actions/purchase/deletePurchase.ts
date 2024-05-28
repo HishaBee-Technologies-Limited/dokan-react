@@ -44,7 +44,7 @@ export const deletePurchase = async ({
 
     const res = await authApi.post(`/purchase`, payload);
     const data = await res.json();
-    revalidatePath('/purchase/history');
+    revalidatePath('/purchase-list');
 
     if (res.ok) {
       return {

@@ -92,7 +92,7 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                           subMenu ? active : active === menu.id ? null : menu.id
                         );
                       }}
-                      className={`flex items-center p-space8 w-full hover:bg-primary-10 dark:hover:bg-[#171717] duration-300 rounded-md relative after:absolute after:w-[.4rem] hover:after:h-full after:duration-300 after:rounded-[1rem] after:-left-3 after:top-1/2 after:transform after:-translate-y-1/2 after:bg-primary-100 dark:after:bg-primary-60 ${pathname.includes(menu.link) || active === menu.id ? 'after:h-full bg-primary-10 dark:bg-[#171717]' : 'after:h-0'}`}
+                      className={`flex items-center p-space8 w-full hover:bg-primary-10 dark:hover:bg-[#171717] duration-300 rounded-md relative after:absolute after:w-[.4rem] hover:after:h-full after:duration-300 after:rounded-[1rem] after:-left-3 after:top-1/2 after:transform after:-translate-y-1/2 after:bg-primary-100 dark:after:bg-primary-60 ${(pathname.includes(menu.link) && !pathname.includes('list')) || active === menu.id ? 'after:h-full bg-primary-10 dark:bg-[#171717]' : 'after:h-0'}`}
                     >
                       <Image src={menu.image} alt="" height={24} width={24} />
                       <span

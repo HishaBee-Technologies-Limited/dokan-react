@@ -24,6 +24,7 @@ export interface IProductPurchasePayload {
   user_id?: number;
   version: number;
   discount_type: string;
+  sms: string | null;
 }
 
 export type PaymentStatusDef = 'PAID' | 'UNPAID';

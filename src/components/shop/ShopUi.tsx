@@ -46,6 +46,8 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
     const shopString = JSON.stringify({
       sms_count: shop.sms_count,
       subscription: shop.package,
+      name: shop.name,
+      number: shop.public_number,
     });
     setCookie('shopId', shop?.id);
     setCookie('shop', shopString);

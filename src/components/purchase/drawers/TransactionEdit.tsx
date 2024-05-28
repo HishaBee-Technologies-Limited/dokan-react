@@ -144,6 +144,7 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: currentPurchase?.version ? currentPurchase?.version + 1 : 0,
+      sms: data.sms ? 'sms' : null,
     });
 
     if (currentPurchase?.payment_status === PAYMENT_STATUS.unpaid) {

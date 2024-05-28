@@ -64,7 +64,7 @@ export const createSell = async ({
 
     const res = await authApi.post(`/transaction`, payload);
     const data = await res.json();
-    revalidatePath('/sell/history');
+    revalidatePath('/sell-list');
 
     console.log(data);
 

@@ -51,6 +51,8 @@ import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 import { toast } from 'sonner';
 import { PurchaseEnum } from '@/enum/purchase';
 import { jwtDecode } from 'jwt-decode';
+import { logger } from '../../../../Pino';
+import { PURCHASE_SMS } from '@/lib/sms-text';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -80,7 +82,7 @@ const ConfirmPayment = () => {
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
   );
-  const cookie = getCookie('shop');
+  const shop = getCookie('shop');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -127,6 +129,16 @@ const ConfirmPayment = () => {
   }, [selectedSupplier, form, selectedEmployee]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const sms = data.sms
+      ? PURCHASE_SMS({
+          amount: data.amount,
+          payment: String(calculatedProducts.paymentAmount)!,
+          due: '0',
+          shopName: JSON.parse(shop!).name,
+          shopNumber: JSON.parse(shop!).number,
+        })
+      : null;
+    console.log(sms);
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -149,7 +161,7 @@ const ConfirmPayment = () => {
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
-      // sms:
+      sms: sms,
     });
 
     if (responseCreatePurchase?.success) {
@@ -195,6 +207,7 @@ const ConfirmPayment = () => {
   );
 
   console.log(totalItems);
+  logger.info('Total items', shop);
 
   useEffect(() => {
     const fetchSuppliersAndEmployees = async () => {
@@ -480,7 +493,7 @@ const ConfirmPayment = () => {
               className="text-sm font-medium flex items-center gap-space4 bg-success-10 py-space4 px-space12 rounded-full"
             >
               <Icon icon="material-symbols:sms" />
-              SMS Balance {cookie ? JSON.parse(cookie).sms_count : 0}
+              SMS Balance {shop ? JSON.parse(shop).sms_count : 0}
             </Text>
           </div>
 

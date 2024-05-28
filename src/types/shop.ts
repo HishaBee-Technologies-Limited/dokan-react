@@ -12,6 +12,7 @@ export interface IShopResponse {
     plus_package: string;
   };
   logo_url: string;
+  public_number: string;
 }
 
 export interface IArea {

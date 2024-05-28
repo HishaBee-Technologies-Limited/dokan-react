@@ -44,7 +44,7 @@ export const deleteTransaction = async ({
 
     const res = await authApi.post(`/transaction`, payload);
     const data = await res.json();
-    revalidatePath('/purchase/history');
+    revalidatePath('/purchase-list');
 
     if (res.ok) {
       return {

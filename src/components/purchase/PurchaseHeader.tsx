@@ -10,12 +10,12 @@ const PurchaseHeader = () => {
     <div className="flex flex-wrap gap-space16 justify-between items-center">
       <PageTitle title="Select Products to Purchase" />
 
-      <Link href="/transaction-history">
+      {/* <Link href="/transaction-history">
         <Button variant={'secondary'}>
           <HistoryIcon />
           History
         </Button>
-      </Link>
+      </Link> */}
     </div>
   );
 };

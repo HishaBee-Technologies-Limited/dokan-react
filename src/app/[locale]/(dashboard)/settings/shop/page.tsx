@@ -44,7 +44,9 @@ const SwitchShopPage = () => {
     console.log(selectShop);
     const shopString = JSON.stringify({
       sms_count: shop.sms_count,
-      subscription: shop.subscription,
+      subscription: shop.package,
+      name: shop.name,
+      number: shop.public_number,
     });
     console.log(shop);
     setCookie('shopId', shop?.id);

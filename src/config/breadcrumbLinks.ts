@@ -17,7 +17,7 @@ const breadCrumbLinks = [
   },
   {
     label: 'Sell History',
-    link: '/sell/history',
+    link: '/sell-list',
   },
   // Purchase
   {
@@ -26,7 +26,7 @@ const breadCrumbLinks = [
   },
   {
     label: 'Purchase History',
-    link: '/purchase/history',
+    link: '/purchase-list',
   },
   // Due
   {

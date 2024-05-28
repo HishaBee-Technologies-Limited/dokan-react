@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { IProductPayload } from '@/types/product';
 import { IProductPurchasePayload } from '@/types/purchase';
 import { revalidatePath } from 'next/cache';
+import { logger } from '../../../Pino';
 
 export const createPurchase = async ({
   batch,
@@ -29,6 +30,7 @@ export const createPurchase = async ({
   updated_at,
   user_id,
   version,
+  sms,
 }: IProductPurchasePayload) => {
   try {
     const shopId = cookies().get('shopId')?.value;
@@ -56,11 +58,12 @@ export const createPurchase = async ({
       total_price: total_price,
       user_id: user_id,
       discount_type: discount_type,
+      sms: sms,
     };
-
+    console.log(JSON.stringify(payload, null, 4));
     const res = await authApi.post(`/purchase`, payload);
     const data = await res.json();
-    revalidatePath('/purchase/history');
+    revalidatePath('/purchase-list');
 
     if (res.ok) {
       return {
