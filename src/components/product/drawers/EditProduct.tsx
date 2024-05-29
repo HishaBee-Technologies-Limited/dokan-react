@@ -163,9 +163,7 @@ export const EditProduct = ({
       form.setValue('bulk_sell_check', true);
     form.setValue('category', String(category?.id));
     setInitialSubCategory(String(product?.sub_category?.id));
-    if (product?.gallery) {
-      console.log(JSON.parse(product?.gallery));
-    }
+
     /*@ts-ignore*/
     // product?.gallery && saveImageUrls(JSON.parse(product?.gallery));
   }, [product, category]);
