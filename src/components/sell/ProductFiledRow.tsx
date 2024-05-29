@@ -57,14 +57,49 @@ const ProductFiledRow = (props: IProps) => {
       `products.${props.index}.product-${props.data?.id}.unit_price`
     );
 
+    if (props.data?.wholesale_amount) {
+      if (Number(quantityValue) >= props.data?.wholesale_amount!) {
+        props.form.setValue(
+          `products.${props.index}.product-${props.data?.id}.unit_price`,
+          String(props.data?.wholesale_price)
+        );
+      } else {
+        props.form.setValue(
+          `products.${props.index}.product-${props.data?.id}.unit_price`,
+          String(props.data?.selling_price)
+        );
+      }
+    } else {
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.unit_price`,
+        String(props.data?.selling_price)
+      );
+    }
+
     if (quantityValue && unitPrice) {
       /**
        * set the total value base on the change of the quantity
        */
-      props.form.setValue(
-        `products.${props.index}.product-${props.data?.id}.total`,
-        Number(quantityValue) * Number(unitPrice)
-      );
+
+      if (props.data?.wholesale_amount) {
+        if (Number(quantityValue) >= props.data?.wholesale_amount!) {
+          props.form.setValue(
+            `products.${props.index}.product-${props.data?.id}.total`,
+            Number(quantityValue) * Number(props.data?.wholesale_price)
+          );
+        }
+        if (Number(quantityValue) < props.data?.wholesale_amount) {
+          props.form.setValue(
+            `products.${props.index}.product-${props.data?.id}.total`,
+            Number(quantityValue) * Number(props.data?.selling_price)
+          );
+        }
+      } else {
+        props.form.setValue(
+          `products.${props.index}.product-${props.data?.id}.total`,
+          Number(quantityValue) * Number(props.data?.selling_price)
+        );
+      }
     }
   }, [quantityWatch]);
 
@@ -81,6 +116,8 @@ const ProductFiledRow = (props: IProps) => {
       String(props.data?.selling_price)
     );
   }, [props.data, props.form]);
+
+  console.log(quantityWatch);
 
   return (
     <div className="border-b border-dashed border-color pt-space8 pb-space12 space-y-space6 ">
@@ -135,6 +172,12 @@ const ProductFiledRow = (props: IProps) => {
             <FormItem className="space-y-0 w-full">
               <FormLabel>
                 Unit Price <span className="text-error-100">*</span>{' '}
+                {props.data?.wholesale_amount &&
+                  Number(quantityWatch) >= props.data?.wholesale_amount && (
+                    <span className="text-orange-400 text-sm">
+                      (Whole Sale Rate)
+                    </span>
+                  )}
               </FormLabel>
               <FormControl>
                 <Input disabled={true} placeholder="Unit Price" {...field} />

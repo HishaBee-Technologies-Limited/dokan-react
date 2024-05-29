@@ -51,7 +51,7 @@ const SwitchShopPage = () => {
     console.log(shop);
     setCookie('shopId', shop?.id);
     setCookie('shop', shopString);
-    window.location.reload();
+    // window.location.reload();
     router.refresh();
   };
 

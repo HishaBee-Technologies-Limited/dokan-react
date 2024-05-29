@@ -258,6 +258,9 @@ export const EditProduct = ({
             name="purchase_price"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>
+                  Purchase Price <span className="text-error-100">*</span>{' '}
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Purchase Price" {...field} />
                 </FormControl>
@@ -269,6 +272,9 @@ export const EditProduct = ({
             name="sell_price"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>
+                  Sell Price <span className="text-error-100">*</span>{' '}
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Sell Price" {...field} />
                 </FormControl>

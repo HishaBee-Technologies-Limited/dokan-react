@@ -31,7 +31,6 @@ export const RightSection = ({
   const { setContactDrawerState, setParty, party } = useContactStore(
     (state) => state
   );
-  console.log(party);
   return (
     <Card className="h-full lg:w-8/12">
       <div className="px-space16 my-space8 border-b border-primary-20 dark:border-primary-80">

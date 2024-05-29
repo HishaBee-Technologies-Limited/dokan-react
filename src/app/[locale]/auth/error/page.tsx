@@ -1,6 +1,8 @@
 'use client';
 import Icon from '@/components/common/Icon';
 import { Text } from '@/components/common/text';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 export default function Error() {
@@ -20,6 +22,9 @@ export default function Error() {
             variant="error"
           />
         </div>
+        <Link href="/auth" className="p-2 bg-slate-500 px-6 rounded-sm ">
+          Back
+        </Link>
         <Text
           title="Something is Wrong"
           variant="secondary"
