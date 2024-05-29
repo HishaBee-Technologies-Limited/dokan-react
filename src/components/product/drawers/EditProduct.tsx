@@ -37,6 +37,7 @@ import { useFileUpload } from '@/hooks/uploadMultipleFile';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { formatDate } from '@/lib/utils';
 import { useProductStore } from '@/stores/useProductStore';
+import { Textarea } from '@/components/ui/textarea';
 
 export const EditProduct = ({
   product,
@@ -52,6 +53,7 @@ export const EditProduct = ({
     defaultValues: {
       files: [],
       discount_type: 'AMOUNT',
+      warranty_type: WARRANTY_TYPE[0].value,
     },
   });
   const router = useRouter();
@@ -84,12 +86,15 @@ export const EditProduct = ({
       cost_price: data.purchase_price,
       sell_online: data.online_sell,
       stock: Number(data.stock),
-      gallery: `[${imageUrls}]`,
-      image_url: imageUrls.length ? imageUrls[0] : '',
+      /*@ts-ignore*/
+      gallery: imageUrls.length ? JSON.stringify(imageUrls) : product?.gallery,
+      image_url: imageUrls.length ? imageUrls[0] : product.image_url,
       ...(product.version && { version: product.version + 1 }),
       ...(product.created_at && { created_at: product.created_at }),
       updated_at: formatDate(DATE_FORMATS.default),
-      sub_category: Number(data.sub_category),
+      sub_category: data.sub_category?.length
+        ? Number(data.sub_category)
+        : product.sub_category,
       wholesale_amount: Number(data.bulk_quantity),
       wholesale_price: Number(data.bulk_price),
       stock_alert: Number(data.low_stock),
@@ -97,7 +102,7 @@ export const EditProduct = ({
       warranty_type: data.warranty_type,
       discount: data.discount,
       discount_type: data.discount_type,
-      // description: ,
+      description: data.details,
       vat_applicable: data.vat_check,
       vat_percent: Number(data.vat_percentage),
       unique_id: product.unique_id,
@@ -138,12 +143,19 @@ export const EditProduct = ({
       form.setValue('vat_percentage', String(product?.wholesale_price ?? '')),
       form.setValue('warranty_duration', String(product?.warranty ?? '')),
       form.setValue('discount', String(product?.discount ?? '')),
-      form.setValue('warranty_type', product?.warranty_type),
-      form.setValue('discount_type', product?.discount_type),
+      form.setValue(
+        'warranty_type',
+        product?.warranty_type ? product?.warranty_type : WARRANTY_TYPE[0].value
+      ),
+      form.setValue(
+        'discount_type',
+        product?.discount_type ? product?.discount_type : 'AMOUNT'
+      ),
       form.setValue('sub_category', String(product?.sub_category?.id)),
       form.setValue('unit', String(product?.unit)),
-      // boolean
-      form.setValue('online_sell', product?.sell_online ?? false),
+      form.setValue('details', product?.description ?? '');
+    // boolean
+    form.setValue('online_sell', product?.sell_online ?? false),
       form.setValue('low_stock_check', true),
       form.setValue('vat_check', product?.vat_applicable ?? false),
       form.setValue('warranty_check', true),
@@ -151,8 +163,11 @@ export const EditProduct = ({
       form.setValue('bulk_sell_check', true);
     form.setValue('category', String(category?.id));
     setInitialSubCategory(String(product?.sub_category?.id));
+    if (product?.gallery) {
+      console.log(JSON.parse(product?.gallery));
+    }
     /*@ts-ignore*/
-    product?.gallery && saveImageUrls(JSON.parse(product?.gallery));
+    // product?.gallery && saveImageUrls(JSON.parse(product?.gallery));
   }, [product, category]);
   // console.log(product);
   return (
@@ -378,6 +393,25 @@ export const EditProduct = ({
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="details"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Details</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Save detail of you product"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Text
           title="Others"

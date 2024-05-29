@@ -36,6 +36,7 @@ export const ProductSchema = z.object({
   warranty_type: z.string().optional(),
   discount: z.string().optional(),
   discount_type: z.string().optional(),
+  details: z.string().optional(),
   // boolean
   online_sell: z.boolean().optional(),
   low_stock_check: z.boolean().optional(),

@@ -12,6 +12,9 @@ const anek_bangla = Anek_Bangla({
 export const metadata: Metadata = {
   title: appConfig.title,
   description: appConfig.description,
+  icons: {
+    icon: '/images/favicon-16x16.png',
+  },
 };
 
 export default function RootLayout({

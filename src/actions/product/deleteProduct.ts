@@ -5,6 +5,7 @@ import { DATE_FORMATS } from '@/lib/constants/common';
 import { DEFAULT_DELETE_VERSION } from '@/lib/constants/product';
 import { formatDate } from '@/lib/utils';
 import { IProduct, IProductPayload } from '@/types/product';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export const deleteProduct = async (product: IProduct) => {
@@ -12,9 +13,11 @@ export const deleteProduct = async (product: IProduct) => {
     const shopId = cookies().get('shopId')?.value;
 
     const res = await authApi.post(
-      `/product?product_type=${product.product_type}&selling_price=${product.selling_price}&name=${product.name}&shop_id=${shopId}unique_id${product.unique_id}&version=${DEFAULT_DELETE_VERSION}&updated_at=${formatDate(DATE_FORMATS.default)}`
+      `/product?product_type=${product.product_type}&selling_price=${product.selling_price}&name=${product.name}&shop_id=${shopId}&unique_id=${product.unique_id}&version=${DEFAULT_DELETE_VERSION}&updated_at=${formatDate(DATE_FORMATS.default)}&created_at=${product.created_at}`
     );
     const data = await res.json();
+
+    revalidatePath('/product');
 
     console.log(data);
 

@@ -55,12 +55,7 @@ export const ProductTable = ({
             <TableRow key={product?.id} onClick={() => handleRowClick(product)}>
               <TableCell>
                 <div className="gap-space8 flex items-center">
-                  <Image
-                    src={product?.image_url}
-                    alt=""
-                    height={40}
-                    width={40}
-                  />
+                  <img src={product?.image_url} alt="" height={40} width={40} />
 
                   <Text title={product.name} className="text-sm" />
                 </div>

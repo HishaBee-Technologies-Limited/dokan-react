@@ -63,7 +63,7 @@ export const createProductOrUpdate = async ({
       ...(warranty && { warranty }),
       ...(warranty_type && { warranty_type }),
       ...(discount && { discount }),
-      ...(discount_type && { discount }),
+      ...(discount_type && { discount_type }),
       ...(created_at && { created_at }),
       ...(updated_at && { updated_at }),
       ...(version && { version }),

@@ -23,6 +23,7 @@ import { IProduct } from '@/types/product';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { productProfitCalculation } from '@/lib/utils';
+import { DISCOUNT_TYPE, WARRANTY_TYPE } from '@/lib/constants/product';
 
 export const ProductDetails = ({ product }: { product: IProduct }) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
@@ -117,7 +118,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
             </article>
             <article className="px-space12 py-space8 space-y-space4 bg-primary-10 dark:bg-primary-80 rounded-lg">
               <Text
-                title={`total profit`}
+                title={`profit`}
                 variant="secondary"
                 className="text-xs font-semibold uppercase"
               />
@@ -150,7 +151,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(Number(product?.discount) ?? 'N/A')}
+                title={`${product.discount_type === DISCOUNT_TYPE[0].value ? '%' : '৳'} ${Number(product?.discount) ?? 'N/A'}`}
                 className="font-semibold"
               />
             </article>
@@ -191,7 +192,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(product?.warranty ?? 'N/A')}
+                title={`${Number(product?.warranty) ?? 'N/A'} ${WARRANTY_TYPE.find((type) => type.value === product.warranty_type)?.name}`}
                 className="font-semibold"
               />
             </article>

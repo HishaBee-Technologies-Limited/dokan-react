@@ -23,7 +23,7 @@ export function productProfitCalculation(
   stock: number
 ): number {
   const perProductPrice = sellPrice - buyPrice;
-  return stock * perProductPrice;
+  return perProductPrice;
 }
 
 /**

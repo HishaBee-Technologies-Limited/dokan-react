@@ -42,6 +42,7 @@ import { DATE_FORMATS } from '@/lib/constants/common';
 import { formatDate } from '@/lib/utils';
 import { useProductStore } from '@/stores/useProductStore';
 import { toast } from 'sonner';
+import { Textarea } from '@/components/ui/textarea';
 
 export const AddProduct = ({
   units,
@@ -64,8 +65,10 @@ export const AddProduct = ({
       low_stock: '',
       vat_percentage: '',
       warranty_duration: '',
+      warranty_type: WARRANTY_TYPE[0].value,
       discount: '',
       discount_type: 'AMOUNT',
+      details: '',
       // boolean
       online_sell: false,
       low_stock_check: false,
@@ -111,6 +114,7 @@ export const AddProduct = ({
       discount_type: data.discount_type,
       gallery: imageUrls.length ? JSON.stringify(imageUrls) : '',
       image_url: imageUrls.length ? imageUrls[0] : '',
+      description: data.details,
       // description: ,
       vat_applicable: data.vat_check,
       vat_percent: Number(data.vat_percentage),
@@ -362,6 +366,25 @@ export const AddProduct = ({
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="details"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Details</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Save detail of you product"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Text
           title="Others"

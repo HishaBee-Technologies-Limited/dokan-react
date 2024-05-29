@@ -53,6 +53,7 @@ export const getShopsProducts = async ({ params }: GetShopsProductsDef) => {
           per_page: '10',
           category: 'true',
           s_query: params?.search ?? '',
+          exclude_deleted: 'true',
         })
     );
 
