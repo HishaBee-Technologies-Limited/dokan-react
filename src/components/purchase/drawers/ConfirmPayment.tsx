@@ -39,7 +39,7 @@ import {
 } from '@radix-ui/react-popover';
 import { cn, formatDate, generateUlid } from '@/lib/utils';
 import { format } from 'date-fns';
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Calendar } from '@/components/ui/calendar';
 import {
   DATE_FORMATS,
@@ -78,6 +78,7 @@ const ConfirmPayment = () => {
   const calculatedProducts = usePurchase((state) => state.calculatedProducts);
   const [suppliers, setSuppliers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
+  const [loading, setLoading] = useState(false);
   const tkn = getCookie('access_token');
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
@@ -129,6 +130,7 @@ const ConfirmPayment = () => {
   }, [selectedSupplier, form, selectedEmployee]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    setLoading(true);
     const sms = data.sms
       ? PURCHASE_SMS({
           amount: data.amount,
@@ -371,7 +373,7 @@ const ConfirmPayment = () => {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="supplier_number"
                 render={({ field }) => (
@@ -382,92 +384,7 @@ const ConfirmPayment = () => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <FormField
-            control={form.control}
-            name="employee_info"
-            render={({ field }) => (
-              <FormItem className="flex justify-between items-center gap-space8">
-                <FormLabel>
-                  <Text title="Employee information" className="text-sm" />
-                </FormLabel>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <div
-            className={`grid ${
-              form.watch('employee_info')
-                ? 'grid-rows-[1fr]'
-                : 'grid-rows-[0fr]'
-            } duration-500`}
-          >
-            <div
-              className={`${
-                form.watch('employee_info') ? 'p-space8' : 'overflow-hidden'
-              } overflow-hidden space-y-space12`}
-            >
-              <FormField
-                control={form.control}
-                name="employee"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="">
-                          <SelectValue placeholder="Employee" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <div className="max-h-[24rem] overflow-y-scroll">
-                          {employees?.map((employee) => (
-                            <SelectItem
-                              key={employee.unique_id}
-                              value={`${employee.name}-${employee.mobile}`}
-                            >
-                              {employee.name}
-                            </SelectItem>
-                          ))}
-                        </div>
-
-                        {/* <Button
-                                        variant={'secondary'}
-                                        onClick={() => handleAddNewCategory({ open: true, header: ExpenseEnum.ADD_NEW_CATEGORY })}
-                                        className="border-x-0 border-b-0 rounded-none w-full sticky -bottom-space6" >
-                                        Add Customer
-                                    </Button> */}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="employee_number"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Number" className="" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -497,8 +414,9 @@ const ConfirmPayment = () => {
             </Text>
           </div>
 
-          <Button type="submit" className="w-full">
-            Amount Recieved
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+            Amount Received
           </Button>
         </DrawerFooter>
       </form>

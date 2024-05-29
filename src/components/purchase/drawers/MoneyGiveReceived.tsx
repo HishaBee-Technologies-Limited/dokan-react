@@ -37,20 +37,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn, formatDate, generateUlid } from '@/lib/utils';
-import {
-  CalendarIcon,
-  Check,
-  ChevronsUpDown,
-  MessageSquareText,
-  UserSearch,
-} from 'lucide-react';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command';
+import { CalendarIcon } from 'lucide-react';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ulid } from 'ulid';
 import { getCookie, getCookies } from 'cookies-next';
@@ -69,6 +57,7 @@ import { toast } from 'sonner';
 import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 import { createDue } from '@/actions/due/createDue';
 import { IDueListResponse } from '@/types/due/dueResponse';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 const partyList = ['customer', 'supplier'];
 
@@ -112,6 +101,7 @@ const MoneyGiveReceived = ({
   );
   const cookie = getCookie('shop');
   const tkn = getCookie('access_token');
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -139,6 +129,8 @@ const MoneyGiveReceived = ({
   }, [form, name]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    setLoading(true);
+
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -235,7 +227,10 @@ const MoneyGiveReceived = ({
 
       setCalculatedProducts({
         ...calculatedProducts,
-        paymentAmount: 0,
+        paymentAmount:
+          Number(data.amount) === Number(calculatedProducts.totalPrice)
+            ? 0
+            : Number(calculatedProducts.totalPrice) - Number(data.amount),
         date: formatDate(DATE_FORMATS.default, data.date),
       });
       handleSellDrawer({ open: false });
@@ -455,7 +450,7 @@ const MoneyGiveReceived = ({
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="number"
             render={({ field }) => (
@@ -469,7 +464,7 @@ const MoneyGiveReceived = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <div className="h-[4.4rem] flex  items-center gap-space8">
             <FormField
@@ -534,7 +529,8 @@ const MoneyGiveReceived = ({
               </Text>
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
               Save
             </Button>
           </DrawerFooter>

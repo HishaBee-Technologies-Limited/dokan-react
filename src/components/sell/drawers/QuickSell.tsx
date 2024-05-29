@@ -44,7 +44,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Calendar } from '@/components/ui/calendar';
 import {
   Command,
@@ -91,6 +91,7 @@ const QuickSell = ({
   const closeDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
   const tkn = getCookie('access_token');
+  const [loading, setLoading] = useState(false);
   const [contact, setContact] = useState<IUserResponse>();
   const setCalculatedProducts = useSellStore(
     (state) => state.setCalculatedProducts
@@ -111,6 +112,7 @@ const QuickSell = ({
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    setLoading(true);
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       // discount: Number(calculatedProducts.discount),
@@ -218,6 +220,7 @@ const QuickSell = ({
     //   paymentAmount: -Number(data.amount),
     //   date: formatDate(DATE_FORMATS.default, data.date),
     // });
+    setLoading(false);
     closeDrawer({ open: false });
     toast.success('Quick Sell Added SuccessFully');
     // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
@@ -477,8 +480,9 @@ const QuickSell = ({
         </div>
 
         <DrawerFooter>
-          <Button type="submit" className="w-full">
-            Amount Recieved
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+            Amount Received
           </Button>
         </DrawerFooter>
       </form>

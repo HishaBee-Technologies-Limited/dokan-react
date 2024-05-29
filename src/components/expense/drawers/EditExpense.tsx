@@ -62,9 +62,7 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
   const router = useRouter();
 
   const closeDrawer = useExpenseStore((state) => state.setExpenseDrawerState);
-  const [categories, setCategories] = useState<
-    ICommonGetResponse<ICategory> | undefined
-  >();
+  const [categories, setCategories] = useState<ICategory[] | undefined>();
   const [selectedFiles, setSelectedFiles] = useState<FileList>();
   const [imageUrls, loading] = useFileUpload(selectedFiles);
   const handleAddNewCategory = useExpenseStore(
@@ -151,7 +149,7 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
     form.setValue('images', imageUrls[0]);
   }, [imageUrls]);
 
-  console.log(form.formState.errors);
+  console.log(categories);
 
   return (
     <Form {...form}>
@@ -224,7 +222,7 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
                       </SelectItem>
                     ))}
                     {categories &&
-                      categories.data?.map((category) => (
+                      categories?.map((category) => (
                         <SelectItem key={category.name} value={category.name}>
                           {category.name}
                         </SelectItem>

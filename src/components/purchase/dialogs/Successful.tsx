@@ -27,7 +27,7 @@ const Successful = () => {
           </div>
 
           <Text
-            title="Buy Successful"
+            title="Purchase Successful"
             variant="success"
             className="text-xl font-bold"
           />

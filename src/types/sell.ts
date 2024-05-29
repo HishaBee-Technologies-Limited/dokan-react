@@ -25,6 +25,7 @@ export interface IProductSellPayload {
   total_profit?: string;
   transaction_type?: 'PRODUCT_SELL' | 'QUICK_SELL'; //PRODUCT_SELL
   message?: string | null;
+  extra_charge?: number;
 }
 
 export interface IProductItemSellPayload {

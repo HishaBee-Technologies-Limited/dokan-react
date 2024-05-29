@@ -27,7 +27,7 @@ export const LeftSection = ({ productData }: { productData: any }) => {
               className="flex items-center gap-space12 justify-between py-space8 px-space8"
             >
               <div className="flex items-center gap-space8">
-                <Image height={32} width={32} src={product?.image_url} alt="" />
+                <img height={32} width={32} src={product?.image_url} alt="" />
                 <Text title={product.name} className="text-sm" />
               </div>
               <Button

@@ -61,6 +61,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { createDue } from '@/actions/due/createDue';
 import { IDueListResponse } from '@/types/due/dueResponse';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 const partyList = ['customer', 'supplier'];
 
@@ -98,6 +99,8 @@ const MoneyGiveReceived = ({
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 
   const [customer, setContact] = useState<IUserResponse>();
+  const [loading, setLoading] = useState(false);
+
   const calculatedProducts = useSellStore((state) => state.calculatedProducts);
   const setCalculatedProducts = useSellStore(
     (state) => state.setCalculatedProducts
@@ -141,6 +144,8 @@ const MoneyGiveReceived = ({
   }, [form, name]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    setLoading(true);
+
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
@@ -164,6 +169,7 @@ const MoneyGiveReceived = ({
       total_discount: 0,
       transaction_type: 'PRODUCT_SELL',
       total_profit: String(totalProfit),
+      extra_charge: Number(calculatedProducts.deliveryCharge),
     });
     console.log('res----', responseCreateSell);
 
@@ -248,12 +254,16 @@ const MoneyGiveReceived = ({
       const res = await createDueItem(payload);
       console.log('res----', res);
     }
-
     setCalculatedProducts({
       ...calculatedProducts,
-      paymentAmount: 0,
+      paymentAmount:
+        Number(data.amount) === Number(calculatedProducts.totalPrice)
+          ? 0
+          : Number(calculatedProducts.totalPrice) - Number(data.amount),
       date: formatDate(DATE_FORMATS.default, data.date),
     });
+    setLoading(false);
+
     handleSellDrawer({ open: false });
     openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
     console.log('data------------', data);
@@ -466,7 +476,7 @@ const MoneyGiveReceived = ({
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="number"
             render={({ field }) => (
@@ -480,7 +490,7 @@ const MoneyGiveReceived = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
           <FormField
             control={form.control}
             name="customer_address"
@@ -558,8 +568,9 @@ const MoneyGiveReceived = ({
               </Text>
             </div>
 
-            <Button type="submit" className="w-full">
-              Save
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+              Sell
             </Button>
           </DrawerFooter>
         </form>

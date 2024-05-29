@@ -24,6 +24,7 @@ type SellState = {
     date?: string;
     paymentAmount?: number;
     totalProfit?: number;
+    amount?: number;
   };
   currentSell?: IPurchaseHistoryResponse;
 };

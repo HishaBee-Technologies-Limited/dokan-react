@@ -51,9 +51,9 @@ const EditUser = () => {
     console.log(party);
     form.setValue('name', party?.name as string);
     form.setValue('number', party?.mobile as string);
-    form.setValue('address', party?.address as string);
-    form.setValue('email', party?.email as string);
-    form.setValue('salary', party?.monthly_salary as string);
+    form.setValue('address', party?.address ?? ('' as string));
+    form.setValue('email', party?.email ?? ('' as string));
+    form.setValue('salary', String(party?.monthly_salary ?? '') as string);
     form.setValue('image_src', party?.image_src as string);
   }, [party]);
 
@@ -85,6 +85,7 @@ const EditUser = () => {
       const response = await updateParty();
       if (response?.success) {
         router.refresh();
+        window.location.reload();
         closeDrawer({ open: false });
       } else {
         toast.error('Something went wrong');

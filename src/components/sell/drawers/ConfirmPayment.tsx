@@ -48,7 +48,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 
@@ -78,6 +78,8 @@ const ConfirmPayment = () => {
   const calculatedProducts = useSellStore((state) => state.calculatedProducts);
   const [customers, setCustomers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
+  const [loading, setLoading] = useState(false);
+
   const tkn = getCookie('access_token');
   const cookie = getCookie('shop');
 
@@ -127,6 +129,7 @@ const ConfirmPayment = () => {
       return;
     }
     console.log(data.sms);
+    setLoading(true);
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
@@ -147,6 +150,7 @@ const ConfirmPayment = () => {
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
+      extra_charge: Number(calculatedProducts.deliveryCharge),
       total_discount: 0,
       transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
       total_profit: String(totalProfit),
@@ -186,6 +190,8 @@ const ConfirmPayment = () => {
         paymentAmount: Number(data.amount),
         date: formatDate(DATE_FORMATS.default, data.date),
       });
+      setLoading(false);
+
       closeDrawer({ open: false });
       openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
     }
@@ -295,7 +301,7 @@ const ConfirmPayment = () => {
                 Amount <span className="text-error-100">*</span>{' '}
               </FormLabel> */}
               <FormControl>
-                <Input type="number" placeholder="Amount" {...field} />
+                <Input type="number" disabled placeholder="Amount" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -377,7 +383,7 @@ const ConfirmPayment = () => {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="customer_number"
                 render={({ field }) => (
@@ -388,7 +394,7 @@ const ConfirmPayment = () => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <FormField
                 control={form.control}
@@ -510,8 +516,9 @@ const ConfirmPayment = () => {
             </Text>
           </div>
 
-          <Button type="submit" className="w-full">
-            Amount Recieved
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+            Amount Received
           </Button>
         </DrawerFooter>
       </form>

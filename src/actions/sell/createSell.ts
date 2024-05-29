@@ -32,6 +32,7 @@ export const createSell = async ({
   total_profit,
   transaction_type,
   message,
+  extra_charge,
 }: IProductSellPayload) => {
   try {
     const shopId = cookies().get('shopId')?.value;
@@ -62,6 +63,7 @@ export const createSell = async ({
       total_profit,
       transaction_type,
       message,
+      extra_charge,
     };
 
     const res = await authApi.post(`/transaction`, payload);
