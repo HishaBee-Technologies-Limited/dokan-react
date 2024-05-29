@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { IProductPayload } from '@/types/product';
 import { IProductPurchasePayload } from '@/types/purchase';
 import { revalidatePath } from 'next/cache';
-import { logger } from '../../../Pino';
+// import { logger } from '../../../Pino';
 
 export const createPurchase = async ({
   batch,

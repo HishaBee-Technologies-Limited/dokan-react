@@ -17,10 +17,6 @@ const logger = (defaultConfig) =>
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['pino', 'pino-pretty'],
-  },
-
   logging: {
     fetches: {
       fullUrl: true,

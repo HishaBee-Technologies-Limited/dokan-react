@@ -51,7 +51,7 @@ import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 import { toast } from 'sonner';
 import { PurchaseEnum } from '@/enum/purchase';
 import { jwtDecode } from 'jwt-decode';
-import { logger } from '../../../../Pino';
+// import { logger } from '../../../../Pino';
 import { PURCHASE_SMS } from '@/lib/sms-text';
 
 const formSchema = z.object({
@@ -207,7 +207,7 @@ const ConfirmPayment = () => {
   );
 
   console.log(totalItems);
-  logger.info('Total items', shop);
+  // logger.info('Total items', shop);
 
   useEffect(() => {
     const fetchSuppliersAndEmployees = async () => {

@@ -44,7 +44,6 @@
     "next-logger": "^4.0.0",
     "next-themes": "^0.3.0",
     "pino": "^9.1.0",
-    "pino-pretty": "^11.1.0",
     "postcss-loader": "^8.1.0",
     "react": "^18",
     "react-day-picker": "^8.10.0",
