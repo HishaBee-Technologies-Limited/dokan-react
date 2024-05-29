@@ -18,7 +18,7 @@ import { usePurchase } from '@/stores/usePurchaseStore';
 import { useSellStore } from '@/stores/useSellStore';
 
 export interface IProductPurchase extends IProduct {
-  calculatedAmount?: { quantity: number; total: number };
+  calculatedAmount?: { quantity: number; total: number; unit_price: number };
 }
 type IProps = {
   form: UseFormReturn<any>;
@@ -37,6 +37,21 @@ const ProductFiledRow = (props: IProps) => {
     `products.${props.index}.product-${props.data?.id}.quantity`
   );
 
+  const totalWatch = props.form.watch(
+    `products.${props.index}.product-${props.data?.id}.total`
+  );
+
+  useEffect(() => {
+    const quantityValue = props.form.getValues(
+      `products.${props.index}.product-${props.data?.id}.quantity`
+    );
+    if (quantityValue) {
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.unit_price`,
+        totalWatch / quantityValue
+      );
+    }
+  }, [totalWatch]);
   const handleProductDeleteFromSelections = () => {
     /**
      * unregister product item from the form array to maintain the calculation

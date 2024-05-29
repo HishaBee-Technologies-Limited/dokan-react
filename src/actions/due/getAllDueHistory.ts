@@ -3,6 +3,7 @@
 import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
 import { IDueItemsResponse } from '@/types/due/dueResponse';
+import { format, subMonths } from 'date-fns';
 
 interface IGetAllDueHistory {
   page?: number;
@@ -12,9 +13,17 @@ interface IGetAllDueHistory {
 
 export const getAllDueHistory = async (params: IGetAllDueHistory) => {
   const { page, start_date, end_date } = params;
+  const today = new Date();
+
+  const startDate =
+    start_date ?? format(subMonths(today, 1), 'yyyy-MM-dd hh:mm:ss');
+  const endDate = end_date ?? today;
+
+  const now = new Date();
+
   try {
     const shopId = cookies().get('shopId')?.value;
-    const params = `shop_id=${18}&start_date=${start_date}&end_date=${end_date}`; //&page=${page}
+    const params = `shop_id=${shopId}&start_date=${format(subMonths(today, 1), 'yyyy-MM-dd hh:mm:ss')}&end_date=${endDate}`; //&page=${page}
     const res = await authApi.get(`/due/history?${params}`);
     const data = await res.json();
 

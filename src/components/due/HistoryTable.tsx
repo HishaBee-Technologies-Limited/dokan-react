@@ -44,13 +44,13 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
               </TableCell>
               <TableCell>{item.contact_mobile}</TableCell>
               <TableCell>{item.contact_type}</TableCell>
-              <TableCell>৳ {item.amount}</TableCell>
+              <TableCell>৳ {Math.abs(item.amount)}</TableCell>
               <TableCell className="text-center">
                 <article className="flex items-center gap-space16 justify-center">
                   <Text
-                    title={item.amount < 0 ? 'Given' : 'Taken'}
+                    title={item.amount <= 0 ? 'Received' : 'Given'}
                     className={`!text-white dark:!text-white max-w-max px-space12 py-space4 rounded-full text-sm uppercase dark:bg-primary-80 ${
-                      item.amount < 0 ? 'bg-error-100' : 'bg-success-100'
+                      item.amount < 0 ? 'bg-success-100' : 'bg-error-100'
                     }`}
                   />
                   {item.created_at}

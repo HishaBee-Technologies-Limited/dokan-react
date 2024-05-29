@@ -102,7 +102,7 @@ const ConfirmPayment = () => {
       form.setValue('amount', String(calculatedProducts.totalPrice));
     }
   }, [calculatedProducts, form]);
-
+  console.log(calculatedProducts);
   useEffect(() => {
     console.log(selectedSupplier.split('-'));
     const supplierNameArray = selectedSupplier.split('-');
@@ -168,7 +168,7 @@ const ConfirmPayment = () => {
           created_at: formatDate(DATE_FORMATS.default),
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
-          unit_price: product.selling_price,
+          unit_price: product.calculatedAmount?.unit_price,
           unit_cost: product.cost_price,
           transaction_unique_id: responseCreateSell.data.transaction.unique_id,
           profit:
