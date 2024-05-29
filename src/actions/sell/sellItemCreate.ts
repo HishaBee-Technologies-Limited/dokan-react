@@ -29,7 +29,6 @@ export const sellItemCreate = async ({
 }: any) => {
   try {
     const shopId = cookies().get('shopId')?.value;
-    console.log(transaction_unique_id);
 
     const payload = new URLSearchParams({
       shop_id: shopId!,
@@ -50,13 +49,9 @@ export const sellItemCreate = async ({
       status,
       shop_product_unique_id,
     });
-    console.log(transaction_unique_id);
-
-    console.log(payload);
 
     const res = await authApi.post(`/transaction_item?${payload}`);
     const data = await res.json();
-    console.log(data);
 
     if (res.ok) {
       return {

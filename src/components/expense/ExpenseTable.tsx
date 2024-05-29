@@ -75,7 +75,10 @@ const ExpenseTable = ({ expenseList }: { expenseList: IExpense[] }) => {
                       variant={'transparent'}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleRowClick(expense);
+                        console.log('l;');
+                        router.push(
+                          `${pathname}?${setQueryString('expense', expense?.unique_id)}`
+                        );
                       }}
                     >
                       <MoreVertIcon />
@@ -94,6 +97,9 @@ const ExpenseTable = ({ expenseList }: { expenseList: IExpense[] }) => {
                         className="w-full justify-start"
                         onClick={(e) => {
                           e.stopPropagation();
+                          router.push(
+                            `${pathname}?${setQueryString('expense', expense?.unique_id)}`
+                          );
                           setExpenseDrawer({
                             open: true,
                             header: ExpenseEnum.EDIT_EXPENSE,
@@ -111,6 +117,9 @@ const ExpenseTable = ({ expenseList }: { expenseList: IExpense[] }) => {
                         className="w-full justify-start text-error-100"
                         onClick={(e) => {
                           e.stopPropagation();
+                          router.push(
+                            `${pathname}?${setQueryString('expense', expense?.unique_id)}`
+                          );
                           setExpenseDialog({
                             open: true,
                             header: ExpenseEnum.DELETE_TRANSACTION,

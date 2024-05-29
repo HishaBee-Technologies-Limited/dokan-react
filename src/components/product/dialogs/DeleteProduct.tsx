@@ -4,9 +4,20 @@ import { Button } from '@/components/ui/button';
 import { DeleteIcon } from '@/components/common/icons';
 import { DialogFooter } from '@/components/common/Dialog';
 import { useProductStore } from '@/stores/useProductStore';
+import { useSearchParams } from 'next/navigation';
+import { deleteProduct } from '@/actions/product/deleteProduct';
+import { IProduct } from '@/types/product';
 
-export const DeleteProduct = () => {
+export const DeleteProduct = ({ product }: { product: IProduct }) => {
   const handleClose = useProductStore((state) => state.setDialogState);
+  const params = useSearchParams();
+  const productId = params.get('product');
+
+  const handleDelete = async () => {
+    const res = await deleteProduct(product);
+    console.log(res);
+    handleClose({ open: false });
+  };
 
   return (
     <div className="relative">
@@ -23,7 +34,7 @@ export const DeleteProduct = () => {
       </article>
 
       <DialogFooter className="flex justify-end gap-space16">
-        <Button variant={'danger'} onClick={() => handleClose({ open: false })}>
+        <Button variant={'danger'} onClick={() => handleDelete()}>
           <DeleteIcon color="#fff" />
           Delete
         </Button>

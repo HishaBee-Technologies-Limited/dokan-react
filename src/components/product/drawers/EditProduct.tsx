@@ -151,9 +151,8 @@ export const EditProduct = ({
       form.setValue('bulk_sell_check', true);
     form.setValue('category', String(category?.id));
     setInitialSubCategory(String(product?.sub_category?.id));
-    // saveImageUrls(
-    //   product?.gallery?.substring(1, product?.gallery.length - 1).split(',')
-    // );
+    /*@ts-ignore*/
+    product?.gallery && saveImageUrls(JSON.parse(product?.gallery));
   }, [product, category]);
   // console.log(product);
   return (
@@ -199,6 +198,7 @@ export const EditProduct = ({
           <div className="flex gap-space12 py-space12">
             {imageUrls.map((url: string) => (
               <div key={url}>
+                {console.log(url[0])}
                 <Image src={url} alt="" height={60} width={60} />
                 {loading && <Skeleton className="h-2 w-full rounded-none" />}
               </div>

@@ -2,19 +2,21 @@
 
 import { authApi } from '@/lib/api';
 import { DATE_FORMATS } from '@/lib/constants/common';
+import { DEFAULT_DELETE_VERSION } from '@/lib/constants/product';
 import { formatDate } from '@/lib/utils';
-import { IProductPayload } from '@/types/product';
+import { IProduct, IProductPayload } from '@/types/product';
+import { cookies } from 'next/headers';
 
-export const deleteProduct = async ({
-  unique_id,
-}: {
-  unique_id: IProductPayload['unique_id'];
-}) => {
+export const deleteProduct = async (product: IProduct) => {
   try {
-    const res = await authApi.delete(
-      `/product${unique_id}?version=${-1}&updated_at=${formatDate(DATE_FORMATS.default)}`
+    const shopId = cookies().get('shopId')?.value;
+
+    const res = await authApi.post(
+      `/product?product_type=${product.product_type}&selling_price=${product.selling_price}&name=${product.name}&shop_id=${shopId}unique_id${product.unique_id}&version=${DEFAULT_DELETE_VERSION}&updated_at=${formatDate(DATE_FORMATS.default)}`
     );
     const data = await res.json();
+
+    console.log(data);
 
     if (res.ok) {
       return {

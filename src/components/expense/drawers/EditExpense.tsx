@@ -51,10 +51,10 @@ const formSchema = z.object({
     message: 'this field is required.',
   }),
   amount: z.string(),
-  reason: z.string(),
-  details: z.string(),
+  reason: z.string().optional(),
+  details: z.string().optional(),
   images: z.string().optional(),
-  date: z.date(),
+  date: z.any(),
   image_changed: z.boolean().optional(),
 });
 
@@ -79,12 +79,12 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
       details: '',
       reason: '',
       images: '',
+      image_changed: false,
     },
   });
   console.log(expense);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    closeDrawer({ open: false });
     console.log('data------------', data, expense);
 
     const res = await editExpense({
@@ -94,9 +94,10 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
       purpose: data.reason,
       image: data.images ?? '',
       image_changed: data.image_changed,
-      created_at: format(data.date, DATE_FORMATS.default),
+      created_at: data.date
+        ? format(data.date, DATE_FORMATS.default)
+        : new Date(),
       updated_at: formatDate(DATE_FORMATS.default),
-      version: expense.version + 1,
       unique_id: expense.unique_id,
       id: expense.id,
     });
@@ -111,6 +112,7 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
 
     if (res?.error) {
       toast.error('Something went wrong');
+      closeDrawer({ open: false });
 
       console.log('error-------', res?.error);
     }
@@ -120,7 +122,7 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
     //set form values
     form.setValue('amount', String(expense?.amount));
     form.setValue('details', expense?.details ?? '');
-    form.setValue('reason', expense?.purpose);
+    form.setValue('reason', expense?.purpose ?? '');
     form.setValue('images', expense?.image ?? '');
     /* @ts-ignore */
     expense?.created_at && form.setValue('date', expense?.created_at);
@@ -148,6 +150,8 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
   useEffect(() => {
     form.setValue('images', imageUrls[0]);
   }, [imageUrls]);
+
+  console.log(form.formState.errors);
 
   return (
     <Form {...form}>

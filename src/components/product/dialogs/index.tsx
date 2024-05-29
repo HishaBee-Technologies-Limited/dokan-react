@@ -43,7 +43,7 @@ export const ProductDialogs = ({ product }: { product: IProduct }) => {
     } else if (ProductEnum.PRODUCT_HISTORY === activeDialog) {
       return <ProductHistory />;
     } else if (ProductEnum.DELETE_PRODUCT === activeDialog) {
-      return <DeleteProduct />;
+      return <DeleteProduct product={product} />;
     }
   };
 

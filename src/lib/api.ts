@@ -37,7 +37,6 @@ export const authFetchAPI = (
     Authorization: `Bearer ${token?.value}`,
     Platform: 'WEB',
   };
-  console.log('----header---', headers);
   return fetch(`${BaseURL}${url}`, {
     method,
     headers,

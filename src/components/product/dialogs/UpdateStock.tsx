@@ -98,6 +98,7 @@ export const UpdateStock = ({ product }: { product: any }) => {
             className="!text-xl !font-bold"
             onClick={() => setChangedStock(Number(changedStock) - 1)}
             type="button"
+            disabled={changedStock <= 0}
           >
             -
           </Button>

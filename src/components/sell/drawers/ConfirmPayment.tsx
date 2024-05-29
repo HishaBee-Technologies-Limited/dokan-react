@@ -126,19 +126,20 @@ const ConfirmPayment = () => {
       });
       return;
     }
+    console.log(data.sms);
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
       discount_type: calculatedProducts.discountType ?? '',
       employee_mobile: data.employee_number,
-      employee_name: data.employee,
+      employee_name: data.employee?.split('-')[0],
       note: data.note,
       payment_method: PAYMENT_METHODS.Cash,
       payment_status: PAYMENT_STATUS.PAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
       customer_mobile: data.customer_number,
-      customer_name: data.customer,
+      customer_name: data.customer.split('-')[0],
       customer_address: data.customer_address,
       total_item: totalItems,
       total_price: Number(data.amount),
@@ -149,6 +150,7 @@ const ConfirmPayment = () => {
       total_discount: 0,
       transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
       total_profit: String(totalProfit),
+      message: data.sms ? 'SMS' : null,
     });
     console.log('res----', responseCreateSell);
 

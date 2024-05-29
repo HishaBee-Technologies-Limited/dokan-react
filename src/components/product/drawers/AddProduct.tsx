@@ -93,6 +93,7 @@ export const AddProduct = ({
   }, [selectedCategory, productCategories]);
 
   async function onSubmit(data: ProductFormDef) {
+    console.log(imageUrls);
     const res = await createProductOrUpdate({
       name: data.product_name,
       cost_price: data.purchase_price,
@@ -108,7 +109,7 @@ export const AddProduct = ({
       warranty_type: data.warranty_type,
       discount: data.discount,
       discount_type: data.discount_type,
-      gallery: imageUrls.length ? `[${imageUrls}]` : '',
+      gallery: imageUrls.length ? JSON.stringify(imageUrls) : '',
       image_url: imageUrls.length ? imageUrls[0] : '',
       // description: ,
       vat_applicable: data.vat_check,

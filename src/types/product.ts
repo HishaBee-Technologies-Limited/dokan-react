@@ -27,6 +27,7 @@ export interface IProduct {
   unit?: number;
   published: boolean;
   gallery?: string[];
+  product_type?: 'SIMPLE';
 }
 
 export interface IProductPayload {
