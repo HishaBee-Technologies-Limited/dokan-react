@@ -338,7 +338,7 @@ export const EditProduct = ({
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sub Category Name</FormLabel>
+                <FormLabel>Category Name</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="">

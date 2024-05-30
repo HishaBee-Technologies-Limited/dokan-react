@@ -199,13 +199,12 @@ const TransactionDetails = () => {
                 <div key={product.unique_id} className="rounded p-space8">
                   <div className="flex items-center gap-space8">
                     <Image
-                      src={product.shop_product?.image_url}
+                      src={product.shop_product_by_uniqueid?.image_url}
                       height={32}
                       width={32}
                       alt=""
                     />
-
-                    <Text title={product.shop_product?.name} />
+                    <Text title={product.shop_product_by_uniqueid?.name} />
                   </div>
 
                   <article className="flex flex-wrap justify-between gap-space8 pl-space40">

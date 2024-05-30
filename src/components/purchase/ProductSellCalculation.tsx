@@ -54,8 +54,8 @@ const ProductSellCalculation = (props: IProps) => {
     calculateGrandTotal(
       discountType,
       Number(totalPrice),
-      Number(deliveryCharge),
-      discountAmount
+      deliveryCharge ? Number(deliveryCharge) : 0,
+      discountAmount ? discountAmount : 0
     );
 
   /**

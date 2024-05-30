@@ -78,7 +78,7 @@ export interface IPurchaseHistoryResponse {
 
 export interface IProducts extends IProductItemPurchasePayload {
   product: IProductPayload;
-  shop_product?: IProductPayload;
+  shop_product_by_uniqueid?: IProductPayload;
 }
 export interface IPurchaseProducts extends IPurchaseHistoryResponse {
   items?: IProducts[];
