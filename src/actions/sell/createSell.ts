@@ -36,7 +36,6 @@ export const createSell = async ({
 }: IProductSellPayload) => {
   try {
     const shopId = cookies().get('shopId')?.value;
-    console.log(shopId);
     const payload: IProductSellPayload = {
       shop_id: Number(shopId),
       unique_id: unique_id,
@@ -69,9 +68,6 @@ export const createSell = async ({
     const res = await authApi.post(`/transaction`, payload);
     const data = await res.json();
     revalidatePath('/sell-list');
-
-    console.log(payload);
-    console.log(data);
 
     if (res.ok) {
       if (data.code !== 200) {

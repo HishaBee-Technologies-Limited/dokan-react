@@ -45,8 +45,6 @@ export const createItemPurchase = async ({
       shop_product_unique_id,
     });
 
-    console.log(JSON.stringify(authApi.post('')));
-
     const res = await authApi.post(`/purchase_item?${payload}`);
     const data = await res.json();
 

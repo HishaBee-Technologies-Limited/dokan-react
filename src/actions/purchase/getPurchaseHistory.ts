@@ -2,7 +2,6 @@
 
 import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
-import { IDueListResponse } from '@/types/due/dueResponse';
 import { IPurchaseHistoryResponse } from '@/types/purchase';
 import { format, sub } from 'date-fns';
 import { DATE_FORMATS } from '@/lib/constants/common';
@@ -14,12 +13,10 @@ export const getPurchaseHistory = async (
   endDate?: string
 ) => {
   const pageCount = page ? page : 1;
-  console.log('sss');
   try {
     const shopId = cookies().get('shopId')?.value;
     const DEFAULT_PAGE_ITEMS = '10';
 
-    // const params = `shop_id=${shopId}&per_page=${pageCount}`;
     const params = new URLSearchParams({
       shop_id: String(shopId),
       page: String(pageCount),
@@ -32,7 +29,6 @@ export const getPurchaseHistory = async (
     });
     const res = await authApi.get(`/purchase?${params}`);
     const data = await res.json();
-    console.log(data);
 
     if (res.ok) {
       return {

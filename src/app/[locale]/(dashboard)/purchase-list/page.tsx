@@ -12,7 +12,6 @@ import { IUserResponse } from '@/types/contact/partyResponse';
 import { getAllDue } from '@/actions/due/getAllDue';
 
 const PurchaseHistory = async ({ searchParams }: any) => {
-  console.log(searchParams);
   const purchaseHistory = await getPurchaseHistory(
     Number(searchParams.page),
     searchParams.start_date,

@@ -82,7 +82,6 @@ const AddExpense = ({ categories }: { categories: ICategory[] }) => {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     // closeDrawer({ open: false });
-    console.log('data------------', data);
 
     const res = await addExpense({
       type: data.category_name,
@@ -96,7 +95,6 @@ const AddExpense = ({ categories }: { categories: ICategory[] }) => {
       unique_id: generateUlid(),
     });
 
-    console.log('expense------------', res);
     if (res?.success) {
       router.refresh();
       closeDrawer({ open: false });
@@ -105,8 +103,6 @@ const AddExpense = ({ categories }: { categories: ICategory[] }) => {
 
     if (res?.error) {
       toast.error('Something went wrong');
-
-      console.log('error-------', res?.error);
     }
   }
 

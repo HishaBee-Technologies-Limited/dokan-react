@@ -10,9 +10,7 @@ export const checkNumber = async ({
 }) => {
   const res = await api.post(`/number_check?mobile_number=${mobile_number}`);
   cookies().set('mobile_number', mobile_number);
-  console.log(res);
-  // logger.info('Mobile number', res);
-  console.log(res);
+
   const data = await res.json();
   if (res.ok) {
     return { success: true, status: data.code, data: data };

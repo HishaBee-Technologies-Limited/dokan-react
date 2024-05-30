@@ -18,7 +18,6 @@ export const editExpenseCategory = async ({
       name,
       id,
     });
-    console.log(payload);
     const res = await authApi.put(`/expense_category?${payload}`);
     const data = await res.json();
     revalidatePath('/expense');

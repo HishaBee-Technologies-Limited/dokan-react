@@ -18,7 +18,6 @@ const SetupPin = ({ mobile_number }: { mobile_number: string }) => {
   const [pin, setPin] = useState<string>('');
   const [pinError, setError] = useState<string>('');
   const cookie = getCookie('signup');
-  console.log('ccccc', JSON.parse(cookie ? cookie : ''));
 
   const signUpString = JSON.parse(cookie ? cookie : '');
   const { address, brand_name, use_intent } = signUpString;

@@ -12,13 +12,9 @@ export const editCustomer = async (payload: any) => {
     shop_id: shopId,
   });
 
-  console.log(updatedPayload);
-
   try {
     const res = await authApi.get(`/customer/edit?${updatedPayload}`);
-    console.log(res);
     const data = await res.json();
-    console.log(data);
 
     if (res.ok) {
       return {

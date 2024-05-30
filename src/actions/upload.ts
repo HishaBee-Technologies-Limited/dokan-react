@@ -5,10 +5,7 @@ import { uploadApi } from '@/lib/api';
 export const filesUpload = async (payload: any) => {
   try {
     const res = await uploadApi.post(`/upload`, payload);
-
     const data = await res.json();
-
-    console.log('ssssss', { data });
 
     if (res.ok) {
       return {

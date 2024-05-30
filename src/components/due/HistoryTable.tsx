@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/table';
 
 const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
-  console.log(dueList);
   return (
     <ScrollArea className="pb-space8">
       <Table wrapperClass="rounded-md border border-color min-w-[80rem]">

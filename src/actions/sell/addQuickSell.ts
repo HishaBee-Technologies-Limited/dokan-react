@@ -22,7 +22,6 @@ export const addQuickSell = async ({
 }: any) => {
   try {
     const shopId = cookies().get('shopId')?.value;
-    console.log(transaction_unique_id);
 
     const payload = {
       shop_id: Number(shopId),

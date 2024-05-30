@@ -57,10 +57,8 @@ function ProductListCardEdit(props: {
         currentPurchase?.discount!
       ) ?? 0
     );
-    console.log(currentPurchase, totalPrice, priceAmount);
     props.form.setValue('amount', priceAmount);
   }, [totalPrice]);
-  console.log(products, totalPrice);
 
   useEffect(() => {
     /**

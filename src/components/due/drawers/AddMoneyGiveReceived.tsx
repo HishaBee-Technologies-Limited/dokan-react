@@ -134,7 +134,6 @@ const AddMoneyGiveReceived = ({
       // purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
     };
     const dueRes = await createDue(payload);
-    console.log('dueRes----', dueRes);
     const payloadForDueItem = {
       amount:
         data.cash_type === 'given' ? -Number(data.amount) : Number(data.amount),
@@ -153,7 +152,6 @@ const AddMoneyGiveReceived = ({
     };
 
     const res = await createDueItem(payloadForDueItem);
-    console.log(res);
     router.refresh();
 
     handleDrawerOpen({ open: false });
@@ -203,8 +201,6 @@ const AddMoneyGiveReceived = ({
     const dueEmployee = dueList.dueList.employeeDueList?.find(
       (due) => due.contact_mobile === sup_mobile
     );
-
-    console.log(dueList.dueList.customerDueList);
 
     const due =
       contactType === 'CUSTOMER'
@@ -256,7 +252,6 @@ const AddMoneyGiveReceived = ({
             {partyList.map((tab) => (
               <TabsTrigger
                 onClick={() => {
-                  console.log(tab.toUpperCase());
                   setContactType(tab.toUpperCase());
                   form.setValue('contactType', tab.toUpperCase());
                 }}

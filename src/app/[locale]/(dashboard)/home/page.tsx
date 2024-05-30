@@ -4,7 +4,6 @@ import HomeHeader from '@/components/HomeHeader';
 
 const HomePage = async () => {
   const cookie = cookies();
-  console.log(cookie.get('shopId'));
 
   return (
     <div className="">

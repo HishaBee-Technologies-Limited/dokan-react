@@ -54,8 +54,6 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
     router.push('/contact');
   };
 
-  console.log(shops);
-
   return (
     <div className="space-y-space16">
       <PageSubTitle title="Switch your Shop" />

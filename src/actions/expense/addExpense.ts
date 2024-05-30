@@ -35,7 +35,6 @@ export const addExpense = async ({
     });
     const res = await authApi.post(`/expense/add?${payload}`);
 
-    console.log(res);
     const data = await res.json();
 
     revalidatePath('/expense');

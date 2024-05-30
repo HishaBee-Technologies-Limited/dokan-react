@@ -15,11 +15,9 @@ export const useFileUpload = (selectedFiles?: FileList) => {
       files.map((file: any) => {
         const uploadImages = async () => {
           const body = new FormData();
-          console.log(file);
 
           body.set('image', file);
           const image = await filesUpload(body);
-          console.log(image);
           if (image?.success) {
             setLoading(true);
             saveImageUrls(image?.data.url);

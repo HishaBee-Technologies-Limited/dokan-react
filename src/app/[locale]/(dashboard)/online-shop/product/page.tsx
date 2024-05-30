@@ -33,7 +33,6 @@ const ProductPage = async ({ searchParams }: ProductPagePropsDef) => {
     singleProduct = await getSingleProduct(productId);
   }
 
-  console.log('User-----', session?.user?.id);
   return (
     <>
       <div className="space-y-space16">

@@ -75,7 +75,6 @@ const ExpenseTable = ({ expenseList }: { expenseList: IExpense[] }) => {
                       variant={'transparent'}
                       onClick={(e) => {
                         e.stopPropagation();
-                        console.log('l;');
                         router.push(
                           `${pathname}?${setQueryString('expense', expense?.unique_id)}`
                         );

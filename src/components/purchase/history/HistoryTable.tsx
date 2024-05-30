@@ -46,7 +46,6 @@ const HistoryTable = ({
 
   const handleRowClick = (row: IPurchaseHistoryResponse) => {
     handleDrawerOpen({ open: true, header: PurchaseEnum.TRANSACTION_DETAILS });
-    console.log(row);
     setCurrentPurchase(row);
   };
 
@@ -73,7 +72,6 @@ const HistoryTable = ({
   //   page: String(purchaseHistory.current_page ?? 1),
   //   start_date:
   // })
-  console.log(purchaseHistory);
 
   return (
     <ScrollArea className="pb-space8">

@@ -51,7 +51,6 @@ export const login = async (payload: any) => {
     payload
   );
   const data = await res.json();
-  console.log('login', data);
   if (res.ok) {
     cookies().set('access_token', data?.access_token);
     return { success: true, status: data.code, data: data };
@@ -67,7 +66,6 @@ export const signup = async (payload: z.infer<typeof RegisterSchema>) => {
   );
 
   const data = await res.json();
-  console.log('register', data);
   if (res.ok) {
     cookies().set('access_token', data?.access_token);
 

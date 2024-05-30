@@ -11,7 +11,6 @@ export const deleteExpense = async (id: string) => {
 
     const res = await authApi.delete(`/expense/delete?id=${id}`);
     const data = await res.json();
-    console.log(res);
 
     revalidatePath('/expense');
 

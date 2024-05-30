@@ -95,11 +95,9 @@ const AddShopPage = () => {
       router.refresh();
     }
   }
-  console.log(form.formState.errors);
   useEffect(() => {
     const getAllAreas = async () => {
       const res = await getAreasAndTypes();
-      console.log(res?.data?.typesData);
       setDivisions(res?.data?.areaData);
       setTypes(res?.data?.typesData);
     };

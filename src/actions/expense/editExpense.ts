@@ -20,7 +20,6 @@ export const editExpense = async ({
 }: any) => {
   try {
     const shopId = cookies().get('shopId')?.value;
-    console.log(shopId);
 
     const payload = new URLSearchParams({
       shop_id: shopId!,
@@ -36,10 +35,8 @@ export const editExpense = async ({
       unique_id,
       updated_at,
     });
-    console.log(payload);
 
     const res = await authApi.put(`/expense/edit?${payload}`);
-    console.log(`/expense/edit?${payload}`);
     const data = await res.json();
 
     revalidatePath('/expense');

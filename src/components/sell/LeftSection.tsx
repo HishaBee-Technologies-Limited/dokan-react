@@ -14,7 +14,6 @@ export const LeftSection = ({ productData }: { productData: any }) => {
   const setProducts = useSellStore((state) => state.setProducts);
   const products = useSellStore((state) => state.products);
 
-  console.log(productData);
   return (
     <div className="lg:pr-space12 lg:w-4/12 h-full">
       <Card className="h-full w-full shadow">

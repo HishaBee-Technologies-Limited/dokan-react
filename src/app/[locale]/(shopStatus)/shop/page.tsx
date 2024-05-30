@@ -6,7 +6,6 @@ import { IShopResponse } from '@/types/shop';
 const SwitchShopPage = async () => {
   const shops = await getAllShops();
 
-  console.log(shops);
   return <ShopUi shops={shops?.data as IShopResponse[]} />;
 };
 

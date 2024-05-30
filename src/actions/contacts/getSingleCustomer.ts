@@ -7,7 +7,6 @@ export const getSingleCustomer = async (id: number) => {
   try {
     const res = await authApi.get(`/customer/${id}?exclude_deleted=true`);
     const data = await res.json();
-    console.log(data);
     if (res.ok) {
       return {
         success: true,

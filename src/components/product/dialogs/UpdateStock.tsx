@@ -74,8 +74,6 @@ export const UpdateStock = ({ product }: { product: IProductPayload }) => {
     form.setValue('stock', changedStock);
   }, [changedStock]);
 
-  console.log('ll', product);
-
   return (
     <div className="space-y-space16 pt-space16">
       <div className="gap-space8 px-space16 md:px-space32 flex items-center">

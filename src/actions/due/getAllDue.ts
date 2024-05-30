@@ -12,7 +12,6 @@ export const getAllDue = async (page?: number) => {
     const params = `shop_id=${shopId}&per_page=${pageCount}&exclude_deleted=true`;
     const res = await authApi.get(`/due/all?${params}`);
     const data = await res.json();
-    // console.log(data);
     if (res.ok) {
       return {
         success: true,

@@ -76,13 +76,11 @@ const Information = () => {
   useEffect(() => {
     const getAllAreas = async () => {
       const res = await getAreasAndTypes();
-      console.log(res?.data?.typesData);
       setDivisions(res?.data?.areaData);
     };
     getAllAreas();
   }, []);
 
-  console.log(form.formState.errors);
   return (
     <div>
       <Text

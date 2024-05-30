@@ -13,7 +13,6 @@ const DeleteExpenseCategory = () => {
 
   const handleDelete = async () => {
     const res = await deleteExpenseCategory({ id: currentCategory });
-    console.log(res);
     if (res?.success) {
       toast.success('Category deleted successfully');
       closeDialog({ open: false });

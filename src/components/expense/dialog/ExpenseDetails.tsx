@@ -22,8 +22,6 @@ const ExpenseDetails = ({ expense }: { expense: IExpense }) => {
     setExpenseDrawer({ open: true, header: ExpenseEnum.EDIT_EXPENSE });
   };
 
-  console.log(expense);
-
   return (
     <div className="relative">
       <div className="px-space16 py-space16">

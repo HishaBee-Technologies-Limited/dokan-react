@@ -68,7 +68,6 @@ export const TableDropdownAction = ({ product }: { product: IProduct }) => {
             className="w-full justify-start"
             onClick={(e) => {
               e.stopPropagation();
-              console.log(product);
               router.push(`${pathname}?product=${product?.unique_id}`);
               handleDrawerOpen({
                 open: true,

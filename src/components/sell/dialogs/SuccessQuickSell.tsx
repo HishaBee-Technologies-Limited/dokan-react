@@ -17,8 +17,6 @@ const Successful = () => {
   const due =
     calculatedProducts?.totalPrice! - calculatedProducts?.paymentAmount!;
 
-  console.log(due, calculatedProducts.paymentAmount);
-
   return (
     <>
       <div className="py-space16 mx-auto max-w-[26.4rem] space-y-space40">

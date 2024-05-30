@@ -37,9 +37,7 @@ const AddNewCategory = () => {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log('data------------', data);
     const res = await createExpenseCategory({ name: data.name });
-    console.log(res);
     if (res?.success) {
       toast.success('Expense category added');
       closeDialog({ open: false });

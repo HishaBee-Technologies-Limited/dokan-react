@@ -14,7 +14,6 @@ export const verifyOTP = async ({
     `/otp/verify?mobile_number=${mobile_number}&code=${otp}&type=MANUAL`
   );
   const data = await res.json();
-  console.log(data);
   if (res.ok) {
     cookieStore.set('otp', otp);
     return { success: true, status: data.code, data: data };

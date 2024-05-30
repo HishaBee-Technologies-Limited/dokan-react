@@ -136,7 +136,6 @@ const QuickSell = ({
       total_profit: data.profit,
       total_item: 1,
     });
-    console.log('res----', responseCreateSell);
 
     if (responseCreateSell?.success) {
       addQuickSell({
@@ -156,8 +155,6 @@ const QuickSell = ({
     }
     if (responseCreateSell?.error) {
       toast.error('Something went wrong');
-
-      console.log('error-------', responseCreateSell?.error);
     }
     // if (data.cash_type === 'due') {
     //   const shop_id = getCookie('shopId') as string;
@@ -224,12 +221,10 @@ const QuickSell = ({
     closeDrawer({ open: false });
     toast.success('Quick Sell Added SuccessFully');
     // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
-    console.log('data------------', data);
   }
 
   useEffect(() => {
     if (contact) {
-      console.log(contact);
       form.setValue('customer', contact.name);
       form.setValue('number', contact.mobile);
     }
@@ -238,7 +233,6 @@ const QuickSell = ({
   useEffect(() => {
     const cus_mobile = form.watch('number');
     const due = dueList?.find((due) => due.contact_mobile === cus_mobile);
-    console.log(due);
     due ? form.setValue('due', due) : due;
   }, [dueList, form.watch('number')]);
 

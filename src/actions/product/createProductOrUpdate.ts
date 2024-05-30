@@ -72,12 +72,9 @@ export const createProductOrUpdate = async ({
       ...(weight && { weight }),
       ...(unit && { unit }),
     };
-    console.log(payload);
 
     const res = await authApi.post(`/product`, payload);
-    console.log(res);
     const data = await res.json();
-    console.log(data);
 
     if (res.ok) {
       return {

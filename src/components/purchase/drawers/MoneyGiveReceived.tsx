@@ -122,7 +122,6 @@ const MoneyGiveReceived = ({
   useEffect(() => {
     // console.log(selectedSupplier.split('-'));
     const customer = name?.split('-');
-    console.log('ccccc', customer[1]);
     if (customer) {
       form.setValue('number', customer[1]);
     }
@@ -156,10 +155,6 @@ const MoneyGiveReceived = ({
     });
 
     if (responseCreatePurchase?.success) {
-      console.log(
-        formatDate(DATE_FORMATS.default, data.date),
-        formatDate(DATE_FORMATS.default)
-      );
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
           created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -204,7 +199,6 @@ const MoneyGiveReceived = ({
       };
 
       const dueRes = await createDue(payload);
-      console.log('dueRes----', dueRes);
 
       const payloadForDueItem = {
         amount: -Number(data.amount),
@@ -229,7 +223,7 @@ const MoneyGiveReceived = ({
       const payloadForDueItemForPayment = {
         amount: -paymentAmount * -1,
         unique_id: generateUlid(),
-        due_left: -Number(data.amount),
+        due_left: 0,
         version: DEFAULT_STARTING_VERSION,
         updated_at: formatDate(DATE_FORMATS.default),
         created_at: formatDate(DATE_FORMATS.default),
@@ -239,13 +233,11 @@ const MoneyGiveReceived = ({
         contact_name: data.name,
         sms: data.sms ?? false,
         due_unique_id: dueRes?.data.due.unique_id,
-        purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+        purchase_unique_id: null,
       };
 
       const res = await createDueItem(payloadForDueItem);
       const resAmount = await createDueItem(payloadForDueItemForPayment);
-
-      console.log(res, resAmount);
 
       setCalculatedProducts({
         ...calculatedProducts,
@@ -260,8 +252,6 @@ const MoneyGiveReceived = ({
     }
     if (responseCreatePurchase?.error) {
       toast.error('Something went wrong');
-
-      console.log('error-------', responseCreatePurchase?.error);
     }
   }
 
@@ -304,7 +294,6 @@ const MoneyGiveReceived = ({
   useEffect(() => {
     const sup_mobile = form.watch('number');
     const due = dueList.find((due) => due.contact_mobile === sup_mobile);
-    console.log(due?.due_amount);
     due ? form.setValue('due', due) : due;
   }, [dueList, form.watch('number')]);
 
@@ -320,7 +309,6 @@ const MoneyGiveReceived = ({
     [calculatedProducts]
   );
 
-  console.log(form.formState.errors);
   return (
     <div className="space-y-space12">
       <Tabs onChange={(value) => {}} defaultValue={partyList[1]}>

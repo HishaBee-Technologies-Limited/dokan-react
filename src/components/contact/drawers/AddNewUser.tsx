@@ -67,7 +67,6 @@ const AddNewUser = () => {
     const response = await createNewUser();
     if (response?.success) {
       closeDrawer({ open: false });
-      console.log('response true');
       router.refresh();
     } else {
       console.log('error', response?.error);
@@ -146,7 +145,6 @@ const AddNewUser = () => {
                   placeholder="Phone Number"
                   maxLength={11}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    console.log(e.target.value.length);
                     if (e.target.value.length <= 11) {
                       const result = e.target?.value.replace(/\D/g, '');
                       field.onChange(result);

@@ -44,12 +44,10 @@ const EditCategory = ({
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log('data------------', data);
     const res = await editExpenseCategory({
       name: data.name,
       id: JSON.parse(currentCategory).id,
     });
-    console.log(res);
     if (res?.success) {
       toast.success('Expense category edited');
       closeDialog({ open: false });

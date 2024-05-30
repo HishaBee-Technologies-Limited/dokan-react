@@ -53,12 +53,10 @@ const OTPVerify = ({ mobile_number }: { mobile_number: string }) => {
         const res = await verifyOTP({ mobile_number, otp });
 
         if (res?.success) {
-          console.log(res);
           startCountdown();
           setDisableResetOtpButton(true);
 
           if (res.status === 200) {
-            console.log(res.data);
             router.push('/auth/signup');
           }
           if (res.status === 400) {

@@ -10,10 +10,8 @@ import { Text } from '@/components/common/text';
 import { Switch } from '@/components/ui/switch';
 import { useDueStore } from '@/stores/useDueStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import DatePicker from '@/components/common/DatePicker';
 import { DrawerFooter } from '@/components/common/Drawer';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+
 import {
   Form,
   FormItem,
@@ -21,7 +19,6 @@ import {
   FormControl,
   FormMessage,
   FormLabel,
-  FormDescription,
 } from '@/components/ui/form';
 import FallBackImage from '@/components/common/FallBackImage';
 import {
@@ -39,11 +36,6 @@ import { createDue } from '@/actions/due/createDue';
 import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
 import { createDueItem } from '@/actions/due/createDueItem';
 import { useRouter } from 'next/navigation';
-
-const cashType = [
-  { value: 'given', label: 'Given', dis: 'You give money' },
-  { value: 'received', label: 'Received', dis: 'You received money' },
-];
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -116,10 +108,8 @@ const MoneyGiveReceived = () => {
     };
 
     const res = await createDueItem(payloadForDueItem);
-    console.log(res);
     router.refresh();
     handleDrawerOpen({ open: false });
-    console.log('data------------', data);
   }
 
   const activeCashColor = (active: string): string => {
@@ -148,8 +138,6 @@ const MoneyGiveReceived = () => {
       handleDrawerOpen({ open: true, header: DueEnum.MONEY_RECEIVED_ENTRY });
     }
   }, [form.watch('cash_type')]);
-
-  console.log(cashStatus, due);
 
   return (
     <div className="space-y-space12">

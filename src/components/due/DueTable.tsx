@@ -11,8 +11,6 @@ import { IDueItemsResponse } from '@/types/due/dueResponse';
 export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
   let totalBalance = 0;
 
-  console.log(dueItems);
-
   const calculateBalance = (amount: number, index: number) => {
     if (index === 1) {
       totalBalance =
@@ -22,9 +20,7 @@ export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
 
       return totalBalance;
     } else {
-      console.log(amount);
       totalBalance = amount > 0 ? amount - totalBalance : totalBalance + amount;
-
       return totalBalance;
     }
   };
@@ -42,7 +38,6 @@ export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
       </TableHeader>
       <TableBody>
         {dueItems.map((row, i) => {
-          console.log(row);
           if (i === 0) {
             return (
               <TableRow key={i}>

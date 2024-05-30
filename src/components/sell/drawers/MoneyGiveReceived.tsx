@@ -137,7 +137,6 @@ const MoneyGiveReceived = ({
   useEffect(() => {
     // console.log(selectedSupplier.split('-'));
     const customer = name?.split('-');
-    console.log('ccccc', customer[1]);
     if (customer) {
       form.setValue('number', customer[1]);
     }
@@ -172,7 +171,6 @@ const MoneyGiveReceived = ({
       total_profit: String(totalProfit),
       extra_charge: Number(calculatedProducts.deliveryCharge),
     });
-    console.log('res----', responseCreateSell);
 
     if (responseCreateSell?.success) {
       calculatedProducts.products.forEach(async (product) => {
@@ -203,11 +201,8 @@ const MoneyGiveReceived = ({
     }
     if (responseCreateSell?.error) {
       toast.error('Something went wrong');
-
-      console.log('error-------', responseCreateSell?.error);
     }
     const shop_id = getCookie('shopId') as string;
-    console.log('shopId----', shop_id);
     const amount = data.due
       ? Number(data.due.due_amount) + Number(data.amount)
       : Number(data.amount);
@@ -230,7 +225,6 @@ const MoneyGiveReceived = ({
     };
 
     const dueRes = await createDue(payload);
-    console.log('dueRes----', dueRes);
     if (!dueRes?.success) return toast.error('Something went wrong');
 
     if (dueRes?.success) {
@@ -258,7 +252,7 @@ const MoneyGiveReceived = ({
       const payloadForPaymentAmount = {
         amount: paymentAmount * -1,
         unique_id: generateUlid(),
-        due_left: Number(data.amount),
+        due_left: 0,
         version: DEFAULT_STARTING_VERSION,
         updated_at: formatDate(DATE_FORMATS.default),
         created_at: formatDate(DATE_FORMATS.default),
@@ -267,15 +261,12 @@ const MoneyGiveReceived = ({
         contact_type: 'CUSTOMER',
         contact_name: data.name,
         sms: data.sms ?? false,
-        transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
+        transaction_unique_id: null,
         due_unique_id: dueRes?.data.due.unique_id,
       };
 
-      console.log('---', payload);
-
       const res = await createDueItem(payload);
       const resAmount = await createDueItem(payloadForPaymentAmount);
-      console.log('res----', res, resAmount);
     }
     setCalculatedProducts({
       ...calculatedProducts,
@@ -289,7 +280,6 @@ const MoneyGiveReceived = ({
 
     handleSellDrawer({ open: false });
     openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
-    console.log('data------------', data);
   }
 
   const activeCashColor = (active: string): string => {
@@ -334,7 +324,6 @@ const MoneyGiveReceived = ({
   useEffect(() => {
     const cus_mobile = form.watch('number');
     const due = dueList?.find((due) => due.contact_mobile === cus_mobile);
-    console.log(due);
     due ? form.setValue('due', due) : due;
   }, [dueList, form.watch('number')]);
   const totalItems = useMemo(

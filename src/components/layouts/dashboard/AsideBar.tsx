@@ -22,7 +22,6 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
   const shop = getCookie('shop');
   const [link, setLink] = useState<IAsideBarMenuItem[]>([]);
   useEffect(() => {
-    console.log(shop);
     if (
       JSON.parse(shop as string).subscription === SUBSCRIPTION_PACKAGES.advanced
     ) {

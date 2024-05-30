@@ -19,8 +19,6 @@ export const deleteProduct = async (product: IProduct) => {
 
     revalidatePath('/product');
 
-    console.log(data);
-
     if (res.ok) {
       return {
         success: true,

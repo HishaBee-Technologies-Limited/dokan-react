@@ -4,16 +4,13 @@ import { authApi } from '@/lib/api';
 import { IShopResponse } from '@/types/shop';
 
 export const getAllShops = async () => {
-  console.log('----');
   try {
     const res = await authApi.get('/shop/all');
     // if (res.status === 401) {
     //   cookies().delete('authjs.session-token');
     //   redirect('/');
     // }
-    console.log('----', res);
     const data = await res.json();
-    console.log('shop', data);
 
     if (res.ok) {
       return {

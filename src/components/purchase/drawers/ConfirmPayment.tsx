@@ -140,7 +140,6 @@ const ConfirmPayment = () => {
           shopNumber: JSON.parse(shop!).number,
         })
       : null;
-    console.log(sms);
     const supplierName = data.supplier?.split('-')[0];
     const employeeName = data.employee?.split('-')[0];
 
@@ -174,7 +173,6 @@ const ConfirmPayment = () => {
     });
 
     if (responseCreatePurchase?.success) {
-      console.log(responseCreatePurchase);
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
           created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -215,7 +213,6 @@ const ConfirmPayment = () => {
     [calculatedProducts]
   );
 
-  console.log(totalItems);
   // logger.info('Total items', shop);
 
   useEffect(() => {

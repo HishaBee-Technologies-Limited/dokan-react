@@ -31,7 +31,6 @@ const NewUserAccess = () => {
       email: data.email as string,
       address: data.address as string,
     };
-    console.log(payload);
   }
 
   return (

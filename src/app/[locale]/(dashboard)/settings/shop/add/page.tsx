@@ -39,9 +39,7 @@ import { ShopSchema } from '@/schemas/shop';
 import { IAllArea } from '@/types/shop';
 import { getAreasAndTypes } from '@/actions/shop/getAreaAndTypes';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getShopInfo } from '@/actions/shop/getShopInfo';
-import { getAreaInfo } from '@/actions/shop/getArea';
-import { updateShop } from '@/actions/shop/updateShop';
+
 import { toast } from 'sonner';
 import { useFileUpload } from '@/hooks/uploadMultipleFile';
 import { createShops } from '@/actions/shop/createShop';
@@ -90,7 +88,6 @@ const AddShopPage = () => {
     area,
     logo_url,
   }: z.infer<typeof ShopSchema>) {
-    console.log(shopId, address);
     const res = await createShops({
       shopId: Number(shopId),
       name,
@@ -113,7 +110,6 @@ const AddShopPage = () => {
     const getAllAreas = async () => {
       const res = await getAreasAndTypes();
       setDivisions(res?.data?.areaData);
-      console.log(res);
       setTypes(res?.data?.typesData);
     };
     getAllAreas();
@@ -128,7 +124,6 @@ const AddShopPage = () => {
   useEffect(() => {
     form.setValue('logo_url', imageUrls[0]);
   }, [imageUrls]);
-  console.log(form.formState.errors);
 
   return (
     <div className="space-y-space16 pb-space16">

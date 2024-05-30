@@ -14,12 +14,9 @@ export const createDueItem = async (payload: any) => {
       shop_id: shopId,
       ...payload,
     });
-    console.log(params);
 
     const res = await authApi.post(`/due_item/add?${params}`);
-    console.log(res);
     const data = await res.json();
-    console.log(data);
 
     if (res.ok) {
       return {

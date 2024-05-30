@@ -40,8 +40,6 @@ const GiveNumber = () => {
     const response = await checkNumber({ mobile_number });
     setLoading(false);
 
-    console.log(response);
-
     if (response?.success) {
       if (response.data?.code === 200) {
         router.push('/auth/pin');

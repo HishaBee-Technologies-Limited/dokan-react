@@ -42,7 +42,6 @@ const HistoryTable = ({
   const setCurrentPurchase = useSellStore((state) => state.setCurrentSell);
   const handleRowClick = (row: IPurchaseHistoryResponse) => {
     handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_DETAILS });
-    console.log(row);
     setCurrentPurchase(row);
   };
 
@@ -75,7 +74,6 @@ const HistoryTable = ({
       return 'bg-error-20';
     }
   };
-  console.log(transactions);
 
   return (
     <ScrollArea className="pb-space8">

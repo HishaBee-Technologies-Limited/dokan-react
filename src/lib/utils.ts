@@ -65,7 +65,6 @@ export function calculateTotal(
   discountType?: DiscountType
 ) {
   const totalWithoutDelivery = totalPrice - deliveryCharge;
-  console.log(totalWithoutDelivery);
   if (discountType) {
     if (discountType === 'PERCENT') {
       const discountPercentToTaka = 1 - discountAmount / 100;

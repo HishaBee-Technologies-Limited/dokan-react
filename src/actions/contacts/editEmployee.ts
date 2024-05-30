@@ -15,10 +15,8 @@ export const editEmployee = async (payload: any) => {
   });
 
   try {
-    console.log(updatedPayload);
     const res = await authApi.get(`/employee/edit?${updatedPayload}`);
     const data = await res.json();
-    console.log(data);
 
     revalidatePath('/contact');
 

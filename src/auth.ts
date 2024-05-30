@@ -49,7 +49,6 @@ export const {
         });
 
         const user = await response?.data;
-        console.log(user, response);
         if (response?.status === 200 && user.user.id) return user.user;
         if (user.code === 400) {
           return { success: false, status: user.code, data: user.message };
@@ -62,7 +61,6 @@ export const {
 
       async authorize(credentials) {
         const validatedFields = RegisterSchema.safeParse(credentials);
-        console.log(credentials);
         if (!validatedFields.success) return null;
 
         const {
@@ -83,7 +81,6 @@ export const {
         });
 
         const user = await response?.data;
-        console.log(user, response);
         if (response?.status === 200 && user.user.id) return user;
         else return { errorMessage: user.message };
       },

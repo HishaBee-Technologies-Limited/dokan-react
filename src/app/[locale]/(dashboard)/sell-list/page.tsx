@@ -14,7 +14,6 @@ const SellHistory = async ({ searchParams }: any) => {
     searchParams.start_date,
     searchParams.end_date
   );
-  console.log(transactions);
   const shopId = cookies().get('shopId')?.value;
   const customers = await getAllCustomer(Number(shopId));
   return (

@@ -27,7 +27,6 @@ export const useCreateQueryString = () => {
     // const { pathname, query } = router;
     const params = new URLSearchParams(searchParams.toString());
     params.delete(param);
-    console.log('params=============', `${pathname}?${params.toString()}`);
     router.replace(`${pathname}?${params.toString()}`, undefined);
     // { shallow: true }
   };

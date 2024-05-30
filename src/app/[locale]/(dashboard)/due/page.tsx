@@ -45,8 +45,6 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
     filteredDueList = employeeDueList;
   }
 
-  // console.log(dueList);
-
   const positiveValue = dueList?.data?.data
     ?.filter((item) => item.due_amount > 0)
     .reduce((acc, item) => {
@@ -63,8 +61,6 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
     total_get: negativeValue ?? 0,
     total_give: positiveValue ?? 0,
   };
-
-  // console.log(positiveValue, negativeValue);
 
   return (
     <>

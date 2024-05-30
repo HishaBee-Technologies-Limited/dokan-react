@@ -60,7 +60,6 @@ const ContactPage = async ({
     transactionsPerUser = purchase?.data?.filter(
       (item) => item.supplier_mobile === supplierDetails?.mobile
     );
-    console.log(res, purchasePerSup);
   }
   if (tab === ContactType.EMPLOYEE && searchParams.active_user) {
     const res = await getSingleEmployee(Number(searchParams.active_user));

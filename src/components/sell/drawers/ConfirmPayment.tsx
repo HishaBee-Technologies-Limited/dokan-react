@@ -102,9 +102,7 @@ const ConfirmPayment = () => {
       form.setValue('amount', String(calculatedProducts.totalPrice));
     }
   }, [calculatedProducts, form]);
-  console.log(calculatedProducts);
   useEffect(() => {
-    console.log(selectedSupplier.split('-'));
     const supplierNameArray = selectedSupplier.split('-');
     const employeeNameArray = selectedEmployee?.split('-');
     if (selectedSupplier) {
@@ -130,8 +128,6 @@ const ConfirmPayment = () => {
     }
     const customerName = data.customer.split('-')[0];
     const employeeName = data.employee?.split('-')[0];
-
-    console.log(customerName, employeeName);
 
     setLoading(true);
     const responseCreateSell = await createSell({
@@ -160,13 +156,11 @@ const ConfirmPayment = () => {
       total_profit: String(totalProfit),
       message: data.sms ? 'SMS' : null,
     });
-    console.log('res----', responseCreateSell);
 
     if (!responseCreateSell?.success)
       return toast.error('Something went wrong');
 
     if (responseCreateSell?.success) {
-      console.log(responseCreateSell);
       calculatedProducts.products.forEach(async (product) => {
         sellItemCreate({
           created_at: formatDate(DATE_FORMATS.default),
@@ -201,11 +195,8 @@ const ConfirmPayment = () => {
     }
     if (responseCreateSell?.error) {
       toast.error('Something went wrong');
-
-      console.log('error-------', responseCreateSell?.error);
     }
 
-    console.log('data------------', data);
     // console.log('res------------', responseCreateSell);
   }
 
@@ -247,8 +238,6 @@ const ConfirmPayment = () => {
       }, 0),
     [calculatedProducts]
   );
-  console.log(totalItems);
-  console.log(calculatedProducts);
 
   return (
     <Form {...form}>

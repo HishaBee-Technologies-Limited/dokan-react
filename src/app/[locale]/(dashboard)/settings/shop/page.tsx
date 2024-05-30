@@ -41,14 +41,12 @@ const SwitchShopPage = () => {
   };
 
   const handleContinue = async (shop: IShopResponse) => {
-    console.log(selectShop);
     const shopString = JSON.stringify({
       sms_count: shop.sms_count,
       subscription: shop.package,
       name: shop.name,
       number: shop.public_number,
     });
-    console.log(shop);
     setCookie('shopId', shop?.id);
     setCookie('shop', shopString);
     // window.location.reload();
@@ -58,7 +56,6 @@ const SwitchShopPage = () => {
   useEffect(() => {
     const getShops = async () => {
       const shops = await getAllShops();
-      console.log(shops);
       if (shops?.success) {
         setShops(shops?.data as IShopResponse[]);
       } else {
@@ -81,8 +78,6 @@ const SwitchShopPage = () => {
   //     setSelectShop(JSON.parse(currentShop));
   //   }
   // }, [currentShop]);
-
-  console.log(currentShop);
 
   return (
     <div className="space-y-space16">

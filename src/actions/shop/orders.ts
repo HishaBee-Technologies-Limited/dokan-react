@@ -35,7 +35,6 @@ export const getOrders = async ({
       return { success: false, error: data };
     }
   } catch (error) {
-    console.error(error);
     return { success: false, error: 'Something went wrong' };
   }
 };

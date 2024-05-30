@@ -48,7 +48,6 @@ const EditUser = () => {
   });
 
   useEffect(() => {
-    console.log(party);
     form.setValue('name', party?.name as string);
     form.setValue('number', party?.mobile as string);
     form.setValue('address', party?.address ?? ('' as string));
@@ -69,8 +68,6 @@ const EditUser = () => {
       salary_amount: data.salary,
     };
 
-    console.log(party);
-
     const updateParty = () => {
       if (activeTab === 'Customer') {
         return editCustomer(payload);
@@ -89,7 +86,6 @@ const EditUser = () => {
         closeDrawer({ open: false });
       } else {
         toast.error('Something went wrong');
-        console.log('error', response?.error);
       }
     };
 
@@ -106,7 +102,6 @@ const EditUser = () => {
     form.setValue('image_src', imageUrls[0]);
   }, [imageUrls]);
 
-  console.log(party);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">

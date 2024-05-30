@@ -80,11 +80,8 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
       image_changed: false,
     },
   });
-  console.log(expense);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log('data------------', data, expense);
-
     const res = await editExpense({
       type: data.category_name,
       amount: Number(data.amount),
@@ -100,7 +97,6 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
       id: expense.id,
     });
 
-    console.log('expense------------', res);
     if (res?.success) {
       router.refresh();
 
@@ -111,8 +107,6 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
     if (res?.error) {
       toast.error('Something went wrong');
       closeDrawer({ open: false });
-
-      console.log('error-------', res?.error);
     }
   }
 
@@ -129,7 +123,6 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
     //get categories
     const fetchCategories = async () => {
       const res = await getCategories();
-      console.log(res);
       if (res?.success) {
         form.setValue('category_name', expense?.type);
 
@@ -148,8 +141,6 @@ const EditExpense = ({ expense }: { expense: IExpense }) => {
   useEffect(() => {
     form.setValue('images', imageUrls[0]);
   }, [imageUrls]);
-
-  console.log(categories);
 
   return (
     <Form {...form}>

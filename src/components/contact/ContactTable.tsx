@@ -14,11 +14,8 @@ import { IProductSellPayload } from '@/types/sell';
 import { format } from 'date-fns';
 
 export const ContactTable = ({ userTransaction }: { userTransaction: any }) => {
-  console.log('transss', userTransaction);
   const { getQueryString } = useCreateQueryString();
-
   const activeTab = getQueryString('tab') ?? '';
-  console.log(activeTab);
 
   return (
     <Table wrapperClass="min-w-[60rem]">

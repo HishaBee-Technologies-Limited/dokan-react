@@ -22,10 +22,8 @@ export const updateShop = async ({
       public_number,
       logo_url,
     });
-    console.log(payload);
 
     const res = await authApi.get(`/shop/edit?${payload}`);
-    console.log(res);
     const data = await res.json();
 
     if (res.ok) {
@@ -36,7 +34,6 @@ export const updateShop = async ({
       };
     }
     if (!res.ok) {
-      console.log(data);
       return { success: false, error: data };
     }
   } catch {

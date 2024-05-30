@@ -65,7 +65,6 @@ const QuickSellEdit = ({ customers }: { customers?: IUserResponse[] }) => {
   function onSubmit(data: z.infer<typeof formSchema>) {
     closeDrawer({ open: false });
     openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
-    console.log('data------------', data);
   }
 
   return (

@@ -14,7 +14,6 @@ const ExpansePage = async ({ searchParams }: any) => {
   let singleExpense;
   if (searchParams.expense) {
     singleExpense = await getSingleExpense(searchParams.expense);
-    console.log(singleExpense);
   }
   const categoriesRes = await getCategories();
 

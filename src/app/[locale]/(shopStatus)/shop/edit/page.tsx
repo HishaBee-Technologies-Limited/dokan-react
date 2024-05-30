@@ -97,7 +97,6 @@ const EditShopPage = () => {
   useEffect(() => {
     const getAllAreasAndTypes = async () => {
       const shopInfo = await getShopInfo(shopId as string);
-      console.log(shopInfo);
       if (shopInfo?.success) {
         form.setValue('address', shopInfo?.data?.shop?.address ?? '');
         form.setValue('name', shopInfo?.data?.shop?.name ?? '');

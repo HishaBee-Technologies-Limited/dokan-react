@@ -11,13 +11,10 @@ export const addSupplier = async (payload: any) => {
     ...payload,
     shop_id: Number(shopId),
   });
-  console.log(updatedPayload);
-  console.log(shopId);
 
   try {
     const res = await authApi.get(`/supplier/add?${updatedPayload}`);
     const data = await res.json();
-    console.log(res);
 
     if (res.ok) {
       return {
@@ -30,7 +27,6 @@ export const addSupplier = async (payload: any) => {
       return { success: false, error: data };
     }
   } catch (error) {
-    console.log(error);
     return { success: false, error: 'Something went wrong' };
   }
 };

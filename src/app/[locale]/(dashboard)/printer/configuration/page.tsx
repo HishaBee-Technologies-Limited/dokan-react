@@ -48,7 +48,6 @@ const ConfigurationPage = () => {
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     // closeDrawer({ open: false })
-    console.log('data------------', data);
   }
 
   return (

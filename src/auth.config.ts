@@ -20,8 +20,6 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl, cookies, headers } }) {
       const isLoggedIn = !!auth;
 
-      console.log('isLoggedIn', isLoggedIn);
-
       const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
       const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
       const isRootRoute = nextUrl.pathname === rootRoute;

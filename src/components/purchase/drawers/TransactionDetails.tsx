@@ -52,7 +52,6 @@ const TransactionDetails = () => {
       return acc + Number(curr?.quantity)!;
     }, 0);
   }, [purchaseProducts]);
-  console.log(purchaseProducts);
 
   return (
     <div className="space-y-space12">

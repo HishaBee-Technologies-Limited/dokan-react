@@ -211,7 +211,6 @@ export const EditProduct = ({
           <div className="flex gap-space12 py-space12">
             {imageUrls.map((url: string) => (
               <div key={url}>
-                {console.log(url[0])}
                 <Image src={url} alt="" height={60} width={60} />
                 {loading && <Skeleton className="h-2 w-full rounded-none" />}
               </div>

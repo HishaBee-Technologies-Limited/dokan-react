@@ -15,9 +15,7 @@ export const deleteExpenseCategory = async ({
     const shopId = cookies().get('shopId')?.value;
 
     const res = await authApi.delete(`/expense_category?id=${id}`);
-    console.log(res);
     const data = await res.json();
-    console.log(data);
     revalidatePath('/expense');
 
     if (res.ok) {
