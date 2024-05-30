@@ -112,7 +112,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
         </div> */}
       </div>
 
-      <ScrollArea className="h-[calc(100%-20.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
+      <ScrollArea className="h-[calc(100%-6.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
         {dueList?.length ? (
           <WrapperOddList>
             {dueList?.map((item, index) => (
@@ -138,7 +138,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
                   <div className="w-full flex items-center justify-between gap-space12">
                     <article>
                       <Text
-                        title={item.contact_name}
+                        title={item.contact_name.split('-')[0]}
                         className="!text-md font-medium"
                       />
                       <Text title={item.contact_mobile} variant="muted" />

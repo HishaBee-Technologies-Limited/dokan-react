@@ -140,7 +140,7 @@ export const EditProduct = ({
       form.setValue('bulk_price', String(product?.wholesale_price ?? '')),
       form.setValue('bulk_quantity', String(product?.wholesale_amount ?? '')),
       form.setValue('low_stock', String(product?.stock_alert ?? '')),
-      form.setValue('vat_percentage', String(product?.wholesale_price ?? '')),
+      form.setValue('vat_percentage', String(product?.vat_percent ?? '')),
       form.setValue('warranty_duration', String(product?.warranty ?? '')),
       form.setValue('discount', String(product?.discount ?? '')),
       form.setValue(

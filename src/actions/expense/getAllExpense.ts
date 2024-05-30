@@ -9,7 +9,7 @@ export const getAllExpense = async (page?: number) => {
   const currentPage = page ? page : 1;
   try {
     const shopId = cookies().get('shopId')?.value;
-    const params = `shop_id=${shopId}&per_page=${pageCount}&page=${currentPage}`;
+    const params = `shop_id=${shopId}&per_page=${pageCount}&page=${currentPage}&exclude_deleted=true`;
     const res = await authApi.get(`/expense/all?${params}`);
     const data = await res.json();
     if (res.ok) {

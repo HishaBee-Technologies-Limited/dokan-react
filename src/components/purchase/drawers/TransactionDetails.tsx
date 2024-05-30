@@ -47,14 +47,18 @@ const TransactionDetails = () => {
     };
     getPurchaseProducts();
   }, [currentPurchase]);
-
+  const totalItems = useMemo(() => {
+    return purchaseProducts?.items?.reduce((acc, curr) => {
+      return acc + Number(curr?.quantity)!;
+    }, 0);
+  }, [purchaseProducts]);
   console.log(purchaseProducts);
 
   return (
     <div className="space-y-space12">
       <section className="bg-secondary rounded-lg p-space12 space-y-space16 ">
         <Text
-          title={`Total Item: ${purchaseProducts?.items?.length ?? 0}`}
+          title={`Total Item: ${totalItems ?? 0}`}
           className="font-semibold"
         />
 

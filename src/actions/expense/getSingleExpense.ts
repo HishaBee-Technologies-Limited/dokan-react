@@ -4,7 +4,7 @@ import { authApi } from '@/lib/api';
 
 export const getSingleExpense = async (id?: string) => {
   try {
-    const res = await authApi.get(`/expense/${id}`);
+    const res = await authApi.get(`/expense/${id}?exclude_deleted=true`);
     const data = await res.json();
 
     if (res.ok) {

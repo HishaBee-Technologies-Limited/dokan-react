@@ -10,9 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useRouter } from 'next/navigation';
 
 const ProductListQueries = () => {
   const [value, setValue] = React.useState<string>('');
+  const router = useRouter();
 
   return (
     <div className="space-y-space8 w-full p-space8 border-b border-color">
@@ -23,6 +25,7 @@ const ProductListQueries = () => {
         <Button
           variant={'secondary'}
           className="!h-[4.4rem] w-[4.8rem] sm:px-space8 text-lg"
+          onClick={() => router.push('/product')}
         >
           <AddIcon />
         </Button>

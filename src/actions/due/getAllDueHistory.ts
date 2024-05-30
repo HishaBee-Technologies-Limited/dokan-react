@@ -23,7 +23,7 @@ export const getAllDueHistory = async (params: IGetAllDueHistory) => {
 
   try {
     const shopId = cookies().get('shopId')?.value;
-    const params = `shop_id=${shopId}&start_date=${format(subMonths(today, 1), 'yyyy-MM-dd hh:mm:ss')}&end_date=${endDate}`; //&page=${page}
+    const params = `shop_id=${shopId}&start_date=${format(subMonths(today, 1), 'yyyy-MM-dd hh:mm:ss')}&end_date=${endDate}&exclude_deleted=true`; //&page=${page}
     const res = await authApi.get(`/due/history?${params}`);
     const data = await res.json();
 

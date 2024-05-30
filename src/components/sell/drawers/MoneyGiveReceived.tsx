@@ -145,6 +145,7 @@ const MoneyGiveReceived = ({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
+    const customerName = data.name.split('-')[0];
 
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -158,7 +159,7 @@ const MoneyGiveReceived = ({
       purchase_barcode: '',
       received_amount: Number(data.amount),
       customer_mobile: data.number,
-      customer_name: data.name,
+      customer_name: customerName,
       customer_address: data.customer_address,
       total_item: totalItems,
       total_price: Number(data.amount),
@@ -249,10 +250,32 @@ const MoneyGiveReceived = ({
         due_unique_id: dueRes?.data.due.unique_id,
       };
 
+      const paymentAmount =
+        Number(data.amount) === Number(calculatedProducts.totalPrice)
+          ? 0
+          : Number(calculatedProducts.totalPrice) - Number(data.amount);
+
+      const payloadForPaymentAmount = {
+        amount: paymentAmount * -1,
+        unique_id: generateUlid(),
+        due_left: Number(data.amount),
+        version: DEFAULT_STARTING_VERSION,
+        updated_at: formatDate(DATE_FORMATS.default),
+        created_at: formatDate(DATE_FORMATS.default),
+        message: data.details,
+        contact_mobile: data.number,
+        contact_type: 'CUSTOMER',
+        contact_name: data.name,
+        sms: data.sms ?? false,
+        transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
+        due_unique_id: dueRes?.data.due.unique_id,
+      };
+
       console.log('---', payload);
 
       const res = await createDueItem(payload);
-      console.log('res----', res);
+      const resAmount = await createDueItem(payloadForPaymentAmount);
+      console.log('res----', res, resAmount);
     }
     setCalculatedProducts({
       ...calculatedProducts,

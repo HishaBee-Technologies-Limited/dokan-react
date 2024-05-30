@@ -5,7 +5,9 @@ import { IUserResponse } from '@/types/contact/partyResponse';
 
 export const getAllCustomer = async (shopId: number) => {
   try {
-    const res = await authApi.get(`/customer/all?shop_id=${shopId}`);
+    const res = await authApi.get(
+      `/customer/all?shop_id=${shopId}&exclude_deleted=true`
+    );
     const data = await res.json();
     if (res.ok) {
       return {

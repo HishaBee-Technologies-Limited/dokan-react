@@ -128,21 +128,25 @@ const ConfirmPayment = () => {
       });
       return;
     }
-    console.log(data.sms);
+    const customerName = data.customer.split('-')[0];
+    const employeeName = data.employee?.split('-')[0];
+
+    console.log(customerName, employeeName);
+
     setLoading(true);
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
       discount_type: calculatedProducts.discountType ?? '',
       employee_mobile: data.employee_number,
-      employee_name: data.employee?.split('-')[0],
+      employee_name: employeeName,
       note: data.note,
       payment_method: PAYMENT_METHODS.Cash,
       payment_status: PAYMENT_STATUS.PAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
       customer_mobile: data.customer_number,
-      customer_name: data.customer.split('-')[0],
+      customer_name: customerName,
       customer_address: data.customer_address,
       total_item: totalItems,
       total_price: Number(data.amount),
@@ -200,10 +204,9 @@ const ConfirmPayment = () => {
 
       console.log('error-------', responseCreateSell?.error);
     }
-    // closeDrawer({ open: false });
-    // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+
     console.log('data------------', data);
-    console.log('res------------', responseCreateSell);
+    // console.log('res------------', responseCreateSell);
   }
 
   useEffect(() => {
@@ -255,7 +258,7 @@ const ConfirmPayment = () => {
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of Purchase</FormLabel>
+              <FormLabel>Date of Sell</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>

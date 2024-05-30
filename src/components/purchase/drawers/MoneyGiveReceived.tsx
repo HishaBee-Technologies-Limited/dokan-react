@@ -130,7 +130,8 @@ const MoneyGiveReceived = ({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
-
+    const supplierName = data.name?.split('-')[0];
+    // const employeeName = data.employee?.split('-')[0];
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -144,7 +145,7 @@ const MoneyGiveReceived = ({
       purchase_barcode: '',
       received_amount: Number(data.amount),
       supplier_mobile: data.name,
-      supplier_name: data.number,
+      supplier_name: supplierName,
       total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: generateUlid(),
@@ -220,10 +221,31 @@ const MoneyGiveReceived = ({
         due_unique_id: dueRes?.data.due.unique_id,
         purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
       };
+      const paymentAmount =
+        Number(data.amount) === Number(calculatedProducts.totalPrice)
+          ? 0
+          : Number(calculatedProducts.totalPrice) - Number(data.amount);
+
+      const payloadForDueItemForPayment = {
+        amount: -paymentAmount * -1,
+        unique_id: generateUlid(),
+        due_left: -Number(data.amount),
+        version: DEFAULT_STARTING_VERSION,
+        updated_at: formatDate(DATE_FORMATS.default),
+        created_at: formatDate(DATE_FORMATS.default),
+        message: data.details,
+        contact_mobile: data.number,
+        contact_type: 'SUPPLIER',
+        contact_name: data.name,
+        sms: data.sms ?? false,
+        due_unique_id: dueRes?.data.due.unique_id,
+        purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+      };
 
       const res = await createDueItem(payloadForDueItem);
+      const resAmount = await createDueItem(payloadForDueItemForPayment);
 
-      console.log(res);
+      console.log(res, resAmount);
 
       setCalculatedProducts({
         ...calculatedProducts,

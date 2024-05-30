@@ -60,7 +60,7 @@ export const createPurchase = async ({
       discount_type: discount_type,
       sms: sms,
     };
-    console.log(JSON.stringify(payload, null, 4));
+    console.log(JSON.stringify(payload, null, 1));
     const res = await authApi.post(`/purchase`, payload);
     const data = await res.json();
     revalidatePath('/purchase-list');

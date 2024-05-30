@@ -10,11 +10,11 @@ const SellHeader = () => {
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
 
   return (
-    <div className="flex flex-wrap gap-space16 justify-between items-center">
-      <PageTitle title="Select Products to Sell" />
-
+    <div className="flex flex-wrap gap-space16 justify-between items-center relative">
+      {/* <PageTitle title="Select Products to Sell" /> */}
       <Button
         variant={'secondary'}
+        className="h-14 absolute right-4 m-5 z-50 "
         onClick={() =>
           handleDrawerOpen({ open: true, header: SellEnum.QUICK_SELL })
         }

@@ -485,9 +485,7 @@ const EditShopPage = () => {
               <Button variant={'secondary'} className="!px-space40">
                 Cancel
               </Button>
-              <Button type="submit" disabled={!form.formState.isValid}>
-                Save
-              </Button>
+              <Button type="submit">Save</Button>
             </div>
           </form>
         </Form>

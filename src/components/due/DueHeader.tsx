@@ -17,14 +17,14 @@ const DueHeader = () => {
 
       <div className="flex gap-space12 grow-[1] sm:grow-0">
         <Link href="/due/history">
-          <Button variant={'secondary'}>
+          <Button variant={'secondary'} className="grow h-14">
             <HistoryIcon />
             <span>Due History</span>
           </Button>
         </Link>
 
         <Button
-          className="grow"
+          className="grow h-14"
           onClick={() =>
             handleDialogOpen({
               open: true,

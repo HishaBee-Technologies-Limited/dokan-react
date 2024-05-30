@@ -19,7 +19,7 @@ const HistoryHeader = () => {
   const handleSort = (value: string) => {};
   return (
     <div className="flex justify-between items-center flex-wrap gap-space16">
-      <PageSubTitle title="Transaction History" />
+      <PageSubTitle title="Purchase History" />
 
       <Button variant={'secondary'} className="sm:hidden">
         <DownloadIcon />

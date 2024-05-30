@@ -141,22 +141,29 @@ const ConfirmPayment = () => {
         })
       : null;
     console.log(sms);
+    const supplierName = data.supplier?.split('-')[0];
+    const employeeName = data.employee?.split('-')[0];
+
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
       date: formatDate(DATE_FORMATS.default, data.date),
-      discount: Number(calculatedProducts.discount),
+      discount: calculatedProducts.discount
+        ? Number(calculatedProducts.discount)
+        : 0,
       discount_type: calculatedProducts.discountType ?? '',
       employee_mobile: data.employee_number,
-      employee_name: data.employee,
-      extra_charge: Number(calculatedProducts.deliveryCharge),
+      employee_name: employeeName,
+      extra_charge: calculatedProducts.deliveryCharge
+        ? Number(calculatedProducts.deliveryCharge)
+        : 0,
       note: data.note,
       payment_method: PAYMENT_METHODS.Cash,
       payment_status: PAYMENT_STATUS.PAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
       supplier_mobile: data.supplier_number,
-      supplier_name: data.supplier,
+      supplier_name: supplierName,
       total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: generateUlid(),

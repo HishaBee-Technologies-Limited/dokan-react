@@ -100,7 +100,7 @@ const HistoryTable = ({
               <TableCell>{transaction.id}</TableCell>
               <TableCell>{transaction.total_item}</TableCell>
               <TableCell className="max-w-[400px]">
-                {transaction.customer_name}
+                {transaction.customer_name?.split('-')[0]}
               </TableCell>
               <TableCell>{transaction.total_price}</TableCell>
               <TableCell>{transaction.created_at}</TableCell>

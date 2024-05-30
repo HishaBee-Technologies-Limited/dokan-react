@@ -5,7 +5,9 @@ import { IUserResponse } from '@/types/contact/partyResponse';
 
 export const getAllSupplier = async (shopId: number) => {
   try {
-    const res = await authApi.get(`/supplier/all?shop_id=${shopId}`);
+    const res = await authApi.get(
+      `/supplier/all?shop_id=${shopId}&exclude_deleted=true`
+    );
     const data = await res.json();
 
     if (res.ok) {

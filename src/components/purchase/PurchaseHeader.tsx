@@ -8,7 +8,7 @@ import { HistoryIcon } from '@/components/common/icons/HistoryIcon';
 const PurchaseHeader = () => {
   return (
     <div className="flex flex-wrap gap-space16 justify-between items-center">
-      <PageTitle title="Select Products to Purchase" />
+      {/* <PageTitle title="Select Products to Purchase" /> */}
 
       {/* <Link href="/transaction-history">
         <Button variant={'secondary'}>
