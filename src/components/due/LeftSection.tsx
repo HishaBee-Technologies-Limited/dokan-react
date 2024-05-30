@@ -138,7 +138,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
                   <div className="w-full flex items-center justify-between gap-space12">
                     <article>
                       <Text
-                        title={item.contact_name.split('-')[0]}
+                        title={item.contact_name}
                         className="!text-md font-medium"
                       />
                       <Text title={item.contact_mobile} variant="muted" />

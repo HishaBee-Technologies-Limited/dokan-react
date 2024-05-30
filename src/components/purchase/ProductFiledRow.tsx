@@ -35,6 +35,21 @@ const ProductFiledRow = (props: IProps) => {
   const quantityWatch = props.form.watch(
     `products.${props.index}.product-${props.data?.id}.quantity`
   );
+  const totalWatch = props.form.watch(
+    `products.${props.index}.product-${props.data?.id}.total`
+  );
+
+  useEffect(() => {
+    const quantityValue = props.form.getValues(
+      `products.${props.index}.product-${props.data?.id}.quantity`
+    );
+    if (quantityValue) {
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.unit_cost`,
+        totalWatch / quantityValue
+      );
+    }
+  }, [totalWatch]);
 
   const handleProductDeleteFromSelections = () => {
     /**

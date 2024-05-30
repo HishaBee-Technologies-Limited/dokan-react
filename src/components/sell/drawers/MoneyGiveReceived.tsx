@@ -144,8 +144,7 @@ const MoneyGiveReceived = ({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
-    const customerName = data.name.split('-')[0];
-
+    console.log(JSON.parse(data.name));
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
@@ -157,8 +156,8 @@ const MoneyGiveReceived = ({
       payment_status: PAYMENT_STATUS.UNPAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
-      customer_mobile: data.number,
-      customer_name: customerName,
+      customer_mobile: JSON.parse(data.name).mobile,
+      customer_name: JSON.parse(data.name).name,
       customer_address: data.customer_address,
       total_item: totalItems,
       total_price: Number(data.amount),
@@ -469,7 +468,7 @@ const MoneyGiveReceived = ({
                       {customers?.map((customer, i) => (
                         <SelectItem
                           key={i + 1}
-                          value={`${customer.name}-${customer.mobile}`}
+                          value={JSON.stringify(customer)}
                         >
                           {customer.name}
                         </SelectItem>

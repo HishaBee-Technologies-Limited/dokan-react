@@ -131,6 +131,7 @@ const MoneyGiveReceived = ({
     setLoading(true);
     const supplierName = data.name?.split('-')[0];
     // const employeeName = data.employee?.split('-')[0];
+    console.log(JSON.parse(data.name));
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -143,8 +144,8 @@ const MoneyGiveReceived = ({
       payment_status: PAYMENT_STATUS.unpaid,
       purchase_barcode: '',
       received_amount: Number(data.amount),
-      supplier_mobile: data.name,
-      supplier_name: supplierName,
+      supplier_mobile: JSON.parse(data.name).mobile,
+      supplier_name: JSON.parse(data.name).name,
       total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: generateUlid(),
@@ -449,7 +450,7 @@ const MoneyGiveReceived = ({
                       {suppliers?.map((customer, i) => (
                         <SelectItem
                           key={i + 1}
-                          value={`${customer.name}-${customer.mobile}`}
+                          value={JSON.stringify(customer)}
                         >
                           {customer.name}
                         </SelectItem>

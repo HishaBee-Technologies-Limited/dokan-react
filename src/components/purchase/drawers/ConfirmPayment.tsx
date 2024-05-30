@@ -79,6 +79,8 @@ const ConfirmPayment = () => {
   const [suppliers, setSuppliers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
   const [loading, setLoading] = useState(false);
+  const [contact, setContact] = useState<IUserResponse>();
+
   const tkn = getCookie('access_token');
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
@@ -143,6 +145,8 @@ const ConfirmPayment = () => {
     const supplierName = data.supplier?.split('-')[0];
     const employeeName = data.employee?.split('-')[0];
 
+    console.log(JSON.parse(data.supplier));
+
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -161,8 +165,8 @@ const ConfirmPayment = () => {
       payment_status: PAYMENT_STATUS.PAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
-      supplier_mobile: data.supplier_number,
-      supplier_name: supplierName,
+      supplier_mobile: JSON.parse(data.supplier).mobile,
+      supplier_name: JSON.parse(data.supplier).name,
       total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: generateUlid(),
@@ -204,7 +208,13 @@ const ConfirmPayment = () => {
       toast.error('Something went wrong');
     }
   }
-
+  useEffect(() => {
+    console.log(contact);
+    if (contact) {
+      form.setValue('supplier', contact.name);
+      form.setValue('supplier_number', contact.mobile);
+    }
+  }, [contact]);
   const totalItems = useMemo(
     () =>
       calculatedProducts.products.reduce((prev, current) => {
@@ -358,7 +368,7 @@ const ConfirmPayment = () => {
                           {suppliers?.map((supplier) => (
                             <SelectItem
                               key={supplier.unique_id}
-                              value={`${supplier.name}-${supplier.mobile}`}
+                              value={JSON.stringify(supplier)}
                             >
                               {supplier.name}
                             </SelectItem>

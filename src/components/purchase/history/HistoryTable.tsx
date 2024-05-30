@@ -96,7 +96,7 @@ const HistoryTable = ({
             >
               <TableCell>{purchase.id}</TableCell>
               <TableCell>{purchase.total_item}</TableCell>
-              <TableCell>{purchase.supplier_name?.split('-')[0]}</TableCell>
+              <TableCell>{purchase.supplier_name}</TableCell>
               <TableCell>{purchase.total_price}</TableCell>
               <TableCell>{purchase.updated_at}</TableCell>
               <TableCell>

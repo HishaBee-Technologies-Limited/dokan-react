@@ -99,7 +99,7 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                       >
                         {menu.title}
                       </span>
-                      {!['ADVANCED', 'STABDARD', 'TRAIL'].includes(
+                      {!['ADVANCED', 'STANDARD', 'TRAIL'].includes(
                         JSON.parse(shop as string).subscription
                       ) && [8, 10, 9].includes(i) ? (
                         <div className={`absolute right-space12   `}>
@@ -111,7 +111,7 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                           />
                         </div>
                       ) : null}
-                      {!['ADVANCED', 'STABDARD', 'TRAIL'].includes(
+                      {!['ADVANCED', 'STANDARD', 'TRAIL'].includes(
                         JSON.parse(shop as string).subscription
                       ) && [11, 12, 13].includes(i) ? (
                         <div className={`absolute right-space12   `}>

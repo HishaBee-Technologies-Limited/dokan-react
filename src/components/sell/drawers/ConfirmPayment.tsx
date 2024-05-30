@@ -128,6 +128,7 @@ const ConfirmPayment = () => {
     }
     const customerName = data.customer.split('-')[0];
     const employeeName = data.employee?.split('-')[0];
+    console.log(JSON.parse(data.customer));
 
     setLoading(true);
     const responseCreateSell = await createSell({
@@ -141,8 +142,8 @@ const ConfirmPayment = () => {
       payment_status: PAYMENT_STATUS.PAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
-      customer_mobile: data.customer_number,
-      customer_name: customerName,
+      customer_mobile: JSON.parse(data.customer).mobile,
+      customer_name: JSON.parse(data.customer).name,
       customer_address: data.customer_address,
       total_item: totalItems,
       total_price: Number(data.amount),
@@ -356,7 +357,7 @@ const ConfirmPayment = () => {
                           {customers?.map((customer, i) => (
                             <SelectItem
                               key={i + 1}
-                              value={`${customer.name}-${customer.mobile}`}
+                              value={JSON.stringify(customer)}
                             >
                               {customer.name}
                             </SelectItem>
