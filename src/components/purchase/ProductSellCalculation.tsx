@@ -89,6 +89,7 @@ const ProductSellCalculation = (props: IProps) => {
                       <Input
                         placeholder="Discount"
                         className="h-[3.6rem] border-0"
+                        type="number"
                         {...field}
                       />
                     </FormControl>
@@ -134,6 +135,7 @@ const ProductSellCalculation = (props: IProps) => {
                     <Input
                       placeholder="Delivery Charge"
                       className="h-[3.6rem]"
+                      type="number"
                       {...field}
                     />
                   </FormControl>

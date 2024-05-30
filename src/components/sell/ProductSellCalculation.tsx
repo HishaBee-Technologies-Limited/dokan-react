@@ -53,10 +53,10 @@ const ProductSellCalculation = (props: IProps) => {
     calculateGrandTotal(
       discountType,
       Number(totalPrice),
-      Number(deliveryCharge),
-      discountAmount
+      deliveryCharge ? Number(deliveryCharge) : 0,
+      discountAmount ? discountAmount : 0
     );
-
+  console.log(grandTotal, totalPrice);
   /**
    * set the total price to the form state for centralize all the necessary information
    * for next action
@@ -88,6 +88,7 @@ const ProductSellCalculation = (props: IProps) => {
                       <Input
                         placeholder="Discount"
                         className="h-[3.6rem] border-0"
+                        type="number"
                         {...field}
                       />
                     </FormControl>
@@ -133,6 +134,7 @@ const ProductSellCalculation = (props: IProps) => {
                     <Input
                       placeholder="Delivery Charge"
                       className="h-[3.6rem]"
+                      type="number"
                       {...field}
                     />
                   </FormControl>

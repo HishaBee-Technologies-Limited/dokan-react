@@ -13,7 +13,7 @@ import { IProduct } from '@/types/product';
 import { useProductTable } from '@/hooks/useProductTable';
 import { INITIAL_QUERY_PARAMS } from '@/config/product';
 
-export const ProductDialogs = ({ product }: { product: IProduct }) => {
+export const ProductDialogs = ({ product }: { product: any }) => {
   const dialogState = useProductStore((state) => state.dialogState);
   const handleClose = useProductStore((state) => state.setDialogState);
   const { updateQueryParams } = useProductTable();
@@ -35,7 +35,7 @@ export const ProductDialogs = ({ product }: { product: IProduct }) => {
 
   const renderedDrawers = (activeDialog: string | undefined) => {
     if (ProductEnum.UPDATE_STOCK === activeDialog) {
-      return <UpdateStock product={productForUpdateStock} />;
+      return <UpdateStock product={product} />;
     } else if (ProductEnum.SHARE_PRODUCT === activeDialog) {
       return <ShareProduct />;
     } else if (ProductEnum.PRODUCT_DETAILS === activeDialog) {

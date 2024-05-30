@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
@@ -16,6 +16,7 @@ import { IProduct } from '@/types/product';
 import { DEFAULT_PRODUCT_QUANTITY } from '@/lib/constants/purchase';
 import { usePurchase } from '@/stores/usePurchaseStore';
 import { useSellStore } from '@/stores/useSellStore';
+import { percentage } from '@/lib/utils';
 
 export interface IProductPurchase extends IProduct {
   calculatedAmount?: { quantity: number; total: number; unit_price: number };
@@ -29,6 +30,27 @@ type IProps = {
 const ProductFiledRow = (props: IProps) => {
   const setProducts = useSellStore((state) => state.setProducts);
   const products = useSellStore((state) => state.products);
+  // const [unitPriceWithExtras, setUnitPriceWithExtras] = useState()
+
+  const unitPriceWithExtras = useMemo(() => {
+    if (props.data?.selling_price) {
+      if (props.data?.discount_type === 'PERCENT') {
+        const priceBeforeVat =
+          props.data?.selling_price -
+          percentage(props.data?.selling_price, props.data.discount);
+        const priceAfterVat =
+          priceBeforeVat + percentage(priceBeforeVat, props.data.vat_percent);
+        return priceAfterVat;
+      } else {
+        const priceBeforeVat = props.data?.selling_price - props.data.discount;
+        const priceAfterVat =
+          priceBeforeVat + percentage(priceBeforeVat, props.data.vat_percent);
+        return priceAfterVat;
+      }
+    } else {
+      return 0;
+    }
+  }, [props.data]);
 
   /**
    * This watch controls the onchange calculation on the viewport
@@ -81,13 +103,13 @@ const ProductFiledRow = (props: IProps) => {
       } else {
         props.form.setValue(
           `products.${props.index}.product-${props.data?.id}.unit_price`,
-          String(props.data?.selling_price)
+          String(unitPriceWithExtras)
         );
       }
     } else {
       props.form.setValue(
         `products.${props.index}.product-${props.data?.id}.unit_price`,
-        String(props.data?.selling_price)
+        String(unitPriceWithExtras)
       );
     }
 
@@ -106,13 +128,13 @@ const ProductFiledRow = (props: IProps) => {
         if (Number(quantityValue) < props.data?.wholesale_amount) {
           props.form.setValue(
             `products.${props.index}.product-${props.data?.id}.total`,
-            Number(quantityValue) * Number(props.data?.selling_price)
+            Number(quantityValue) * unitPriceWithExtras
           );
         }
       } else {
         props.form.setValue(
           `products.${props.index}.product-${props.data?.id}.total`,
-          Number(quantityValue) * Number(props.data?.selling_price)
+          Number(quantityValue) * unitPriceWithExtras
         );
       }
     }
@@ -128,9 +150,9 @@ const ProductFiledRow = (props: IProps) => {
     );
     props.form.setValue(
       `products.${props.index}.product-${props.data?.id}.unit_price`,
-      String(props.data?.selling_price)
+      String(unitPriceWithExtras)
     );
-  }, [props.data, props.form]);
+  }, [unitPriceWithExtras, props.form]);
 
   console.log(quantityWatch);
 
@@ -189,10 +211,14 @@ const ProductFiledRow = (props: IProps) => {
                 Unit Price <span className="text-error-100">*</span>{' '}
                 {props.data?.wholesale_amount &&
                   Number(quantityWatch) >= props.data?.wholesale_amount && (
-                    <span className="text-orange-400 text-sm">
-                      (Whole Sale Rate)
-                    </span>
-                  )}
+                    <span className="text-orange-400 text-xs">[Bulk Rate]</span>
+                  )}{' '}
+                {props.data?.discount && (
+                  <span className="text-orange-400 text-xs">[Discount]</span>
+                )}{' '}
+                {props.data?.vat_percent && (
+                  <span className="text-orange-400 text-xs">[Vat]</span>
+                )}
               </FormLabel>
               <FormControl>
                 <Input disabled={true} placeholder="Unit Price" {...field} />

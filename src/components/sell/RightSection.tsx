@@ -45,8 +45,9 @@ export const RightSection = () => {
     // resolver: zodResolver(formSchema),
     defaultValues: {
       quantity: [],
-      delivery_charge: 0,
-      discount: 0,
+      // delivery_charge: 0,
+      // discount: 0,
+      discount_type: 'AMOUNT',
     },
   });
 

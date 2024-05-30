@@ -48,7 +48,7 @@ const TransactionDetails = () => {
     getPurchaseProducts();
   }, [currentPurchase]);
 
-  console.log(currentPurchase);
+  console.log(purchaseProducts);
 
   return (
     <div className="space-y-space12">

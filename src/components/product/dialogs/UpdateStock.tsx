@@ -15,11 +15,11 @@ import { ProductEnum } from '@/enum/product';
 import { toast } from 'sonner';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 
-export const UpdateStock = ({ product }: { product: any }) => {
+export const UpdateStock = ({ product }: { product: IProductPayload }) => {
   const form = useForm<{ stock: IProductPayload['stock'] }>({
     defaultValues: { stock: 0 },
   });
-  const [changedStock, setChangedStock] = useState<number>(product.stock);
+  const [changedStock, setChangedStock] = useState<number>(product?.stock ?? 0);
   const router = useRouter();
   const handleClose = useProductStore((state) => state.setDialogState);
   const pathname = usePathname();
@@ -32,27 +32,27 @@ export const UpdateStock = ({ product }: { product: any }) => {
   }) => {
     const res = await createProductOrUpdate({
       stock: changedStock,
-      unique_id: product.uniqueId,
+      unique_id: product?.unique_id,
       name: product.name,
-      selling_price: product.sellingPrice,
+      selling_price: product.selling_price,
       ...(product.version && { version: product.version + 1 }),
       updated_at: format(Date.now(), 'yyyy-MM-dd HH:mm:ss'),
-      created_at: product?.createdAt,
-      cost_price: product.purchase_price!,
-      sell_online: product.online_sell,
+      created_at: product?.created_at,
+      cost_price: product.cost_price!,
+      sell_online: product.sell_online,
       gallery: product.gallery,
       image_url: product.image_url,
       sub_category: Number(product.sub_category),
-      wholesale_amount: Number(product.bulk_quantity),
-      wholesale_price: Number(product.bulk_price),
-      stock_alert: Number(product.low_stock),
-      warranty: Number(product.warranty_duration),
+      wholesale_amount: Number(product.wholesale_amount),
+      wholesale_price: Number(product.wholesale_price),
+      stock_alert: Number(product.stock_alert),
+      warranty: Number(product.warranty),
       warranty_type: product.warranty_type,
       discount: product.discount,
       discount_type: product.discount_type,
       // description: ,
-      vat_applicable: product.vat_check,
-      vat_percent: Number(product.vat_percentage),
+      vat_applicable: product.vat_applicable,
+      vat_percent: Number(product.vat_percent),
       unit: Number(product.unit),
     });
 
@@ -84,7 +84,7 @@ export const UpdateStock = ({ product }: { product: any }) => {
         <article className="space-y-space4">
           <Text title={product.name} className="text-sm font-semibold" />
           <Text
-            title={String(product.sellingPrice ?? '')}
+            title={String(product.selling_price ?? '')}
             variant="secondary"
             className="text-sm font-semibold"
           />
