@@ -53,6 +53,15 @@ import { PurchaseEnum } from '@/enum/purchase';
 import { jwtDecode } from 'jwt-decode';
 // import { logger } from '../../../../Pino';
 import { PURCHASE_SMS } from '@/lib/sms-text';
+import { Check, UserSearch } from 'lucide-react';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -114,23 +123,6 @@ const ConfirmPayment = () => {
     }
   }, [calculatedProducts, form]);
 
-  useEffect(() => {
-    const supplierNameArray = selectedSupplier.split('-');
-    const employeeNameArray = selectedEmployee?.split('-');
-    if (supplierNameArray) {
-      form.setValue(
-        'supplier_number',
-        supplierNameArray[supplierNameArray.length - 1]
-      );
-    }
-    if (employeeNameArray) {
-      form.setValue(
-        'employee_number',
-        employeeNameArray[employeeNameArray.length - 1]
-      );
-    }
-  }, [selectedSupplier, form, selectedEmployee]);
-
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
     const sms = data.sms
@@ -142,71 +134,69 @@ const ConfirmPayment = () => {
           shopNumber: JSON.parse(shop!).number,
         })
       : null;
-    const supplierName = data.supplier?.split('-')[0];
-    const employeeName = data.employee?.split('-')[0];
 
-    console.log(JSON.parse(data.supplier));
+    console.log(data);
 
-    const responseCreatePurchase = await createPurchase({
-      batch: '',
-      created_at: formatDate(DATE_FORMATS.default, data.date),
-      date: formatDate(DATE_FORMATS.default, data.date),
-      discount: calculatedProducts.discount
-        ? Number(calculatedProducts.discount)
-        : 0,
-      discount_type: calculatedProducts.discountType ?? '',
-      employee_mobile: data.employee_number,
-      employee_name: employeeName,
-      extra_charge: calculatedProducts.deliveryCharge
-        ? Number(calculatedProducts.deliveryCharge)
-        : 0,
-      note: data.note,
-      payment_method: PAYMENT_METHODS.Cash,
-      payment_status: PAYMENT_STATUS.PAID,
-      purchase_barcode: '',
-      received_amount: Number(data.amount),
-      supplier_mobile: JSON.parse(data.supplier).mobile,
-      supplier_name: JSON.parse(data.supplier).name,
-      total_item: totalItems,
-      total_price: Number(data.amount),
-      unique_id: generateUlid(),
-      updated_at: formatDate(DATE_FORMATS.default),
-      user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
-      version: DEFAULT_STARTING_VERSION,
-      sms: sms,
-    });
+    // const responseCreatePurchase = await createPurchase({
+    //   batch: '',
+    //   created_at: formatDate(DATE_FORMATS.default, data.date),
+    //   date: formatDate(DATE_FORMATS.default, data.date),
+    //   discount: calculatedProducts.discount
+    //     ? Number(calculatedProducts.discount)
+    //     : 0,
+    //   discount_type: calculatedProducts.discountType ?? '',
+    //   employee_mobile: data.employee_number,
+    //   employee_name: employeeName,
+    //   extra_charge: calculatedProducts.deliveryCharge
+    //     ? Number(calculatedProducts.deliveryCharge)
+    //     : 0,
+    //   note: data.note,
+    //   payment_method: PAYMENT_METHODS.Cash,
+    //   payment_status: PAYMENT_STATUS.PAID,
+    //   purchase_barcode: '',
+    //   received_amount: Number(data.amount),
+    //   supplier_mobile: JSON.parse(data.supplier).mobile,
+    //   supplier_name: JSON.parse(data.supplier).name,
+    //   total_item: totalItems,
+    //   total_price: Number(data.amount),
+    //   unique_id: generateUlid(),
+    //   updated_at: formatDate(DATE_FORMATS.default),
+    //   user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
+    //   version: DEFAULT_STARTING_VERSION,
+    //   sms: sms,
+    // });
 
-    if (responseCreatePurchase?.success) {
-      calculatedProducts.products.forEach(async (product) => {
-        createItemPurchase({
-          created_at: formatDate(DATE_FORMATS.default, data.date),
-          name: product.name,
-          quantity: product.calculatedAmount?.quantity,
-          unit_price: product.selling_price,
-          unit_cost: product.cost_price,
-          purchase_id: responseCreatePurchase.data.purchase.id,
-          purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
-          shop_product_unique_id: product.unique_id,
+    // if (responseCreatePurchase?.success) {
+    //   calculatedProducts.products.forEach(async (product) => {
+    //     createItemPurchase({
+    //       created_at: formatDate(DATE_FORMATS.default, data.date),
+    //       name: product.name,
+    //       quantity: product.calculatedAmount?.quantity,
+    //       unit_price: product.selling_price,
+    //       unit_cost: product.cost_price,
+    //       purchase_id: responseCreatePurchase.data.purchase.id,
+    //       purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+    //       shop_product_unique_id: product.unique_id,
 
-          shop_product_id: product.id,
-          shop_product_variance_id: 1,
-          price: product.calculatedAmount?.total,
-          unique_id: generateUlid(),
-          updated_at: formatDate(DATE_FORMATS.default),
-          version: DEFAULT_STARTING_VERSION,
-        });
-      });
-      setCalculatedProducts({
-        ...calculatedProducts,
-        paymentAmount: Number(data.amount),
-        date: formatDate(DATE_FORMATS.default, data.date),
-      });
-      closeDrawer({ open: false });
-      openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
-    }
-    if (responseCreatePurchase?.error) {
-      toast.error('Something went wrong');
-    }
+    //       shop_product_id: product.id,
+    //       shop_product_variance_id: 1,
+    //       price: product.calculatedAmount?.total,
+    //       unique_id: generateUlid(),
+    //       updated_at: formatDate(DATE_FORMATS.default),
+    //       version: DEFAULT_STARTING_VERSION,
+    //     });
+    //   });
+    //   setCalculatedProducts({
+    //     ...calculatedProducts,
+    //     paymentAmount: Number(data.amount),
+    //     date: formatDate(DATE_FORMATS.default, data.date),
+    //   });
+    //   closeDrawer({ open: false });
+    //   openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
+    // }
+    // if (responseCreatePurchase?.error) {
+    //   toast.error('Something went wrong');
+    // }
   }
   useEffect(() => {
     console.log(contact);
@@ -318,8 +308,7 @@ const ConfirmPayment = () => {
           )}
         />
 
-        <div>
-          <FormField
+        {/* <FormField
             control={form.control}
             name="supplier_info"
             render={({ field }) => (
@@ -335,9 +324,9 @@ const ConfirmPayment = () => {
                 </FormControl>
               </FormItem>
             )}
-          />
+          /> */}
 
-          <div
+        {/* <div
             className={`grid ${
               form.watch('supplier_info')
                 ? 'grid-rows-[1fr]'
@@ -348,60 +337,103 @@ const ConfirmPayment = () => {
               className={`${
                 form.watch('supplier_info') ? 'p-space8' : 'overflow-hidden'
               } overflow-hidden space-y-space12`}
-            >
-              <FormField
-                control={form.control}
-                name="supplier"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="">
-                          <SelectValue placeholder="Supplier" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <div className="max-h-[24rem] overflow-y-scroll">
-                          {suppliers?.map((supplier) => (
-                            <SelectItem
-                              key={supplier.unique_id}
-                              value={JSON.stringify(supplier)}
-                            >
-                              {supplier.name}
-                            </SelectItem>
-                          ))}
-                        </div>
+            > */}
+        <FormField
+          control={form.control}
+          name="supplier"
+          render={({ field }) => (
+            <FormItem className="pb-8">
+              <FormLabel>
+                Supplier Name <span className="text-error-100">*</span>{' '}
+              </FormLabel>
+              <FormControl>
+                <div className="relative h-10 w-full">
+                  <Input
+                    type="text"
+                    placeholder="Enter name..."
+                    className="pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent" // Add additional styling as needed
+                    {...field}
+                  />
 
-                        {/* <Button
-                                        variant={'secondary'}
-                                        onClick={() => handleAddNewCategory({ open: true, header: ExpenseEnum.ADD_NEW_CATEGORY })}
-                                        className="border-x-0 border-b-0 rounded-none w-full sticky -bottom-space6" >
-                                        Add Customer
-                                    </Button> */}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
+                  <FormItem className="flex flex-col absolute right-2 top-8 transform -translate-y-1/2 text-gray-500 z-10">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="transparent"
+                            role="combobox"
+                            className={cn(
+                              'w-[50px] justify-between',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                          >
+                            {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
+                            <UserSearch className="  shrink-0" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0 mr-10 ">
+                        <Command>
+                          {/* <CommandInput placeholder="Search language..." /> */}
+                          <CommandEmpty>No language found.</CommandEmpty>
+                          <CommandGroup>
+                            <ScrollArea className="max-h-[200px] scroll-p-4 rounded-md border">
+                              {suppliers?.map((supplier) => (
+                                <CommandItem
+                                  value={contact?.name}
+                                  key={supplier.id}
+                                  onSelect={() => {
+                                    setContact(supplier);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      'mr-2 h-4 w-4',
+                                      supplier.name === contact?.name
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                  <div className="flex flex-col">
+                                    <p>{supplier.name}</p>
+                                    <p>{supplier.mobile}</p>
+                                  </div>
+                                  {/* {supplier.mobile} */}
+                                </CommandItem>
+                              ))}
+                            </ScrollArea>
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
 
-              {/* <FormField
-                control={form.control}
-                name="supplier_number"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Number" className="" {...field} />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
-                )}
-              /> */}
-            </div>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="supplier_number"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Mobile Number <span className="text-error-100">*</span>{' '}
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Mobile Number" className="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* </div>
           </div>
-        </div>
+        </div> */}
 
         <DrawerFooter height="14rem" className="flex-col !gap-space12">
           <div className="flex items-center gap-space8 justify-center">
