@@ -14,7 +14,7 @@ const ContactUSPage = () => {
         <Text title="আমাদের ফলো করুন" className="text-sm font-medium" />
 
         <div className="flex gap-space24">
-          <Link href="https://www.facebook.com" target="_blank">
+          <Link href={`https://www.facebook.com/hishabee.bd/`} target="_blank">
             <Image
               src="/images/social/facebook.svg"
               alt=""
@@ -22,7 +22,7 @@ const ContactUSPage = () => {
               width={64}
             />
           </Link>
-          <Link href="https://www.instagram.com" target="_blank">
+          <Link href="https://www.instagram.com/HishaBee/" target="_blank">
             <Image
               src="/images/social/instagram.svg"
               alt=""
@@ -30,7 +30,10 @@ const ContactUSPage = () => {
               width={64}
             />
           </Link>
-          <Link href="https://www.youtube.com" target="_blank">
+          <Link
+            href="https://www.youtube.com/channel/UCrFh9vK3wfo0kLwxlrEJYHQ"
+            target="_blank"
+          >
             <Image
               src="/images/social/youtube.svg"
               alt=""
@@ -51,7 +54,7 @@ const ContactUSPage = () => {
               width={20}
             />
             <article className="flex items-center gap-space8 text-lg font-semibold">
-              <Text title="12345" variant="success" />
+              <Text title="+88 9638011199" variant="success" />
               <Text title="নম্বরে" />
             </article>
           </div>
@@ -59,27 +62,31 @@ const ContactUSPage = () => {
 
         <div className="flex justify-between items-center gap-space16 pt-space16">
           <div>
-            <div className="flex items-center gap-space8 mt-space8">
-              <Image
-                src="/images/social/messenger.svg"
-                alt=""
-                height={20}
-                width={20}
-              />
-              <Text
-                title="লাইভ চ্যাট সাপোর্ট"
-                className="text-sm font-medium"
-              />
-            </div>
+            <a href="mailto: support@hishabee.io">
+              <div className="flex items-center gap-space8 mt-space8">
+                {/* <Image
+                  src="/images/social/messenger.svg"
+                  alt=""
+                  height={20}
+                  width={20}
+                /> */}
+                <Text title="ইমেইল  সাপোর্ট" className="text-sm font-medium" />
+              </div>
+            </a>
 
             <Text
               variant="secondary"
               className="text-xs mt-space4 max-w-[21rem]"
-              title="যেকোনো সমস্যা কিংবা সাহায্য দরকার হলে লাইভ চ্যাট সাপোর্ট নিন।"
+              title="যেকোনো সমস্যা কিংবা সাহায্য দরকার হলে ইমেইল সাপোর্ট নিন।"
             />
           </div>
 
-          <Button>Chat</Button>
+          <a
+            href="mailto: support@hishabee.io"
+            className="px-6 py-4 bg-black text-white rounded-sm"
+          >
+            ইমেইল
+          </a>
         </div>
       </div>
     </div>

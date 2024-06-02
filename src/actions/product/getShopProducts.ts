@@ -35,7 +35,7 @@ export const getShopsProducts = async ({ params }: GetShopsProductsDef) => {
               : 'id',
           order_type: 'desc',
           page: params?.page?.toString() ?? '1',
-          per_page: '10',
+          per_page: '20',
           category: 'true',
           s_query: params?.search ?? '',
           exclude_deleted: 'true',

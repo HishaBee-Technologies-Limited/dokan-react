@@ -1,25 +1,60 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@/components/common/Card';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
 import { Image } from '@/components/common/Image';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ProductListQueries from '@/components/sell/ProductListQueries';
-import { IProduct } from '@/types/product';
+import { IProduct, IProductPayload } from '@/types/product';
+import { useInView } from 'react-intersection-observer';
 
 import { usePurchase } from '@/stores/usePurchaseStore';
+import { getShopsProducts } from '@/actions/product/getShopProducts';
+import { ICommonGetResponse } from '@/types/common';
 
 export const LeftSection = ({ productData }: { productData: any }) => {
   const setProducts = usePurchase((state) => state.setProducts);
   const products = usePurchase((state) => state.products);
+  const [productRes, setProductsRes] = useState<IProductPayload[]>([]);
+  const { ref, inView, entry } = useInView({
+    /* Optional options */
+    threshold: 0.2,
+  });
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+
+  // const fetchProducts = async () => {
+  //   setLoading(true);
+  //   const allProductsResponse = await getShopsProducts({
+  //     params: { page: page + 1, sorted_by: 'new_to_old' },
+  //   });
+  //   console.log(allProductsResponse);
+  //   setProductsRes((prevProd) => [
+  //     ...prevProd,
+  //     ...allProductsResponse?.data.data,
+  //   ]);
+  //   setPage(allProductsResponse?.data.current_page);
+  //   setLoading(false);
+  // };
+
+  // useEffect(() => {
+  //   fetchProducts();
+  // }, []);
+
+  // useEffect(() => {
+  //   fetchProducts();
+  //   console.log(page);
+  //   console.log(productRes);
+  // }, [inView]);
+  // console.log(page);
   return (
     <div className="lg:pr-space12 lg:w-4/12 h-full">
       <Card className="h-full w-full shadow">
         <ProductListQueries />
 
         <ScrollArea className="h-[calc(100%-14rem)] overflow-y-scroll px-space8">
-          {productData?.data?.map((product: IProduct) => (
+          {productData?.data?.map((product: IProduct, i: number) => (
             <div
               key={product.id}
               className="flex items-center gap-space12 justify-between py-space8 px-space8"
@@ -35,6 +70,11 @@ export const LeftSection = ({ productData }: { productData: any }) => {
               >
                 Add
               </Button>
+              {i === productData?.data.length - 1 ? (
+                <div ref={ref}>
+                  <h2>{`Header inside viewport ${inView}.`}</h2>
+                </div>
+              ) : null}
             </div>
           ))}
         </ScrollArea>

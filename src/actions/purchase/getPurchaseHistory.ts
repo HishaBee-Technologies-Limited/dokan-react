@@ -1,4 +1,5 @@
 'use server';
+import { ICommonGetResponse } from '@/types/common';
 
 import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
@@ -35,7 +36,7 @@ export const getPurchaseHistory = async (
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data.data as IPurchaseHistoryResponse[],
+        data: data as ICommonGetResponse<IPurchaseHistoryResponse>,
       };
     }
     if (!res.ok) {

@@ -26,16 +26,17 @@ import { IPurchaseHistoryResponse } from '@/types/purchase';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import Pagination from '@/components/common/CustomPagination';
+import NoDataCard from '@/components/common/no-data-card';
 
 const HistoryTable = ({
   transactions,
 }: {
-  transactions?: IPurchaseHistoryResponse[];
+  transactions?: ICommonGetResponse<IPurchaseHistoryResponse>;
 }) => {
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
   const setSellDetails = useSellStore((state) => state.setSellDetails);
-
+  console.log(transactions);
   const pathname = usePathname();
   const router = useRouter();
   const { setQueryString } = useCreateQueryString();
@@ -77,60 +78,64 @@ const HistoryTable = ({
 
   return (
     <ScrollArea className="pb-space8">
-      <Table wrapperClass="rounded-md border border-color">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="">#</TableHead>
-            <TableHead>Items</TableHead>
-            <TableHead>Contact</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Payment Status</TableHead>
-            <TableHead className="text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {transactions?.map((transaction, i) => (
-            <TableRow
-              key={transaction.id}
-              onClick={() => handleRowClick(transaction)}
-            >
-              <TableCell>{transaction.id}</TableCell>
-              <TableCell>{transaction.total_item}</TableCell>
-              <TableCell className="max-w-[400px]">
-                {transaction.customer_name}
-              </TableCell>
-              <TableCell>{transaction.total_price}</TableCell>
-              <TableCell>{transaction.created_at}</TableCell>
-              <TableCell>
-                <Text
-                  title={transaction.payment_status}
-                  variant={transactionTypeTextVariant(
-                    transaction.payment_status
-                  )}
-                  className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(transaction.payment_status)}`}
-                />
-              </TableCell>
-              <TableCell className={`text-right`}>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size={'icon'}
-                      variant={'transparent'}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <MoreVertIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
+      {transactions?.data.length === 0 ? (
+        <NoDataCard />
+      ) : (
+        <>
+          <Table wrapperClass="rounded-md border border-color">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="">#</TableHead>
+                <TableHead>Items</TableHead>
+                <TableHead>Contact</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Payment Status</TableHead>
+                <TableHead className="text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {transactions?.data.map((transaction, i) => (
+                <TableRow
+                  key={transaction.id}
+                  onClick={() => handleRowClick(transaction)}
+                >
+                  <TableCell>{transaction.id}</TableCell>
+                  <TableCell>{transaction.total_item}</TableCell>
+                  <TableCell className="max-w-[400px]">
+                    {transaction.customer_name}
+                  </TableCell>
+                  <TableCell>{transaction.total_price}</TableCell>
+                  <TableCell>{transaction.created_at}</TableCell>
+                  <TableCell>
+                    <Text
+                      title={transaction.payment_status}
+                      variant={transactionTypeTextVariant(
+                        transaction.payment_status
+                      )}
+                      className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(transaction.payment_status)}`}
+                    />
+                  </TableCell>
+                  <TableCell className={`text-right`}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          size={'icon'}
+                          variant={'transparent'}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <MoreVertIcon />
+                        </Button>
+                      </DropdownMenuTrigger>
 
-                  <DropdownMenuContent
-                    align="end"
-                    side="bottom"
-                    className="w-56 "
-                  >
-                    {/* <DropdownMenuItem asChild>
+                      <DropdownMenuContent
+                        align="end"
+                        side="bottom"
+                        className="w-56 "
+                      >
+                        {/* <DropdownMenuItem asChild>
                       <Button
                         size={'sm'}
                         variant={'transparent'}
@@ -144,56 +149,56 @@ const HistoryTable = ({
                         Edit
                       </Button>
                     </DropdownMenuItem> */}
-                    <DropdownMenuItem asChild>
-                      <Button
-                        size={'sm'}
-                        variant={'transparent'}
-                        className="w-full justify-start text-error-100"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDialogOpen({
-                            open: true,
-                            header: SellEnum.TRANSACTION_DELETE,
-                          });
-                          setCurrentPurchase(transaction);
-                        }}
-                      >
-                        <DeleteIcon />
-                        Delete
-                      </Button>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+                        <DropdownMenuItem asChild>
+                          <Button
+                            size={'sm'}
+                            variant={'transparent'}
+                            className="w-full justify-start text-error-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDialogOpen({
+                                open: true,
+                                header: SellEnum.TRANSACTION_DELETE,
+                              });
+                              setCurrentPurchase(transaction);
+                            }}
+                          >
+                            <DeleteIcon />
+                            Delete
+                          </Button>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
 
-        <TableFooter>
+            {/* <TableFooter>
           <TableRow>
             <TableCell colSpan={7} className="text-center">
               Showing 10 of 100 Transactions
             </TableCell>
           </TableRow>
-        </TableFooter>
-      </Table>
-      <ScrollBar orientation="horizontal" />
-      {/* <Pagination
-        pageCount={
-          transactions?.length === 0
-            ? transactions?.last_page
-            : transactions
-              ? Math.ceil(
-                  transactions?.total ?? 0 / transactions?.per_page ?? 0
-                )
-              : 0
-        }
-        currentPage={transactions?.current_page ?? 0}
-        lastPage={transactions?.last_page ?? 0}
-        onChanage={(page) => {
-          router.push(`${pathname}?${setQueryString('page', page)}`);
-        }}
-      /> */}
+        </TableFooter> */}
+          </Table>
+          <ScrollBar orientation="horizontal" />
+          <Pagination
+            pageCount={
+              transactions
+                ? Math.ceil(
+                    transactions?.total ?? 0 / transactions?.per_page ?? 0
+                  )
+                : 0
+            }
+            currentPage={transactions?.current_page ?? 0}
+            lastPage={transactions?.last_page ?? 0}
+            onChanage={(page) => {
+              router.push(`${pathname}?${setQueryString('page', page)}`);
+            }}
+          />
+        </>
+      )}
     </ScrollArea>
   );
 };

@@ -76,6 +76,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
           active={activeTab}
           className="border-b w-full  px-space12 sm:px-space16 pt-space8"
           handleChange={(item) => {
+            console.log(item);
             router.replace(`${pathname}?${setQueryString('tab', item.value)}`);
           }}
         />
