@@ -98,8 +98,8 @@ const MoneyGiveReceived = ({
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 
-  const [customer, setContact] = useState<IUserResponse>();
   const [loading, setLoading] = useState(false);
+  const [contact, setContact] = useState<IUserResponse>();
 
   const calculatedProducts = useSellStore((state) => state.calculatedProducts);
   const setCalculatedProducts = useSellStore(
@@ -119,6 +119,13 @@ const MoneyGiveReceived = ({
       }, 0),
     [calculatedProducts]
   );
+  useEffect(() => {
+    console.log(contact);
+    if (contact) {
+      form.setValue('name', contact.name);
+      form.setValue('number', contact.mobile);
+    }
+  }, [contact]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -134,17 +141,17 @@ const MoneyGiveReceived = ({
     },
   });
   const name = form.watch('name');
-  useEffect(() => {
-    // console.log(selectedSupplier.split('-'));
-    const customer = name?.split('-');
-    if (customer) {
-      form.setValue('number', customer[1]);
-    }
-  }, [form, name]);
+  // useEffect(() => {
+  //   // console.log(selectedSupplier.split('-'));
+  //   const customer = name?.split('-');
+  //   if (customer) {
+  //     form.setValue('number', customer[1]);
+  //   }
+  // }, [form, name]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
-    console.log(JSON.parse(data.name));
+    console.log(data);
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
@@ -156,8 +163,8 @@ const MoneyGiveReceived = ({
       payment_status: PAYMENT_STATUS.UNPAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
-      customer_mobile: JSON.parse(data.name).mobile,
-      customer_name: JSON.parse(data.name).name,
+      customer_mobile: data.number,
+      customer_name: data.name,
       customer_address: data.customer_address,
       total_item: totalItems,
       total_price: Number(data.amount),
@@ -266,6 +273,7 @@ const MoneyGiveReceived = ({
 
       const res = await createDueItem(payload);
       const resAmount = await createDueItem(payloadForPaymentAmount);
+      console.log(res);
     }
     setCalculatedProducts({
       ...calculatedProducts,
@@ -308,14 +316,6 @@ const MoneyGiveReceived = ({
     }
   }, [form.watch('cash_type')]);
 
-  // useEffect(() => {
-  //   if (contact) {
-  //     console.log(contact);
-  //     form.setValue('name', contact.name);
-  //     form.setValue('number', contact.mobile);
-  //   }
-  // }, [contact]);
-
   useEffect(() => {
     form.setValue('amount', String(calculatedProducts.totalPrice));
   }, [calculatedProducts]);
@@ -323,6 +323,7 @@ const MoneyGiveReceived = ({
   useEffect(() => {
     const cus_mobile = form.watch('number');
     const due = dueList?.find((due) => due.contact_mobile === cus_mobile);
+    console.log(due);
     due ? form.setValue('due', due) : due;
   }, [dueList, form.watch('number')]);
   const totalItems = useMemo(
@@ -453,47 +454,87 @@ const MoneyGiveReceived = ({
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem>
-                <Select
-                  onValueChange={field.onChange}
-                  // defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="">
-                      <SelectValue placeholder="Customer" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="w-[500px]">
-                    <div className="max-h-[24rem] overflow-y-scroll">
-                      {customers?.map((customer, i) => (
-                        <SelectItem
-                          key={i + 1}
-                          value={JSON.stringify(customer)}
-                        >
-                          {customer.name}
-                        </SelectItem>
-                      ))}
-                    </div>
+              <FormItem className="pb-8">
+                <FormLabel>
+                  Customer Name <span className="text-error-100">*</span>{' '}
+                </FormLabel>
+                <FormControl>
+                  <div className="relative h-10 w-full">
+                    <Input
+                      type="text"
+                      placeholder="Enter name..."
+                      className="pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent" // Add additional styling as needed
+                      {...field}
+                    />
 
-                    {/* <Button
-                                        variant={'secondary'}
-                                        onClick={() => handleAddNewCategory({ open: true, header: ExpenseEnum.ADD_NEW_CATEGORY })}
-                                        className="border-x-0 border-b-0 rounded-none w-full sticky -bottom-space6" >
-                                        Add Customer
-                                    </Button> */}
-                  </SelectContent>
-                </Select>
+                    <FormItem className="flex flex-col absolute right-2 top-8 transform -translate-y-1/2 text-gray-500 z-10">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="transparent"
+                              role="combobox"
+                              className={cn(
+                                'w-[50px] justify-between',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
+                              <UserSearch className="  shrink-0" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] p-0 mr-10 ">
+                          <Command>
+                            {/* <CommandInput placeholder="Search language..." /> */}
+                            <CommandEmpty>No language found.</CommandEmpty>
+                            <CommandGroup className="max-h-80 overflow-y-scroll">
+                              {/* <ScrollArea className="max-h-[200px] scroll-p-4 rounded-md border"> */}
+                              {customers?.map((customer) => (
+                                <CommandItem
+                                  value={contact?.name}
+                                  key={customer.id}
+                                  onSelect={() => {
+                                    setContact(customer);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      'mr-2 h-4 w-4',
+                                      customer.name === contact?.name
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                  <div className="flex flex-col">
+                                    <p>{customer.name}</p>
+                                    <p>{customer.mobile}</p>
+                                  </div>
+                                  {/* {supplier.mobile} */}
+                                </CommandItem>
+                              ))}
+                              {/* </ScrollArea> */}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+
+                      <FormMessage />
+                    </FormItem>
+                  </div>
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* <FormField
+          <FormField
             control={form.control}
             name="number"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Number <span className="text-error-100">*</span>{' '}
+                  Customer Number <span className="text-error-100">*</span>{' '}
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="Number" {...field} />
@@ -501,7 +542,7 @@ const MoneyGiveReceived = ({
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
           <FormField
             control={form.control}
             name="customer_address"

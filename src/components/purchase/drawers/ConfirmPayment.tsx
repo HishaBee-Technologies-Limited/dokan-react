@@ -115,8 +115,6 @@ const ConfirmPayment = () => {
     },
   });
 
-  const selectedSupplier = form.watch('supplier');
-  const selectedEmployee = form.watch('employee');
   useEffect(() => {
     if (calculatedProducts) {
       form.setValue('amount', String(calculatedProducts.totalPrice));
@@ -137,66 +135,66 @@ const ConfirmPayment = () => {
 
     console.log(data);
 
-    // const responseCreatePurchase = await createPurchase({
-    //   batch: '',
-    //   created_at: formatDate(DATE_FORMATS.default, data.date),
-    //   date: formatDate(DATE_FORMATS.default, data.date),
-    //   discount: calculatedProducts.discount
-    //     ? Number(calculatedProducts.discount)
-    //     : 0,
-    //   discount_type: calculatedProducts.discountType ?? '',
-    //   employee_mobile: data.employee_number,
-    //   employee_name: employeeName,
-    //   extra_charge: calculatedProducts.deliveryCharge
-    //     ? Number(calculatedProducts.deliveryCharge)
-    //     : 0,
-    //   note: data.note,
-    //   payment_method: PAYMENT_METHODS.Cash,
-    //   payment_status: PAYMENT_STATUS.PAID,
-    //   purchase_barcode: '',
-    //   received_amount: Number(data.amount),
-    //   supplier_mobile: JSON.parse(data.supplier).mobile,
-    //   supplier_name: JSON.parse(data.supplier).name,
-    //   total_item: totalItems,
-    //   total_price: Number(data.amount),
-    //   unique_id: generateUlid(),
-    //   updated_at: formatDate(DATE_FORMATS.default),
-    //   user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
-    //   version: DEFAULT_STARTING_VERSION,
-    //   sms: sms,
-    // });
+    const responseCreatePurchase = await createPurchase({
+      batch: '',
+      created_at: formatDate(DATE_FORMATS.default, data.date),
+      date: formatDate(DATE_FORMATS.default, data.date),
+      discount: calculatedProducts.discount
+        ? Number(calculatedProducts.discount)
+        : 0,
+      discount_type: calculatedProducts.discountType ?? '',
+      employee_mobile: data.employee_number,
+      employee_name: data.employee,
+      extra_charge: calculatedProducts.deliveryCharge
+        ? Number(calculatedProducts.deliveryCharge)
+        : 0,
+      note: data.note,
+      payment_method: PAYMENT_METHODS.Cash,
+      payment_status: PAYMENT_STATUS.PAID,
+      purchase_barcode: '',
+      received_amount: Number(data.amount),
+      supplier_mobile: data.supplier_number,
+      supplier_name: data.supplier,
+      total_item: totalItems,
+      total_price: Number(data.amount),
+      unique_id: generateUlid(),
+      updated_at: formatDate(DATE_FORMATS.default),
+      user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
+      version: DEFAULT_STARTING_VERSION,
+      sms: sms,
+    });
+    console.log(responseCreatePurchase?.data.purchase);
+    if (responseCreatePurchase?.success) {
+      calculatedProducts.products.forEach(async (product) => {
+        createItemPurchase({
+          created_at: formatDate(DATE_FORMATS.default, data.date),
+          name: product.name,
+          quantity: product.calculatedAmount?.quantity,
+          unit_price: product.selling_price,
+          unit_cost: product.cost_price,
+          purchase_id: responseCreatePurchase.data.purchase.id,
+          purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
+          shop_product_unique_id: product.unique_id,
 
-    // if (responseCreatePurchase?.success) {
-    //   calculatedProducts.products.forEach(async (product) => {
-    //     createItemPurchase({
-    //       created_at: formatDate(DATE_FORMATS.default, data.date),
-    //       name: product.name,
-    //       quantity: product.calculatedAmount?.quantity,
-    //       unit_price: product.selling_price,
-    //       unit_cost: product.cost_price,
-    //       purchase_id: responseCreatePurchase.data.purchase.id,
-    //       purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
-    //       shop_product_unique_id: product.unique_id,
-
-    //       shop_product_id: product.id,
-    //       shop_product_variance_id: 1,
-    //       price: product.calculatedAmount?.total,
-    //       unique_id: generateUlid(),
-    //       updated_at: formatDate(DATE_FORMATS.default),
-    //       version: DEFAULT_STARTING_VERSION,
-    //     });
-    //   });
-    //   setCalculatedProducts({
-    //     ...calculatedProducts,
-    //     paymentAmount: Number(data.amount),
-    //     date: formatDate(DATE_FORMATS.default, data.date),
-    //   });
-    //   closeDrawer({ open: false });
-    //   openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
-    // }
-    // if (responseCreatePurchase?.error) {
-    //   toast.error('Something went wrong');
-    // }
+          shop_product_id: product.id,
+          shop_product_variance_id: 1,
+          price: product.calculatedAmount?.total,
+          unique_id: generateUlid(),
+          updated_at: formatDate(DATE_FORMATS.default),
+          version: DEFAULT_STARTING_VERSION,
+        });
+      });
+      setCalculatedProducts({
+        ...calculatedProducts,
+        paymentAmount: Number(data.amount),
+        date: formatDate(DATE_FORMATS.default, data.date),
+      });
+      closeDrawer({ open: false });
+      openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
+    }
+    if (responseCreatePurchase?.error) {
+      toast.error('Something went wrong');
+    }
   }
   useEffect(() => {
     console.log(contact);
@@ -376,32 +374,32 @@ const ConfirmPayment = () => {
                         <Command>
                           {/* <CommandInput placeholder="Search language..." /> */}
                           <CommandEmpty>No language found.</CommandEmpty>
-                          <CommandGroup>
-                            <ScrollArea className="max-h-[200px] scroll-p-4 rounded-md border">
-                              {suppliers?.map((supplier) => (
-                                <CommandItem
-                                  value={contact?.name}
-                                  key={supplier.id}
-                                  onSelect={() => {
-                                    setContact(supplier);
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      'mr-2 h-4 w-4',
-                                      supplier.name === contact?.name
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                  <div className="flex flex-col">
-                                    <p>{supplier.name}</p>
-                                    <p>{supplier.mobile}</p>
-                                  </div>
-                                  {/* {supplier.mobile} */}
-                                </CommandItem>
-                              ))}
-                            </ScrollArea>
+                          <CommandGroup className="max-h-80 overflow-y-scroll">
+                            {/* <ScrollArea className="max-h-[200px] scroll-p-4 rounded-md border"> */}
+                            {suppliers?.map((supplier) => (
+                              <CommandItem
+                                value={contact?.name}
+                                key={supplier.id}
+                                onSelect={() => {
+                                  setContact(supplier);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    'mr-2 h-4 w-4',
+                                    supplier.name === contact?.name
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                                <div className="flex flex-col">
+                                  <p>{supplier.name}</p>
+                                  <p>{supplier.mobile}</p>
+                                </div>
+                                {/* {supplier.mobile} */}
+                              </CommandItem>
+                            ))}
+                            {/* </ScrollArea> */}
                           </CommandGroup>
                         </Command>
                       </PopoverContent>

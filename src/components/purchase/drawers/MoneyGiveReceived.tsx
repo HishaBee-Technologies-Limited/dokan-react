@@ -480,32 +480,32 @@ const MoneyGiveReceived = ({
                           <Command>
                             {/* <CommandInput placeholder="Search language..." /> */}
                             <CommandEmpty>No language found.</CommandEmpty>
-                            <CommandGroup>
-                              <ScrollArea className="h-[200px] scroll-p-4 rounded-md border">
-                                {suppliers?.map((supplier) => (
-                                  <CommandItem
-                                    value={contact?.name}
-                                    key={supplier.id}
-                                    onSelect={() => {
-                                      setContact(supplier);
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        'mr-2 h-4 w-4',
-                                        supplier.name === contact?.name
-                                          ? 'opacity-100'
-                                          : 'opacity-0'
-                                      )}
-                                    />
-                                    <div className="flex flex-col">
-                                      <p>{supplier.name}</p>
-                                      <p>{supplier.mobile}</p>
-                                    </div>
-                                    {/* {supplier.mobile} */}
-                                  </CommandItem>
-                                ))}
-                              </ScrollArea>
+                            <CommandGroup className="max-h-80 overflow-y-scroll">
+                              {/* <ScrollArea className="h-[200px] scroll-p-4 rounded-md border"> */}
+                              {suppliers?.map((supplier) => (
+                                <CommandItem
+                                  value={contact?.name}
+                                  key={supplier.id}
+                                  onSelect={() => {
+                                    setContact(supplier);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      'mr-2 h-4 w-4',
+                                      supplier.name === contact?.name
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                  <div className="flex flex-col">
+                                    <p>{supplier.name}</p>
+                                    <p>{supplier.mobile}</p>
+                                  </div>
+                                  {/* {supplier.mobile} */}
+                                </CommandItem>
+                              ))}
+                              {/* </ScrollArea> */}
                             </CommandGroup>
                           </Command>
                         </PopoverContent>
