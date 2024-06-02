@@ -211,7 +211,7 @@ const AddShopPage = () => {
                             className="h-12"
                           />
                           <CommandEmpty>No type found.</CommandEmpty>
-                          <CommandGroup className="max-h-80 overflow-scroll">
+                          <CommandGroup className="max-h-80 overflow-y-scroll">
                             {types?.map((type) => (
                               <CommandItem
                                 key={type.id}
@@ -271,7 +271,7 @@ const AddShopPage = () => {
                               className="h-12"
                             /> */}
                             <CommandEmpty>No type found.</CommandEmpty>
-                            <CommandGroup className="max-h-80 overflow-scroll">
+                            <CommandGroup className="max-h-80 overflow-y-scroll">
                               {divisions?.map((type) => (
                                 <CommandItem
                                   key={type.id}

@@ -51,6 +51,14 @@ import {
 import { CalendarIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
+import { Check, UserSearch } from 'lucide-react';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from '@/components/ui/command';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const formSchema = z.object({
   amount: z.string(),
@@ -79,6 +87,7 @@ const ConfirmPayment = () => {
   const [customers, setCustomers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
   const [loading, setLoading] = useState(false);
+  const [contact, setContact] = useState<IUserResponse>();
 
   const tkn = getCookie('access_token');
   const cookie = getCookie('shop');
@@ -95,29 +104,18 @@ const ConfirmPayment = () => {
     },
   });
 
-  const selectedSupplier = form.watch('customer');
-  const selectedEmployee = form.watch('employee');
   useEffect(() => {
     if (calculatedProducts) {
       form.setValue('amount', String(calculatedProducts.totalPrice));
     }
   }, [calculatedProducts, form]);
   useEffect(() => {
-    const supplierNameArray = selectedSupplier.split('-');
-    const employeeNameArray = selectedEmployee?.split('-');
-    if (selectedSupplier) {
-      form.setValue(
-        'customer_number',
-        supplierNameArray[supplierNameArray.length - 1]
-      );
+    console.log(contact);
+    if (contact) {
+      form.setValue('customer', contact.name);
+      form.setValue('customer_number', contact.mobile);
     }
-    if (employeeNameArray) {
-      form.setValue(
-        'employee_number',
-        employeeNameArray[employeeNameArray?.length - 1]
-      );
-    }
-  }, [selectedSupplier, form, selectedEmployee]);
+  }, [contact]);
   async function onSubmit(data: z.infer<typeof formSchema>) {
     if (!data.amount) {
       form.setError('amount', {
@@ -126,9 +124,8 @@ const ConfirmPayment = () => {
       });
       return;
     }
-    const customerName = data.customer.split('-')[0];
-    const employeeName = data.employee?.split('-')[0];
-    console.log(JSON.parse(data.customer));
+
+    console.log(data);
 
     setLoading(true);
     const responseCreateSell = await createSell({
@@ -136,14 +133,14 @@ const ConfirmPayment = () => {
       discount: Number(calculatedProducts.discount),
       discount_type: calculatedProducts.discountType ?? '',
       employee_mobile: data.employee_number,
-      employee_name: employeeName,
+      employee_name: data.employee,
       note: data.note,
       payment_method: PAYMENT_METHODS.Cash,
       payment_status: PAYMENT_STATUS.PAID,
       purchase_barcode: '',
       received_amount: Number(data.amount),
-      customer_mobile: JSON.parse(data.customer).mobile,
-      customer_name: JSON.parse(data.customer).name,
+      customer_mobile: data.customer_number,
+      customer_name: data.customer,
       customer_address: data.customer_address,
       total_item: totalItems,
       total_price: Number(data.amount),
@@ -314,7 +311,7 @@ const ConfirmPayment = () => {
         />
 
         <div>
-          <FormField
+          {/* <FormField
             control={form.control}
             name="customer_info"
             render={({ field }) => (
@@ -330,7 +327,7 @@ const ConfirmPayment = () => {
                 </FormControl>
               </FormItem>
             )}
-          />
+          /> */}
 
           <div
             className={`grid ${form.watch('customer_info') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} duration-500`}
@@ -342,52 +339,95 @@ const ConfirmPayment = () => {
                 control={form.control}
                 name="customer"
                 render={({ field }) => (
-                  <FormItem>
-                    <Select
-                      onValueChange={field.onChange}
-                      // defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="">
-                          <SelectValue placeholder="Customer" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="w-[500px]">
-                        <div className="max-h-[24rem] overflow-y-scroll">
-                          {customers?.map((customer, i) => (
-                            <SelectItem
-                              key={i + 1}
-                              value={JSON.stringify(customer)}
-                            >
-                              {customer.name}
-                            </SelectItem>
-                          ))}
-                        </div>
+                  <FormItem className="pb-8">
+                    <FormLabel>
+                      Customer Name <span className="text-error-100">*</span>{' '}
+                    </FormLabel>
+                    <FormControl>
+                      <div className="relative h-10 w-full">
+                        <Input
+                          type="text"
+                          placeholder="Enter name..."
+                          className="pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent" // Add additional styling as needed
+                          {...field}
+                        />
 
-                        {/* <Button
-                                        variant={'secondary'}
-                                        onClick={() => handleAddNewCategory({ open: true, header: ExpenseEnum.ADD_NEW_CATEGORY })}
-                                        className="border-x-0 border-b-0 rounded-none w-full sticky -bottom-space6" >
-                                        Add Customer
-                                    </Button> */}
-                      </SelectContent>
-                    </Select>
+                        <FormItem className="flex flex-col absolute right-2 top-8 transform -translate-y-1/2 text-gray-500 z-10">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="transparent"
+                                  role="combobox"
+                                  className={cn(
+                                    'w-[50px] justify-between',
+                                    !field.value && 'text-muted-foreground'
+                                  )}
+                                >
+                                  {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
+                                  <UserSearch className="  shrink-0" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[400px] p-0 mr-10 ">
+                              {/* <ScrollArea className="h-[200px] scroll-p-4 rounded-md border"> */}
+                              <Command>
+                                {/* <CommandInput placeholder="Search language..." /> */}
+                                <CommandEmpty>No contact found.</CommandEmpty>
+                                <CommandGroup className="max-h-80 overflow-y-scroll">
+                                  {customers?.map((customer) => (
+                                    <CommandItem
+                                      value={contact?.name}
+                                      key={customer.id}
+                                      onSelect={() => {
+                                        setContact(customer);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          'mr-2 h-4 w-4',
+                                          customer.name === contact?.name
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                        )}
+                                      />
+                                      <div className="flex flex-col">
+                                        <p>{customer.name}</p>
+                                        <p>{customer.mobile}</p>
+                                      </div>
+                                      {/* {supplier.mobile} */}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </Command>
+                              {/* </ScrollArea> */}
+                            </PopoverContent>
+                          </Popover>
+
+                          <FormMessage />
+                        </FormItem>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="customer_number"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>
+                      Customer Number <span className="text-error-100">*</span>{' '}
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Number" className="" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
 
               <FormField
                 control={form.control}
@@ -406,7 +446,7 @@ const ConfirmPayment = () => {
         </div>
 
         <div>
-          <FormField
+          {/* <FormField
             control={form.control}
             name="employee_info"
             render={({ field }) => (
@@ -422,7 +462,7 @@ const ConfirmPayment = () => {
                 </FormControl>
               </FormItem>
             )}
-          />
+          /> */}
 
           <div
             className={`grid ${form.watch('employee_info') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} duration-500`}

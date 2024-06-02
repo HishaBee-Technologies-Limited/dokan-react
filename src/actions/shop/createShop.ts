@@ -17,7 +17,7 @@ export const createShops = async ({
     );
 
     const data = await res.json();
-
+    console.log(res, data);
     if (res.ok) {
       return {
         success: true,

@@ -49,7 +49,7 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
                   <Text
                     title={item.amount <= 0 ? 'Received' : 'Given'}
                     className={`!text-white dark:!text-white max-w-max px-space12 py-space4 rounded-full text-sm uppercase dark:bg-primary-80 ${
-                      item.amount < 0 ? 'bg-success-100' : 'bg-error-100'
+                      item.amount <= 0 ? 'bg-success-100' : 'bg-error-100'
                     }`}
                   />
                   {item.created_at}
