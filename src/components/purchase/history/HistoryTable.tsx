@@ -30,11 +30,12 @@ import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import { usePathname, useRouter } from 'next/navigation';
 import { generateQueryString } from '@/lib/queryString';
 import { usePurchase } from '@/stores/usePurchaseStore';
+import NoDataCard from '@/components/common/no-data-card';
 
 const HistoryTable = ({
   purchaseHistory,
 }: {
-  purchaseHistory: IPurchaseHistoryResponse[];
+  purchaseHistory: ICommonGetResponse<IPurchaseHistoryResponse>;
 }) => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
@@ -75,57 +76,62 @@ const HistoryTable = ({
 
   return (
     <ScrollArea className="pb-space8">
-      <Table wrapperClass="rounded-md border border-color">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="">#</TableHead>
-            <TableHead>Items</TableHead>
-            <TableHead>Contact</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Payment Status</TableHead>
-            <TableHead className="text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
+      {purchaseHistory?.data.length === 0 ? (
+        <NoDataCard />
+      ) : (
+        <Table wrapperClass="rounded-md border border-color">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="">#</TableHead>
+              <TableHead>Items</TableHead>
+              <TableHead>Contact</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Payment Status</TableHead>
+              <TableHead className="text-right">Action</TableHead>
+            </TableRow>
+          </TableHeader>
 
-        <TableBody>
-          {purchaseHistory?.map((purchase) => (
-            <TableRow
-              key={purchase.id}
-              onClick={() => handleRowClick(purchase)}
-            >
-              <TableCell>{purchase.id}</TableCell>
-              <TableCell>{purchase.total_item}</TableCell>
-              <TableCell>{purchase.supplier_name}</TableCell>
-              <TableCell>{purchase.total_price}</TableCell>
-              <TableCell>{purchase.updated_at}</TableCell>
-              <TableCell>
-                <Text
-                  title={purchase.payment_status}
-                  variant={transactionTypeTextVariant(purchase.payment_status)}
-                  className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(purchase.payment_status)}`}
-                />
-              </TableCell>
-              <TableCell className={`text-right`}>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size={'icon'}
-                      variant={'transparent'}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
+          <TableBody>
+            {purchaseHistory?.data.map((purchase) => (
+              <TableRow
+                key={purchase.id}
+                onClick={() => handleRowClick(purchase)}
+              >
+                <TableCell>{purchase.id}</TableCell>
+                <TableCell>{purchase.total_item}</TableCell>
+                <TableCell>{purchase.supplier_name}</TableCell>
+                <TableCell>{purchase.total_price}</TableCell>
+                <TableCell>{purchase.updated_at}</TableCell>
+                <TableCell>
+                  <Text
+                    title={purchase.payment_status}
+                    variant={transactionTypeTextVariant(
+                      purchase.payment_status
+                    )}
+                    className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(purchase.payment_status)}`}
+                  />
+                </TableCell>
+                <TableCell className={`text-right`}>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        size={'icon'}
+                        variant={'transparent'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        <MoreVertIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent
+                      align="end"
+                      side="bottom"
+                      className="w-56 "
                     >
-                      <MoreVertIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-
-                  <DropdownMenuContent
-                    align="end"
-                    side="bottom"
-                    className="w-56 "
-                  >
-                    {/* <DropdownMenuItem asChild>
+                      {/* <DropdownMenuItem asChild>
                       <Button
                         size={'sm'}
                         variant={'transparent'}
@@ -139,54 +145,57 @@ const HistoryTable = ({
                         Edit
                       </Button>
                     </DropdownMenuItem> */}
-                    <DropdownMenuItem asChild>
-                      <Button
-                        size={'sm'}
-                        variant={'transparent'}
-                        className="w-full justify-start text-error-100"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDialogOpen({
-                            open: true,
-                            header: PurchaseEnum.TRANSACTION_DELETE,
-                          });
-                          setCurrentPurchase(purchase);
-                        }}
-                      >
-                        <DeleteIcon />
-                        Delete
-                      </Button>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+                      <DropdownMenuItem asChild>
+                        <Button
+                          size={'sm'}
+                          variant={'transparent'}
+                          className="w-full justify-start text-error-100"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDialogOpen({
+                              open: true,
+                              header: PurchaseEnum.TRANSACTION_DELETE,
+                            });
+                            setCurrentPurchase(purchase);
+                          }}
+                        >
+                          <DeleteIcon />
+                          Delete
+                        </Button>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
 
-        <TableFooter>
+          {/* <TableFooter>
           <TableRow>
             <TableCell colSpan={7} className="text-center">
               Showing 10 of 100 Transactions
             </TableCell>
           </TableRow>
-        </TableFooter>
-      </Table>
+        </TableFooter> */}
+        </Table>
+      )}
       <ScrollBar orientation="horizontal" />
-      {/* <Pagination
-        pageCount={
-          purchaseHistory.length === 0
-            ? purchaseHistory.last_page
-            : Math.ceil(
-                purchaseHistory.total ?? 0 / purchaseHistory.per_page ?? 0
-              )
-        }
-        currentPage={purchaseHistory.current_page ?? 0}
-        lastPage={purchaseHistory.last_page ?? 0}
-        onChanage={(page) => {
-          router.push(`${pathname}?${setQueryString('page', page)}`);
-        }}
-      /> */}
+      {purchaseHistory?.data.length !== 0 && (
+        <Pagination
+          pageCount={
+            purchaseHistory?.data.length === 0
+              ? purchaseHistory.last_page
+              : Math.ceil(
+                  purchaseHistory.total ?? 0 / purchaseHistory.per_page ?? 0
+                )
+          }
+          currentPage={purchaseHistory.current_page ?? 0}
+          lastPage={purchaseHistory.last_page ?? 0}
+          onChanage={(page) => {
+            router.push(`${pathname}?${setQueryString('page', page)}`);
+          }}
+        />
+      )}
     </ScrollArea>
   );
 };

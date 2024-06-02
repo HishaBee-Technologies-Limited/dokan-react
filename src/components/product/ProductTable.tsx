@@ -92,10 +92,10 @@ export const ProductTable = ({
       <div className="my-10">
         <ProductPagination
           pageCount={Math.ceil(
-            (productData?.data?.total ?? 0) / (productData?.data?.per_page ?? 0)
+            (productData?.total ?? 0) / (productData?.per_page ?? 0)
           )}
-          currentPage={productData?.data?.current_page ?? 0}
-          lastPage={productData?.data?.last_page ?? 0}
+          currentPage={productData?.current_page ?? 0}
+          lastPage={productData?.last_page ?? 0}
         />
       </div>
     </ScrollArea>

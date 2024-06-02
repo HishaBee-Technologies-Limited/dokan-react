@@ -48,7 +48,7 @@ const ContactPage = async ({
   if (tab === ContactType.CUSTOMER && searchParams.active_user) {
     const res = await getSingleCustomer(Number(searchParams.active_user));
     customerDetails = res?.data;
-    transactionsPerUser = transactions?.data?.filter(
+    transactionsPerUser = transactions?.data?.data?.filter(
       (item) => item.customer_mobile === customerDetails?.mobile
     );
   }
@@ -57,14 +57,14 @@ const ContactPage = async ({
     const purchase = await getPurchaseHistory();
 
     supplierDetails = res?.data;
-    transactionsPerUser = purchase?.data?.filter(
+    transactionsPerUser = purchase?.data?.data?.filter(
       (item) => item.supplier_mobile === supplierDetails?.mobile
     );
   }
   if (tab === ContactType.EMPLOYEE && searchParams.active_user) {
     const res = await getSingleEmployee(Number(searchParams.active_user));
     employeeDetails = res?.data;
-    transactionsPerUser = transactions?.data?.filter(
+    transactionsPerUser = transactions?.data?.data.filter(
       (item) => item.employee_mobile === employeeDetails?.mobile
     );
   }

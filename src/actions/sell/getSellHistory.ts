@@ -1,4 +1,5 @@
 'use server';
+import { ICommonGetResponse } from '@/types/common';
 
 import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
@@ -38,7 +39,7 @@ export const getSellHistory = async (
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data.data as IProductSellPayload[],
+        data: data as ICommonGetResponse<IProductSellPayload>,
       };
     }
     if (!res.ok) {
