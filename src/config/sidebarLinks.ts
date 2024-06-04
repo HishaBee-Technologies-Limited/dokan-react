@@ -486,14 +486,14 @@ export const SidebarLinksStandard = [
     image: '/images/features/contact.svg',
     link: '/contact',
   },
-  {
-    id: 3,
-    title: 'Standard',
-    bn_title: 'স্টক খাতা',
-    image: '/images/features/standard.svg',
-    link: '#',
-    children: [],
-  },
+  // {
+  //   id: 3,
+  //   title: 'Standard',
+  //   bn_title: 'স্টক খাতা',
+  //   image: '/images/features/standard.svg',
+  //   link: '#',
+  //   children: [],
+  // },
   {
     id: 301,
     title: 'Product List',
