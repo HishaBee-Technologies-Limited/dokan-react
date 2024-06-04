@@ -11,7 +11,7 @@ export const getAllShops = async () => {
     //   redirect('/');
     // }
     const data = await res.json();
-    console.log(res, data);
+    // console.log(res, data);
 
     if (res.ok) {
       return {

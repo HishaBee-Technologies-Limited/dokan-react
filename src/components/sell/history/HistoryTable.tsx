@@ -36,7 +36,6 @@ const HistoryTable = ({
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
   const setSellDetails = useSellStore((state) => state.setSellDetails);
-  console.log(transactions);
   const pathname = usePathname();
   const router = useRouter();
   const { setQueryString } = useCreateQueryString();

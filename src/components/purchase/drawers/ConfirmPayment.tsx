@@ -133,8 +133,6 @@ const ConfirmPayment = () => {
         })
       : null;
 
-    console.log(data);
-
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -163,7 +161,6 @@ const ConfirmPayment = () => {
       version: DEFAULT_STARTING_VERSION,
       sms: sms,
     });
-    console.log(responseCreatePurchase?.data.purchase);
     if (responseCreatePurchase?.success) {
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
@@ -197,7 +194,6 @@ const ConfirmPayment = () => {
     }
   }
   useEffect(() => {
-    console.log(contact);
     if (contact) {
       form.setValue('supplier', contact.name);
       form.setValue('supplier_number', contact.mobile);

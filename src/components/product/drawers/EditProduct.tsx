@@ -131,7 +131,6 @@ export const EditProduct = ({
   };
 
   useEffect(() => {
-    console.log(product);
     form.setValue('product_name', product?.name ?? ''),
       form.setValue('stock', String(product?.stock ?? '')),
       form.setValue('purchase_price', String(product?.cost_price ?? '')),

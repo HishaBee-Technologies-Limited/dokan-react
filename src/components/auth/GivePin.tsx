@@ -29,6 +29,8 @@ const GivePin = ({ mobile_number }: { mobile_number: string }) => {
     const res = await authenticate(undefined, { mobile_number, pin });
     if (res === 'Something went wrong.') {
       toast.error('You phone or pin is incorrect');
+    } else {
+      router.push('/shop');
     }
     setLoading(false);
   };

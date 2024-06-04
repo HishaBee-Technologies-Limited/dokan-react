@@ -127,9 +127,7 @@ const MoneyGiveReceived = ({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
-    const supplierName = data.name?.split('-')[0];
     // const employeeName = data.employee?.split('-')[0];
-    console.log(data);
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -152,7 +150,6 @@ const MoneyGiveReceived = ({
       version: DEFAULT_STARTING_VERSION,
       sms: data.sms ? 'sms' : null,
     });
-    console.log(responseCreatePurchase);
     if (responseCreatePurchase?.success) {
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
@@ -198,7 +195,6 @@ const MoneyGiveReceived = ({
       };
 
       const dueRes = await createDue(payload);
-      console.log(dueRes);
 
       const payloadForDueItem = {
         amount: -Number(data.amount),
@@ -238,7 +234,6 @@ const MoneyGiveReceived = ({
 
       const res = await createDueItem(payloadForDueItem);
       const resAmount = await createDueItem(payloadForDueItemForPayment);
-      console.log(res, resAmount);
 
       setCalculatedProducts({
         ...calculatedProducts,
@@ -288,7 +283,6 @@ const MoneyGiveReceived = ({
 
   useEffect(() => {
     if (contact) {
-      console.log(contact);
       form.setValue('name', contact.name);
       form.setValue('number', contact.mobile);
     }
@@ -296,11 +290,9 @@ const MoneyGiveReceived = ({
   const watchNumber = form.watch('number');
 
   useEffect(() => {
-    console.log(watchNumber);
     if (dueList?.length) {
       const sup_mobile = form.watch('number');
       const due = dueList.find((due) => {
-        console.log(due.contact_mobile, sup_mobile);
         return due.contact_mobile === sup_mobile;
       });
       // console.log(sup_mobile, dueList);
@@ -319,7 +311,6 @@ const MoneyGiveReceived = ({
       }, 0),
     [calculatedProducts]
   );
-  console.log(form.watch('number'));
 
   return (
     <div className="space-y-space12">
