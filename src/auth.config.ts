@@ -41,6 +41,11 @@ export const authConfig = {
 
         return;
       }
+      // if (isLoggedIn) {
+      //   if (!cookies.get('shopId')?.value) {
+      //     return Response.redirect(new URL('/shop', nextUrl));
+      //   }
+      // }
 
       if (isLoggedIn) {
         if (nextUrl.pathname === '/shop') {

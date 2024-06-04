@@ -154,8 +154,6 @@ const ProductFiledRow = (props: IProps) => {
     );
   }, [unitPriceWithExtras, props.form]);
 
-  console.log(quantityWatch);
-
   return (
     <div className="border-b border-dashed border-color pt-space8 pb-space12 space-y-space6 ">
       <div className="flex justify-between gap-space10 items-start">

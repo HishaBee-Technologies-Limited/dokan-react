@@ -155,7 +155,6 @@ const AddMoneyGiveReceived = ({
     router.refresh();
 
     handleDrawerOpen({ open: false });
-    console.log('data------------', data);
   }
 
   const activeCashColor = (active: string): string => {

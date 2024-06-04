@@ -29,8 +29,6 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
   const handleDialogOpen = useProductStore((state) => state.setDialogState);
   const handleDrawerOpen = useProductStore((state) => state.setDrawerState);
 
-  console.log(product);
-
   return (
     <div>
       {product?.name ? (

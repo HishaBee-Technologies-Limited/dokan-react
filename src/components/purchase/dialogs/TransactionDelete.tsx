@@ -31,7 +31,6 @@ const TransactionDelete = () => {
         payment_method: currentPurchase.payment_method,
         user_id: currentPurchase.user_id,
       });
-      console.log(res);
       if (res?.success) {
         toast.success('Purchase was successfully deleted');
         handleClose({ open: false });

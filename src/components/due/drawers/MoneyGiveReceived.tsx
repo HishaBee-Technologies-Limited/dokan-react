@@ -89,7 +89,6 @@ const MoneyGiveReceived = () => {
       // purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
     };
     const dueRes = await createDue(payload);
-    console.log('dueRes----', dueRes);
     const payloadForDueItem = {
       amount:
         cashStatus === 'Given' ? Number(data.amount) : -Number(data.amount),

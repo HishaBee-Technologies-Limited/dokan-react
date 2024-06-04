@@ -36,6 +36,7 @@ const nextConfig = {
       },
     ];
   },
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {

@@ -31,15 +31,14 @@ type ProductPagePropsDef = {
 const ProductPage = async ({ searchParams }: ProductPagePropsDef) => {
   const session = await auth();
   const shop = cookies().get('shop')?.value as string;
-  console.log('shop', JSON.parse(shop).subscription);
   const hasAccess = ['ADVANCED', 'STANDARD', 'TRAIL'].includes(
     JSON.parse(shop).subscription
   );
-  shop &&
-    console.log(
-      'dddd',
-      ['ADVANCED', 'STANDARD', 'TRAIL'].includes(JSON.parse(shop).subscription)
-    );
+  // shop &&
+  //   console.log(
+  //     'dddd',
+  //     ['ADVANCED', 'STANDARD', 'TRAIL'].includes(JSON.parse(shop).subscription)
+  //   );
   const productUnits = await getUnits();
   const allProductsResponse = await getShopsProducts({ params: searchParams });
   const categories = await getCategories(session?.user?.id as string);

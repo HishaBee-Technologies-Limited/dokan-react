@@ -112,7 +112,6 @@ function ProductListCardEdit(props: {
         <Button
           type="button"
           onClick={() => {
-            console.log('dd');
             props.removeItemFromProduct();
           }}
           className="h-[20px]"

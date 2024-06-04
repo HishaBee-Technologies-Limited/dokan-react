@@ -20,41 +20,47 @@ export const LeftSection = ({ productData }: { productData: any }) => {
   const { ref, inView, entry } = useInView({
     /* Optional options */
     threshold: 0.2,
+    delay: 2000,
   });
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
-  // const fetchProducts = async () => {
-  //   setLoading(true);
-  //   const allProductsResponse = await getShopsProducts({
-  //     params: { page: page + 1, sorted_by: 'new_to_old' },
-  //   });
-  //   console.log(allProductsResponse);
-  //   setProductsRes((prevProd) => [
-  //     ...prevProd,
-  //     ...allProductsResponse?.data.data,
-  //   ]);
-  //   setPage(allProductsResponse?.data.current_page);
-  //   setLoading(false);
-  // };
+  const fetchProducts = async () => {
+    setLoading(true);
+    const allProductsResponse = await getShopsProducts({
+      params: { page: page + 1, sorted_by: 'new_to_old' },
+    });
+    setProductsRes((prevProd) => {
+      let arr = [...prevProd, ...allProductsResponse?.data.data];
+      let output = arr.reduce((acc, curr) => {
+        let temp = acc.some(
+          (prod: IProduct) => prod.unique_id === curr.unique_id
+        );
+        if (!temp) {
+          acc = [...acc, curr];
+        }
+        return acc;
+      }, []);
+      return output;
+    });
+    setPage(allProductsResponse?.data.current_page);
+    setLoading(false);
+  };
 
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
-  // useEffect(() => {
-  //   fetchProducts();
-  //   console.log(page);
-  //   console.log(productRes);
-  // }, [inView]);
-  // console.log(page);
+  useEffect(() => {
+    fetchProducts();
+  }, [inView]);
   return (
     <div className="lg:pr-space12 lg:w-4/12 h-full">
       <Card className="h-full w-full shadow">
         <ProductListQueries />
 
         <ScrollArea className="h-[calc(100%-14rem)] overflow-y-scroll px-space8">
-          {productData?.data?.map((product: IProduct, i: number) => (
+          {productRes.map((product: any, i: number) => (
             <div
               key={product.id}
               className="flex items-center gap-space12 justify-between py-space8 px-space8"
@@ -70,13 +76,10 @@ export const LeftSection = ({ productData }: { productData: any }) => {
               >
                 Add
               </Button>
-              {i === productData?.data.length - 1 ? (
-                <div ref={ref}>
-                  <h2>{`Header inside viewport ${inView}.`}</h2>
-                </div>
-              ) : null}
+              {i === productRes.length - 1 ? <div ref={ref}></div> : null}
             </div>
           ))}
+          {loading ? <div>Loading</div> : null}
         </ScrollArea>
       </Card>
     </div>

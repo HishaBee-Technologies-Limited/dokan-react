@@ -110,7 +110,6 @@ const ConfirmPayment = () => {
     }
   }, [calculatedProducts, form]);
   useEffect(() => {
-    console.log(contact);
     if (contact) {
       form.setValue('customer', contact.name);
       form.setValue('customer_number', contact.mobile);
