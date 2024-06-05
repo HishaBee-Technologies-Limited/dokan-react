@@ -26,6 +26,7 @@ type IContactProps = {
   searchParams: any;
 };
 
+//TODO: need refactoring and BE refactoring in this component
 const ContactPage = async ({
   params: { locale },
   searchParams,
