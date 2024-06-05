@@ -16,7 +16,7 @@ const SellPage = async () => {
   const allProductsResponse = await getShopsProducts({});
   const allCustomers = await getAllCustomer(Number(shopId));
 
-  const dueList = await getAllDue();
+  const dueList = await getAllDue({});
 
   const customerDueList = dueList?.data?.data.filter(
     (item) => item.contact_type === 'CUSTOMER'

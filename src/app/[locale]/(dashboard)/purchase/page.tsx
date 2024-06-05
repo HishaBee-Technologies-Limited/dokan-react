@@ -16,7 +16,7 @@ const PurchasePage = async () => {
   const allProductsResponse = await getShopsProducts({});
   const allSupplier = await getAllSupplier(Number(shopId));
 
-  const dueList = await getAllDue();
+  const dueList = await getAllDue({});
 
   const supplierDueList = dueList?.data?.data.filter(
     (item) => item.contact_type === 'SUPPLIER'

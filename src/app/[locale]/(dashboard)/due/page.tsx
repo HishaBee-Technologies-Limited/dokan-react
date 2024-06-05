@@ -18,7 +18,7 @@ const DuePage = async ({ params: { locale }, searchParams }: IContactProps) => {
   const userID = searchParams.active_user || '';
   const tab = searchParams.tab || '';
 
-  const dueList = await getAllDue();
+  const dueList = await getAllDue({});
   const dueItems = await getDueItemByUniqueID(`${userID}`);
 
   const customerDueList = dueList?.data?.data.filter(

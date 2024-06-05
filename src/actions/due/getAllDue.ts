@@ -5,12 +5,18 @@ import { cookies } from 'next/headers';
 import { IDueListResponse } from '@/types/due/dueResponse';
 import { ICommonGetResponse } from '@/types/common';
 
-export const getAllDue = async (page?: number) => {
-  const pageCount = page ? page : 10;
+export const getAllDue = async ({ page }: { page?: number }) => {
   try {
     const shopId = cookies().get('shopId')?.value;
-    const params = `shop_id=${shopId}&per_page=${pageCount}&exclude_deleted=true`;
-    const res = await authApi.get(`/due/all?${params}`);
+    // const params = `shop_id=${shopId}&per_page=${pageCount}&exclude_deleted=true`;
+    const res = await authApi.get(
+      `/due/all?${new URLSearchParams({
+        per_page: '200',
+        exclude_deleted: 'true',
+        shop_id: shopId?.toString() ?? '',
+        page: page?.toString() ?? '1',
+      })}`
+    );
     const data = await res.json();
     if (res.ok) {
       return {
