@@ -29,7 +29,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { IUserResponse } from '@/types/contact/partyResponse';
-import { useSession } from 'next-auth/react';
 import { getCookie } from 'cookies-next';
 import { cn, formatDate, generateUlid } from '@/lib/utils';
 import {
@@ -62,6 +61,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { createDue } from '@/actions/due/createDue';
 import { IDueListResponse } from '@/types/due/dueResponse';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import { getUserDue } from '@/actions/due/getUserDue';
 
 const partyList = ['customer', 'supplier'];
 
@@ -88,13 +88,7 @@ const formSchema = z.object({
   customer_address: z.string().optional(),
 });
 
-const MoneyGiveReceived = ({
-  customers,
-  dueList,
-}: {
-  customers?: IUserResponse[];
-  dueList?: IDueListResponse[];
-}) => {
+const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 
@@ -321,11 +315,21 @@ const MoneyGiveReceived = ({
   }, [calculatedProducts]);
 
   useEffect(() => {
-    const cus_mobile = form.watch('number');
-    const due = dueList?.find((due) => due.contact_mobile === cus_mobile);
-    console.log(due);
-    due ? form.setValue('due', due) : due;
-  }, [dueList, form.watch('number')]);
+    const fetchUserDue = async () => {
+      const sup_mobile = form.watch('number');
+
+      const res = await getUserDue(sup_mobile);
+      console.log(res);
+      if (res?.success) {
+        form.setValue('due', res.data);
+      }
+      /*@ts-ignore*/
+      if (!res?.success && res?.error?.status === 404) {
+        console.log('no due');
+      }
+    };
+    fetchUserDue();
+  }, [form.watch('number')]);
   const totalItems = useMemo(
     () =>
       calculatedProducts.products.reduce((prev, current) => {
