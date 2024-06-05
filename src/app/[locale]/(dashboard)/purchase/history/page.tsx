@@ -20,7 +20,7 @@ const PurchaseHistory = async ({ searchParams }: any) => {
   const shopId = cookies().get('shopId')?.value;
   const allSupplier = await getAllSupplier(Number(shopId));
 
-  const dueList = await getAllDue();
+  const dueList = await getAllDue({});
 
   const supplierDueList = dueList?.data?.data.filter(
     (item) => item.contact_type === 'SUPPLIER'

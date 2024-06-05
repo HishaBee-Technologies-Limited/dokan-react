@@ -12,7 +12,11 @@ import {
 } from '@/components/ui/select';
 import { useRouter } from 'next/navigation';
 
-const ProductListQueries = () => {
+const ProductListQueries = ({
+  handleSearch,
+}: {
+  handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
   const [value, setValue] = React.useState<string>('');
   const router = useRouter();
 
@@ -21,7 +25,11 @@ const ProductListQueries = () => {
       <Text title="Select Products to Purchase" className="font-semibold" />
 
       <div className="flex gap-space12">
-        <Search onChange={(e: React.ChangeEvent<HTMLInputElement>) => {}} />
+        <Search
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleSearch(e);
+          }}
+        />
         <Button
           variant={'secondary'}
           className="!h-[4.4rem] w-[4.8rem] sm:px-space8 text-lg"
