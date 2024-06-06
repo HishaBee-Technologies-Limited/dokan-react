@@ -1,3 +1,4 @@
+import { getPurchaseOrTransactionList } from '@/actions/contacts/getPurchaseOrTransactionList';
 import {
   Table,
   TableBody,
@@ -8,15 +9,24 @@ import {
 } from '@/components/ui/table';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import { DATE_FORMATS } from '@/lib/constants/common';
-import { ICommonGetResponse } from '@/types/common';
-import { IPurchaseProducts } from '@/types/purchase';
 import { IProductSellPayload } from '@/types/sell';
 import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 
-export const ContactTable = ({ userTransaction }: { userTransaction: any }) => {
+export const ContactTable = () => {
+  const [userTransactions, setUserTransactions] = useState<any>();
   const { getQueryString } = useCreateQueryString();
   const activeTab = getQueryString('tab') ?? '';
+  const id = getQueryString('active_user') ?? '';
 
+  useEffect(() => {
+    const fetchPurchase = async () => {
+      const res = await getPurchaseOrTransactionList(id, activeTab);
+      console.log(res);
+      setUserTransactions(res?.data?.data);
+    };
+    fetchPurchase();
+  }, [id]);
   return (
     <Table wrapperClass="min-w-[60rem]">
       <TableHeader>
@@ -34,7 +44,7 @@ export const ContactTable = ({ userTransaction }: { userTransaction: any }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {userTransaction?.map((invoice: IProductSellPayload) => (
+        {userTransactions?.map((invoice: IProductSellPayload) => (
           <TableRow key={invoice.id}>
             <TableCell>{invoice.id}</TableCell>
             <TableCell>

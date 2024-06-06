@@ -1,12 +1,21 @@
 'use server';
+import { ICommonGetResponse } from '@/types/common';
 
 import { authApi } from '@/lib/api';
 import { IUserResponse } from '@/types/contact/partyResponse';
+import { cookies } from 'next/headers';
 
-export const getAllCustomer = async (shopId: number) => {
+export const getAllCustomer = async (page: number) => {
   try {
+    const shopId = cookies().get('shopId')?.value;
+
     const res = await authApi.get(
-      `/customer/all?shop_id=${shopId}&exclude_deleted=true`
+      `/customer/all?${new URLSearchParams({
+        page: page.toString(),
+        per_page: '20',
+        exclude_deleted: 'true',
+        shop_id: shopId!,
+      })}`
     );
     const data = await res.json();
     if (res.ok) {
@@ -14,7 +23,7 @@ export const getAllCustomer = async (shopId: number) => {
         success: true,
         message: data.message,
         status: data.status_code,
-        data: data as IUserResponse[],
+        data: data as ICommonGetResponse<IUserResponse>,
       };
     }
     if (!res.ok) {

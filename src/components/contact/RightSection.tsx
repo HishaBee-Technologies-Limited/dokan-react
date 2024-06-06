@@ -17,13 +17,13 @@ export interface ICommonTransaction extends IProductSellPayload {}
 
 export const RightSection = ({
   userDetails,
-  transactions,
+  // transactions,
 }: {
   userDetails: any;
-  transactions:
-    | IProductSellPayload[]
-    | (undefined & IPurchaseProducts)
-    | undefined;
+  // transactions:
+  //   | IProductSellPayload[]
+  //   | (undefined & IPurchaseProducts)
+  // | undefined;
 }) => {
   const { getQueryString } = useCreateQueryString();
   const activeTab = getQueryString('tab') ?? '';
@@ -66,7 +66,7 @@ export const RightSection = ({
       </div>
 
       <ScrollArea className="h-[calc(100%-9rem)] pb-space16 px-space16">
-        <ContactTable userTransaction={transactions} />
+        <ContactTable />
 
         <ScrollBar orientation="horizontal" />
       </ScrollArea>

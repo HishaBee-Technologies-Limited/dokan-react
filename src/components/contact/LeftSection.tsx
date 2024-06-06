@@ -13,6 +13,8 @@ import WrapperOddList from '@/components/common/WrapperOddList';
 import { IUserResponse } from '@/types/contact/partyResponse';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator';
+import { useContactPagination } from '@/hooks/useContactPagination';
+import { useInView } from 'react-intersection-observer';
 
 const tabData = [
   {
@@ -29,11 +31,13 @@ const tabData = [
   },
 ];
 
-export const LeftSection = ({
-  userList,
-}: {
-  userList: IUserResponse[] | undefined;
-}) => {
+export const LeftSection = (
+  {
+    //   contactRes,
+    // }: {
+    //   contactRes: IUserResponse[] | undefined;
+  }
+) => {
   const router = useRouter();
   const pathname = usePathname();
   const { getQueryString, setQueryString } = useCreateQueryString();
@@ -41,6 +45,13 @@ export const LeftSection = ({
   const [userFilterList, setUserFilterList] = useState<
     IUserResponse[] | undefined
   >();
+  const { ref, inView, entry } = useInView({
+    /* Optional options */
+    threshold: 0.2,
+    delay: 2000,
+  });
+  const [page, setPage] = useState(1);
+  const { loading, hasMore, contactRes } = useContactPagination(page, '');
 
   const activeTab = getQueryString('tab') ?? '';
   const activeUser = getQueryString('active_user') ?? '';
@@ -48,13 +59,13 @@ export const LeftSection = ({
   const { setContactDrawerState, setParty } = useContactStore((state) => state);
 
   useEffect(() => {
-    if (userList) {
-      setParty(userList[0]);
+    if (contactRes) {
+      setParty(contactRes[0]);
     }
 
     const params = {
       tab: activeTab ? activeTab : 'Customer',
-      active_user: userList?.length ? String(userList[0].id) : '',
+      active_user: contactRes?.length ? String(contactRes[0].id) : '',
     };
     router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
     setUserSearch('');
@@ -63,18 +74,18 @@ export const LeftSection = ({
   useEffect(() => {
     const params = {
       tab: 'Customer',
-      active_user: userList?.length ? String(userList[0].id) : '',
+      active_user: contactRes?.length ? String(contactRes[0].id) : '',
     };
     router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
   }, []);
 
   useEffect(() => {
-    if (userList) {
-      setUserFilterList(userList);
+    if (contactRes) {
+      setUserFilterList(contactRes);
     }
-  }, [userList]);
+  }, [contactRes]);
   useEffect(() => {
-    let temArr = userList && [...userList];
+    let temArr = contactRes && [...contactRes];
 
     const temArr2 = temArr?.filter(
       (user) =>
@@ -82,6 +93,11 @@ export const LeftSection = ({
     );
     setUserFilterList(temArr2);
   }, [userSearch]);
+
+  useEffect(() => {
+    setPage((prevPage) => prevPage + 1);
+  }, [inView]);
+  console.log(contactRes);
 
   return (
     <Card className="h-full lg:w-4/12 flex flex-col gap-space16">
@@ -118,6 +134,10 @@ export const LeftSection = ({
                 setParty(item);
               }}
             >
+              {contactRes && index === contactRes?.length - 1 ? (
+                <div ref={ref}></div>
+              ) : null}
+
               <div className="flex items-center gap-space8">
                 <FallBackImage
                   src={item.image_src ?? ''}
@@ -130,6 +150,7 @@ export const LeftSection = ({
               </div>
             </CardWithSideIndicator>
           ))}
+          {loading ? <div>Loading</div> : null}
         </WrapperOddList>
       </ScrollArea>
 
