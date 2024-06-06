@@ -65,6 +65,7 @@ import {
   CommandInput,
   CommandItem,
 } from '@/components/ui/command';
+import { getUserDue } from '@/actions/due/getUserDue';
 
 const partyList = ['customer', 'supplier'];
 
@@ -92,13 +93,7 @@ const formSchema = z.object({
   due: z.any(),
 });
 
-const MoneyGiveReceived = ({
-  suppliers,
-  dueList,
-}: {
-  suppliers?: IUserResponse[];
-  dueList: IDueListResponse[];
-}) => {
+const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   const handleSellDrawer = usePurchaseStore((state) => state.setDrawerState);
   const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
   const [contact, setContact] = useState<IUserResponse>();
@@ -290,15 +285,21 @@ const MoneyGiveReceived = ({
   const watchNumber = form.watch('number');
 
   useEffect(() => {
-    if (dueList?.length) {
+    const fetchUserDue = async () => {
       const sup_mobile = form.watch('number');
-      const due = dueList.find((due) => {
-        return due.contact_mobile === sup_mobile;
-      });
-      // console.log(sup_mobile, dueList);
-      due ? form.setValue('due', due) : due;
-    }
-  }, [watchNumber, dueList, form]);
+
+      const res = await getUserDue(sup_mobile);
+      console.log(res);
+      if (res?.success) {
+        form.setValue('due', res.data);
+      }
+      /*@ts-ignore*/
+      if (!res?.success && res?.error?.status === 404) {
+        console.log('no due');
+      }
+    };
+    fetchUserDue();
+  }, [watchNumber, form]);
 
   useEffect(() => {
     form.setValue('amount', String(calculatedProducts.totalPrice));

@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Card from '@/components/common/Card';
 import CustomTab from '@/components/common/Tab';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,8 @@ import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator';
 import { useDueStore } from '@/stores/useDueStore';
 import { useInView } from 'react-intersection-observer';
+import { useDuePagination } from '@/hooks/useDuePagination';
+import { Input } from '../ui/input';
 
 const tabData = [
   {
@@ -40,20 +42,23 @@ interface IProps {
     | undefined;
 }
 
-export const LeftSection = ({ dueList, totalValues }: IProps) => {
+export const LeftSection = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { getQueryString, setQueryString } = useCreateQueryString();
   const currentSearchParams = useSearchParams();
   const setDueList = useDueStore((state) => state.setDueList);
   const [page, setPage] = useState(1);
-
-  // const { loading, hasMore, dueRes } = useDuePagination(page, '');
+  const [userSearch, setUserSearch] = useState('');
+  const [dueFilterList, setDueFilterList] = useState<
+    IDueListResponse[] | undefined
+  >();
   const { ref, inView, entry } = useInView({
     /* Optional options */
-    threshold: 0.2,
+    threshold: 0.1,
     delay: 2000,
   });
+  const { loading, hasMore, dueRes } = useDuePagination(page, '');
   const activeTab = getQueryString('tab') ?? '';
   const activeUser = getQueryString('active_user') ?? '';
 
@@ -65,33 +70,39 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
     }
   };
 
+  useEffect(() => {
+    if (dueRes) {
+      setDueFilterList(dueRes);
+    }
+  }, [dueRes]);
+
   // const filteredDueList = dueList?.data?.filter(
   //   (item) => item.contact_type === activeTab.toUpperCase()
   // );
 
   useEffect(() => {
+    console.log('in', hasMore, loading);
     setPage((prevPage) => prevPage + 1);
     console.log('fdfgfg');
   }, [inView]);
+  console.log(dueRes);
 
   useEffect(() => {
-    const updatedSearchParams = new URLSearchParams(
-      currentSearchParams.toString()
+    let temArr = dueRes && [...dueRes];
+
+    const temArr2 = temArr?.filter(
+      (user) =>
+        user.contact_name.includes(userSearch) ||
+        user.contact_mobile.includes(userSearch)
     );
-    updatedSearchParams.set('page', page.toString());
-    router.push(pathname + '?' + updatedSearchParams.toString());
-  }, [page]);
+    setDueFilterList(temArr2);
+  }, [userSearch]);
 
   useEffect(() => {
+    setPage(1);
     router.replace(
       `${pathname}?${setQueryString('tab', activeTab ? activeTab : 'Customer')}`
     );
-
-    const updatedSearchParams = new URLSearchParams(
-      currentSearchParams.toString()
-    );
-    updatedSearchParams.set('page', '1');
-    router.push(pathname + '?' + updatedSearchParams.toString());
   }, [activeTab]);
 
   return (
@@ -133,15 +144,21 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
           </article>
         </Card> */}
 
-        {/* <div className=" px-space12 sm:px-space16">
-          <Input placeholder="Search contact" />
-        </div> */}
+        <div className=" px-space12 sm:px-space16">
+          <Input
+            value={userSearch}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setUserSearch(e.target.value)
+            }
+            placeholder="Search contact"
+          />
+        </div>
       </div>
 
       <ScrollArea className="h-[calc(100%-6.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
-        {dueList?.length ? (
+        {dueFilterList?.length ? (
           <WrapperOddList>
-            {dueList?.map((item, index) => (
+            {dueFilterList?.map((item, index) => (
               <div key={index}>
                 <CardWithSideIndicator
                   active={item.unique_id === activeUser}
@@ -152,9 +169,10 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
                         item.unique_id
                       )}`
                     );
-                    setDueList(dueList);
+                    setDueList(dueRes);
                   }}
                 >
+                  {index === dueRes.length - 1 ? <div ref={ref}></div> : null}
                   <div className="w-full flex items-center gap-space8">
                     <FallBackImage
                       src={''}
@@ -165,7 +183,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
                       <article>
                         <Text
                           title={item.contact_name}
-                          className="!text-md font-medium"
+                          className="!text-md font-medium  w-24"
                         />
                         <Text title={item.contact_mobile} variant="muted" />
                       </article>
@@ -196,7 +214,6 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
                     </div>
                   </div>
                 </CardWithSideIndicator>
-                {index === dueList.length - 1 ? <div ref={ref}></div> : null}
               </div>
             ))}
           </WrapperOddList>
@@ -207,7 +224,7 @@ export const LeftSection = ({ dueList, totalValues }: IProps) => {
             </Link>
           </div>
         )}
-        {/* {loading ? <div>Loading</div> : null} */}
+        {loading ? <div>Loading</div> : null}
       </ScrollArea>
     </Card>
   );

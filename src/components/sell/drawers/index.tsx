@@ -15,7 +15,6 @@ import { IDueListResponse } from '@/types/due/dueResponse';
 
 const SellDrawers = ({
   customers,
-  dueList,
 }: {
   customers?: IUserResponse[];
 
@@ -26,13 +25,13 @@ const SellDrawers = ({
 
   const renderedDrawers = (activeDrawer: string | undefined) => {
     if (SellEnum.QUICK_SELL === activeDrawer) {
-      return <QuickSell dueList={dueList} customers={customers} />;
+      return <QuickSell customers={customers} />;
     } else if (SellEnum.CONFIRM_PAYMENT === activeDrawer) {
       return <ConfirmPayment />;
     } else if (SellEnum.MONEY_GIVEN_ENTRY === activeDrawer) {
-      return <MoneyGiveReceived dueList={dueList} customers={customers} />;
+      return <MoneyGiveReceived customers={customers} />;
     } else if (SellEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
-      return <MoneyGiveReceived dueList={dueList} customers={customers} />;
+      return <MoneyGiveReceived customers={customers} />;
     } else if (SellEnum.TRANSACTION_DETAILS === activeDrawer) {
       return <TransactionDetails />;
     } else if (SellEnum.QUICK_SELL_EDIT === activeDrawer) {

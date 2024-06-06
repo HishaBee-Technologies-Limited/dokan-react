@@ -16,12 +16,6 @@ const PurchasePage = async () => {
   const allProductsResponse = await getShopsProducts({});
   const allSupplier = await getAllSupplier(Number(shopId));
 
-  const dueList = await getAllDue({});
-
-  const supplierDueList = dueList?.data?.data.filter(
-    (item) => item.contact_type === 'SUPPLIER'
-  );
-
   return (
     <>
       <div className="space-y-space16 h-full">
@@ -33,10 +27,7 @@ const PurchasePage = async () => {
         </div>
       </div>
 
-      <PurchaseDrawers
-        suppliers={allSupplier?.data as IUserResponse[]}
-        dueList={supplierDueList!}
-      />
+      <PurchaseDrawers suppliers={allSupplier?.data as IUserResponse[]} />
       <PurchaseDialogs />
     </>
   );

@@ -62,6 +62,7 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { getUserDue } from '@/actions/due/getUserDue';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -228,6 +229,12 @@ const ConfirmPayment = () => {
     };
     fetchSuppliersAndEmployees();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchDue = async () => {
+  //     const res = await getUserDue();
+  //   };
+  // }, []);
 
   return (
     <Form {...form}>
