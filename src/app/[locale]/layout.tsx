@@ -3,7 +3,7 @@ import { ThemeProvider } from '@/themes';
 import { Anek_Bangla } from 'next/font/google';
 import { appConfig } from '../../../app.config';
 import { Toaster } from '@/components/ui/sonner';
-
+import { Analytics } from '@vercel/analytics/react';
 const anek_bangla = Anek_Bangla({
   subsets: ['latin', 'latin-ext', 'bengali'],
   weight: ['400', '500', '600', '700'],
@@ -41,6 +41,7 @@ export default function RootLayout({
           <div className="hd:w-[2024px] mx-auto">{children}</div>
           <Toaster />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

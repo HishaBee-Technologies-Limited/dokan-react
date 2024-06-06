@@ -14,7 +14,7 @@ const SellHeader = () => {
       {/* <PageTitle title="Select Products to Sell" /> */}
       <Button
         variant={'secondary'}
-        className="h-14 absolute right-4 m-5 z-50 "
+        className="h-14 "
         onClick={() =>
           handleDrawerOpen({ open: true, header: SellEnum.QUICK_SELL })
         }

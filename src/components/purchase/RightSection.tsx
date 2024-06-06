@@ -114,7 +114,7 @@ export const RightSection = () => {
           <ProductSellCalculation form={form} />
 
           <Card className="p-space8 py-space12 space-y-space8 rounded-none">
-            <Text title="মূল্য পরিশোধ পদ্ধতি" className="text-sm" />
+            {/* <Text title="মূল্য পরিশোধ পদ্ধতি" className="text-sm" /> */}
 
             <div className="gap-space8 sm:gap-space16 flex">
               <Button
@@ -125,7 +125,8 @@ export const RightSection = () => {
                   setSellType('cash');
                 }}
               >
-                নগদ টাকা <ArrowForwardIcon />
+                নগদ টাকা পরিশোধ
+                <ArrowForwardIcon />
               </Button>
               <Button
                 size="sm"
@@ -135,7 +136,8 @@ export const RightSection = () => {
                   setSellType('due');
                 }}
               >
-                বাকি <ArrowForwardIcon />
+                বাকি পরিশোধ
+                <ArrowForwardIcon />
               </Button>
               {/* <Button
                 size="sm"
