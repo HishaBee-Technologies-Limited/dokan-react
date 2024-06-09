@@ -2,11 +2,19 @@
 
 import { authApi } from '@/lib/api';
 import { IUserResponse } from '@/types/contact/partyResponse';
+import { cookies } from 'next/headers';
 
-export const getAllEmployee = async (shopId: number) => {
+export const getAllEmployee = async (page: number) => {
   try {
+    const shopId = cookies().get('shopId')?.value;
+
     const res = await authApi.get(
-      `/employee/all?shop_id=${shopId}&exclude_deleted=true`
+      `/employee/all?${new URLSearchParams({
+        page: page.toString(),
+        per_page: '20',
+        exclude_deleted: 'true',
+        shop_id: shopId!,
+      })}`
     );
     const data = await res.json();
 

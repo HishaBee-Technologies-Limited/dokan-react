@@ -11,30 +11,33 @@ import { ContactType } from '@/enum/contact';
 
 export const useContactPagination = (page: number, query: string) => {
   const [contactRes, setContactRes] = useState<IUserResponse[]>([]);
-  const [hasMore, setHasMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const currentParams = useSearchParams();
   const tab = currentParams.get('tab');
 
   useEffect(() => {
     setContactRes([]);
-  }, [query]);
+  }, [tab]);
 
   const reFetchContact = async (query: string) => {
     setLoading(true);
     let allContactResponse: IUserResponse[] | undefined;
     if (tab === ContactType.CUSTOMER) {
       const allCustomer = await getAllCustomer(page);
+      console.log(allCustomer);
       allContactResponse = allCustomer?.data?.data;
     }
-    if (tab === ContactType.CUSTOMER) {
+    if (tab === ContactType.SUPPLIER) {
       const allSupplier = await getAllSupplier(page);
       allContactResponse = allSupplier?.data?.data;
     }
-    if (tab === ContactType.CUSTOMER) {
+    if (tab === ContactType.EMPLOYEE) {
       const allEmployee = await getAllEmployee(page);
       allContactResponse = allEmployee?.data?.data;
     }
+
+    console.log(allContactResponse);
 
     setHasMore(allContactResponse?.length! > 0);
     allContactResponse &&
@@ -66,11 +69,13 @@ export const useContactPagination = (page: number, query: string) => {
     }
     if (tab === ContactType.SUPPLIER) {
       const allSupplier = await getAllSupplier(page);
+      console.log('ll', allSupplier);
       allContactResponse = allSupplier?.data?.data;
     }
     if (tab === ContactType.EMPLOYEE) {
       const allEmployee = await getAllEmployee(page);
       allContactResponse = allEmployee?.data?.data;
+      console.log('ll', allEmployee);
     }
     console.log(allContactResponse);
     setContactRes((prevProd) => {
@@ -92,11 +97,11 @@ export const useContactPagination = (page: number, query: string) => {
 
   useEffect(() => {
     fetchContacts();
-  }, [tab]);
+  }, []);
 
   useEffect(() => {
     reFetchContact(query);
-  }, [page]);
+  }, [page, tab]);
 
   return { loading, contactRes, hasMore };
 };

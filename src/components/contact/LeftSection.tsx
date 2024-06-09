@@ -62,7 +62,8 @@ export const LeftSection = (
     if (contactRes) {
       setParty(contactRes[0]);
     }
-
+    console.log(activeTab, page);
+    setPage(0);
     const params = {
       tab: activeTab ? activeTab : 'Customer',
       active_user: contactRes?.length ? String(contactRes[0].id) : '',
@@ -71,18 +72,19 @@ export const LeftSection = (
     setUserSearch('');
   }, [activeTab]);
 
-  useEffect(() => {
-    const params = {
-      tab: 'Customer',
-      active_user: contactRes?.length ? String(contactRes[0].id) : '',
-    };
-    router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
-  }, []);
+  // useEffect(() => {
+  //   const params = {
+  //     tab: 'Customer',
+  //     active_user: contactRes?.length ? String(contactRes[0].id) : '',
+  //   };
+  //   router.push(`${pathname}?${new URLSearchParams(params).toString()}`);
+  // }, []);
 
   useEffect(() => {
     if (contactRes) {
       setUserFilterList(contactRes);
     }
+    console.log('ss', contactRes);
   }, [contactRes]);
   useEffect(() => {
     let temArr = contactRes && [...contactRes];
@@ -95,9 +97,11 @@ export const LeftSection = (
   }, [userSearch]);
 
   useEffect(() => {
-    setPage((prevPage) => prevPage + 1);
+    console.log(loading, hasMore);
+    if (!loading && hasMore) {
+      setPage((prevPage) => prevPage + 1);
+    }
   }, [inView]);
-  console.log(contactRes);
 
   return (
     <Card className="h-full lg:w-4/12 flex flex-col gap-space16">
