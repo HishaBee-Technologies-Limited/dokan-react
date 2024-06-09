@@ -29,7 +29,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { IUserResponse } from '@/types/contact/partyResponse';
-import { useSession } from 'next-auth/react';
 import { getCookie } from 'cookies-next';
 import { cn, formatDate, generateUlid } from '@/lib/utils';
 import {
@@ -62,6 +61,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { createDue } from '@/actions/due/createDue';
 import { IDueListResponse } from '@/types/due/dueResponse';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import { getUserDue } from '@/actions/due/getUserDue';
+import { SELL_SMS } from '@/lib/sms-text';
 
 const partyList = ['customer', 'supplier'];
 
@@ -88,13 +89,7 @@ const formSchema = z.object({
   customer_address: z.string().optional(),
 });
 
-const MoneyGiveReceived = ({
-  customers,
-  dueList,
-}: {
-  customers?: IUserResponse[];
-  dueList?: IDueListResponse[];
-}) => {
+const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
   const openSuccessDialog = useSellStore((state) => state.setSellDialogState);
 
@@ -105,7 +100,7 @@ const MoneyGiveReceived = ({
   const setCalculatedProducts = useSellStore(
     (state) => state.setCalculatedProducts
   );
-  const cookie = getCookie('shop');
+  const shop = getCookie('shop');
   const tkn = getCookie('access_token');
 
   const totalProfit = useMemo(
@@ -140,16 +135,24 @@ const MoneyGiveReceived = ({
       date: new Date(),
     },
   });
-  const name = form.watch('name');
-  // useEffect(() => {
-  //   // console.log(selectedSupplier.split('-'));
-  //   const customer = name?.split('-');
-  //   if (customer) {
-  //     form.setValue('number', customer[1]);
-  //   }
-  // }, [form, name]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const paymentAmount =
+      Number(data.amount) === Number(calculatedProducts.totalPrice)
+        ? 0
+        : Number(calculatedProducts.totalPrice) - Number(data.amount);
+
+    const sms = data.sms
+      ? SELL_SMS({
+          amount: String(calculatedProducts.totalPrice)!,
+          payment: String(paymentAmount),
+          due: String(calculatedProducts.totalPrice! - paymentAmount),
+          shopName: JSON.parse(shop!).name,
+          shopNumber: JSON.parse(shop!).number,
+        })
+      : null;
+
+    console.log(data, sms);
     setLoading(true);
     console.log(data);
     const responseCreateSell = await createSell({
@@ -176,6 +179,7 @@ const MoneyGiveReceived = ({
       transaction_type: 'PRODUCT_SELL',
       total_profit: String(totalProfit),
       extra_charge: Number(calculatedProducts.deliveryCharge),
+      message: sms,
     });
 
     if (responseCreateSell?.success) {
@@ -226,7 +230,7 @@ const MoneyGiveReceived = ({
       contact_mobile: data.number,
       contact_type: 'CUSTOMER',
       contact_name: data.name,
-      sms: data.sms ?? false,
+      // sms: data.sms ?? false,
       transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
     };
 
@@ -245,15 +249,10 @@ const MoneyGiveReceived = ({
         contact_mobile: data.number,
         contact_type: 'CUSTOMER',
         contact_name: data.name,
-        sms: data.sms ?? false,
+        // sms: data.sms ?? false,
         transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
         due_unique_id: dueRes?.data.due.unique_id,
       };
-
-      const paymentAmount =
-        Number(data.amount) === Number(calculatedProducts.totalPrice)
-          ? 0
-          : Number(calculatedProducts.totalPrice) - Number(data.amount);
 
       const payloadForPaymentAmount = {
         amount: paymentAmount * -1,
@@ -266,13 +265,16 @@ const MoneyGiveReceived = ({
         contact_mobile: data.number,
         contact_type: 'CUSTOMER',
         contact_name: data.name,
-        sms: data.sms ?? false,
+        // sms: data.sms ?? false,
         transaction_unique_id: null,
         due_unique_id: dueRes?.data.due.unique_id,
       };
 
       const res = await createDueItem(payload);
-      const resAmount = await createDueItem(payloadForPaymentAmount);
+      if (Number(data.amount) === calculatedProducts.totalPrice) {
+        await createDueItem(payloadForPaymentAmount);
+      }
+      // const resAmount = await createDueItem(payloadForPaymentAmount);
       console.log(res);
     }
     setCalculatedProducts({
@@ -321,11 +323,21 @@ const MoneyGiveReceived = ({
   }, [calculatedProducts]);
 
   useEffect(() => {
-    const cus_mobile = form.watch('number');
-    const due = dueList?.find((due) => due.contact_mobile === cus_mobile);
-    console.log(due);
-    due ? form.setValue('due', due) : due;
-  }, [dueList, form.watch('number')]);
+    const fetchUserDue = async () => {
+      const sup_mobile = form.watch('number');
+
+      const res = await getUserDue(sup_mobile);
+      console.log(res);
+      if (res?.success) {
+        form.setValue('due', res.data);
+      }
+      /*@ts-ignore*/
+      if (!res?.success && res?.error?.status === 404) {
+        console.log('no due');
+      }
+    };
+    fetchUserDue();
+  }, [form.watch('number')]);
   const totalItems = useMemo(
     () =>
       calculatedProducts.products.reduce((prev, current) => {
@@ -616,7 +628,7 @@ const MoneyGiveReceived = ({
                 className="text-sm font-medium flex items-center gap-space4 bg-success-10 dark:bg-primary-80 py-space4 px-space12 rounded-full"
               >
                 <Icon icon="material-symbols:sms" />
-                SMS Balance {cookie ? JSON.parse(cookie).sms_count : 0}
+                SMS Balance {shop ? JSON.parse(shop).sms_count : 0}
               </Text>
             </div>
 

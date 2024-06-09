@@ -63,15 +63,12 @@ export const RightSection = () => {
             (prod: IProduct) => Object.keys(prod)[0] === `product-${product.id}`
           )
         )[0];
-        console.log(updatedProduct);
         return {
           ...product,
           calculatedAmount: updatedProduct,
         };
       }
     });
-
-    console.log(updatedProducts.length);
 
     if (!updatedProducts.length) {
       toast.warning('No Product Selected or Total is 0');
@@ -141,7 +138,6 @@ export const RightSection = () => {
                 type="submit"
                 className="w-full"
                 onClick={() => {
-                  console.log('ccc', calculatedProducts);
                   setSellType('due');
                 }}
               >

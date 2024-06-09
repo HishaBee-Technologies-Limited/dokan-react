@@ -79,7 +79,6 @@ const TransactionDetails = () => {
       const res = await getTransactionItems({
         id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
       });
-      console.log(res, currentPurchase);
       if (res?.success) {
         setPurchaseProducts(res?.data);
       }
@@ -87,14 +86,11 @@ const TransactionDetails = () => {
     getPurchaseProducts();
   }, [currentPurchase]);
 
-  console.log(currentPurchase);
-
   const totalItems = useMemo(() => {
     return purchaseProducts.reduce((acc, curr) => {
       return acc + Number(curr?.quantity)!;
     }, 0);
   }, [purchaseProducts]);
-  console.log(totalItems);
   return (
     <div className="space-y-space12">
       <section className="bg-secondary rounded-lg p-space12 space-y-space16 ">

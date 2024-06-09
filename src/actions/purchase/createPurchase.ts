@@ -59,6 +59,7 @@ export const createPurchase = async ({
       user_id: user_id,
       discount_type: discount_type,
       sms: sms,
+      message: sms,
     };
     console.log('purchase', payload);
     const res = await authApi.post(`/purchase`, payload);

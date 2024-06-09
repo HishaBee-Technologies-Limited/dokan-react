@@ -56,7 +56,6 @@ const ProductSellCalculation = (props: IProps) => {
       deliveryCharge ? Number(deliveryCharge) : 0,
       discountAmount ? discountAmount : 0
     );
-  console.log(grandTotal, totalPrice);
   /**
    * set the total price to the form state for centralize all the necessary information
    * for next action

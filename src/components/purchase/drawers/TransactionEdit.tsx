@@ -173,7 +173,6 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
 
     handleSellDrawer({ open: false });
     openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
-    console.log('data------------', data);
   }
 
   const activeCashColor = (active: string): string => {
@@ -208,7 +207,6 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
 
   useEffect(() => {
     if (contact) {
-      console.log(contact);
       form.setValue('name', contact.name);
       form.setValue('number', contact.mobile);
     }

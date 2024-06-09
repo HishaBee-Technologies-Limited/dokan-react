@@ -5,12 +5,24 @@ import { cookies } from 'next/headers';
 import { IDueListResponse } from '@/types/due/dueResponse';
 import { ICommonGetResponse } from '@/types/common';
 
-export const getAllDue = async (page?: number) => {
-  const pageCount = page ? page : 10;
+export const getAllDue = async ({
+  page,
+  contact_type,
+}: {
+  page?: number;
+  contact_type?: string;
+}) => {
   try {
     const shopId = cookies().get('shopId')?.value;
-    const params = `shop_id=${shopId}&per_page=${pageCount}&exclude_deleted=true`;
-    const res = await authApi.get(`/due/all?${params}`);
+    const res = await authApi.get(
+      `/due/all?${new URLSearchParams({
+        per_page: '20',
+        exclude_deleted: 'true',
+        shop_id: shopId?.toString() ?? '',
+        page: page?.toString() ?? '1',
+        ...(contact_type && { contact_type }),
+      })}`
+    );
     const data = await res.json();
     if (res.ok) {
       return {
@@ -18,10 +30,6 @@ export const getAllDue = async (page?: number) => {
         message: data.message,
         status_code: data.status_code,
         data: data as ICommonGetResponse<IDueListResponse>,
-        // metadata: {
-        //   total_get: data.metadata.total_get,
-        //   total_give: data.metadata.total_give,
-        // },
       };
     }
     if (!res.ok) {

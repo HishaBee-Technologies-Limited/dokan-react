@@ -8,7 +8,6 @@ import { cookies } from 'next/headers';
 import { getShopsProducts } from '@/actions/product/getShopProducts';
 import { getAllCustomer } from '@/actions/contacts/getAllCustomer';
 import { IUserResponse } from '@/types/contact/partyResponse';
-import { getAllDue } from '@/actions/due/getAllDue';
 
 const SellPage = async () => {
   const shopId = cookies().get('shopId')?.value;
@@ -16,11 +15,6 @@ const SellPage = async () => {
   const allProductsResponse = await getShopsProducts({});
   const allCustomers = await getAllCustomer(Number(shopId));
 
-  const dueList = await getAllDue();
-
-  const customerDueList = dueList?.data?.data.filter(
-    (item) => item.contact_type === 'CUSTOMER'
-  );
   return (
     <>
       <div className="space-y-space16 h-full">
@@ -32,10 +26,7 @@ const SellPage = async () => {
         </div>
       </div>
 
-      <SellDrawers
-        dueList={customerDueList!}
-        customers={allCustomers?.data as IUserResponse[]}
-      />
+      <SellDrawers customers={allCustomers?.data as IUserResponse[]} />
       <SellDialogs />
     </>
   );

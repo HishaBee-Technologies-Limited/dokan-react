@@ -53,7 +53,6 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
       handleDialogOpen({ open: true, header: DueEnum.SELECT_DUE_TYPE });
     }
   };
-  console.log(dueItems);
 
   return (
     <Card className="h-full lg:w-8/12 flex flex-col gap-space8">

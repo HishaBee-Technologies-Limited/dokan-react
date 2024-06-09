@@ -58,8 +58,9 @@ import { Check, UserSearch } from 'lucide-react';
 import { toast } from 'sonner';
 import { addQuickSell } from '@/actions/sell/addQuickSell';
 import { IDueListResponse } from '@/types/due/dueResponse';
-import { createDue } from '@/actions/due/createDue';
-import { createDueItem } from '@/actions/due/createDueItem';
+import { Switch } from '@/components/ui/switch';
+import { QUICK_SELL_SMS } from '@/lib/sms-text';
+const shop = getCookie('shop');
 
 const cashType = [
   { value: 'cash', label: 'নগদ টাকা' },
@@ -79,6 +80,7 @@ const formSchema = z.object({
   date: z.date().optional(),
   due: z.any(),
   profit: z.string(),
+  sms: z.boolean().optional(),
 });
 
 const QuickSell = ({
@@ -108,11 +110,23 @@ const QuickSell = ({
       images: '',
       cash_type: 'cash',
       profit: '',
+      sms: false,
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
+    const sms = data.sms
+      ? QUICK_SELL_SMS({
+          amount: data.amount,
+          payment: data.amount,
+          due: '0',
+          shopName: JSON.parse(shop!).name,
+          shopNumber: JSON.parse(shop!).number,
+        })
+      : null;
+
+    console.log(data, sms);
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       // discount: Number(calculatedProducts.discount),
@@ -135,6 +149,7 @@ const QuickSell = ({
       transaction_type: 'QUICK_SELL',
       total_profit: data.profit,
       total_item: 1,
+      message: sms,
     });
 
     if (responseCreateSell?.success) {
@@ -474,6 +489,30 @@ const QuickSell = ({
         </div>
 
         <DrawerFooter>
+          <div className="flex items-center gap-space8 justify-center">
+            <FormField
+              control={form.control}
+              name="sms"
+              render={({ field }) => (
+                <FormItem>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    id="airplane-mode"
+                  />
+                </FormItem>
+              )}
+            />
+            <Text title="Send SMS" className="text-sm font-medium" />
+            <Text
+              variant="success"
+              className="text-sm font-medium flex items-center gap-space4 bg-success-10 dark:bg-primary-80 py-space4 px-space12 rounded-full"
+            >
+              <Icon icon="material-symbols:sms" />
+              SMS Balance {shop ? JSON.parse(shop).sms_count : 0}
+            </Text>
+          </div>
+
           <Button type="submit" disabled={loading} className="w-full">
             {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
             Amount Received

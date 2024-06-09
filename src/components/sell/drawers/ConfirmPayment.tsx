@@ -59,6 +59,7 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { SELL_SMS } from '@/lib/sms-text';
 
 const formSchema = z.object({
   amount: z.string(),
@@ -90,7 +91,7 @@ const ConfirmPayment = () => {
   const [contact, setContact] = useState<IUserResponse>();
 
   const tkn = getCookie('access_token');
-  const cookie = getCookie('shop');
+  const shop = getCookie('shop');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -110,7 +111,6 @@ const ConfirmPayment = () => {
     }
   }, [calculatedProducts, form]);
   useEffect(() => {
-    console.log(contact);
     if (contact) {
       form.setValue('customer', contact.name);
       form.setValue('customer_number', contact.mobile);
@@ -125,7 +125,17 @@ const ConfirmPayment = () => {
       return;
     }
 
-    console.log(data);
+    const sms = data.sms
+      ? SELL_SMS({
+          amount: data.amount,
+          payment: data.amount,
+          due: '0',
+          shopName: JSON.parse(shop!).name,
+          shopNumber: JSON.parse(shop!).number,
+        })
+      : null;
+
+    console.log(data, sms);
 
     setLoading(true);
     const responseCreateSell = await createSell({
@@ -152,7 +162,7 @@ const ConfirmPayment = () => {
       total_discount: 0,
       transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
       total_profit: String(totalProfit),
-      message: data.sms ? 'SMS' : null,
+      message: sms,
     });
 
     if (!responseCreateSell?.success)
@@ -545,7 +555,7 @@ const ConfirmPayment = () => {
               className="text-sm font-medium flex items-center gap-space4 bg-success-10 py-space4 px-space12 rounded-full"
             >
               <Icon icon="material-symbols:sms" />
-              SMS Balance {cookie ? JSON.parse(cookie).sms_count : 0}
+              SMS Balance {shop ? JSON.parse(shop).sms_count : 0}
             </Text>
           </div>
 

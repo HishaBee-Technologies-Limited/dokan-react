@@ -51,9 +51,8 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
     });
     setCookie('shopId', shop?.id);
     setCookie('shop', shopString);
-    router.push('/contact');
+    router.push('/sell');
   };
-
   return (
     <div className="space-y-space16">
       <PageSubTitle title="Switch your Shop" />

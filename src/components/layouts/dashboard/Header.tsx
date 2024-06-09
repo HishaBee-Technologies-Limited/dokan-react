@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import { ModeToggle } from '@/themes';
@@ -16,11 +16,23 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { logout } from '@/actions/logout';
-import { getCookies } from 'cookies-next';
+import { getCookie, getCookies } from 'cookies-next';
+import { checkSubscription } from '@/actions/subscription/checkShopSubscription';
+import { useShop } from '@/stores/useShopStore';
 
 const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
-  const cookies = getCookies();
-  console.log(session);
+  const shopId = getCookie('shopId');
+  const cookie = getCookie('shop');
+  const setShop = useShop((state) => state.saveShop);
+  useEffect(() => {
+    const getShopInfo = async () => {
+      if (shopId) {
+        const response = await checkSubscription({ shopId: shopId! });
+        setShop(response?.data?.shop);
+      }
+    };
+    getShopInfo();
+  }, []);
   return (
     <header className="sticky top-0 bg-white dark:bg-primary-90 shadow-sm z-40">
       <nav className="h-[7.2rem] flex justify-between items-center gap-2 border-b border-primary-10 dark:border-primary-80 py-space12 px-space16">
@@ -38,7 +50,7 @@ const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
               rotate={menuOpen ? 4 : 2}
             />
           </Button>
-          <AppSearch />
+          {/* <AppSearch />  */}
         </div>
 
         {/* right side */}
@@ -84,7 +96,6 @@ const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
               <DropdownMenuItem asChild>
                 <div
                   onClick={() => {
-                    console.log(getCookies());
                     logout();
                   }}
                   className="w-full cursor-pointer"

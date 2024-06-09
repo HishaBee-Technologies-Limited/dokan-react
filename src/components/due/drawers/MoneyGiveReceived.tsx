@@ -89,7 +89,6 @@ const MoneyGiveReceived = () => {
       // purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
     };
     const dueRes = await createDue(payload);
-    console.log('dueRes----', dueRes);
     const payloadForDueItem = {
       amount:
         cashStatus === 'Given' ? Number(data.amount) : -Number(data.amount),
@@ -284,18 +283,6 @@ const MoneyGiveReceived = () => {
           </div>
 
           <DrawerFooter height="14rem" className="flex-col !gap-space12">
-            <div className="flex items-center gap-space8 justify-center">
-              <Switch id="airplane-mode" />
-              <Text title="Send SMS" className="text-sm font-medium" />
-              <Text
-                variant="success"
-                className="text-sm font-medium flex items-center gap-space4 bg-success-10 dark:bg-primary-80 py-space4 px-space12 rounded-full"
-              >
-                <Icon icon="material-symbols:sms" />
-                SMS Balance 27
-              </Text>
-            </div>
-
             <Button type="submit" className="w-full">
               Save
             </Button>

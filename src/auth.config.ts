@@ -34,18 +34,23 @@ export const authConfig = {
       if (isAuthRoute) {
         if (isLoggedIn) {
           if (cookies.get('shopId')?.value) {
-            return Response.redirect(new URL('/contact', nextUrl));
+            return Response.redirect(new URL('/sell', nextUrl));
           }
           return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
 
         return;
       }
+      // if (isLoggedIn) {
+      //   if (!cookies.get('shopId')?.value) {
+      //     return Response.redirect(new URL('/shop', nextUrl));
+      //   }
+      // }
 
       if (isLoggedIn) {
         if (nextUrl.pathname === '/shop') {
           if (cookies.get('shopId')?.value) {
-            return Response.redirect(new URL('/contact', nextUrl));
+            return Response.redirect(new URL('/sell', nextUrl));
           } else {
             return;
           }

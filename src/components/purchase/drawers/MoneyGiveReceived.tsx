@@ -13,13 +13,7 @@ import { usePurchaseStore } from '@/stores/usePurchase';
 import { DrawerFooter } from '@/components/common/Drawer';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import {
   Form,
   FormItem,
@@ -65,6 +59,8 @@ import {
   CommandInput,
   CommandItem,
 } from '@/components/ui/command';
+import { getUserDue } from '@/actions/due/getUserDue';
+import { PURCHASE_SMS } from '@/lib/sms-text';
 
 const partyList = ['customer', 'supplier'];
 
@@ -92,13 +88,7 @@ const formSchema = z.object({
   due: z.any(),
 });
 
-const MoneyGiveReceived = ({
-  suppliers,
-  dueList,
-}: {
-  suppliers?: IUserResponse[];
-  dueList: IDueListResponse[];
-}) => {
+const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   const handleSellDrawer = usePurchaseStore((state) => state.setDrawerState);
   const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
   const [contact, setContact] = useState<IUserResponse>();
@@ -106,7 +96,7 @@ const MoneyGiveReceived = ({
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
   );
-  const cookie = getCookie('shop');
+  const shop = getCookie('shop');
   const tkn = getCookie('access_token');
   const [loading, setLoading] = useState(false);
 
@@ -127,9 +117,22 @@ const MoneyGiveReceived = ({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
-    const supplierName = data.name?.split('-')[0];
     // const employeeName = data.employee?.split('-')[0];
-    console.log(data);
+    const paymentAmount =
+      Number(data.amount) === Number(calculatedProducts.totalPrice)
+        ? 0
+        : Number(calculatedProducts.totalPrice) - Number(data.amount);
+    const sms = data.sms
+      ? PURCHASE_SMS({
+          amount: String(calculatedProducts.totalPrice)!,
+          payment: String(paymentAmount),
+          due: String(calculatedProducts.totalPrice! - paymentAmount),
+          shopName: JSON.parse(shop!).name,
+          shopNumber: JSON.parse(shop!).number,
+        })
+      : null;
+
+    const uniqueId = generateUlid();
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -140,19 +143,18 @@ const MoneyGiveReceived = ({
       note: data.details,
       payment_method: PAYMENT_METHODS['Due Payment'],
       payment_status: PAYMENT_STATUS.unpaid,
-      purchase_barcode: '',
+      purchase_barcode: uniqueId,
       received_amount: Number(data.amount),
       supplier_mobile: data.number,
       supplier_name: data.number,
       total_item: totalItems,
       total_price: Number(data.amount),
-      unique_id: generateUlid(),
+      unique_id: uniqueId,
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
-      sms: data.sms ? 'sms' : null,
+      sms: sms,
     });
-    console.log(responseCreatePurchase);
     if (responseCreatePurchase?.success) {
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
@@ -193,12 +195,11 @@ const MoneyGiveReceived = ({
         contact_mobile: data.number,
         contact_type: 'SUPPLIER',
         contact_name: data.name,
-        sms: data.sms ?? false,
+        // sms: data.sms ?? false,
         purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
       };
 
       const dueRes = await createDue(payload);
-      console.log(dueRes);
 
       const payloadForDueItem = {
         amount: -Number(data.amount),
@@ -211,14 +212,14 @@ const MoneyGiveReceived = ({
         contact_mobile: data.number,
         contact_type: 'SUPPLIER',
         contact_name: data.name,
-        sms: data.sms ?? false,
+        // sms: data.sms ?? false,
         due_unique_id: dueRes?.data.due.unique_id,
         purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
       };
-      const paymentAmount =
-        Number(data.amount) === Number(calculatedProducts.totalPrice)
-          ? 0
-          : Number(calculatedProducts.totalPrice) - Number(data.amount);
+      // const paymentAmount =
+      //   Number(data.amount) === Number(calculatedProducts.totalPrice)
+      //     ? 0
+      //     : Number(calculatedProducts.totalPrice) - Number(data.amount);
 
       const payloadForDueItemForPayment = {
         amount: -paymentAmount * -1,
@@ -231,14 +232,15 @@ const MoneyGiveReceived = ({
         contact_mobile: data.number,
         contact_type: 'SUPPLIER',
         contact_name: data.name,
-        sms: data.sms ?? false,
+        // sms: data.sms ?? false,
         due_unique_id: dueRes?.data.due.unique_id,
         purchase_unique_id: null,
       };
 
       const res = await createDueItem(payloadForDueItem);
-      const resAmount = await createDueItem(payloadForDueItemForPayment);
-      console.log(res, resAmount);
+      if (Number(data.amount) === calculatedProducts.totalPrice) {
+        await createDueItem(payloadForDueItemForPayment);
+      }
 
       setCalculatedProducts({
         ...calculatedProducts,
@@ -288,7 +290,6 @@ const MoneyGiveReceived = ({
 
   useEffect(() => {
     if (contact) {
-      console.log(contact);
       form.setValue('name', contact.name);
       form.setValue('number', contact.mobile);
     }
@@ -296,17 +297,21 @@ const MoneyGiveReceived = ({
   const watchNumber = form.watch('number');
 
   useEffect(() => {
-    console.log(watchNumber);
-    if (dueList?.length) {
+    const fetchUserDue = async () => {
       const sup_mobile = form.watch('number');
-      const due = dueList.find((due) => {
-        console.log(due.contact_mobile, sup_mobile);
-        return due.contact_mobile === sup_mobile;
-      });
-      // console.log(sup_mobile, dueList);
-      due ? form.setValue('due', due) : due;
-    }
-  }, [watchNumber, dueList, form]);
+
+      const res = await getUserDue(sup_mobile);
+      console.log(res);
+      if (res?.success) {
+        form.setValue('due', res.data);
+      }
+      /*@ts-ignore*/
+      if (!res?.success && res?.error?.status === 404) {
+        console.log('no due');
+      }
+    };
+    fetchUserDue();
+  }, [watchNumber, form]);
 
   useEffect(() => {
     form.setValue('amount', String(calculatedProducts.totalPrice));
@@ -319,7 +324,6 @@ const MoneyGiveReceived = ({
       }, 0),
     [calculatedProducts]
   );
-  console.log(form.watch('number'));
 
   return (
     <div className="space-y-space12">
@@ -594,7 +598,7 @@ const MoneyGiveReceived = ({
                 className="text-sm font-medium flex items-center gap-space4 bg-success-10 dark:bg-primary-80 py-space4 px-space12 rounded-full"
               >
                 <Icon icon="material-symbols:sms" />
-                SMS Balance {cookie ? JSON.parse(cookie).sms_count : 0}
+                SMS Balance {shop ? JSON.parse(shop).sms_count : 0}
               </Text>
             </div>
 

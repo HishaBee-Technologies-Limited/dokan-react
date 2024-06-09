@@ -62,6 +62,7 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { getUserDue } from '@/actions/due/getUserDue';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -123,17 +124,18 @@ const ConfirmPayment = () => {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
+
     const sms = data.sms
       ? PURCHASE_SMS({
           amount: data.amount,
-          payment: String(calculatedProducts.paymentAmount)!,
+          payment: data.amount,
           due: '0',
           shopName: JSON.parse(shop!).name,
           shopNumber: JSON.parse(shop!).number,
         })
       : null;
 
-    console.log(data);
+    const uniqueId = generateUlid();
 
     const responseCreatePurchase = await createPurchase({
       batch: '',
@@ -151,19 +153,18 @@ const ConfirmPayment = () => {
       note: data.note,
       payment_method: PAYMENT_METHODS.Cash,
       payment_status: PAYMENT_STATUS.PAID,
-      purchase_barcode: '',
+      purchase_barcode: uniqueId,
       received_amount: Number(data.amount),
       supplier_mobile: data.supplier_number,
       supplier_name: data.supplier,
       total_item: totalItems,
       total_price: Number(data.amount),
-      unique_id: generateUlid(),
+      unique_id: uniqueId,
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
       sms: sms,
     });
-    console.log(responseCreatePurchase?.data.purchase);
     if (responseCreatePurchase?.success) {
       calculatedProducts.products.forEach(async (product) => {
         createItemPurchase({
@@ -197,7 +198,6 @@ const ConfirmPayment = () => {
     }
   }
   useEffect(() => {
-    console.log(contact);
     if (contact) {
       form.setValue('supplier', contact.name);
       form.setValue('supplier_number', contact.mobile);
@@ -232,6 +232,12 @@ const ConfirmPayment = () => {
     };
     fetchSuppliersAndEmployees();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchDue = async () => {
+  //     const res = await getUserDue();
+  //   };
+  // }, []);
 
   return (
     <Form {...form}>

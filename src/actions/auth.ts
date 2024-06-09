@@ -6,13 +6,15 @@ import { z } from 'zod';
 import { RegisterSchema } from '@/schemas/auth';
 import { cookies } from 'next/headers';
 import { toast } from 'sonner';
+import { redirect } from 'next/navigation';
 
 export async function authenticate(
   prevState: string | undefined,
   formData: { mobile_number: string; pin: string }
 ) {
   try {
-    await signIn('credentials', formData);
+    const res = await signIn('credentials', formData);
+    console.log('new---', res);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
