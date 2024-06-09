@@ -194,6 +194,13 @@ const SidebarLinks: IAsideBarMenuItem[] = [
     image: '/images/features/sms_marketing.svg',
     link: '/sms',
   },
+  {
+    id: 500,
+    title: 'Business Overview',
+    bn_title: 'স্টক ড্যাশবোর্ড',
+    image: '/images/features/sms_marketing.svg',
+    link: '/business/overview',
+  },
   // {
   //   id: 4,
   //   title: 'Advanced',
