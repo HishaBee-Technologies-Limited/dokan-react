@@ -55,6 +55,7 @@ import {
   CommandGroup,
   CommandItem,
 } from '@/components/ui/command';
+import { DUE_RECEIVED } from '@/lib/sms-text';
 
 const partyList = ['customer', 'supplier', 'employee'];
 
@@ -79,6 +80,7 @@ const formSchema = z.object({
   contactType: z.string(),
   due: z.any(),
   selectedContact: z.any(),
+  sms: z.boolean().optional(),
 });
 
 const AddMoneyGiveReceived = (
@@ -103,6 +105,7 @@ const AddMoneyGiveReceived = (
   const [employees, setEmployee] = useState<IUserResponse[] | undefined>();
   const [contacts, setContacts] = useState<IUserResponse[] | undefined>();
   const [contact, setContact] = useState<IUserResponse>();
+  const shop = getCookie('shop');
 
   const [selectedContact, setSelectedContact] = useState<
     IUserResponse[] | undefined
@@ -120,6 +123,7 @@ const AddMoneyGiveReceived = (
       images: '',
       cash_type: '',
       contactType: 'CUSTOMER',
+      sms: false,
     },
   });
 
@@ -133,6 +137,14 @@ const AddMoneyGiveReceived = (
 
     const amount = data.cash_type === 'given' ? amountPos : amountNeg;
 
+    const sms = data.sms
+      ? DUE_RECEIVED({
+          amount: data.amount,
+          totalDue: data.due,
+          shopName: JSON.parse(shop!).name,
+          shopNumber: JSON.parse(shop!).number,
+        })
+      : null;
     const payload = {
       // shop_id: Number(shop_id),
       amount: amount,
@@ -147,7 +159,7 @@ const AddMoneyGiveReceived = (
       contact_mobile: data.number,
       contact_type: contactType,
       contact_name: data.name,
-      // sms: data.sms ?? false,
+      sms: data.sms,
       // purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
     };
     const dueRes = await createDue(payload);
@@ -486,14 +498,26 @@ const AddMoneyGiveReceived = (
 
           <DrawerFooter height="14rem" className="flex-col !gap-space12">
             <div className="flex items-center gap-space8 justify-center">
-              <Switch id="airplane-mode" />
+              <FormField
+                control={form.control}
+                name="sms"
+                render={({ field }) => (
+                  <FormItem>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      id="sms"
+                    />
+                  </FormItem>
+                )}
+              />
               <Text title="Send SMS" className="text-sm font-medium" />
               <Text
                 variant="success"
                 className="text-sm font-medium flex items-center gap-space4 bg-success-10 dark:bg-primary-80 py-space4 px-space12 rounded-full"
               >
                 <Icon icon="material-symbols:sms" />
-                SMS Balance 27
+                SMS Balance {shop ? JSON.parse(shop).sms_count : 0}
               </Text>
             </div>
 

@@ -26,7 +26,6 @@ const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
   const setShop = useShop((state) => state.saveShop);
   useEffect(() => {
     const getShopInfo = async () => {
-      console.log(shopId);
       if (shopId) {
         const response = await checkSubscription({ shopId: shopId! });
         setShop(response?.data?.shop);

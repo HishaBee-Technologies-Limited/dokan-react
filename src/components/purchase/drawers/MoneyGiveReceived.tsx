@@ -13,13 +13,7 @@ import { usePurchaseStore } from '@/stores/usePurchase';
 import { DrawerFooter } from '@/components/common/Drawer';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import {
   Form,
   FormItem,
@@ -66,6 +60,7 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { getUserDue } from '@/actions/due/getUserDue';
+import { PURCHASE_SMS } from '@/lib/sms-text';
 
 const partyList = ['customer', 'supplier'];
 
@@ -101,7 +96,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
   );
-  const cookie = getCookie('shop');
+  const shop = getCookie('shop');
   const tkn = getCookie('access_token');
   const [loading, setLoading] = useState(false);
 
@@ -123,6 +118,21 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
     // const employeeName = data.employee?.split('-')[0];
+    const paymentAmount =
+      Number(data.amount) === Number(calculatedProducts.totalPrice)
+        ? 0
+        : Number(calculatedProducts.totalPrice) - Number(data.amount);
+    const sms = data.sms
+      ? PURCHASE_SMS({
+          amount: String(calculatedProducts.totalPrice)!,
+          payment: String(paymentAmount),
+          due: String(calculatedProducts.totalPrice! - paymentAmount),
+          shopName: JSON.parse(shop!).name,
+          shopNumber: JSON.parse(shop!).number,
+        })
+      : null;
+
+    const uniqueId = generateUlid();
     const responseCreatePurchase = await createPurchase({
       batch: '',
       created_at: formatDate(DATE_FORMATS.default, data.date),
@@ -133,17 +143,17 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       note: data.details,
       payment_method: PAYMENT_METHODS['Due Payment'],
       payment_status: PAYMENT_STATUS.unpaid,
-      purchase_barcode: '',
+      purchase_barcode: uniqueId,
       received_amount: Number(data.amount),
       supplier_mobile: data.number,
       supplier_name: data.number,
       total_item: totalItems,
       total_price: Number(data.amount),
-      unique_id: generateUlid(),
+      unique_id: uniqueId,
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
-      sms: data.sms ? 'sms' : null,
+      sms: sms,
     });
     if (responseCreatePurchase?.success) {
       calculatedProducts.products.forEach(async (product) => {
@@ -185,7 +195,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
         contact_mobile: data.number,
         contact_type: 'SUPPLIER',
         contact_name: data.name,
-        sms: data.sms ?? false,
+        // sms: data.sms ?? false,
         purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
       };
 
@@ -202,14 +212,14 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
         contact_mobile: data.number,
         contact_type: 'SUPPLIER',
         contact_name: data.name,
-        sms: data.sms ?? false,
+        // sms: data.sms ?? false,
         due_unique_id: dueRes?.data.due.unique_id,
         purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
       };
-      const paymentAmount =
-        Number(data.amount) === Number(calculatedProducts.totalPrice)
-          ? 0
-          : Number(calculatedProducts.totalPrice) - Number(data.amount);
+      // const paymentAmount =
+      //   Number(data.amount) === Number(calculatedProducts.totalPrice)
+      //     ? 0
+      //     : Number(calculatedProducts.totalPrice) - Number(data.amount);
 
       const payloadForDueItemForPayment = {
         amount: -paymentAmount * -1,
@@ -222,13 +232,15 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
         contact_mobile: data.number,
         contact_type: 'SUPPLIER',
         contact_name: data.name,
-        sms: data.sms ?? false,
+        // sms: data.sms ?? false,
         due_unique_id: dueRes?.data.due.unique_id,
         purchase_unique_id: null,
       };
 
       const res = await createDueItem(payloadForDueItem);
-      const resAmount = await createDueItem(payloadForDueItemForPayment);
+      if (Number(data.amount) === calculatedProducts.totalPrice) {
+        await createDueItem(payloadForDueItemForPayment);
+      }
 
       setCalculatedProducts({
         ...calculatedProducts,
@@ -586,7 +598,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
                 className="text-sm font-medium flex items-center gap-space4 bg-success-10 dark:bg-primary-80 py-space4 px-space12 rounded-full"
               >
                 <Icon icon="material-symbols:sms" />
-                SMS Balance {cookie ? JSON.parse(cookie).sms_count : 0}
+                SMS Balance {shop ? JSON.parse(shop).sms_count : 0}
               </Text>
             </div>
 

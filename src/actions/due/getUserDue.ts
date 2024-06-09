@@ -15,7 +15,7 @@ export const getUserDue = async (mobile: string) => {
         success: true,
         status_code: data.status_code,
         message: data.message,
-        data: data as IDueItemsResponse[],
+        data: data as IDueItemsResponse,
       };
     }
     if (!res.ok) {
