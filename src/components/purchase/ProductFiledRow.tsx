@@ -92,7 +92,7 @@ const ProductFiledRow = (props: IProps) => {
     );
     props.form.setValue(
       `products.${props.index}.product-${props.data?.id}.unit_cost`,
-      String(props.data?.selling_price)
+      String(props.data?.cost_price)
     );
   }, [props.data, props.form]);
 

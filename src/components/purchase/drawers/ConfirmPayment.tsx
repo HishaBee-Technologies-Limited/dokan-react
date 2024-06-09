@@ -124,15 +124,18 @@ const ConfirmPayment = () => {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
+
     const sms = data.sms
       ? PURCHASE_SMS({
           amount: data.amount,
-          payment: String(calculatedProducts.paymentAmount)!,
+          payment: data.amount,
           due: '0',
           shopName: JSON.parse(shop!).name,
           shopNumber: JSON.parse(shop!).number,
         })
       : null;
+
+    const uniqueId = generateUlid();
 
     const responseCreatePurchase = await createPurchase({
       batch: '',
@@ -150,13 +153,13 @@ const ConfirmPayment = () => {
       note: data.note,
       payment_method: PAYMENT_METHODS.Cash,
       payment_status: PAYMENT_STATUS.PAID,
-      purchase_barcode: '',
+      purchase_barcode: uniqueId,
       received_amount: Number(data.amount),
       supplier_mobile: data.supplier_number,
       supplier_name: data.supplier,
       total_item: totalItems,
       total_price: Number(data.amount),
-      unique_id: generateUlid(),
+      unique_id: uniqueId,
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
