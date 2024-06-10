@@ -14,7 +14,7 @@ export default function TotalDueCalculation() {
         </Text>
       </div>
 
-      <div className="flex items-center justify-between gap-6">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         <TotalDueCalculationItemCardLink
           label="Due To supplier"
           value={100}

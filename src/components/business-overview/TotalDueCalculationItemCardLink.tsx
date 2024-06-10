@@ -14,7 +14,7 @@ export default function TotalDueCalculationItemCardLink({
   label,
 }: TotalDueCalculationItemCardLink) {
   return (
-    <Link className="w-1/2" href="">
+    <Link className="w-full md:w-1/2" href="">
       <Card
         className={`flex flex-col gap-1 items-center justify-center p-4 ${isSupplier ? '!bg-success-100' : '!bg-error-100'} `}
       >
