@@ -154,7 +154,6 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
 
     console.log(data, sms);
     setLoading(true);
-    console.log(data);
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),
       discount: Number(calculatedProducts.discount),
@@ -236,10 +235,9 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
 
     const dueRes = await createDue(payload);
     if (!dueRes?.success) return toast.error('Something went wrong');
-
     if (dueRes?.success) {
       const payload = {
-        amount: Number(data.amount),
+        amount: Number(calculatedProducts.totalPrice),
         unique_id: generateUlid(),
         due_left: Number(data.amount),
         version: DEFAULT_STARTING_VERSION,
@@ -271,11 +269,10 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
       };
 
       const res = await createDueItem(payload);
-      if (Number(data.amount) === calculatedProducts.totalPrice) {
-        await createDueItem(payloadForPaymentAmount);
+      if (Number(data.amount) !== calculatedProducts.totalPrice) {
+        const res = await createDueItem(payloadForPaymentAmount);
       }
       // const resAmount = await createDueItem(payloadForPaymentAmount);
-      console.log(res);
     }
     setCalculatedProducts({
       ...calculatedProducts,

@@ -202,7 +202,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       const dueRes = await createDue(payload);
 
       const payloadForDueItem = {
-        amount: -Number(data.amount),
+        amount: -Number(calculatedProducts.totalPrice),
         unique_id: generateUlid(),
         due_left: -Number(data.amount),
         version: DEFAULT_STARTING_VERSION,
@@ -238,7 +238,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       };
 
       const res = await createDueItem(payloadForDueItem);
-      if (Number(data.amount) === calculatedProducts.totalPrice) {
+      if (Number(data.amount) !== calculatedProducts.totalPrice) {
         await createDueItem(payloadForDueItemForPayment);
       }
 
