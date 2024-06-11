@@ -49,6 +49,7 @@ const ShopUi = ({ shops }: { shops: IShopResponse[] }) => {
       name: shop.name,
       number: shop.public_number,
       address: shop.address,
+      logo_url: shop.logo_url,
     });
     setCookie('shopId', shop?.id);
     setCookie('shop', shopString);

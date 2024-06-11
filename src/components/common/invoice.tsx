@@ -40,9 +40,9 @@ const styles = StyleSheet.create({
 
   spaceBetween: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     color: '#3E3E3E',
   },
 
@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
 
   logo: { width: 90 },
 
-  reportTitle: { fontSize: 20, textAlign: 'center', fontStyle: 'bold' },
+  reportTitle: { fontSize: 16, textAlign: 'center' },
 
-  addressTitle: { fontSize: 11, fontStyle: 'bold', alignSelf: 'center' },
+  addressTitle: { fontSize: 11, fontStyle: 'bold' },
 
-  invoice: { fontWeight: 'bold', fontSize: 14 },
+  invoice: { fontWeight: 'bold', fontSize: 20 },
 
   invoiceNumber: { fontSize: 11, fontWeight: 'bold' },
 
@@ -110,11 +110,30 @@ function Invoice({
   //   const calculatedProducts = useSellStore((state) => state.calculatedProducts);
   console.log(calculatedProducts, shop);
   const shopInfo = JSON.parse(shop);
+  console.log(shopInfo.logo_url, shopInfo);
   const InvoiceTitle = () => (
     // update InvoiceTitle component here
     <View style={styles.titleContainer}>
       <View style={styles.spaceBetween}>
-        {/* <Image style={styles.logo} src={logo} /> */}
+        {shopInfo.logo_url ? (
+          <Image style={styles.logo} src={shopInfo.logo_url} />
+        ) : (
+          <PDFText
+            style={{
+              backgroundColor: '#512DA8',
+              borderRadius: '50%',
+              color: '#fff',
+              fontWeight: 'bold',
+              fontSize: ' 35px',
+              width: '50px',
+              height: '50px',
+              textAlign: 'center',
+              lineHeight: '50px',
+            }}
+          >
+            {shopInfo.name[0]}
+          </PDFText>
+        )}
         <PDFText style={styles.reportTitle}>{shopInfo.name}</PDFText>
         <PDFText style={styles.addressTitle}>{shopInfo.address}</PDFText>
 
@@ -148,18 +167,18 @@ function Invoice({
     </View>
   );
 
-  // const UserAddress = () => (
-  //   // update UserAddress component here
-  //   <View style={styles.titleContainer}>
-  //     <View style={styles.spaceBetween}>
-  //       <View style={{ maxWidth: 200 }}>
-  //         <PDFText style={styles.addressTitle}>Bill to </PDFText>
-  //         {/* <PDFText style={styles.address}>{reciept_data.address}</PDFText> */}
-  //       </View>
-  //       {/* <PDFText style={styles.addressTitle}>{reciept_data.date}</PDFText> */}
-  //     </View>
-  //   </View>
-  // );
+  const UserAddress = () => (
+    // update UserAddress component here
+    <View style={styles.titleContainer}>
+      <View style={styles.spaceBetween}>
+        <View style={{ maxWidth: 200 }}>
+          <PDFText style={styles.addressTitle}>Bill to </PDFText>
+          {/* <PDFText style={styles.address}>{reciept_data.address}</PDFText> */}
+        </View>
+        {/* <PDFText style={styles.addressTitle}>{reciept_data.date}</PDFText> */}
+      </View>
+    </View>
+  );
 
   const TableHead = () => (
     // update TableHead component here
@@ -210,7 +229,8 @@ function Invoice({
       </View>
       <View style={styles.tbody}>
         <PDFText>
-          Discount {calculatedProducts.discountType === 'AMOUNT' ? '৳' : '%'}{' '}
+          Discount{' '}
+          {calculatedProducts.discountType === 'AMOUNT' ? '(Taka)' : '(%)'}
         </PDFText>
       </View>
       <View style={styles.tbody}>
@@ -304,10 +324,14 @@ function Invoice({
       >
         <InvoiceTitle />
         <Address />
-        {/* <UserAddress /> */}
+        <UserAddress />
         <TableHead />
         <TableBody />
+        <TableDelivery />
+        <TableDiscount />
+        <TablePayment />
         <TableTotalPayable />
+        <TableDue />
       </Page>
     </Document>
   );
