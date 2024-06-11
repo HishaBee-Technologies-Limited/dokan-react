@@ -10,6 +10,17 @@ import { useInView } from 'react-intersection-observer';
 import { useProductPagination } from '@/hooks/useProductPagination';
 import Successful from './dialogs/Successful';
 
+import {
+  Page,
+  Text as PDFText,
+  View,
+  Document,
+  StyleSheet,
+  PDFDownloadLink,
+  BlobProvider,
+  Image,
+} from '@react-pdf/renderer';
+
 //TODO: Need refactoring in this
 
 let timer: any;
@@ -44,6 +55,8 @@ export const LeftSection = ({ productData }: { productData: any }) => {
       setPage(1);
     }, 1000);
   };
+  const bb =
+    'https://hishabee.fra1.digitaloceanspaces.com/business-manager/9/logo/TrYbbs28mA6z6b9XHrndLi0acL9wZTcRM921SluT.jpg';
   return (
     <div className="lg:pr-space12 lg:w-4/12 h-full">
       <Card className="h-full w-full shadow">
@@ -75,6 +88,40 @@ export const LeftSection = ({ productData }: { productData: any }) => {
           {loading ? <div>Loading</div> : null}
         </ScrollArea>
       </Card>
+      <PDFDownloadLink
+        document={
+          <Document>
+            <Page>
+              <View>
+                <PDFText>HEllo</PDFText>
+                <Image src={`${bb}`} />
+              </View>
+            </Page>
+          </Document>
+        }
+        fileName="invoice.pdf"
+      >
+        {({ blob, url, loading, error }) =>
+          loading ? (
+            'Loading document...'
+          ) : (
+            <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
+              <Image
+                src="/images/print_receipt.svg"
+                /*@ts-ignore*/
+                alt="d"
+                height={36}
+                width={36}
+              />
+
+              <Text
+                title="Download/Print Receipt"
+                className="text-sm font-medium"
+              />
+            </Button>
+          )
+        }
+      </PDFDownloadLink>
     </div>
   );
 };

@@ -19,6 +19,7 @@ import {
   StyleSheet,
   PDFDownloadLink,
   BlobProvider,
+  PDFViewer,
 } from '@react-pdf/renderer';
 import saveAs from 'file-saver';
 import Invoice from '@/components/common/invoice';
@@ -72,7 +73,6 @@ const Successful = () => {
               variant="error"
             />
           </article>
-          {console.log(calculatedProducts)}
 
           <Text
             title={`Date: ${calculatedProducts.date}`}
@@ -127,6 +127,28 @@ const Successful = () => {
               )
             }
           </PDFDownloadLink>
+          <div
+            style={{
+              backgroundColor: '#512DA8',
+              borderRadius: '50%',
+              color: '#fff',
+              fontWeight: 'bold',
+              fontSize: ' 35px',
+              width: '50px',
+              height: '50px',
+              textAlign: 'center',
+              // lineHeight: '50px',
+            }}
+          >
+            S
+          </div>
+          <PDFViewer>
+            <Invoice
+              calculatedProducts={calculatedProducts}
+              shop={shop}
+              due={due}
+            />
+          </PDFViewer>
           {/* <Invoice /> */}
 
           {/* <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
