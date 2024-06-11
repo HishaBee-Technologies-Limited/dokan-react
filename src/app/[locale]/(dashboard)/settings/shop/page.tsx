@@ -46,6 +46,7 @@ const SwitchShopPage = () => {
       subscription: shop.package,
       name: shop.name,
       number: shop.public_number,
+      address: shop.address,
     });
     setCookie('shopId', shop?.id);
     setCookie('shop', shopString);

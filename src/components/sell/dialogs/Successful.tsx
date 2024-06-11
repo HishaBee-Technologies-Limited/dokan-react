@@ -9,6 +9,21 @@ import { DialogFooter } from '@/components/common/Dialog';
 import { usePurchase } from '@/stores/usePurchaseStore';
 import { useFormContext } from 'react-hook-form';
 import { useSellStore } from '@/stores/useSellStore';
+import Pdf from 'react-to-pdf';
+import { useRef, useState } from 'react';
+import {
+  Page,
+  Text as PDFText,
+  View,
+  Document,
+  StyleSheet,
+  PDFDownloadLink,
+  BlobProvider,
+} from '@react-pdf/renderer';
+import saveAs from 'file-saver';
+import Invoice from '@/components/common/invoice';
+import { getCookie } from 'cookies-next';
+
 const Successful = () => {
   const handleClose = useSellStore((state) => state.setSellDialogState);
   const calculatedProducts = useSellStore((state) => state.calculatedProducts);
@@ -16,6 +31,8 @@ const Successful = () => {
   const methods = useFormContext();
   const due =
     calculatedProducts?.totalPrice! - calculatedProducts?.paymentAmount!;
+
+  const shop = getCookie('shop');
 
   return (
     <>
@@ -55,6 +72,7 @@ const Successful = () => {
               variant="error"
             />
           </article>
+          {console.log(calculatedProducts)}
 
           <Text
             title={`Date: ${calculatedProducts.date}`}
@@ -62,8 +80,8 @@ const Successful = () => {
           />
         </article>
 
-        {/* <div className="grid grid-cols-2 gap-space16">
-          <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
+        <div className="">
+          {/* <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
             <Image
               src="/images/print_receipt.svg"
               alt=""
@@ -71,9 +89,47 @@ const Successful = () => {
               width={36}
             />
 
-            <Text title="Print Receipt" className="text-sm font-medium" />
-          </Button>
-          <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
+            <Text
+              title="Download/Print Receipt"
+              className="text-sm font-medium"
+            />
+          </Button> */}
+          <PDFDownloadLink
+            document={
+              <Invoice
+                calculatedProducts={calculatedProducts}
+                shop={shop}
+                due={due}
+              />
+            }
+            fileName="invoice.pdf"
+          >
+            {({ blob, url, loading, error }) =>
+              loading ? (
+                'Loading document...'
+              ) : (
+                <Button
+                  className="w-full h-[9.6rem] flex-col"
+                  variant="secondary"
+                >
+                  <Image
+                    src="/images/print_receipt.svg"
+                    alt=""
+                    height={36}
+                    width={36}
+                  />
+
+                  <Text
+                    title="Download/Print Receipt"
+                    className="text-sm font-medium"
+                  />
+                </Button>
+              )
+            }
+          </PDFDownloadLink>
+          {/* <Invoice /> */}
+
+          {/* <Button className="w-full h-[9.6rem] flex-col" variant="secondary">
             <Image
               src="/images/share_receipt.svg"
               alt=""
@@ -82,8 +138,8 @@ const Successful = () => {
             />
 
             <Text title="Share receipt " className="text-sm font-medium" />
-          </Button>
-        </div> */}
+          </Button> */}
+        </div>
       </div>
 
       <DialogFooter>
