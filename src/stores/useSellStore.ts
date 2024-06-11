@@ -25,6 +25,7 @@ type SellState = {
     paymentAmount?: number;
     totalProfit?: number;
     amount?: number;
+    user?: { name: string; mobile: string };
   };
   currentSell?: IPurchaseHistoryResponse;
 };
@@ -58,6 +59,7 @@ export const useSellStore = create<SellState & SellActions>()(
       date: '',
       paymentAmount: 0,
       totalProfit: 0,
+      user: { name: '', mobile: '' },
     },
 
     // Update state-------------------------------------
