@@ -276,12 +276,8 @@ const PDFGenerator = ({
                   {/* <Separator className="my-1 " /> */}
                   {due > 0 && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xl font-bold text-[5px] ">
-                        Due:
-                      </span>
-                      <span className="text-xl font-bold text-[5px]">
-                        {due}
-                      </span>
+                      <span className="font-bold text-[5px] ">Due:</span>
+                      <span className="font-bold text-[5px]">{due}</span>
                     </div>
                   )}
                 </div>
