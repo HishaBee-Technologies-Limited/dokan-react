@@ -46,7 +46,10 @@ const SwitchShopPage = () => {
       subscription: shop.package,
       name: shop.name,
       number: shop.public_number,
+      address: shop.address,
+      logo_url: shop.logo_url,
     });
+    console.log(shop);
     setCookie('shopId', shop?.id);
     setCookie('shop', shopString);
     // window.location.reload();
