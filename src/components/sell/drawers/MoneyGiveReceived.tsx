@@ -206,8 +206,6 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
           version: DEFAULT_STARTING_VERSION,
         });
       });
-      // closeDrawer({ open: false });
-      // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
     }
     if (responseCreateSell?.error) {
       toast.error('Something went wrong');
@@ -274,7 +272,6 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
       if (Number(data.amount) === calculatedProducts.totalPrice) {
         await createDueItem(payloadForPaymentAmount);
       }
-      // const resAmount = await createDueItem(payloadForPaymentAmount);
       console.log(res);
     }
     setCalculatedProducts({
@@ -284,6 +281,7 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
           ? 0
           : Number(calculatedProducts.totalPrice) - Number(data.amount),
       date: formatDate(DATE_FORMATS.default, data.date),
+      user: { name: data.name, mobile: data.number },
     });
     setLoading(false);
 
