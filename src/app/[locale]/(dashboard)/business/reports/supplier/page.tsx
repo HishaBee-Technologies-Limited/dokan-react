@@ -1,6 +1,6 @@
-import PageHeader from '@/components/product-report/PageHeader';
 import SupplierReportTable from '@/components/supplier-report/SupplierReportTable';
 import { getSupplierReport } from '@/actions/supplier-report/getSupplierReport';
+import PageHeader from '@/components/supplier-report/PageHeader';
 
 export default async function Supplier({ searchParams }: any) {
   const supplierReport = await getSupplierReport(
