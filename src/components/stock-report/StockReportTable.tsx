@@ -8,62 +8,37 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import React from 'react';
-import { IStockReportsResponse } from '@/types/stockReport';
-import { Text } from '@/components/common/text';
+import { IProductReportsResponse } from '@/types/productReport';
 import NoDataCard from '@/components/common/no-data-card';
 
-type StockReportTableType = {
-  stockReport: IStockReportsResponse[];
+type ProductReportTableType = {
+  productReport: IProductReportsResponse[];
 };
 
-export default function StockReportTable({
-  stockReport,
-}: StockReportTableType) {
+export default function ProductReportTable({
+  productReport,
+}: ProductReportTableType) {
   return (
     <ScrollArea className="pb-space8">
-      {!!stockReport?.length ? (
+      {!!productReport?.length ? (
         <Table wrapperClass="rounded-md border border-color">
           <TableHeader>
             <TableRow>
               <TableHead className="">#</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>
-                <Text variant="success">Stock In Count</Text>
-              </TableHead>
-              <TableHead>
-                <Text variant="success">Stock In Amount</Text>
-              </TableHead>
-              <TableHead>
-                <Text variant="error">Stock Out Count</Text>
-              </TableHead>
-              <TableHead>
-                <Text variant="error">Stock Out Amount</Text>
-              </TableHead>
+              <TableHead>Product Name</TableHead>
+              <TableHead>Sold Quantity</TableHead>
+              <TableHead>Price (without discount)</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {stockReport?.map((item, index) => {
+            {productReport?.map((item, index) => {
               return (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{item.product_name}</TableCell>
-                  <TableCell>
-                    <Text variant="success">{item.stock_in_count}</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text variant="success">৳{item.stock_in_amount}</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text variant="error">
-                      {item.stock_out_count.toString()}
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text variant="error">
-                      ৳{item.stock_out_amount.toString()}
-                    </Text>
-                  </TableCell>
+                  <TableCell>{item.sell_count}</TableCell>
+                  <TableCell>{item.sell_amount}</TableCell>
                 </TableRow>
               );
             })}
