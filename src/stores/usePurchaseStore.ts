@@ -15,7 +15,7 @@ export interface IProductState {
     date?: string;
     paymentAmount?: number;
     due?: number;
-    user: { name: string; mobile: string };
+    user?: { name: string; mobile: string };
   };
   currentPurchase?: IPurchaseHistoryResponse;
 }
