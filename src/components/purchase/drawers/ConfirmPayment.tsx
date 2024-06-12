@@ -189,6 +189,7 @@ const ConfirmPayment = () => {
         ...calculatedProducts,
         paymentAmount: Number(data.amount),
         date: formatDate(DATE_FORMATS.default, data.date),
+        user: { name: data.supplier, mobile: data.supplier_number! },
       });
       closeDrawer({ open: false });
       openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });

@@ -216,10 +216,6 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
         due_unique_id: dueRes?.data.due.unique_id,
         purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
       };
-      // const paymentAmount =
-      //   Number(data.amount) === Number(calculatedProducts.totalPrice)
-      //     ? 0
-      //     : Number(calculatedProducts.totalPrice) - Number(data.amount);
 
       const payloadForDueItemForPayment = {
         amount: -paymentAmount * -1,
@@ -249,6 +245,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
             ? 0
             : Number(calculatedProducts.totalPrice) - Number(data.amount),
         date: formatDate(DATE_FORMATS.default, data.date),
+        user: { name: data.name, mobile: data.number },
       });
       handleSellDrawer({ open: false });
       openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
