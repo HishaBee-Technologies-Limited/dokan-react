@@ -17,8 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import PDFDownloader from '../common/PDFDownloader';
-import { DueHistoryPDF } from '../pdf/DueHistoryPDF';
+
 import { Quixote } from '../pdf/HistoryPDF';
 
 const HistoryHeader = () => {
