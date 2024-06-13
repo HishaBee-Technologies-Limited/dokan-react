@@ -54,7 +54,6 @@ export const authFetchAPI = (
       //TODO: change it properly adds tags
       tags: tags ? ['get-roles'] : [],
     },
-    cache: 'no-store',
   });
 };
 

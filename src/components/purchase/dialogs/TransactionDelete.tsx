@@ -30,6 +30,7 @@ const TransactionDelete = () => {
         total_price: currentPurchase.total_price,
         payment_method: currentPurchase.payment_method,
         user_id: currentPurchase.user_id,
+        payment_status: currentPurchase.payment_status,
       });
       if (res?.success) {
         toast.success('Purchase was successfully deleted');
