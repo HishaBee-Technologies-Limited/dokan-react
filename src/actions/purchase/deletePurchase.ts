@@ -15,6 +15,7 @@ export const deletePurchase = async ({
   total_item,
   total_price,
   user_id,
+  payment_status,
 }: {
   created_at: IProductPurchasePayload['created_at'];
   unique_id: IProductPurchasePayload['unique_id'];
@@ -24,6 +25,7 @@ export const deletePurchase = async ({
   total_price: IProductPurchasePayload['total_item'];
   payment_method: IProductPurchasePayload['total_price'];
   user_id: IProductPurchasePayload['user_id'];
+  payment_status: string;
 }) => {
   try {
     const shopId = cookies().get('shopId')?.value;
@@ -40,10 +42,14 @@ export const deletePurchase = async ({
       total_item,
       total_price,
       user_id,
+      payment_status,
     };
+
+    console.log(payload);
 
     const res = await authApi.post(`/purchase`, payload);
     const data = await res.json();
+    console.log(res, data);
     revalidatePath('/purchase-list');
 
     if (res.ok) {
