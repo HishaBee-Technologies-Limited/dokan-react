@@ -19,7 +19,12 @@ import { useSellStore } from '@/stores/useSellStore';
 import { percentage } from '@/lib/utils';
 
 export interface IProductPurchase extends IProduct {
-  calculatedAmount?: { quantity: number; total: number; unit_price: number };
+  calculatedAmount?: {
+    quantity: number;
+    total: number;
+    unit_price: number;
+    unit_cost?: number;
+  };
 }
 type IProps = {
   form: UseFormReturn<any>;

@@ -195,6 +195,7 @@ const ConfirmPayment = () => {
         ...calculatedProducts,
         paymentAmount: Number(data.amount),
         date: formatDate(DATE_FORMATS.default, data.date),
+        user: { name: data.customer, mobile: data.customer_number! },
       });
       setLoading(false);
 
