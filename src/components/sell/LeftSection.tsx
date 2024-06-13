@@ -49,7 +49,7 @@ export const LeftSection = ({ productData }: { productData: any }) => {
           }}
         />
 
-        <ScrollArea className="h-[calc(100%-14rem)] overflow-y-scroll px-space8">
+        <ScrollArea className="h-[calc(100%-14rem)] px-space8">
           {productRes.map((product: any, i: number) => (
             <div key={product.id}>
               <div className="flex items-center gap-space12 justify-between py-space8 px-space8">

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Header from '@/components/layouts/dashboard/Header';
 import AsideBar from '@/components/layouts/dashboard/AsideBar';
 import { SessionProvider } from 'next-auth/react';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
 
 // import { useSession } from "next-auth/react";
 
@@ -42,7 +43,7 @@ const Dashboard = ({
           menuOpen={menuOpen}
         />
 
-        <div className="h-[calc(100vh-7.2rem)] lg:h-[calc(100vh-10rem)] overflow-y-scroll">
+        <div className="h-[calc(100vh-7.2rem)] lg:h-[calc(100vh-10rem)] md:overflow-y-scroll no-scrollbar ">
           <div className="h-full px-space8 sm:px-space24 pt-space16 text-justify ">
             {children}
           </div>

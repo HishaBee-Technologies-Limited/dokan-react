@@ -43,7 +43,6 @@ export const getShopsProducts = async ({ params }: GetShopsProductsDef) => {
     );
 
     const data = await res.json();
-    console.log(data);
     if (res.ok) {
       return {
         success: true,

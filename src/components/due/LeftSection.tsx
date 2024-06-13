@@ -155,7 +155,7 @@ export const LeftSection = () => {
         </div>
       </div>
 
-      <ScrollArea className="h-[calc(100%-6.6rem)] overflow-y-scroll  px-space12 sm:px-space16">
+      <ScrollArea className="h-[calc(100%-6.6rem)]  px-space12 sm:px-space16">
         {dueFilterList?.length ? (
           <WrapperOddList>
             {dueFilterList?.map((item, index) => (

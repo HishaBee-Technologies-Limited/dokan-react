@@ -18,9 +18,9 @@ const PurchaseDrawers = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     if (PurchaseEnum.CONFIRM_PAYMENT === activeDrawer) {
       return <ConfirmPayment />;
     } else if (PurchaseEnum.MONEY_GIVEN_ENTRY === activeDrawer) {
-      return <MoneyGiveReceived suppliers={suppliers} />;
+      return <MoneyGiveReceived />;
     } else if (PurchaseEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
-      return <MoneyGiveReceived suppliers={suppliers} />;
+      return <MoneyGiveReceived />;
     } else if (PurchaseEnum.TRANSACTION_DETAILS === activeDrawer) {
       return <TransactionDetails />;
     } else if (PurchaseEnum.TRANSACTION_EDIT === activeDrawer) {

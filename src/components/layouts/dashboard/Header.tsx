@@ -22,7 +22,6 @@ import { useShop } from '@/stores/useShopStore';
 
 const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
   const shopId = getCookie('shopId');
-  const cookie = getCookie('shop');
   const setShop = useShop((state) => state.saveShop);
   useEffect(() => {
     const getShopInfo = async () => {

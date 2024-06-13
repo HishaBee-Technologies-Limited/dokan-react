@@ -14,6 +14,7 @@ import { getCookie } from 'cookies-next';
 import { SUBSCRIPTION_PACKAGES } from '@/lib/constants/common';
 import { LockClosedIcon } from '@radix-ui/react-icons';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { logout } from '@/actions/logout';
 
 const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
   const pathname = usePathname();
@@ -22,16 +23,25 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
   const shop = getCookie('shop');
   const [link, setLink] = useState<IAsideBarMenuItem[]>([]);
   useEffect(() => {
-    if (
-      JSON.parse(shop as string).subscription === SUBSCRIPTION_PACKAGES.advanced
-    ) {
-      setLink(SidebarLinks);
-    } else if (
-      JSON.parse(shop as string).subscription === SUBSCRIPTION_PACKAGES.standard
-    ) {
-      setLink(SidebarLinksStandard);
-    } else {
-      setLink(SidebarLinksFree);
+    console.log(shop);
+    if (shop) {
+      if (
+        JSON.parse(shop as string).subscription ===
+        SUBSCRIPTION_PACKAGES.advanced
+      ) {
+        setLink(SidebarLinks);
+      } else if (
+        JSON.parse(shop as string).subscription ===
+        SUBSCRIPTION_PACKAGES.standard
+      ) {
+        setLink(SidebarLinksStandard);
+      } else {
+        setLink(SidebarLinksFree);
+      }
+    }
+    if (!shop) {
+      console.log('shop not found');
+      logout();
     }
   }, [shop]);
   // console.log(JSON.parse(shop as string).subscription);

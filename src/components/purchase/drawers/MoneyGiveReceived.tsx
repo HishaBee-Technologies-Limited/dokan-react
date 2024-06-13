@@ -61,6 +61,8 @@ import {
 } from '@/components/ui/command';
 import { getUserDue } from '@/actions/due/getUserDue';
 import { PURCHASE_SMS } from '@/lib/sms-text';
+import { Skeleton } from '@/components/ui/skeleton';
+import { getAllSupplier } from '@/actions/contacts/getAllSupplier';
 
 const partyList = ['customer', 'supplier'];
 
@@ -73,12 +75,8 @@ const formSchema = z.object({
   amount: z.string().min(1, {
     message: 'this field is required.',
   }),
-  name: z.string().min(1, {
-    message: 'this field is required.',
-  }),
-  number: z.string().min(11).max(11, {
-    message: 'this field is required.',
-  }),
+  name: z.string(),
+  number: z.string().optional(),
   details: z.string(),
   images: z.string(),
   cash_type: z.string(),
@@ -88,7 +86,7 @@ const formSchema = z.object({
   due: z.any(),
 });
 
-const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
+const MoneyGiveReceived = () => {
   const handleSellDrawer = usePurchaseStore((state) => state.setDrawerState);
   const openSuccessDialog = usePurchaseStore((state) => state.setDialogState);
   const [contact, setContact] = useState<IUserResponse>();
@@ -96,10 +94,13 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
   const setCalculatedProducts = usePurchase(
     (state) => state.setCalculatedProducts
   );
+  const [suppliers, setSuppliers] = useState<IUserResponse[]>();
+  const [employees, setEmployee] = useState<IUserResponse[]>();
+  const [loading, setLoading] = useState(false);
+  const [loadingContacts, setLoadingContacts] = useState(false);
+
   const shop = getCookie('shop');
   const tkn = getCookie('access_token');
-  const [loading, setLoading] = useState(false);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -202,7 +203,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       const dueRes = await createDue(payload);
 
       const payloadForDueItem = {
-        amount: -Number(data.amount),
+        amount: -Number(calculatedProducts.totalPrice),
         unique_id: generateUlid(),
         due_left: -Number(data.amount),
         version: DEFAULT_STARTING_VERSION,
@@ -234,7 +235,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       };
 
       const res = await createDueItem(payloadForDueItem);
-      if (Number(data.amount) === calculatedProducts.totalPrice) {
+      if (Number(data.amount) !== calculatedProducts.totalPrice) {
         await createDueItem(payloadForDueItemForPayment);
       }
 
@@ -245,7 +246,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
             ? 0
             : Number(calculatedProducts.totalPrice) - Number(data.amount),
         date: formatDate(DATE_FORMATS.default, data.date),
-        user: { name: data.name, mobile: data.number },
+        user: { name: data.name, mobile: data.number! },
       });
       handleSellDrawer({ open: false });
       openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
@@ -297,7 +298,7 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     const fetchUserDue = async () => {
       const sup_mobile = form.watch('number');
 
-      const res = await getUserDue(sup_mobile);
+      const res = await getUserDue(sup_mobile!);
       console.log(res);
       if (res?.success) {
         form.setValue('due', res.data);
@@ -321,6 +322,29 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
       }, 0),
     [calculatedProducts]
   );
+
+  useEffect(() => {
+    const fetchSuppliersAndEmployees = async () => {
+      setLoadingContacts(true);
+      const shopId = getCookie('shopId');
+
+      const suppliers = await getAllSupplier(Number(shopId));
+      // const employees = await getAllEmployee(Number(shopId));
+      if (suppliers?.success) {
+        setSuppliers(suppliers?.data as IUserResponse[]);
+        setLoadingContacts(false);
+      } else {
+        console.log(suppliers);
+        setLoadingContacts(false);
+      }
+      // if (employees?.success) {
+      //   setEmployee(employees?.data as IUserResponse[]);
+      // } else {
+      //   console.log(employees);
+      // }
+    };
+    fetchSuppliersAndEmployees();
+  }, []);
 
   return (
     <div className="space-y-space12">
@@ -477,37 +501,51 @@ const MoneyGiveReceived = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0 mr-10 ">
+                        <PopoverContent className="w-[300px]  p-0 border border-gray-300 mr-10 ">
                           <Command>
-                            {/* <CommandInput placeholder="Search language..." /> */}
-                            <CommandEmpty>No language found.</CommandEmpty>
-                            <CommandGroup className="max-h-80 overflow-y-scroll">
-                              {/* <ScrollArea className="h-[200px] scroll-p-4 rounded-md border"> */}
-                              {suppliers?.map((supplier) => (
-                                <CommandItem
-                                  value={contact?.name}
-                                  key={supplier.id}
-                                  onSelect={() => {
-                                    setContact(supplier);
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      'mr-2 h-4 w-4',
-                                      supplier.name === contact?.name
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                  <div className="flex flex-col">
-                                    <p>{supplier.name}</p>
-                                    <p>{supplier.mobile}</p>
+                            <CommandInput
+                              placeholder="Search contacts..."
+                              className="w-[w-200px]"
+                            />
+
+                            {!loadingContacts && (
+                              <CommandEmpty>No contacts found.</CommandEmpty>
+                            )}
+                            <ScrollArea className="h-[200px] max-h-[200px] scroll-p-4  border">
+                              <CommandGroup className=" ">
+                                {!loadingContacts ? (
+                                  suppliers?.map((supplier) => (
+                                    <CommandItem
+                                      value={supplier?.name}
+                                      key={supplier.id}
+                                      onSelect={() => {
+                                        setContact(supplier);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          'mr-2 h-4 w-4',
+                                          supplier.name === contact?.name
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                        )}
+                                      />
+                                      <div className="flex flex-col">
+                                        <p>{supplier.name}</p>
+                                        <p>{supplier.mobile}</p>
+                                      </div>
+                                      {/* {supplier.mobile} */}
+                                    </CommandItem>
+                                  ))
+                                ) : (
+                                  <div className="flex justify-center mt-2 flex-col gap-2 items-center">
+                                    <Skeleton className="w-[280px] h-[50px]" />
+                                    <Skeleton className="w-[280px] h-[50px]" />
+                                    <Skeleton className="w-[280px] h-[50px]" />
                                   </div>
-                                  {/* {supplier.mobile} */}
-                                </CommandItem>
-                              ))}
-                              {/* </ScrollArea> */}
-                            </CommandGroup>
+                                )}
+                              </CommandGroup>
+                            </ScrollArea>
                           </Command>
                         </PopoverContent>
                       </Popover>
