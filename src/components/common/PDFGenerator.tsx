@@ -139,13 +139,22 @@ const PDFGenerator = ({
           <div className="flex justify-between  ">
             <div className="flex items-center gap-2 self-start">
               <div className="mt-2">
-                <Image
-                  src="https://hishabee.fra1.digitaloceanspaces.com/business-manager/9/logo/TrYbbs28mA6z6b9XHrndLi0acL9wZTcRM921SluT.jpg"
-                  height={40}
-                  width={40}
-                  alt="ll"
-                  className="w-10 h-10 "
-                />
+                {shopInfo.logo_url ? (
+                  <Image
+                    src={shopInfo.logo_url}
+                    height={40}
+                    width={40}
+                    alt="ll"
+                    className="w-10 h-10 "
+                  />
+                ) : (
+                  <div className="bg-secondary-50 w-8 h-8  flex items-center justify-center text-[7px] font-bold">
+                    <Text
+                      className="mb-4"
+                      title={shopInfo.name[0].toUpperCase()}
+                    />
+                  </div>
+                )}
               </div>
               <div className="mb-2">
                 <h1 className="text-[9px] font-bold">{shopInfo.name}</h1>
@@ -166,13 +175,23 @@ const PDFGenerator = ({
                 <Text title="Invoice To" className="text-[8px] font-bold" />
 
                 <Text
-                  title={calculatedProducts?.user?.name ?? 'Not Available'}
+                  title={
+                    (calculatedProducts?.user?.name ?? 'Not Available') ||
+                    (!calculatedProducts?.user?.name.length
+                      ? 'Not Available'
+                      : calculatedProducts?.user?.name)
+                  }
                   className="text-[6px]"
                 />
                 <p className=" flex items-center flex-row  gap-1">
                   {/* <PhoneIcon className="w-2 h-2 text-blue-400" /> */}
                   <Text
-                    title={calculatedProducts?.user?.mobile ?? 'Not Available'}
+                    title={
+                      (calculatedProducts?.user?.mobile ?? 'Not Available') ||
+                      (!calculatedProducts?.user?.mobile.length
+                        ? 'Not Available'
+                        : calculatedProducts?.user?.mobile)
+                    }
                     className="text-[6px] mb-[1.35rem]"
                   />
                 </p>
