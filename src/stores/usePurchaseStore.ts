@@ -15,6 +15,7 @@ export interface IProductState {
     date?: string;
     paymentAmount?: number;
     due?: number;
+    user?: { name: string; mobile: string };
   };
   currentPurchase?: IPurchaseHistoryResponse;
 }
@@ -36,15 +37,10 @@ export const usePurchase = create<IProductState & IProductStateActions>()(
       products: [],
       date: '',
       paymentAmount: 0,
+      user: { name: '', mobile: '' },
     },
     setProducts: (products) => set({ products: products }),
     setCalculatedProducts: (products) => set({ calculatedProducts: products }),
     setCurrentPurchase: (purchase) => set({ currentPurchase: purchase }),
   })
-  // {
-  //   storage: createJSONStorage(() => sessionStorage),
-
-  //   name: 'products',
-  // }
-  // )
 );
