@@ -99,7 +99,7 @@ export const RightSection = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="lg:pl-space12 lg:border-l border-color h-full lg:w-8/12 space-y-space16"
       >
-        <ScrollArea className="w-full h-[calc(100%-30rem)] overflow-y-scroll shadow p-space8 pt-0 relative background rounded-md">
+        <ScrollArea className="w-full h-[calc(100%-30rem)] shadow p-space8 pt-0 relative background rounded-md">
           <Text
             title="Products Added for Sell"
             className="font-semibold sticky top-0 z-20 background pt-space8"

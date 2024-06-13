@@ -63,6 +63,7 @@ import {
 } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getUserDue } from '@/actions/due/getUserDue';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -89,6 +90,7 @@ const ConfirmPayment = () => {
   const [suppliers, setSuppliers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
   const [loading, setLoading] = useState(false);
+  const [loadingContacts, setLoadingContacts] = useState(false);
   const [contact, setContact] = useState<IUserResponse>();
 
   const tkn = getCookie('access_token');
@@ -216,14 +218,17 @@ const ConfirmPayment = () => {
 
   useEffect(() => {
     const fetchSuppliersAndEmployees = async () => {
+      setLoadingContacts(true);
       const shopId = getCookie('shopId');
 
       const suppliers = await getAllSupplier(Number(shopId));
       const employees = await getAllEmployee(Number(shopId));
       if (suppliers?.success) {
         setSuppliers(suppliers?.data as IUserResponse[]);
+        setLoadingContacts(false);
       } else {
         console.log(suppliers);
+        setLoadingContacts(false);
       }
       if (employees?.success) {
         setEmployee(employees?.data as IUserResponse[]);
@@ -352,7 +357,7 @@ const ConfirmPayment = () => {
                 Supplier Name <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
-                <div className="relative h-10 w-full">
+                <div className="relative h-10 w-full mr-8">
                   <Input
                     type="text"
                     placeholder="Enter name..."
@@ -377,36 +382,49 @@ const ConfirmPayment = () => {
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-[200px] p-0 mr-10 ">
+                      <PopoverContent className="w-[300px] p-0 border border-gray-300 mr-10">
                         <Command>
-                          {/* <CommandInput placeholder="Search language..." /> */}
-                          <CommandEmpty>No language found.</CommandEmpty>
-                          <CommandGroup className="max-h-80 overflow-y-scroll">
-                            {/* <ScrollArea className="max-h-[200px] scroll-p-4 rounded-md border"> */}
-                            {suppliers?.map((supplier) => (
-                              <CommandItem
-                                value={contact?.name}
-                                key={supplier.id}
-                                onSelect={() => {
-                                  setContact(supplier);
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    'mr-2 h-4 w-4',
-                                    supplier.name === contact?.name
-                                      ? 'opacity-100'
-                                      : 'opacity-0'
-                                  )}
-                                />
-                                <div className="flex flex-col">
-                                  <p>{supplier.name}</p>
-                                  <p>{supplier.mobile}</p>
+                          <CommandInput
+                            placeholder="Search language..."
+                            className="w-[w-200px]"
+                          />
+                          {!loadingContacts && (
+                            <CommandEmpty>No contacts found.</CommandEmpty>
+                          )}
+                          <CommandGroup className=" ">
+                            <ScrollArea className="h-[200px] max-h-[200px] scroll-p-4  border">
+                              {!loadingContacts ? (
+                                suppliers?.map((supplier) => (
+                                  <CommandItem
+                                    value={supplier?.name}
+                                    key={supplier.id}
+                                    onSelect={() => {
+                                      setContact(supplier);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        supplier.name === contact?.name
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                    <div className="flex flex-col">
+                                      <p>{supplier.name}</p>
+                                      <p>{supplier.mobile}</p>
+                                    </div>
+                                    {/* {supplier.mobile} */}
+                                  </CommandItem>
+                                ))
+                              ) : (
+                                <div className="flex justify-center mt-2 flex-col gap-2 items-center">
+                                  <Skeleton className="w-[280px] h-[50px]" />
+                                  <Skeleton className="w-[280px] h-[50px]" />
+                                  <Skeleton className="w-[280px] h-[50px]" />
                                 </div>
-                                {/* {supplier.mobile} */}
-                              </CommandItem>
-                            ))}
-                            {/* </ScrollArea> */}
+                              )}
+                            </ScrollArea>
                           </CommandGroup>
                         </Command>
                       </PopoverContent>

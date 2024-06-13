@@ -37,7 +37,7 @@ export function Drawer({ children, header, onClose, open }: IDrawerProps) {
 
           <div
             style={{ height: calcHeight }}
-            className="px-space16 py-space10 md:px-space32 md:py-space16 overflow-y-scroll"
+            className="px-space16 py-space10 md:px-space32 md:py-space16"
           >
             {children}
           </div>

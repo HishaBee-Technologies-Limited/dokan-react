@@ -492,36 +492,39 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0 mr-10 ">
+                        <PopoverContent className="w-[300px] p-0 border border-gray-300 mr-10 ">
                           <Command>
-                            {/* <CommandInput placeholder="Search language..." /> */}
+                            <CommandInput
+                              placeholder="Search language..."
+                              className="w-[w-200px]"
+                            />
                             <CommandEmpty>No language found.</CommandEmpty>
-                            <CommandGroup className="max-h-80 overflow-y-scroll">
-                              {/* <ScrollArea className="max-h-[200px] scroll-p-4 rounded-md border"> */}
-                              {customers?.map((customer) => (
-                                <CommandItem
-                                  value={contact?.name}
-                                  key={customer.id}
-                                  onSelect={() => {
-                                    setContact(customer);
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      'mr-2 h-4 w-4',
-                                      customer.name === contact?.name
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                  <div className="flex flex-col">
-                                    <p>{customer.name}</p>
-                                    <p>{customer.mobile}</p>
-                                  </div>
-                                  {/* {supplier.mobile} */}
-                                </CommandItem>
-                              ))}
-                              {/* </ScrollArea> */}
+                            <CommandGroup className="">
+                              <ScrollArea className="h-[200px] scroll-p-4 rounded-md border">
+                                {customers?.map((customer) => (
+                                  <CommandItem
+                                    value={contact?.name}
+                                    key={customer.id}
+                                    onSelect={() => {
+                                      setContact(customer);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        customer.name === contact?.name
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                    <div className="flex flex-col">
+                                      <p>{customer.name}</p>
+                                      <p>{customer.mobile}</p>
+                                    </div>
+                                    {/* {supplier.mobile} */}
+                                  </CommandItem>
+                                ))}
+                              </ScrollArea>
                             </CommandGroup>
                           </Command>
                         </PopoverContent>
