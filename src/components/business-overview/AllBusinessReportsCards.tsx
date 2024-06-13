@@ -32,12 +32,12 @@ export default function AllBusinessReportsCards() {
         />
         <AllBusinessReportItemLinkCard
           imageURL="/images/features/due.svg"
-          linkURL="/best/customer"
+          linkURL="/reports/best/customer"
           label="Best Customer"
         />
         <AllBusinessReportItemLinkCard
           imageURL="/images/features/due.svg"
-          linkURL="/best/employee"
+          linkURL="/reports/best/employee"
           label="Best Employee"
         />
 
