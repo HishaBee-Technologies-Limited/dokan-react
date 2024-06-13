@@ -26,7 +26,7 @@ export default function SupplierReportTable({
             <TableRow>
               <TableHead className="">#</TableHead>
               <TableHead>Supplier Name</TableHead>
-              <TableHead>Purchase Count</TableHead>
+              <TableHead>Purchase Quantity</TableHead>
               <TableHead>Purchase Amount</TableHead>
             </TableRow>
           </TableHeader>
