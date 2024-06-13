@@ -56,10 +56,12 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
 } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SELL_SMS } from '@/lib/sms-text';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
   amount: z.string(),
@@ -88,6 +90,7 @@ const ConfirmPayment = () => {
   const [customers, setCustomers] = useState<IUserResponse[]>();
   const [employees, setEmployee] = useState<IUserResponse[]>();
   const [loading, setLoading] = useState(false);
+  const [loadingContacts, setLoadingContacts] = useState(false);
   const [contact, setContact] = useState<IUserResponse>();
 
   const tkn = getCookie('access_token');
@@ -211,13 +214,16 @@ const ConfirmPayment = () => {
 
   useEffect(() => {
     const fetchSuppliersAndEmployees = async () => {
+      setLoadingContacts(true);
       const shopId = getCookie('shopId');
 
       const customer = await getAllCustomer(Number(shopId));
       const employees = await getAllEmployee(Number(shopId));
       if (customer?.success) {
+        setLoadingContacts(false);
         setCustomers(customer?.data as IUserResponse[]);
       } else {
+        setLoadingContacts(false);
         console.log(customer);
       }
       if (employees?.success) {
@@ -380,35 +386,49 @@ const ConfirmPayment = () => {
                                 </Button>
                               </FormControl>
                             </PopoverTrigger>
-                            <PopoverContent className="w-[400px] p-0 mr-10 ">
+                            <PopoverContent className="w-[300px]  p-0 border border-gray-300 mr-10 ">
                               {/* <ScrollArea className="h-[200px] scroll-p-4 rounded-md border"> */}
                               <Command>
-                                {/* <CommandInput placeholder="Search language..." /> */}
-                                <CommandEmpty>No contact found.</CommandEmpty>
-                                <CommandGroup className="max-h-80 overflow-y-scroll">
-                                  {customers?.map((customer) => (
-                                    <CommandItem
-                                      value={contact?.name}
-                                      key={customer.id}
-                                      onSelect={() => {
-                                        setContact(customer);
-                                      }}
-                                    >
-                                      <Check
-                                        className={cn(
-                                          'mr-2 h-4 w-4',
-                                          customer.name === contact?.name
-                                            ? 'opacity-100'
-                                            : 'opacity-0'
-                                        )}
-                                      />
-                                      <div className="flex flex-col">
-                                        <p>{customer.name}</p>
-                                        <p>{customer.mobile}</p>
+                                <CommandInput placeholder="Search contact..." />
+                                {!loadingContacts && (
+                                  <CommandEmpty>
+                                    No contacts found.
+                                  </CommandEmpty>
+                                )}
+                                <CommandGroup className="">
+                                  <ScrollArea className="h-[200px]  scroll-p-4  border">
+                                    {!loadingContacts ? (
+                                      customers?.map((customer) => (
+                                        <CommandItem
+                                          value={contact?.name}
+                                          key={customer.id}
+                                          onSelect={() => {
+                                            setContact(customer);
+                                          }}
+                                        >
+                                          <Check
+                                            className={cn(
+                                              'mr-2 h-4 w-4',
+                                              customer.name === contact?.name
+                                                ? 'opacity-100'
+                                                : 'opacity-0'
+                                            )}
+                                          />
+                                          <div className="flex flex-col">
+                                            <p>{customer.name}</p>
+                                            <p>{customer.mobile}</p>
+                                          </div>
+                                          {/* {supplier.mobile} */}
+                                        </CommandItem>
+                                      ))
+                                    ) : (
+                                      <div className="flex justify-center mt-2 flex-col gap-2 items-center">
+                                        <Skeleton className="w-[280px] h-[50px]" />
+                                        <Skeleton className="w-[280px] h-[50px]" />
+                                        <Skeleton className="w-[280px] h-[50px]" />
                                       </div>
-                                      {/* {supplier.mobile} */}
-                                    </CommandItem>
-                                  ))}
+                                    )}
+                                  </ScrollArea>
                                 </CommandGroup>
                               </Command>
                               {/* </ScrollArea> */}

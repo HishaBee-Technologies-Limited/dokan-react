@@ -24,7 +24,7 @@ const CommonLayout = ({
       <div className="h-full md:h-[calc(100%-4.4rem)] w-full flex">
         <SideNavBar data={menuLinks} />
 
-        <div className="h-full w-full md:w-9/12 md:pl-space24 flex justify-center md:block md:overflow-y-scroll ">
+        <div className="h-full w-full md:w-9/12 md:pl-space24 flex justify-center md:block  ">
           {children}
         </div>
       </div>

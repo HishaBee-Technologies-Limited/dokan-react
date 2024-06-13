@@ -42,7 +42,7 @@ const Dashboard = ({
           menuOpen={menuOpen}
         />
 
-        <div className="h-[calc(100vh-7.2rem)] lg:h-[calc(100vh-10rem)] overflow-y-scroll">
+        <div className="h-[calc(100vh-7.2rem)] lg:h-[calc(100vh-10rem)]">
           <div className="h-full px-space8 sm:px-space24 pt-space16 text-justify ">
             {children}
           </div>
