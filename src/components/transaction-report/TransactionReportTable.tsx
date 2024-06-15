@@ -1,18 +1,13 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import NoDataCard from '@/components/common/no-data-card';
 import React from 'react';
-import {
-  ITransactionReportsResponse,
-  TransactionDef,
-} from '@/types/TransactionReport';
+import { ITransactionReportsResponse } from '@/types/TransactionReport';
+import Card from '@/components/common/Card';
+import { Text } from '@/components/common/text';
+import { formatDate } from '@/lib/date';
+import { format } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { PAYMENT_STATUS } from '@/lib/constants/common';
 
 type TransactionReportTablePropsType = {
   transactionReport: ITransactionReportsResponse;
@@ -28,41 +23,68 @@ export default async function TransactionReportTable({
         <NoDataCard />
       ) : (
         <>
-          <Table wrapperClass="rounded-md border border-color">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="">Transaction ID</TableHead>
-                <TableHead>Customer Name</TableHead>
-                <TableHead>Total Price</TableHead>
-                <TableHead>Date</TableHead>
-              </TableRow>
-            </TableHeader>
+          {Object.keys(transactionReport?.items).map((date) => (
+            <Card className="my-3 p-4" key={date}>
+              <div className="flex items-center justify-between">
+                <Text variant="blue" className="font-medium text-lg">
+                  {formatDate(date)}
+                </Text>
+                <Text variant="blue" className="font-medium text-lg">
+                  Total Sell ৳ {transactionReport?.sum[date]}
+                </Text>
+              </div>
+              <div>
+                {transactionReport?.items[date]?.map((transaction) => (
+                  <Card
+                    className="flex items-center justify-between my-3 p-4 rounded-md border border-primary-10 dark:border-primary-80 dark:bg-primary-100"
+                    key={transaction.id}
+                  >
+                    <div>
+                      <Text variant="muted">#{transaction.id}</Text>
+                      <Text variant="primary" className="font-medium text-md">
+                        Total Price: ৳ {transaction.total_price}
+                      </Text>
+                      <Text variant="primary" className="font-medium text-md">
+                        Total Item: {transaction.total_item}
+                      </Text>
+                      <Text variant="muted">
+                        {format(
+                          new Date(transaction.created_at),
+                          'dd MMM yyyy, HH:mm'
+                        )}
+                      </Text>
+                    </div>
 
-            <TableBody>
-              {Object.keys(transactionReport.items).map((date) => (
-                <React.Fragment key={date}>
-                  {transactionReport.items[date].map((item, index) => (
-                    <TableRow key={item.id}>
-                      <TableCell>
-                        #{item.transaction_barcode.slice(-6)}
-                      </TableCell>
-                      <TableCell>{item.customer_name}</TableCell>
-                      <TableCell>{item.total_price}</TableCell>
-                      <TableCell>{item.created_at}</TableCell>
-                    </TableRow>
-                  ))}
-                </React.Fragment>
-              ))}
-              {/*<TableRow key={`${item.transaction_barcode}_${index}`}>*/}
-              {/*  <TableCell>*/}
-              {/*    #{item.transaction_barcode.slice(-6)}*/}
-              {/*  </TableCell>*/}
-              {/*  <TableCell>{item.customer_name}</TableCell>*/}
-              {/*  <TableCell>{item.total_price}</TableCell>*/}
-              {/*  <TableCell>{item.created_at}</TableCell>*/}
-              {/*</TableRow>*/}
-            </TableBody>
-          </Table>
+                    <div className="">
+                      <Text
+                        variant="primary"
+                        className="font-medium text-md pb-3"
+                      >
+                        {transaction.customer_name}
+                      </Text>
+
+                      <Button
+                        variant={
+                          transaction?.transaction_type === 'QUICK_SELL'
+                            ? 'success'
+                            : transaction?.payment_status ===
+                                PAYMENT_STATUS.UNPAID
+                              ? 'danger'
+                              : 'success'
+                        }
+                        size="sm"
+                        className="text-white text-lg focus:outline-none"
+                      >
+                        {transaction?.transaction_type === 'QUICK_SELL'
+                          ? 'Quick Sell'
+                          : transaction.payment_status}
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </Card>
+          ))}
           <ScrollBar orientation="horizontal" />
         </>
       )}
