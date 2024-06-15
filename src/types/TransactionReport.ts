@@ -1,4 +1,5 @@
 import { PaymentStatusDef } from '@/types/purchase';
+import { TRANSACTION_TYPE } from '@/lib/constants/common';
 
 export type TransactionDef = {
   id: number;
@@ -7,8 +8,9 @@ export type TransactionDef = {
   total_price: number;
   created_at: string;
   total_item: number;
-  transaction_type: 'QUICK_SELL';
+  transaction_type: TRANSACTION_TYPE;
   payment_status: PaymentStatusDef;
+  total_profit: number;
 };
 
 export interface ITransactionReportsResponse {
