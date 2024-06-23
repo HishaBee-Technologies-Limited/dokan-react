@@ -39,7 +39,6 @@ export const RightSection = () => {
   const setCalculatedProducts = useSellStore(
     (state) => state.setCalculatedProducts
   );
-  const calculatedProducts = useSellStore((state) => state.calculatedProducts);
 
   const form = useForm({
     // resolver: zodResolver(formSchema),
