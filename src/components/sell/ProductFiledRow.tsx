@@ -84,7 +84,15 @@ const ProductFiledRow = (props: IProps) => {
      * unregister product item from the form array to maintain the calculation
      * Set the filtered products to update the current view
      */
-    props.form.unregister(`products.${props.index}.product-${props.data?.id}`);
+
+    props.form.setValue(
+      'products',
+      props.form
+        .watch('products')
+        .filter(
+          (prod: any) => Object.keys(prod)[0] !== `product-${props.data?.id}`
+        )
+    );
     setProducts(products.filter((product) => product.id !== props.data?.id));
   };
 
