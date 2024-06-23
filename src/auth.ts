@@ -49,9 +49,10 @@ export const {
         });
 
         const user = await response?.data;
+        console.log(user);
         if (response?.status === 200 && user.user.id) return user.user;
         if (user.code === 400) {
-          return { success: false, status: user.code, data: user.message };
+          throw new Error('User not found');
         }
       },
     }),

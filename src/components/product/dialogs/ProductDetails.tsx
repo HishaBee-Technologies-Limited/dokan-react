@@ -138,7 +138,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={`৳ ${String(product?.cost_price ?? 'N/A')}`}
+                title={`৳ ${String(!!product?.cost_price ? product?.cost_price : 'N/A')}`}
                 className="font-semibold"
               />
             </article>
@@ -149,7 +149,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={`${product.discount_type === DISCOUNT_TYPE[0].value ? '%' : '৳'} ${Number(product?.discount) ?? 'N/A'}`}
+                title={`${product.discount_type === DISCOUNT_TYPE[0].value ? '%' : '৳'} ${!!Number(product?.discount) ? Number(product?.discount) : 'N/A'}`}
                 className="font-semibold"
               />
             </article>
@@ -160,7 +160,13 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(product?.sub_category?.name ?? 'N/A') ?? '--'}
+                title={
+                  String(
+                    !!product?.sub_category?.name
+                      ? product?.sub_category?.name
+                      : 'N/A'
+                  ) ?? '--'
+                }
                 className="font-semibold"
               />
             </article>
@@ -179,7 +185,9 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(product?.vat_percent ?? 'N/A')}
+                title={String(
+                  !!product?.vat_percent ? product?.vat_percent : 'N/A'
+                )}
                 className="font-semibold"
               />
             </article>
@@ -190,7 +198,7 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={`${Number(product?.warranty) ?? 'N/A'} ${WARRANTY_TYPE.find((type) => type.value === product.warranty_type)?.name}`}
+                title={`${!!Number(product?.warranty) ? Number(product?.warranty) : 'N/A'} ${!!product.warranty_type ? WARRANTY_TYPE.find((type) => type.value === product.warranty_type)?.name : ''}`}
                 className="font-semibold"
               />
             </article>
@@ -201,7 +209,11 @@ export const ProductDetails = ({ product }: { product: IProduct }) => {
                 className="text-xs font-semibold uppercase"
               />
               <Text
-                title={String(Number(product?.stock_alert) ?? 'N/A')}
+                title={String(
+                  !!Number(product?.stock_alert)
+                    ? Number(product?.stock_alert)
+                    : 'N/A'
+                )}
                 className="font-semibold"
               />
             </article>
