@@ -14,6 +14,8 @@ import {
 import { DISCOUNT_TYPE } from '@/lib/constants/product';
 import { calculateGrandTotal } from '@/lib/utils';
 import { useSellStore } from '@/stores/useSellStore';
+import { hasPermission } from '@/lib/utils';
+import { useRoleStore } from '@/stores/useRoleStore';
 
 type IProps = {
   form: UseFormReturn<any>;
@@ -23,6 +25,7 @@ type IProps = {
 const ProductSellCalculation = (props: IProps) => {
   const { form } = props;
   const productList = useSellStore((state) => state.products);
+  const userRoles = useRoleStore((state) => state.roles);
 
   /**
    * values reading from the hook form
@@ -74,19 +77,68 @@ const ProductSellCalculation = (props: IProps) => {
         </article>
 
         <div className="border-b border-dashed border-color">
-          <div className="flex justify-between items-center gap-space8 py-space4">
-            <Text title="Discount" className="text-sm" />
+          {hasPermission(userRoles, 'SELL_DISCOUNT') && (
+            <div className="flex justify-between items-center gap-space8 py-space4">
+              <Text title="Discount" className="text-sm" />
 
-            <Card className="flex justify-between border border-color w-[20rem] gap-space4 dark:!bg-primary-100">
+              <Card className="flex justify-between border border-color w-[20rem] gap-space4 dark:!bg-primary-100">
+                <FormField
+                  control={form.control}
+                  name="discount"
+                  render={({ field }) => (
+                    <FormItem className="space-y-0 max-w-[14rem]">
+                      <FormControl>
+                        <Input
+                          placeholder="Discount"
+                          className="h-[3.6rem] border-0"
+                          type="number"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="discount_type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="border-0 h-[3.6rem] px-space4 max-w-[6rem]">
+                            <SelectValue placeholder="Type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent align="end" side="top">
+                          {DISCOUNT_TYPE.map((type) => (
+                            <SelectItem key={type.value} value={type.value}>
+                              {type.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </Card>
+            </div>
+          )}
+
+          {hasPermission(userRoles, 'SELL_DELIVERY') && (
+            <div className="flex justify-between items-center gap-space8 py-space4">
+              <Text title="Delivery Charge" className="text-sm" />
               <FormField
                 control={form.control}
-                name="discount"
+                name="delivery_charge"
                 render={({ field }) => (
-                  <FormItem className="space-y-0 max-w-[14rem]">
+                  <FormItem className="space-y-0 w-[20rem]">
                     <FormControl>
                       <Input
-                        placeholder="Discount"
-                        className="h-[3.6rem] border-0"
+                        placeholder="Delivery Charge"
+                        className="h-[3.6rem]"
                         type="number"
                         {...field}
                       />
@@ -94,53 +146,8 @@ const ProductSellCalculation = (props: IProps) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="discount_type"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="border-0 h-[3.6rem] px-space4 max-w-[6rem]">
-                          <SelectValue placeholder="Type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent align="end" side="top">
-                        {DISCOUNT_TYPE.map((type) => (
-                          <SelectItem key={type.value} value={type.value}>
-                            {type.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-            </Card>
-          </div>
-
-          <div className="flex justify-between items-center gap-space8 py-space4">
-            <Text title="Delivery Charge" className="text-sm" />
-            <FormField
-              control={form.control}
-              name="delivery_charge"
-              render={({ field }) => (
-                <FormItem className="space-y-0 w-[20rem]">
-                  <FormControl>
-                    <Input
-                      placeholder="Delivery Charge"
-                      className="h-[3.6rem]"
-                      type="number"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+            </div>
+          )}
         </div>
 
         <article className="flex justify-between items-center gap-space8 py-space4 border-t border-dashed border-color">

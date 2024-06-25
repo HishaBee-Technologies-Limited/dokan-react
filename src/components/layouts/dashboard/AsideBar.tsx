@@ -12,9 +12,11 @@ import { IAsideBarMenuItem } from '@/types/SidebarLinks';
 import { CancelIcon, ExpandMoreIcon } from '@/components/common/icons';
 import { getCookie } from 'cookies-next';
 import { SUBSCRIPTION_PACKAGES } from '@/lib/constants/common';
-import { LockClosedIcon } from '@radix-ui/react-icons';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { logout } from '@/actions/logout';
+import { useRoleStore } from '@/stores/useRoleStore';
+import { Lock } from 'lucide-react';
+import { hasPermission } from '@/lib/utils';
 
 const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
   const pathname = usePathname();
@@ -22,8 +24,11 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
   const [active, setActive] = useState<number | null>(null);
   const shop = getCookie('shop');
   const [link, setLink] = useState<IAsideBarMenuItem[]>([]);
+  const userRoles = useRoleStore((state) => state.roles);
+
+  console.log(userRoles);
+
   useEffect(() => {
-    console.log(shop);
     if (shop) {
       if (
         JSON.parse(shop as string).subscription ===
@@ -34,9 +39,9 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
         JSON.parse(shop as string).subscription ===
         SUBSCRIPTION_PACKAGES.standard
       ) {
-        setLink(SidebarLinksStandard);
+        setLink(SidebarLinks);
       } else {
-        setLink(SidebarLinksFree);
+        setLink(SidebarLinks);
       }
     }
     if (!shop) {
@@ -44,10 +49,14 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
       logout();
     }
   }, [shop]);
-  // console.log(JSON.parse(shop as string).subscription);
   return (
     <aside
-      className={`bg-white dark:bg-primary-90 h-screen fixed hd:relative ${menuOpen ? 'w-[30rem] xl:w-[34.4rem] left-0' : '-left-[30rem] xl:left-0 w-[30rem] xl:w-[8rem] hd:w-[34.4rem]'} duration-500 z-50`}
+      className={`bg-white dark:bg-primary-90 h-screen fixed hd:relative 
+        ${
+          menuOpen
+            ? 'w-[30rem] xl:w-[34.4rem] left-0'
+            : '-left-[30rem] xl:left-0 w-[30rem] xl:w-[8rem] hd:w-[34.4rem]'
+        } duration-500 z-50`}
     >
       <div
         className={`h-[7.2rem] border-b border-primary-10 dark:border-primary-80 px-space16 flex items-center justify-between sticky top-0`}
@@ -91,9 +100,9 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                 subMenu: boolean
               ) => (
                 <>
-                  {![9, 10, 11, 12, 13, 0].includes(i) && (
+                  {![11, 12, 13, 0].includes(i) && (
                     <Link
-                      href={`${menu.link}`}
+                      href={`${hasPermission(userRoles, menu.permissionId!) ? menu.link : '#'}`}
                       onClick={() => {
                         setMenuOpen(true);
 
@@ -133,6 +142,23 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                           />
                         </div>
                       ) : null}
+
+                      {[0, 1, 2, 3, 4, 5, 6, 7].includes(i) &&
+                        hasPermission(userRoles, menu.permissionId!) && (
+                          <div className="absolute right-space12">
+                            <Lock color="#0891b2" size={16} strokeWidth={2.5} />
+                          </div>
+                        )}
+
+                      {['ADVANCED', 'STANDARD', 'TRAIL'].includes(
+                        JSON.parse(shop as string).subscription
+                      ) &&
+                        [11, 12, 13, 8, 10, 9].includes(i) &&
+                        hasPermission(userRoles, menu.permissionId!) && (
+                          <div className="absolute right-space12">
+                            <Lock color="#0891b2" size={16} strokeWidth={2.5} />
+                          </div>
+                        )}
                       {/* {menu.children && (
                   <div
                     className={`absolute right-space12 top-1/2 transform -translate-y-1/2 ease-in ${active === menu.id ? 'rotate-180 duration-300' : 'duration-300'} ${menuOpen ? 'opacity-100 duration-1000' : 'xl:opacity-0 w-0 hd:opacity-100 hd:w-auto'}  `}

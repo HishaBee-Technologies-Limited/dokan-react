@@ -19,14 +19,22 @@ import { logout } from '@/actions/logout';
 import { getCookie, getCookies } from 'cookies-next';
 import { checkSubscription } from '@/actions/subscription/checkShopSubscription';
 import { useShop } from '@/stores/useShopStore';
+import { getUserRoles } from '@/actions/access/getUserRoles';
+import { useRoleStore } from '@/stores/useRoleStore';
 
 const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
   const shopId = getCookie('shopId');
   const setShop = useShop((state) => state.saveShop);
+  const setRoles = useRoleStore((state) => state.setRoles);
+
   useEffect(() => {
     const getShopInfo = async () => {
       if (shopId) {
         const response = await checkSubscription({ shopId: shopId! });
+        console.log(response);
+        const responseOfRoles = await getUserRoles(response?.data.shop.user.id);
+        console.log(responseOfRoles?.data);
+        setRoles(responseOfRoles?.data.role.shop_permissions);
         setShop(response?.data?.shop);
       }
     };
@@ -85,7 +93,7 @@ const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/settings/lang" className="w-full cursor-pointer">
+                <Link href="/settings/shop" className="w-full cursor-pointer">
                   Settings
                 </Link>
               </DropdownMenuItem>

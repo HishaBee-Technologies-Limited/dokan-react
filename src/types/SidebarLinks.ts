@@ -13,4 +13,5 @@ export interface IAsideBarMenuItem {
   image: string;
   link: string;
   children?: IAsideItem[];
+  permissionId?: string;
 }

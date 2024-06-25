@@ -16,7 +16,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -27,6 +26,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import Pagination from '@/components/common/CustomPagination';
 import NoDataCard from '@/components/common/no-data-card';
+import { hasPermission } from '@/lib/utils';
+import { useRoleStore } from '@/stores/useRoleStore';
 
 const HistoryTable = ({
   transactions,
@@ -40,6 +41,8 @@ const HistoryTable = ({
   const router = useRouter();
   const { setQueryString } = useCreateQueryString();
   const setCurrentPurchase = useSellStore((state) => state.setCurrentSell);
+  const userRoles = useRoleStore((state) => state.roles);
+
   const handleRowClick = (row: IPurchaseHistoryResponse) => {
     handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_DETAILS });
     setCurrentPurchase(row);
@@ -90,7 +93,10 @@ const HistoryTable = ({
                 <TableHead>Amount</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Payment Status</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                {(hasPermission(userRoles, 'SELL_BOOK_EDIT') ||
+                  hasPermission(userRoles, 'SELL_BOOK_DELETE')) && (
+                  <TableHead className="text-right">Action</TableHead>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -115,60 +121,67 @@ const HistoryTable = ({
                       className={`max-w-max px-space16 py-space8 rounded-md uppercase font-medium dark:bg-primary-80 ${transactionTypeTextBG(transaction.payment_status)}`}
                     />
                   </TableCell>
-                  <TableCell className={`text-right`}>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          size={'icon'}
-                          variant={'transparent'}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
-                          <MoreVertIcon />
-                        </Button>
-                      </DropdownMenuTrigger>
-
-                      <DropdownMenuContent
-                        align="end"
-                        side="bottom"
-                        className="w-56 "
-                      >
-                        {/* <DropdownMenuItem asChild>
-                      <Button
-                        size={'sm'}
-                        variant={'transparent'}
-                        className="w-full justify-start"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditClick(transaction);
-                        }}
-                      >
-                        <EditIcon />
-                        Edit
-                      </Button>
-                    </DropdownMenuItem> */}
-                        <DropdownMenuItem asChild>
+                  {(hasPermission(userRoles, 'SELL_BOOK_EDIT') ||
+                    hasPermission(userRoles, 'SELL_BOOK_DELETE')) && (
+                    <TableCell className={`text-right`}>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
                           <Button
-                            size={'sm'}
+                            size={'icon'}
                             variant={'transparent'}
-                            className="w-full justify-start text-error-100"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleDialogOpen({
-                                open: true,
-                                header: SellEnum.TRANSACTION_DELETE,
-                              });
-                              setCurrentPurchase(transaction);
                             }}
                           >
-                            <DeleteIcon />
-                            Delete
+                            <MoreVertIcon />
                           </Button>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent
+                          align="end"
+                          side="bottom"
+                          className="w-56 "
+                        >
+                          {hasPermission(userRoles, 'SELL_BOOK_EDIT') && (
+                            <DropdownMenuItem asChild>
+                              <Button
+                                size={'sm'}
+                                variant={'transparent'}
+                                className="w-full justify-start"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditClick(transaction);
+                                }}
+                              >
+                                <EditIcon />
+                                Edit
+                              </Button>
+                            </DropdownMenuItem>
+                          )}
+                          {hasPermission(userRoles, 'SELL_BOOK_DELETE') && (
+                            <DropdownMenuItem asChild>
+                              <Button
+                                size={'sm'}
+                                variant={'transparent'}
+                                className="w-full justify-start text-error-100"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDialogOpen({
+                                    open: true,
+                                    header: SellEnum.TRANSACTION_DELETE,
+                                  });
+                                  setCurrentPurchase(transaction);
+                                }}
+                              >
+                                <DeleteIcon />
+                                Delete
+                              </Button>
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

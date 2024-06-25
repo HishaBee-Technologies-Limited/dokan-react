@@ -1,4 +1,5 @@
 import { DiscountType } from '@/schemas/products';
+import { RoleState } from '@/stores/useRoleStore';
 import { type ClassValue, clsx } from 'clsx';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
@@ -100,4 +101,15 @@ export function formatDate(formatString: string, date?: Date): string {
  */
 export function generateUlid() {
   return ulid();
+}
+
+/**
+ * Check user permission.
+ *
+ * @param  roles - user permission list
+ * @param  featureName - current feature name
+ * @returns boolean value if has access or not
+ */
+export function hasPermission(roles: RoleState['roles'], featureName: string) {
+  return roles.some((role) => role.name === featureName);
 }
