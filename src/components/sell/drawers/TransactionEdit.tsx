@@ -133,8 +133,8 @@ const TransactionEdit = ({ customers }: { customers?: IUserResponse[] }) => {
 
   useEffect(() => {
     form.setValue('amount', String(currentPurchase?.total_price));
-    form.setValue('name', currentPurchase?.supplier_name ?? '');
-    form.setValue('number', currentPurchase?.supplier_mobile ?? '');
+    form.setValue('name', currentPurchase?.customer_name ?? '');
+    form.setValue('number', currentPurchase?.customer_mobile ?? '');
     form.setValue('date', new Date(currentPurchase?.created_at ?? ''));
     form.setValue('details', currentPurchase?.note ?? '');
   }, [currentPurchase]);

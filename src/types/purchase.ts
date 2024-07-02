@@ -1,5 +1,5 @@
 import { DiscountType } from '@/schemas/products';
-import { IProductPayload } from './product';
+import { IProduct, IProductPayload } from './product';
 
 export interface IProductPurchasePayload {
   batch?: string;
@@ -79,7 +79,7 @@ export interface IPurchaseHistoryResponse {
 
 export interface IProducts extends IProductItemPurchasePayload {
   product: IProductPayload;
-  shop_product_by_uniqueid?: IProductPayload;
+  shop_product_by_uniqueid?: IProduct;
 }
 export interface IPurchaseProducts extends IPurchaseHistoryResponse {
   items?: IProducts[];

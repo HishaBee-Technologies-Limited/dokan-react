@@ -16,42 +16,20 @@ import { calculateTotal } from '@/lib/utils';
 import { PAYMENT_STATUS } from '@/lib/constants/common';
 import { getTransactionItems } from '@/actions/sell/getTransactionItems';
 import { IProducts, IPurchaseProducts } from '@/types/purchase';
-
-const productList = [
-  {
-    id: 1,
-    img: '',
-    sell: '5',
-    total: '10',
-    unit_price: '10',
-    name: 'কোকাকোলা ৬০০ মিলি',
-  },
-  {
-    id: 2,
-    img: '',
-    sell: '5',
-    total: '10',
-    unit_price: '10',
-    name: 'কোকাকোলা ৬০০ মিলি',
-  },
-  {
-    id: 3,
-    img: '',
-    sell: '5',
-    total: '10',
-    unit_price: '10',
-    name: 'কোকাকোলা ৬০০ মিলি',
-  },
-];
+import { IProduct } from '@/types/product';
+import { useRouter } from 'next/navigation';
+import { Package } from 'lucide-react';
 
 const TransactionDetails = () => {
   const [accordion, setAccordion] = useState<boolean>(false);
   const transactionDetails = useSellStore((state) => state.sellDetails);
   const [purchaseProducts, setPurchaseProducts] = useState<IProducts[]>([]);
-
+  const setProducts = useSellStore((state) => state.setProducts);
+  const setTransaction = useSellStore((state) => state.setTransaction);
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
   const currentPurchase = useSellStore((state) => state.currentSell);
+  const router = useRouter();
 
   const total = useMemo(() => {
     return (
@@ -80,6 +58,7 @@ const TransactionDetails = () => {
         id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
       });
       if (res?.success) {
+        console.log(res?.data);
         setPurchaseProducts(res?.data);
       }
     };
@@ -91,6 +70,9 @@ const TransactionDetails = () => {
       return acc + Number(curr?.quantity)!;
     }, 0);
   }, [purchaseProducts]);
+
+  console.log(currentPurchase);
+
   return (
     <div className="space-y-space12">
       <section className="bg-secondary rounded-lg p-space12 space-y-space16 ">
@@ -195,17 +177,21 @@ const TransactionDetails = () => {
         {currentPurchase?.transaction_type! !== 'QUICK_SELL' && (
           <>
             <Text title="Sold Products" className="text-lg font-medium" />
-
             <div className={`grid 'grid-rows-[1fr]'`}>
               {purchaseProducts?.map((product) => (
                 <div key={product.unique_id} className="rounded p-space8">
                   <div className="flex items-center gap-space8">
-                    <Image
-                      src={product.shop_product_by_uniqueid?.image_url}
-                      height={32}
-                      width={32}
-                      alt=""
-                    />
+                    {!!product.shop_product_by_uniqueid?.image_url &&
+                    product.shop_product_by_uniqueid?.image_url !== 'null' ? (
+                      <Image
+                        src={product.shop_product_by_uniqueid?.image_url}
+                        height={32}
+                        width={32}
+                        alt=""
+                      />
+                    ) : (
+                      <Package />
+                    )}
                     <Text title={product.shop_product_by_uniqueid?.name} />
                   </div>
 
@@ -228,6 +214,26 @@ const TransactionDetails = () => {
                 </div>
               ))}
             </div>
+            {!!purchaseProducts.length && (
+              <div
+                className="cursor-pointer bg-black text-white rounded-sm w-1/4 text-center right-14 absolute mt-4"
+                onClick={() => {
+                  setProducts(
+                    purchaseProducts.map(
+                      (purchase) => purchase.shop_product_by_uniqueid!
+                    )
+                  );
+                  setTransaction(purchaseProducts);
+                  router.push(`/sell`);
+                  handleDrawerOpen({
+                    open: false,
+                    header: SellEnum.TRANSACTION_DETAILS,
+                  });
+                }}
+              >
+                Edit Products
+              </div>
+            )}
           </>
         )}
       </section>

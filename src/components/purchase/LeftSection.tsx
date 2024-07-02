@@ -8,7 +8,8 @@ import ProductListQueries from '@/components/sell/ProductListQueries';
 import { useInView } from 'react-intersection-observer';
 import { usePurchase } from '@/stores/usePurchaseStore';
 import { useProductPagination } from '@/hooks/useProductPagination';
-
+import { Package } from 'lucide-react';
+import { Image } from '@/components/common/Image';
 //TODO: Need refactoring in this
 
 let timer: any;
@@ -54,7 +55,16 @@ export const LeftSection = ({ productData }: { productData: any }) => {
             <div key={product.id}>
               <div className="flex items-center gap-space12 justify-between py-space8 px-space8">
                 <div className="flex items-center gap-space8">
-                  <img height={32} width={32} src={product?.image_url} alt="" />
+                  {!!product?.image_url && product?.image_url !== 'null' ? (
+                    <Image
+                      src={product?.image_url}
+                      height={32}
+                      width={32}
+                      alt=""
+                    />
+                  ) : (
+                    <Package />
+                  )}
                   <Text title={product.name} className="text-sm" />
                 </div>
                 <Button

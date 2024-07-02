@@ -1,6 +1,7 @@
 import { IProductPurchase } from '@/components/sell/ProductFiledRow';
 import { IProduct } from '@/types/product';
-import { IPurchaseHistoryResponse } from '@/types/purchase';
+import { IProducts, IPurchaseHistoryResponse } from '@/types/purchase';
+import { IProductSellPayload } from '@/types/sell';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
@@ -27,7 +28,8 @@ type SellState = {
     amount?: number;
     user?: { name: string; mobile: string };
   };
-  currentSell?: IPurchaseHistoryResponse;
+  currentSell?: IProductSellPayload;
+  transaction: IProducts[];
 };
 
 type SellActions = {
@@ -42,7 +44,8 @@ type SellActions = {
   setSellDetails: (params: any) => void;
   setProducts: (products: IProductPurchase[] | IProduct[]) => void;
   setCalculatedProducts: (products: SellState['calculatedProducts']) => void;
-  setCurrentSell: (sell: IPurchaseHistoryResponse) => void;
+  setCurrentSell: (sell: IProductSellPayload) => void;
+  setTransaction: (transaction: IProducts[]) => void;
 };
 
 export const useSellStore = create<SellState & SellActions>()(
@@ -61,6 +64,7 @@ export const useSellStore = create<SellState & SellActions>()(
       totalProfit: 0,
       user: { name: '', mobile: '' },
     },
+    transaction: [],
 
     // Update state-------------------------------------
     setSellDrawerState: (params) => set({ sellDrawerState: params }),
@@ -69,5 +73,6 @@ export const useSellStore = create<SellState & SellActions>()(
     setProducts: (products) => set({ products: products }),
     setCalculatedProducts: (products) => set({ calculatedProducts: products }),
     setCurrentSell: (sell) => set({ currentSell: sell }),
+    setTransaction: (transaction) => set({ transaction }),
   }))
 );
