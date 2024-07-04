@@ -28,6 +28,8 @@ type IProps = {
 const ProductFiledRow = (props: IProps) => {
   const setProducts = usePurchase((state) => state.setProducts);
   const products = usePurchase((state) => state.products);
+  const purchase = usePurchase((state) => state.purchase);
+  const currentPurchase = usePurchase((state) => state.currentPurchase);
 
   /**
    * This watch controls the onchange calculation on the viewport
@@ -95,13 +97,42 @@ const ProductFiledRow = (props: IProps) => {
      */
     props.form.setValue(
       `products.${props.index}.product-${props.data?.id}.quantity`,
-      DEFAULT_PRODUCT_QUANTITY
+      Number(
+        purchase?.find(
+          (transaction) => transaction.product?.id === props.data?.id
+        )?.quantity
+      )
+        ? Number(
+            purchase?.find(
+              (transaction) => transaction.product?.id === props.data?.id
+            )?.quantity
+          )
+        : DEFAULT_PRODUCT_QUANTITY
     );
     props.form.setValue(
       `products.${props.index}.product-${props.data?.id}.unit_cost`,
       String(props.data?.cost_price)
     );
-  }, [props.data, props.form]);
+
+    setTimeout(() => {
+      props.form.setFocus(
+        `products.${props.index}.product-${props.data?.id}.total`
+      );
+    }, 50);
+  }, [props.data, props.form, purchase]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      props.form.setValue('delivery_charge', currentPurchase?.extra_charge);
+      props.form.setValue('discount', currentPurchase?.discount, {
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+      props.form.setValue('discount_type', currentPurchase?.discount_type);
+      props.form.setFocus(`discount`);
+      props.form.setFocus(`discount_type`);
+    }, 50);
+  }, [props.form, currentPurchase]);
 
   return (
     <div className="border-b border-dashed border-color pt-space8 pb-space12 space-y-space6 ">

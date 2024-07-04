@@ -3,12 +3,23 @@ import { Image } from '@/components/common/Image';
 import { IProducts } from '@/types/purchase';
 import { Text } from '@/components/common/text';
 import { Pencil1Icon } from '@radix-ui/react-icons';
+import { Package } from 'lucide-react';
 function ProductListCard({ product }: { product: IProducts }) {
   console.log(product);
   return (
     <div key={product.unique_id} className="rounded p-space8">
       <div className="flex items-center gap-space8">
-        <Image src={product.product?.image_url} height={32} width={32} alt="" />
+        {!!product.product?.image_url &&
+        product.product?.image_url !== 'null' ? (
+          <Image
+            src={product.product?.image_url}
+            height={32}
+            width={32}
+            alt=""
+          />
+        ) : (
+          <Package />
+        )}
 
         <Text title={product.name} />
       </div>

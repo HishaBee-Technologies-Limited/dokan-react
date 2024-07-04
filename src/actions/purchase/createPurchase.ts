@@ -61,11 +61,11 @@ export const createPurchase = async ({
       sms: sms,
       message: sms,
     };
-    console.log('purchase', payload);
+    // console.log('purchase', payload);
     const res = await authApi.post(`/purchase`, payload);
     const data = await res.json();
     revalidatePath('/purchase-list');
-
+    // console.log('purchase -----', data);
     if (res.ok) {
       return {
         success: true,

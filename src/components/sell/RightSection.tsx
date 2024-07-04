@@ -1,12 +1,10 @@
 'use client';
-import { z } from 'zod';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Card from '@/components/common/Card';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowForwardIcon } from '@/components/common/icons';
 import ProductFiledRow, {
   IProductPurchase,
@@ -19,12 +17,7 @@ import { IProduct } from '@/types/product';
 import { toast } from 'sonner';
 import { createSell } from '@/actions/sell/createSell';
 import { formatDate, generateUlid } from '@/lib/utils';
-import {
-  DATE_FORMATS,
-  PAYMENT_METHODS,
-  PAYMENT_STATUS,
-  TRANSACTION_TYPE,
-} from '@/lib/constants/common';
+import { DATE_FORMATS, TRANSACTION_TYPE } from '@/lib/constants/common';
 import { jwtDecode } from 'jwt-decode';
 import {
   DEFAULT_DELETE_VERSION,
@@ -37,21 +30,7 @@ import { createDueItem } from '@/actions/due/createDueItem';
 import { createDue } from '@/actions/due/createDue';
 import { getDueByTransactionId } from '@/actions/due/getDueByTransactionId';
 
-const formSchema = z.object({
-  quantity: z.string().min(1, {
-    message: 'This field is required.',
-  }),
-  unit_price: z.string().min(1, {
-    message: 'This field is required.',
-  }),
-  total: z.string(),
-  delivery_charge: z.string(),
-  discount: z.string(),
-  discount_type: z.string(),
-});
-
 export const RightSection = () => {
-  const handleSellDialog = useSellStore((state) => state.setSellDialogState);
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
   const [sellType, setSellType] = useState('');
   const products = useSellStore((state) => state.products);
@@ -67,15 +46,12 @@ export const RightSection = () => {
   );
 
   const form = useForm({
-    // resolver: zodResolver(formSchema),
     defaultValues: {
       quantity: [],
-      // delivery_charge: 0,
-      // discount: 0,
       discount_type: 'AMOUNT',
     },
   });
-  console.log(transaction);
+
   async function onSubmit(data: any) {
     const updatedProducts = products.map((product) => {
       if (
@@ -98,9 +74,9 @@ export const RightSection = () => {
     if (!updatedProducts.length) {
       toast.warning('No Product Selected or Total is 0');
     }
+
     if (!!updatedProducts.length) {
       if (!!transaction.length) {
-        // console.log(data, transaction, currentSell, updatedProducts);
         setLoading(true);
         const totalItems = updatedProducts.reduce((prev, current: any) => {
           return prev + Number(current?.calculatedAmount?.quantity!);
@@ -112,7 +88,7 @@ export const RightSection = () => {
               (current.selling_price - current.cost_price)
           );
         }, 0);
-        console.log(totalItems);
+
         const responseCreateSell = await createSell({
           created_at: currentSell?.created_at!,
           discount: Number(data.discount),
@@ -120,8 +96,8 @@ export const RightSection = () => {
           employee_mobile: currentSell?.employee_mobile,
           employee_name: currentSell?.employee_name,
           note: currentSell?.note,
-          payment_method: PAYMENT_METHODS.Cash,
-          payment_status: PAYMENT_STATUS.PAID,
+          payment_method: currentSell?.payment_method!,
+          payment_status: currentSell?.payment_status!,
           purchase_barcode: '',
           received_amount: Number(data.totalPrice),
           customer_mobile: currentSell?.customer_mobile,
@@ -137,17 +113,14 @@ export const RightSection = () => {
           total_discount: Number(data.discount),
           transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
           total_profit: String(totalProfit),
-          // message: sms,
         });
-        console.log(responseCreateSell);
 
         if (!responseCreateSell?.success)
           return toast.error('Something went wrong');
 
         if (responseCreateSell?.success) {
-          transaction.forEach(async (product: any) => {
-            console.log(product.shop_product_by_uniqueid.unique_id);
-            sellItemCreate({
+          const apiCalls = async (product: any) => {
+            const res = await sellItemCreate({
               created_at: formatDate(DATE_FORMATS.default),
               name: product.shop_product_by_uniqueid.name,
               quantity:
@@ -171,95 +144,124 @@ export const RightSection = () => {
               updated_at: formatDate(DATE_FORMATS.default),
               version: DEFAULT_DELETE_VERSION,
             });
-          });
-          updatedProducts.forEach(async (product: any) => {
-            sellItemCreate({
-              created_at: formatDate(DATE_FORMATS.default),
-              name: product.name,
-              quantity: product.calculatedAmount?.quantity,
-              unit_price: product.calculatedAmount?.unit_price,
-              unit_cost: product.cost_price,
-              transaction_unique_id:
-                responseCreateSell.data.transaction.unique_id,
-              profit:
-                product.calculatedAmount?.quantity! *
-                (product.selling_price - product.cost_price),
-              status: 'PAID',
+            return res;
+          };
 
-              shop_product_id: product.id,
-              shop_product_unique_id: product.unique_id,
-              shop_product_variance_id: 1,
-              price: product.calculatedAmount?.total,
-              unique_id: generateUlid(),
-              updated_at: formatDate(DATE_FORMATS.default),
-              version: DEFAULT_STARTING_VERSION,
-            });
-          });
-          if (currentSell?.payment_status === 'UNPAID') {
-            const due = await getDueByTransactionId(
-              currentSell?.unique_id!,
-              String(currentSell?.id!)
-            );
+          const promises = transaction.map(apiCalls);
+          const res = await Promise.all(promises);
+          const isTransactionsDeleted = !res.some(
+            (response) => !response?.success
+          );
 
-            console.log(due);
-            const shop_id = getCookie('shopId') as string;
+          if (isTransactionsDeleted) {
+            const apiCalls = (product: any) => {
+              const res = sellItemCreate({
+                created_at: formatDate(DATE_FORMATS.default),
+                name: product.name,
+                quantity: product.calculatedAmount?.quantity,
+                unit_price: product.calculatedAmount?.unit_price,
+                unit_cost: product.cost_price,
+                transaction_unique_id:
+                  responseCreateSell.data.transaction.unique_id,
+                profit:
+                  product.calculatedAmount?.quantity! *
+                  (product.selling_price - product.cost_price),
+                status: 'PAID',
 
-            // Current Total - (Prev Total - Prev due)
-            const amount =
-              Number(data.totalPrice) -
-                (due?.data.due_item.amount - due?.data.due_item.due_left) !==
-              due?.data.due_item.due_left
-                ? Number(data.totalPrice) -
-                  due?.data.due_item.amount +
-                  due?.data.due_item.due.due_amount
-                : due?.data.due_item.due.due_amount;
-            console.log(amount);
-
-            const payload = {
-              shop_id: Number(shop_id),
-              amount: amount,
-              unique_id: due?.data.due_item.due.unique_id,
-              due_left: amount,
-              version: due?.data.due_item.due.version + 1,
-              updated_at: formatDate(DATE_FORMATS.default),
-              created_at: due?.data.due_item.due.created_at,
-              message: data.details,
-              contact_mobile: due?.data.due_item.due.contact_mobile,
-              contact_type: 'CUSTOMER',
-              contact_name: due?.data.due_item.due.contact_name,
-              transaction_unique_id: due?.data.due_item.transaction_unique_id,
+                shop_product_id: product.id,
+                shop_product_unique_id: product.unique_id,
+                shop_product_variance_id: 1,
+                price: product.calculatedAmount?.total,
+                unique_id: generateUlid(),
+                updated_at: formatDate(DATE_FORMATS.default),
+                version: DEFAULT_STARTING_VERSION,
+              });
+              return res;
             };
 
-            const dueRes = await createDue(payload);
-            if (!dueRes?.success) return toast.error('Something went wrong');
-            if (dueRes?.success) {
-              const payload = {
-                amount: Number(data.totalPrice),
-                unique_id: due?.data.due_item.unique_id,
-                due_left: due?.data.due_item.due_left,
-                version: due?.data.due_item.version + 1,
-                updated_at: formatDate(DATE_FORMATS.default),
-                created_at: due?.data.due_item.created_at,
-                message: due?.data.due_item.note,
-                contact_mobile: due?.data.due_item.due.contact_mobile,
-                contact_type: 'CUSTOMER',
-                contact_name: due?.data.due_item.due.contact_name,
-                // sms: data.sms ?? false,
-                transaction_unique_id: due?.data.due_item.transaction_unique_id,
-                due_unique_id: due?.data.due_item.due.unique_id,
-              };
+            const promises = updatedProducts.map(apiCalls);
+            const res = await Promise.all(promises);
+            const isTransactionsCreated = !res.some(
+              (response) => !response?.success
+            );
 
-              await createDueItem(payload);
+            if (!isTransactionsCreated)
+              return toast.error('Something went wrong');
+            if (isTransactionsCreated) {
+              if (currentSell?.payment_method === 3) {
+                const due = await getDueByTransactionId(
+                  currentSell?.unique_id!,
+                  String(currentSell?.id!)
+                );
 
-              // const resAmount = await createDueItem(payloadForPaymentAmount);
+                const shop_id = getCookie('shopId') as string;
+
+                // Current Total - (Prev Total - Prev due)
+                const amount =
+                  Number(data.totalPrice) -
+                    (due?.data.due_item.amount -
+                      due?.data.due_item.due_left) !==
+                  due?.data.due_item.due_left
+                    ? Number(data.totalPrice) -
+                      due?.data.due_item.amount +
+                      due?.data.due_item.due.due_amount
+                    : due?.data.due_item.due.due_amount;
+
+                const payload = {
+                  shop_id: Number(shop_id),
+                  amount: amount,
+                  unique_id: due?.data.due_item.due.unique_id,
+                  due_left: amount,
+                  version: due?.data.due_item.due.version + 1,
+                  updated_at: formatDate(DATE_FORMATS.default),
+                  created_at: due?.data.due_item.due.created_at,
+                  message: data.details,
+                  contact_mobile: due?.data.due_item.due.contact_mobile,
+                  contact_type: 'CUSTOMER',
+                  contact_name: due?.data.due_item.due.contact_name,
+                  transaction_unique_id:
+                    due?.data.due_item.transaction_unique_id,
+                };
+
+                const dueRes = await createDue(payload);
+
+                if (!dueRes?.success)
+                  return toast.error('Something went wrong');
+                if (dueRes?.success) {
+                  const payload = {
+                    amount: Number(data.totalPrice),
+                    unique_id: due?.data.due_item.unique_id,
+                    due_left: due?.data.due_item.due_left,
+                    version: due?.data.due_item.version + 1,
+                    updated_at: formatDate(DATE_FORMATS.default),
+                    created_at: due?.data.due_item.created_at,
+                    message: due?.data.due_item.note,
+                    contact_mobile: due?.data.due_item.due.contact_mobile,
+                    contact_type: 'CUSTOMER',
+                    contact_name: due?.data.due_item.due.contact_name,
+                    // sms: data.sms ?? false,
+                    transaction_unique_id:
+                      due?.data.due_item.transaction_unique_id,
+                    due_unique_id: due?.data.due_item.due.unique_id,
+                  };
+
+                  await createDueItem(payload);
+                }
+
+                setTransaction([]);
+                setProducts([]);
+                setLoading(false);
+
+                toast.message('Transaction Updated Successfully');
+              } else {
+                setTransaction([]);
+                setProducts([]);
+                setLoading(false);
+
+                toast.message('Transaction Updated Successfully');
+              }
             }
           }
-          setTransaction([]);
-          setProducts([]);
-
-          setLoading(false);
-
-          toast.message('Transaction Updated Successfully');
         }
       } else {
         sellType == 'cash'

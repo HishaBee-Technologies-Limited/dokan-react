@@ -165,7 +165,7 @@ const AddMoneyGiveReceived = (
     const dueRes = await createDue(payload);
     const payloadForDueItem = {
       amount:
-        data.cash_type === 'given' ? -Number(data.amount) : Number(data.amount),
+        data.cash_type === 'given' ? Number(data.amount) : -Number(data.amount),
       unique_id: generateUlid(),
       due_left: Number(data.amount),
       version: DEFAULT_STARTING_VERSION,

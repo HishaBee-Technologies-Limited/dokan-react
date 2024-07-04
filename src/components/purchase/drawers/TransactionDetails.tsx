@@ -12,14 +12,18 @@ import { calculateTotal } from '@/lib/utils';
 
 import { PAYMENT_STATUS } from '@/lib/constants/purchase';
 import { getPurchaseItems } from '@/actions/purchase/getPurchaseItems';
-import { IPurchaseProducts } from '@/types/purchase';
+import { IProducts, IPurchaseProducts } from '@/types/purchase';
 import ProductListCard from '../ProductListCard';
+import { useRouter } from 'next/navigation';
 
 const TransactionDetails = () => {
-  const [purchaseProducts, setPurchaseProducts] = useState<IPurchaseProducts>();
+  const [purchaseProducts, setPurchaseProducts] = useState<IProducts[]>();
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
   const currentPurchase = usePurchase((state) => state.currentPurchase);
+  const setProducts = usePurchase((state) => state.setProducts);
+  const setPurchase = usePurchase((state) => state.setPurchase);
+  const router = useRouter();
 
   const total = useMemo(() => {
     return (
@@ -42,13 +46,13 @@ const TransactionDetails = () => {
       });
       console.log(res);
       if (res?.success) {
-        setPurchaseProducts(res?.data);
+        setPurchaseProducts(res?.data.items);
       }
     };
     getPurchaseProducts();
   }, [currentPurchase]);
   const totalItems = useMemo(() => {
-    return purchaseProducts?.items?.reduce((acc, curr) => {
+    return purchaseProducts?.reduce((acc, curr) => {
       return acc + Number(curr?.quantity)!;
     }, 0);
   }, [purchaseProducts]);
@@ -155,11 +159,29 @@ const TransactionDetails = () => {
         </div> */}
         <Text title="Buy Products" className="text-lg font-medium" />
         <div className={`grid 'grid-rows-[1fr]'`}>
-          {purchaseProducts?.items &&
-            purchaseProducts?.items.map((product) => (
+          {purchaseProducts &&
+            purchaseProducts.map((product) => (
               <ProductListCard key={product.unique_id} product={product} />
             ))}
         </div>
+        {purchaseProducts && !!purchaseProducts.length && (
+          <div
+            className="cursor-pointer bg-black text-white rounded-sm w-1/4 text-center right-14 absolute mt-4"
+            onClick={() => {
+              setProducts(
+                purchaseProducts.map((purchase) => purchase.product!)
+              );
+              setPurchase(purchaseProducts!);
+              router.push(`/purchase`);
+              handleDrawerOpen({
+                open: false,
+                header: PurchaseEnum.TRANSACTION_DETAILS,
+              });
+            }}
+          >
+            Edit Products
+          </div>
+        )}
       </section>
       {currentPurchase?.note && (
         <article className="space-y-space8">

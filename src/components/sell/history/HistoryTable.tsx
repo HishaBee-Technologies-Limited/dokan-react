@@ -66,6 +66,7 @@ const HistoryTable = ({
       return 'error';
     }
   };
+
   const transactionTypeTextBG = (type: string): string => {
     if (type === 'quick sell') {
       return 'bg-warning-20';

@@ -267,7 +267,7 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
       };
 
       const res = await createDueItem(payload);
-      if (Number(data.amount) !== calculatedProducts.totalPrice) {
+      if (Number(data.amount) !== Number(calculatedProducts.totalPrice)) {
         const res = await createDueItem(payloadForPaymentAmount);
       }
       // const resAmount = await createDueItem(payloadForPaymentAmount);

@@ -1,6 +1,6 @@
 import { IProductPurchase } from '@/components/sell/ProductFiledRow';
 import { IProduct } from '@/types/product';
-import { IPurchaseHistoryResponse } from '@/types/purchase';
+import { IProducts, IPurchaseHistoryResponse } from '@/types/purchase';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
@@ -18,6 +18,7 @@ export interface IProductState {
     user?: { name: string; mobile: string };
   };
   currentPurchase?: IPurchaseHistoryResponse;
+  purchase?: IProducts[];
 }
 interface IProductStateActions {
   setProducts: (products: IProductPurchase[] | IProduct[]) => void;
@@ -25,6 +26,7 @@ interface IProductStateActions {
     products: IProductState['calculatedProducts']
   ) => void;
   setCurrentPurchase: (purchase: IPurchaseHistoryResponse) => void;
+  setPurchase: (purchase: IProducts[]) => void;
 }
 export const usePurchase = create<IProductState & IProductStateActions>()(
   // persist(
@@ -39,8 +41,10 @@ export const usePurchase = create<IProductState & IProductStateActions>()(
       paymentAmount: 0,
       user: { name: '', mobile: '' },
     },
+    purchase: [],
     setProducts: (products) => set({ products: products }),
     setCalculatedProducts: (products) => set({ calculatedProducts: products }),
     setCurrentPurchase: (purchase) => set({ currentPurchase: purchase }),
+    setPurchase: (purchase) => set({ purchase }),
   })
 );

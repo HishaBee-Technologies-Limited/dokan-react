@@ -2,8 +2,8 @@ import { DiscountType, WarrantyType } from '@/schemas/products';
 import { ISortOptions } from '@/types/Sorting';
 import { DeliveryStatusDef } from '@/types/orders';
 export interface IProduct {
-  id: number;
-  name: string;
+  id?: number;
+  name?: string;
   stock: number;
   cost_price: number;
   stock_alert: number;
@@ -64,6 +64,7 @@ export interface IProductPayload {
   unit?: number;
   gallery?: string;
   image?: string;
+  published?: boolean;
 }
 
 export interface IUnits {
