@@ -1,4 +1,4 @@
-import { IDueListResponse } from '@/types/due/dueResponse';
+import { IDueItemsResponse, IDueListResponse } from '@/types/due/dueResponse';
 import { create } from 'zustand';
 
 type DueState = {
@@ -14,6 +14,7 @@ type DueState = {
   dueList: IDueListResponse[] | undefined;
   due: IDueListResponse | undefined;
   cashStatus: string;
+  dueItem: IDueItemsResponse | undefined;
 };
 
 type DueActions = {
@@ -28,6 +29,7 @@ type DueActions = {
   setDueList: (dueList: IDueListResponse[] | undefined) => void;
   setDue: (dueList: IDueListResponse | undefined) => void;
   setCashStatue: (cashStatue: string) => void;
+  setDueItem: (dueItem: IDueItemsResponse | undefined) => void;
 };
 
 export const useDueStore = create<DueState & DueActions>()((set) => ({
@@ -36,6 +38,7 @@ export const useDueStore = create<DueState & DueActions>()((set) => ({
   dueList: [],
   due: undefined,
   cashStatus: '',
+  dueItem: undefined,
 
   // Update state-------------------------------------
   setDrawerState: (params) => set({ drawerState: params }),
@@ -43,4 +46,7 @@ export const useDueStore = create<DueState & DueActions>()((set) => ({
   setDueList: (dueList) => set({ dueList: dueList }),
   setDue: (due) => set({ due: due }),
   setCashStatue: (cashStatus) => set({ cashStatus: cashStatus }),
+  setDueItem(dueItem) {
+    set({ dueItem: dueItem });
+  },
 }));
