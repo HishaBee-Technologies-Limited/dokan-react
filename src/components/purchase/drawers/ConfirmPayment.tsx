@@ -64,6 +64,18 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getUserDue } from '@/actions/due/getUserDue';
 import { Skeleton } from '@/components/ui/skeleton';
+import { DotLoader, GridLoader, PacmanLoader } from 'react-spinners';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -488,6 +500,28 @@ const ConfirmPayment = () => {
           </Button>
         </DrawerFooter>
       </form>
+
+      <AlertDialog open={true}>
+        {/* <AlertDialogTrigger asChild>
+          <Button variant="outline">Show Dialog</Button>
+        </AlertDialogTrigger> */}
+        <AlertDialogContent>
+          {/* <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction>Continue</AlertDialogAction>
+          </AlertDialogFooter> */}
+          {/* <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-500 border-t-transparent dark:border-gray-400" /> */}
+          <DotLoader color="#FFC600" />
+          {/* <PacmanLoader color="#FFC600" /> */}
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 };
