@@ -101,7 +101,6 @@ const PDFGenerator = ({
   due: any;
 }) => {
   const pdfRef = useRef<HTMLDivElement | null>(null);
-  console.log(calculatedProducts, shop, due);
 
   const shopInfo = JSON.parse(shop);
 

@@ -50,7 +50,7 @@ export const RightSection = () => {
       discount_type: 'AMOUNT',
     },
   });
-  console.log(currentPurchase);
+
   async function onSubmit(data: any) {
     const updatedProducts = products.map((product) => {
       if (
@@ -173,7 +173,6 @@ export const RightSection = () => {
                   String(currentPurchase?.id!)
                 );
 
-                console.log(due);
                 const shop_id = getCookie('shopId') as string;
 
                 // Current Total - (Prev Total - Prev due)

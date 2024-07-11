@@ -1,7 +1,9 @@
 import { createDue } from '@/actions/due/createDue';
 import { createDueItem } from '@/actions/due/createDueItem';
 import { DrawerFooter } from '@/components/common/Drawer';
+import FallBackImage from '@/components/common/FallBackImage';
 import { Button } from '@/components/ui/button';
+import { Text } from '@/components/common/text';
 import {
   Form,
   FormControl,
@@ -15,6 +17,9 @@ import { DATE_FORMATS } from '@/lib/constants/common';
 import { formatDate } from '@/lib/utils';
 import { useDueStore } from '@/stores/useDueStore';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -24,25 +29,29 @@ const formSchema = z.object({
   }),
 });
 const EditDue = () => {
-  console.log('s');
   const dueItem = useDueStore((state) => state.dueItem);
+  const handleDrawerOpen = useDueStore((state) => state.setDrawerState);
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: String(dueItem?.amount),
+      amount: String(Math.abs(dueItem?.amount!)),
     },
   });
+  const router = useRouter();
 
-  console.log(dueItem);
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
-    const amount =
-      Number(data.amount) > dueItem?.amount!
-        ? dueItem?.due.due_amount! + (Number(data.amount) - dueItem?.amount!)
-        : Number(data.amount);
+    setLoading(true);
+
+    const isSupplier = dueItem?.contact_type === 'SUPPLIER';
+    const surplus = dueItem?.amount! - Number(data.amount);
+    const dueAmount = isSupplier
+      ? dueItem?.due.due_amount! - surplus
+      : dueItem?.due.due_amount! + surplus;
+
     const payload = {
-      // shop_id: Number(shop_id),
-      amount: data.amount,
+      amount: dueAmount,
       unique_id: dueItem?.due.unique_id,
       due_left: data.amount,
       version: Number(dueItem?.due.version) + 1,
@@ -52,12 +61,12 @@ const EditDue = () => {
       contact_mobile: dueItem?.contact_mobile,
       contact_type: dueItem?.contact_type,
       contact_name: dueItem?.contact_name,
-      // sms: data.sms ?? false,
-      // purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
     };
-    const dueRes = await createDue(payload);
+
+    await createDue(payload);
+
     const payloadForDueItem = {
-      amount: Number(data.amount),
+      amount: isSupplier ? Number(data.amount) : -Number(data.amount),
       unique_id: dueItem?.unique_id,
       due_left: Number(data.amount),
       version: dueItem?.version! + 1,
@@ -67,20 +76,28 @@ const EditDue = () => {
       contact_mobile: dueItem?.contact_mobile,
       contact_type: dueItem?.contact_type,
       contact_name: dueItem?.contact_name,
-      // sms: data.sms ?? false,
       due_unique_id: dueItem?.due.unique_id,
-      // purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
     };
 
-    const res = await createDueItem(payloadForDueItem);
-    // router.refresh();
-    // handleDrawerOpen({ open: false });
+    await createDueItem(payloadForDueItem);
+    router.refresh();
+    setLoading(false);
+    handleDrawerOpen({ open: false });
   }
   return (
     <div>
-      <div>
-        <h4>{dueItem?.contact_name}</h4>
-        <h5>{dueItem?.contact_mobile}</h5>
+      <div className="flex items-center gap-space8 border-b border-color pb-space16">
+        <FallBackImage
+          src=""
+          fallback={dueItem?.contact_name[0].toUpperCase() ?? 'FF'}
+        />
+        <article>
+          <Text
+            title={dueItem?.contact_name}
+            className="!text-lg font-medium"
+          />
+          <Text title={dueItem?.contact_mobile} variant="muted" />
+        </article>
       </div>
 
       <Form {...form}>
@@ -104,7 +121,8 @@ const EditDue = () => {
             )}
           />
           <DrawerFooter height="14rem" className="flex-col !gap-space12">
-            <Button type="submit" className="w-full">
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
               Save
             </Button>
           </DrawerFooter>

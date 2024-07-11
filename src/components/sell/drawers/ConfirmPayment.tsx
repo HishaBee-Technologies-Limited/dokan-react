@@ -140,8 +140,6 @@ const ConfirmPayment = () => {
         })
       : null;
 
-    console.log(data, sms);
-
     setLoading(true);
     const responseCreateSell = await createSell({
       created_at: formatDate(DATE_FORMATS.default, data.date),

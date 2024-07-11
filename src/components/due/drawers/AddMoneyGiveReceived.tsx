@@ -221,7 +221,6 @@ const AddMoneyGiveReceived = (
       const sup_mobile = form.watch('number');
 
       const res = await getUserDue(sup_mobile);
-      console.log(res);
       if (res?.success) {
         form.setValue('due', res.data);
       }

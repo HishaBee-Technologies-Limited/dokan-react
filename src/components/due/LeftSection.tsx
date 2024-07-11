@@ -81,11 +81,8 @@ export const LeftSection = () => {
   // );
 
   useEffect(() => {
-    console.log('in', hasMore, loading);
     setPage((prevPage) => prevPage + 1);
-    console.log('fdfgfg');
   }, [inView]);
-  console.log(dueRes);
 
   useEffect(() => {
     let temArr = dueRes && [...dueRes];

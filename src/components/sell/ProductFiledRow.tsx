@@ -126,7 +126,6 @@ const ProductFiledRow = (props: IProps) => {
         String(unitPriceWithExtras)
       );
     }
-    console.log('ll', unitPriceWithExtras);
     if (quantityValue && unitPrice) {
       /**
        * set the total value based on the change of the quantity

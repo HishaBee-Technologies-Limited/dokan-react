@@ -71,7 +71,6 @@ const AddNewUser = () => {
     } else {
       console.log('error', response?.error);
     }
-    // console.log('response', response);
   }
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {

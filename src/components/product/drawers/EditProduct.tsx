@@ -80,7 +80,6 @@ export const EditProduct = ({
   }, [selectedCategory, productCategories]);
 
   async function onSubmit(data: ProductFormDef) {
-    console.log(data);
     const res = await createProductOrUpdate({
       name: data.product_name,
       cost_price: data.purchase_price,
@@ -120,8 +119,6 @@ export const EditProduct = ({
       handleClose({ open: false });
     }
   }
-
-  console.log(form.formState.errors);
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -166,7 +163,7 @@ export const EditProduct = ({
     /*@ts-ignore*/
     // product?.gallery && saveImageUrls(JSON.parse(product?.gallery));
   }, [product, category]);
-  // console.log(product);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">

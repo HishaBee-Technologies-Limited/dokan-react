@@ -23,7 +23,6 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
   const shop = getCookie('shop');
   const [link, setLink] = useState<IAsideBarMenuItem[]>([]);
   useEffect(() => {
-    console.log(shop);
     if (shop) {
       if (
         JSON.parse(shop as string).subscription ===
@@ -44,7 +43,6 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
       logout();
     }
   }, [shop]);
-  // console.log(JSON.parse(shop as string).subscription);
   return (
     <aside
       className={`bg-white dark:bg-primary-90 h-screen fixed hd:relative ${menuOpen ? 'w-[30rem] xl:w-[34.4rem] left-0' : '-left-[30rem] xl:left-0 w-[30rem] xl:w-[8rem] hd:w-[34.4rem]'} duration-500 z-50`}

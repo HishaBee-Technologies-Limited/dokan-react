@@ -258,11 +258,6 @@ const TransactionEdit = ({ suppliers }: { suppliers?: IUserResponse[] }) => {
     purchaseProdClone!.items = filterProducts;
     // form.unregister(`products.${index}.product-${product.unique_id}`);
     setPurchaseProducts(purchaseProdClone);
-    // console.log(
-    //   purchaseProducts?.items?.filter(
-    //     (prod) => prod.unique_id !== product.unique_id
-    //   )
-    // );
   };
 
   return (
