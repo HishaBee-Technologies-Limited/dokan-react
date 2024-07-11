@@ -4,6 +4,7 @@ import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
 import { IDueItemsResponse } from '@/types/due/dueResponse';
 import { format, subMonths } from 'date-fns';
+import { ICommonGetResponse } from '@/types/common';
 
 interface IGetAllDueHistory {
   page?: number;
@@ -23,7 +24,7 @@ export const getAllDueHistory = async (params: IGetAllDueHistory) => {
 
   try {
     const shopId = cookies().get('shopId')?.value;
-    const params = `shop_id=${shopId}&start_date=${format(subMonths(today, 1), 'yyyy-MM-dd hh:mm:ss')}&end_date=${endDate}&exclude_deleted=true`; //&page=${page}
+    const params = `shop_id=${shopId}&start_date=${format(subMonths(today, 1), 'yyyy-MM-dd hh:mm:ss')}&end_date=${endDate}&exclude_deleted=true&page=${page}&per_page=20`; //&page=${page}
     const res = await authApi.get(`/due/history?${params}`);
     const data = await res.json();
 
@@ -32,7 +33,7 @@ export const getAllDueHistory = async (params: IGetAllDueHistory) => {
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data.data as IDueItemsResponse[],
+        data: data as ICommonGetResponse<IDueItemsResponse>,
         metadata: data.metadata,
       };
     }

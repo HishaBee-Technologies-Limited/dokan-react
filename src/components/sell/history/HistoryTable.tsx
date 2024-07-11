@@ -76,7 +76,6 @@ const HistoryTable = ({
       return 'bg-error-20';
     }
   };
-
   return (
     <ScrollArea className="pb-space8">
       {transactions?.data.length === 0 ? (
@@ -187,9 +186,7 @@ const HistoryTable = ({
           <Pagination
             pageCount={
               transactions
-                ? Math.ceil(
-                    transactions?.total ?? 0 / transactions?.per_page ?? 0
-                  )
+                ? Math.ceil(transactions?.total / transactions?.per_page)
                 : 0
             }
             currentPage={transactions?.current_page ?? 0}

@@ -6,6 +6,7 @@ import HistoryReport from '@/components/due/HistoryReport';
 import { IDueItemsResponse } from '@/types/due/dueResponse';
 import { getAllDueHistory } from '@/actions/due/getAllDueHistory';
 import DueDrawers from '@/components/due/drawers';
+import { ICommonGetResponse } from '@/types/common';
 
 interface IDueHistoryProps {
   params: { locale: string };
@@ -18,9 +19,11 @@ const DueHistory = async ({
 }: IDueHistoryProps) => {
   const end_date = searchParams.end_date?.split('-')[0] ?? new Date();
   const start_date = searchParams.start_date?.split('-')[0] ?? new Date();
+  const page = searchParams.page ?? 1;
 
   const params = {
     // page: 1,
+    page,
     end_date: format(end_date, 'yyyy-MM-dd HH:mm:ss'),
     start_date: format(start_date, 'yyyy-MM-dd HH:mm:ss'),
   };
@@ -31,7 +34,9 @@ const DueHistory = async ({
     <div className="space-y-space16 h-full w-full">
       <HistoryHeader />
       <HistoryReport totalValues={dueList?.metadata} />
-      <HistoryTable dueList={dueList?.data as IDueItemsResponse[]} />
+      <HistoryTable
+        dueList={dueList?.data as ICommonGetResponse<IDueItemsResponse>}
+      />
       <DueDrawers />
     </div>
   );
