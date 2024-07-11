@@ -5,6 +5,7 @@ import HistoryHeader from '@/components/due/HistoryHeader';
 import HistoryReport from '@/components/due/HistoryReport';
 import { IDueItemsResponse } from '@/types/due/dueResponse';
 import { getAllDueHistory } from '@/actions/due/getAllDueHistory';
+import DueDrawers from '@/components/due/drawers';
 
 interface IDueHistoryProps {
   params: { locale: string };
@@ -31,6 +32,7 @@ const DueHistory = async ({
       <HistoryHeader />
       <HistoryReport totalValues={dueList?.metadata} />
       <HistoryTable dueList={dueList?.data as IDueItemsResponse[]} />
+      <DueDrawers />
     </div>
   );
 };

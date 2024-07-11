@@ -147,7 +147,7 @@ const MoneyGiveReceived = () => {
       purchase_barcode: uniqueId,
       received_amount: Number(data.amount),
       supplier_mobile: data.number,
-      supplier_name: data.number,
+      supplier_name: data.name,
       total_item: totalItems,
       total_price: Number(data.amount),
       unique_id: uniqueId,
@@ -233,10 +233,14 @@ const MoneyGiveReceived = () => {
         due_unique_id: dueRes?.data.due.unique_id,
         purchase_unique_id: null,
       };
-
+      console.log(
+        Number(data.amount) !== calculatedProducts.totalPrice,
+        calculatedProducts.totalPrice,
+        Number(data.amount)
+      );
       const res = await createDueItem(payloadForDueItem);
-      if (Number(data.amount) !== calculatedProducts.totalPrice) {
-        await createDueItem(payloadForDueItemForPayment);
+      if (Number(data.amount) !== Number(calculatedProducts.totalPrice)) {
+        const res = await createDueItem(payloadForDueItemForPayment);
       }
 
       setCalculatedProducts({
@@ -292,6 +296,7 @@ const MoneyGiveReceived = () => {
       form.setValue('number', contact.mobile);
     }
   }, [contact, form]);
+
   const watchNumber = form.watch('number');
 
   useEffect(() => {

@@ -113,12 +113,14 @@ const ConfirmPayment = () => {
       form.setValue('amount', String(calculatedProducts.totalPrice));
     }
   }, [calculatedProducts, form]);
+
   useEffect(() => {
     if (contact) {
       form.setValue('customer', contact.name);
       form.setValue('customer_number', contact.mobile);
     }
   }, [contact]);
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
     if (!data.amount) {
       form.setError('amount', {
@@ -162,7 +164,7 @@ const ConfirmPayment = () => {
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
       version: DEFAULT_STARTING_VERSION,
       extra_charge: Number(calculatedProducts.deliveryCharge),
-      total_discount: 0,
+      total_discount: Number(calculatedProducts.discount),
       transaction_type: TRANSACTION_TYPE.PRODUCT_SELL,
       total_profit: String(totalProfit),
       message: sms,
@@ -194,6 +196,7 @@ const ConfirmPayment = () => {
           version: DEFAULT_STARTING_VERSION,
         });
       });
+
       setCalculatedProducts({
         ...calculatedProducts,
         paymentAmount: Number(data.amount),

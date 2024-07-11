@@ -62,7 +62,7 @@ export function calculateTotal(
   totalPrice: number,
   deliveryCharge: number,
   discountAmount: number,
-  discountType?: DiscountType
+  discountType?: string
 ) {
   const totalWithoutDelivery = totalPrice - deliveryCharge;
   if (discountType) {

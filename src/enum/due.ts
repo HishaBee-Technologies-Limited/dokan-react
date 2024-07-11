@@ -9,4 +9,6 @@ export enum DueEnum {
   MONEY_RECEIVED_ENTRY = 'Money Received Entry',
   ADD_MONEY_GIVEN_ENTRY = 'Add Money Given Entry',
   ADD_MONEY_RECEIVED_ENTRY = 'Add Money Received Entry',
+  DELETE_DUE = 'Delete Due Item',
+  EDIT_DUE = 'Edit Due Item',
 }

@@ -4,7 +4,9 @@ import { authApi } from '@/lib/api';
 
 export const getTransactionItems = async ({ id }: { id: string }) => {
   try {
-    const res = await authApi.get(`/transaction/items?unique_id=${id}`);
+    const res = await authApi.get(
+      `/transaction/items?unique_id=${id}&exclude_deleted=true`
+    );
     const data = await res.json();
 
     if (res.ok) {

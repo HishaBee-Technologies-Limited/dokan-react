@@ -23,6 +23,7 @@ type IProps = {
 const ProductSellCalculation = (props: IProps) => {
   const { form } = props;
   const productList = useSellStore((state) => state.products);
+  const transaction = useSellStore((state) => state.transaction);
 
   /**
    * values reading from the hook form
@@ -41,9 +42,11 @@ const ProductSellCalculation = (props: IProps) => {
         return prev;
       }, 0)
     : 0;
+
   useEffect(() => {
     if (!productList.length) form.reset();
   }, [productList]);
+
   /**
    * calculate based on the discount type
    * discount type is declared on DISCOUNT_TYPE schema
@@ -56,6 +59,7 @@ const ProductSellCalculation = (props: IProps) => {
       deliveryCharge ? Number(deliveryCharge) : 0,
       discountAmount ? discountAmount : 0
     );
+
   /**
    * set the total price to the form state for centralize all the necessary information
    * for next action

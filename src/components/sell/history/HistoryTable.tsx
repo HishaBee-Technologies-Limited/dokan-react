@@ -27,11 +27,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import Pagination from '@/components/common/CustomPagination';
 import NoDataCard from '@/components/common/no-data-card';
+import { IProductSellPayload } from '@/types/sell';
 
 const HistoryTable = ({
   transactions,
 }: {
-  transactions?: ICommonGetResponse<IPurchaseHistoryResponse>;
+  transactions?: ICommonGetResponse<IProductSellPayload>;
 }) => {
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
@@ -40,7 +41,7 @@ const HistoryTable = ({
   const router = useRouter();
   const { setQueryString } = useCreateQueryString();
   const setCurrentPurchase = useSellStore((state) => state.setCurrentSell);
-  const handleRowClick = (row: IPurchaseHistoryResponse) => {
+  const handleRowClick = (row: IProductSellPayload) => {
     handleDrawerOpen({ open: true, header: SellEnum.TRANSACTION_DETAILS });
     setCurrentPurchase(row);
   };
@@ -65,6 +66,7 @@ const HistoryTable = ({
       return 'error';
     }
   };
+
   const transactionTypeTextBG = (type: string): string => {
     if (type === 'quick sell') {
       return 'bg-warning-20';

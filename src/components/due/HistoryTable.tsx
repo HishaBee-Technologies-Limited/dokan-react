@@ -13,8 +13,41 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useDueStore } from '@/stores/useDueStore';
+import { DueEnum } from '@/enum/due';
+import { toast } from 'sonner';
 
 const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
+  console.log(dueList);
+  const handleDrawerOpen = useDueStore((state) => state.setDrawerState);
+  const setDueItem = useDueStore((state) => state.setDueItem);
+
+  const handleEdit = (dueItem: IDueItemsResponse) => {
+    const isPurchaseUniqueId = dueItem.purchase_unique_id
+      ? dueItem.purchase_unique_id === 'null'
+        ? true
+        : false
+      : true;
+
+    const isTransactionUniqueId = dueItem.transaction_unique_id
+      ? dueItem.transaction_unique_id === 'null'
+        ? true
+        : false
+      : true;
+
+    console.log(isPurchaseUniqueId && isTransactionUniqueId);
+
+    if (isPurchaseUniqueId && isTransactionUniqueId) {
+      console.log('bb');
+      setDueItem(dueItem);
+      handleDrawerOpen({ open: true, header: DueEnum.EDIT_DUE });
+    } else {
+      dueItem.contact_type === 'CUSTOMER'
+        ? toast.message('Please go to Sell List To Edit This Item')
+        : toast.message('Please go to Purchase List To Edit This Item');
+    }
+  };
+
   return (
     <ScrollArea className="pb-space8">
       <Table wrapperClass="rounded-md border border-color min-w-[80rem]">
@@ -30,7 +63,11 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
 
         <TableBody>
           {dueList?.map((item, i) => (
-            <TableRow className="cursor-pointer" key={item.id}>
+            <TableRow
+              className="cursor-pointer"
+              key={item.id}
+              onClick={() => handleEdit(item)}
+            >
               <TableCell>
                 <div className="flex items-center gap-space8">
                   <FallBackImage

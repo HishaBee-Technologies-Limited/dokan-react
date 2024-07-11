@@ -73,7 +73,7 @@ const HistoryTable = ({
   //   page: String(purchaseHistory.current_page ?? 1),
   //   start_date:
   // })
-
+  console.log(purchaseHistory);
   return (
     <ScrollArea className="pb-space8">
       {purchaseHistory?.data.length === 0 ? (

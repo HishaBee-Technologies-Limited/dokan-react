@@ -10,7 +10,6 @@ import { IDueItemsResponse } from '@/types/due/dueResponse';
 
 export const DueTable = ({ dueItems }: { dueItems: IDueItemsResponse[] }) => {
   let totalBalance = 0;
-
   const calculateBalance = (amount: number, index: number) => {
     if (index === 1) {
       totalBalance =

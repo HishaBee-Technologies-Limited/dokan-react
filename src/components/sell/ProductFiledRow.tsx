@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/form';
 import { IProduct } from '@/types/product';
 import { DEFAULT_PRODUCT_QUANTITY } from '@/lib/constants/purchase';
-import { usePurchase } from '@/stores/usePurchaseStore';
 import { useSellStore } from '@/stores/useSellStore';
 import { percentage } from '@/lib/utils';
 
@@ -35,7 +34,9 @@ type IProps = {
 const ProductFiledRow = (props: IProps) => {
   const setProducts = useSellStore((state) => state.setProducts);
   const products = useSellStore((state) => state.products);
-  // const [unitPriceWithExtras, setUnitPriceWithExtras] = useState()
+  const transaction = useSellStore((state) => state.transaction);
+
+  const currentPurchase = useSellStore((state) => state.currentSell);
 
   const unitPriceWithExtras = useMemo(() => {
     if (props.data?.selling_price) {
@@ -125,10 +126,10 @@ const ProductFiledRow = (props: IProps) => {
         String(unitPriceWithExtras)
       );
     }
-
+    console.log('ll', unitPriceWithExtras);
     if (quantityValue && unitPrice) {
       /**
-       * set the total value base on the change of the quantity
+       * set the total value based on the change of the quantity
        */
 
       if (props.data?.wholesale_amount) {
@@ -159,13 +160,51 @@ const ProductFiledRow = (props: IProps) => {
      */
     props.form.setValue(
       `products.${props.index}.product-${props.data?.id}.quantity`,
-      DEFAULT_PRODUCT_QUANTITY
+      Number(
+        transaction.find(
+          (transaction) =>
+            transaction.shop_product_by_uniqueid?.id === props.data?.id
+        )?.quantity
+      )
+        ? Number(
+            transaction.find(
+              (transaction) =>
+                transaction.shop_product_by_uniqueid?.id === props.data?.id
+            )?.quantity
+          )
+        : DEFAULT_PRODUCT_QUANTITY
     );
     props.form.setValue(
       `products.${props.index}.product-${props.data?.id}.unit_price`,
       String(unitPriceWithExtras)
     );
-  }, [unitPriceWithExtras, props.form]);
+    console.log(
+      Number(
+        transaction.find(
+          (transaction) =>
+            transaction.shop_product_by_uniqueid?.id === props.data?.id
+        )?.quantity
+      ),
+      props.data
+    );
+    setTimeout(() => {
+      props.form.setFocus(
+        `products.${props.index}.product-${props.data?.id}.total`
+      );
+    }, 50);
+  }, [unitPriceWithExtras, props.form, transaction]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      props.form.setValue('discount', currentPurchase?.discount, {
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+      props.form.setValue('discount_type', currentPurchase?.discount_type);
+      props.form.setValue('delivery_charge', currentPurchase?.extra_charge);
+      // props.form.setFocus(`discount`);
+    }, 50);
+  }, [props.form, currentPurchase]);
 
   return (
     <div className="border-b border-dashed border-color pt-space8 pb-space12 space-y-space6 ">
@@ -227,7 +266,7 @@ const ProductFiledRow = (props: IProps) => {
                 {props.data?.discount && (
                   <span className="text-orange-400 text-xs">[Discount]</span>
                 )}{' '}
-                {props.data?.vat_percent && (
+                {!!props.data?.vat_percent && (
                   <span className="text-orange-400 text-xs">[Vat]</span>
                 )}
               </FormLabel>

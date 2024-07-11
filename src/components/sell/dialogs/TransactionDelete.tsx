@@ -22,7 +22,7 @@ const TransactionDelete = () => {
         created_at: currentPurchase.created_at,
         updated_at: formatDate(DATE_FORMATS.default),
         version: DEFAULT_DELETE_VERSION,
-        total_item: currentPurchase.total_item,
+        total_item: currentPurchase.total_item!,
         total_price: currentPurchase.total_price,
         payment_method: currentPurchase.payment_method,
         user_id: currentPurchase.user_id,

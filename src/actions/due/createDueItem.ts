@@ -15,10 +15,11 @@ export const createDueItem = async (payload: any) => {
       ...payload,
     });
 
-    console.log(params);
+    // console.log(params);
 
     const res = await authApi.post(`/due_item/add?${params}`);
     const data = await res.json();
+    console.log('due------Item', params, data);
 
     if (res.ok) {
       return {

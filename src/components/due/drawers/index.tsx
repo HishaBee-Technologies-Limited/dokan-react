@@ -8,6 +8,8 @@ import { Drawer } from '@/components/common/Drawer';
 import AddNewUser from '@/components/contact/drawers/AddNewUser';
 import MoneyGiveReceived from '@/components/due/drawers/MoneyGiveReceived';
 import AddMoneyGiveReceived from '@/components/due/drawers/AddMoneyGiveReceived';
+import { Edit } from 'lucide-react';
+import EditDue from './EditDue';
 
 const DueDrawers = () => {
   const drawerState = useDueStore((state) => state.drawerState);
@@ -20,7 +22,8 @@ const DueDrawers = () => {
       return <AddMoneyGiveReceived />;
     } else if (DueEnum.MONEY_GIVEN_ENTRY === activeDrawer) {
       return <MoneyGiveReceived />;
-    } else if (DueEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
+    } else if (DueEnum.EDIT_DUE === activeDrawer) return <EditDue />;
+    else if (DueEnum.MONEY_RECEIVED_ENTRY === activeDrawer) {
       return <MoneyGiveReceived />;
     } else if (
       ContactEnum.ADD_CUSTOMER === activeDrawer ||
@@ -30,7 +33,7 @@ const DueDrawers = () => {
       return <AddNewUser />;
     }
   };
-
+  console.log(drawerState);
   return (
     <Drawer
       open={drawerState.open}

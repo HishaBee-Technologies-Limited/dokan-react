@@ -47,7 +47,7 @@ export const createItemPurchase = async ({
 
     const res = await authApi.post(`/purchase_item?${payload}`);
     const data = await res.json();
-    console.log(res, payload);
+    // console.log(res, payload);
     if (res.ok) {
       return {
         success: true,

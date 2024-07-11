@@ -1,5 +1,5 @@
 import { DiscountType } from '@/schemas/products';
-import { IProductPayload } from './product';
+import { IProduct, IProductPayload } from './product';
 
 export interface IProductPurchasePayload {
   batch?: string;
@@ -11,7 +11,7 @@ export interface IProductPurchasePayload {
   extra_charge: number;
   note?: string;
   payment_method: number;
-  payment_status: 'PAID' | 'UNPAID';
+  payment_status: string;
   purchase_barcode?: string;
   received_amount: number;
   shop_id?: number;
@@ -24,7 +24,7 @@ export interface IProductPurchasePayload {
   user_id?: number;
   version: number;
   discount_type: string;
-  sms: string | null;
+  sms?: string | null;
   message?: string | null;
 }
 
@@ -78,8 +78,8 @@ export interface IPurchaseHistoryResponse {
 }
 
 export interface IProducts extends IProductItemPurchasePayload {
-  product: IProductPayload;
-  shop_product_by_uniqueid?: IProductPayload;
+  product: IProduct;
+  shop_product_by_uniqueid?: IProduct;
 }
 export interface IPurchaseProducts extends IPurchaseHistoryResponse {
   items?: IProducts[];
