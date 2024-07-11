@@ -8,7 +8,6 @@ import { Drawer } from '@/components/common/Drawer';
 import AddNewUser from '@/components/contact/drawers/AddNewUser';
 import MoneyGiveReceived from '@/components/due/drawers/MoneyGiveReceived';
 import AddMoneyGiveReceived from '@/components/due/drawers/AddMoneyGiveReceived';
-import { Edit } from 'lucide-react';
 import EditDue from './EditDue';
 
 const DueDrawers = () => {
@@ -33,7 +32,6 @@ const DueDrawers = () => {
       return <AddNewUser />;
     }
   };
-  console.log(drawerState);
   return (
     <Drawer
       open={drawerState.open}

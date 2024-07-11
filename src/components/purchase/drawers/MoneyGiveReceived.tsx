@@ -233,11 +233,7 @@ const MoneyGiveReceived = () => {
         due_unique_id: dueRes?.data.due.unique_id,
         purchase_unique_id: null,
       };
-      console.log(
-        Number(data.amount) !== calculatedProducts.totalPrice,
-        calculatedProducts.totalPrice,
-        Number(data.amount)
-      );
+
       const res = await createDueItem(payloadForDueItem);
       if (Number(data.amount) !== Number(calculatedProducts.totalPrice)) {
         const res = await createDueItem(payloadForDueItemForPayment);
@@ -304,7 +300,6 @@ const MoneyGiveReceived = () => {
       const sup_mobile = form.watch('number');
 
       const res = await getUserDue(sup_mobile!);
-      console.log(res);
       if (res?.success) {
         form.setValue('due', res.data);
       }
@@ -339,14 +334,8 @@ const MoneyGiveReceived = () => {
         setSuppliers(suppliers?.data as IUserResponse[]);
         setLoadingContacts(false);
       } else {
-        console.log(suppliers);
         setLoadingContacts(false);
       }
-      // if (employees?.success) {
-      //   setEmployee(employees?.data as IUserResponse[]);
-      // } else {
-      //   console.log(employees);
-      // }
     };
     fetchSuppliersAndEmployees();
   }, []);

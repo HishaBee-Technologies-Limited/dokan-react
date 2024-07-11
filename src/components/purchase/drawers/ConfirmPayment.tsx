@@ -227,7 +227,6 @@ const ConfirmPayment = () => {
         setSuppliers(suppliers?.data as IUserResponse[]);
         setLoadingContacts(false);
       } else {
-        console.log(suppliers);
         setLoadingContacts(false);
       }
       if (employees?.success) {

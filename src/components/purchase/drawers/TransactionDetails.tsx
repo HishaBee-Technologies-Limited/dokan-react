@@ -44,7 +44,6 @@ const TransactionDetails = () => {
       const res = await getPurchaseItems({
         id: currentPurchase?.unique_id ? currentPurchase?.unique_id : '',
       });
-      console.log(res);
       if (res?.success) {
         setPurchaseProducts(res?.data.items);
       }

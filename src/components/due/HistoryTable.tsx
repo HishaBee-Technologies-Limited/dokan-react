@@ -18,7 +18,6 @@ import { DueEnum } from '@/enum/due';
 import { toast } from 'sonner';
 
 const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
-  console.log(dueList);
   const handleDrawerOpen = useDueStore((state) => state.setDrawerState);
   const setDueItem = useDueStore((state) => state.setDueItem);
 
@@ -35,10 +34,7 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
         : false
       : true;
 
-    console.log(isPurchaseUniqueId && isTransactionUniqueId);
-
     if (isPurchaseUniqueId && isTransactionUniqueId) {
-      console.log('bb');
       setDueItem(dueItem);
       handleDrawerOpen({ open: true, header: DueEnum.EDIT_DUE });
     } else {

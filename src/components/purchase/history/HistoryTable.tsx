@@ -50,10 +50,10 @@ const HistoryTable = ({
     setCurrentPurchase(row);
   };
 
-  const handleEditClick = (item: any) => {
-    handleDrawerOpen({ open: true, header: PurchaseEnum.TRANSACTION_EDIT });
-    setCurrentPurchase(item);
-  };
+  // const handleEditClick = (item: any) => {
+  //   handleDrawerOpen({ open: true, header: PurchaseEnum.TRANSACTION_EDIT });
+  //   setCurrentPurchase(item);
+  // };
 
   const transactionTypeTextVariant = (type: string): 'success' | 'error' => {
     if (type === 'UNPAID') {
@@ -69,11 +69,7 @@ const HistoryTable = ({
       return 'bg-success-20 ';
     }
   };
-  // const params = new URLSearchParams({
-  //   page: String(purchaseHistory.current_page ?? 1),
-  //   start_date:
-  // })
-  console.log(purchaseHistory);
+
   return (
     <ScrollArea className="pb-space8">
       {purchaseHistory?.data.length === 0 ? (
