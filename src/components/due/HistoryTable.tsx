@@ -16,10 +16,21 @@ import {
 import { useDueStore } from '@/stores/useDueStore';
 import { DueEnum } from '@/enum/due';
 import { toast } from 'sonner';
+import { ICommonGetResponse } from '@/types/common';
+import Pagination from '@/components/common/CustomPagination';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 
-const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
+const HistoryTable = ({
+  dueList,
+}: {
+  dueList: ICommonGetResponse<IDueItemsResponse>;
+}) => {
   const handleDrawerOpen = useDueStore((state) => state.setDrawerState);
   const setDueItem = useDueStore((state) => state.setDueItem);
+  const pathname = usePathname();
+  const router = useRouter();
+  const { setQueryString } = useCreateQueryString();
 
   const handleEdit = (dueItem: IDueItemsResponse) => {
     const isPurchaseUniqueId = dueItem.purchase_unique_id
@@ -58,7 +69,7 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
         </TableHeader>
 
         <TableBody>
-          {dueList?.map((item, i) => (
+          {dueList?.data?.map((item, i) => (
             <TableRow
               className="cursor-pointer"
               key={item.id}
@@ -101,6 +112,16 @@ const HistoryTable = ({ dueList }: { dueList: IDueItemsResponse[] }) => {
         </TableFooter>
       </Table>
       <ScrollBar orientation="horizontal" />
+      {dueList?.data.length !== 0 && (
+        <Pagination
+          pageCount={Math.ceil(dueList.total / dueList.per_page)}
+          currentPage={dueList.current_page ?? 0}
+          lastPage={dueList.last_page ?? 0}
+          onChanage={(page) => {
+            router.push(`${pathname}?${setQueryString('page', page)}`);
+          }}
+        />
+      )}
     </ScrollArea>
   );
 };

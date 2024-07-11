@@ -181,9 +181,7 @@ const HistoryTable = ({
           pageCount={
             purchaseHistory?.data.length === 0
               ? purchaseHistory.last_page
-              : Math.ceil(
-                  purchaseHistory.total ?? 0 / purchaseHistory.per_page ?? 0
-                )
+              : Math.ceil(purchaseHistory.total / purchaseHistory.per_page)
           }
           currentPage={purchaseHistory.current_page ?? 0}
           lastPage={purchaseHistory.last_page ?? 0}
