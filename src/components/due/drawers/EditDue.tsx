@@ -19,7 +19,7 @@ import { useDueStore } from '@/stores/useDueStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -84,6 +84,9 @@ const EditDue = () => {
     setLoading(false);
     handleDrawerOpen({ open: false });
   }
+  useEffect(() => {
+    form.setValue('amount', String(Math.abs(dueItem?.amount!)));
+  }, [dueItem]);
   return (
     <div>
       <div className="flex items-center gap-space8 border-b border-color pb-space16">
