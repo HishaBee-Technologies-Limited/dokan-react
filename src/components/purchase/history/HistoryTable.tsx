@@ -31,6 +31,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { generateQueryString } from '@/lib/queryString';
 import { usePurchase } from '@/stores/usePurchaseStore';
 import NoDataCard from '@/components/common/no-data-card';
+import { cn } from '@/lib/utils';
 
 const HistoryTable = ({
   purchaseHistory,
@@ -98,7 +99,13 @@ const HistoryTable = ({
               >
                 <TableCell>{purchase.id}</TableCell>
                 <TableCell>{purchase.total_item}</TableCell>
-                <TableCell>{purchase.supplier_name}</TableCell>
+                <TableCell
+                  className={cn(
+                    purchase.supplier_name.includes('ENCRYPTED') && 'blur-sm'
+                  )}
+                >
+                  {purchase.supplier_name}
+                </TableCell>
                 <TableCell>{purchase.total_price}</TableCell>
                 <TableCell>{purchase.updated_at}</TableCell>
                 <TableCell>

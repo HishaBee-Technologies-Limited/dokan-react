@@ -12,6 +12,7 @@ import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import { ICommonGetResponse } from '@/types/common';
 import { IPurchaseProducts } from '@/types/purchase';
 import { IProductSellPayload } from '@/types/sell';
+import { cn } from '@/lib/utils';
 
 export interface ICommonTransaction extends IProductSellPayload {}
 
@@ -39,10 +40,20 @@ export const RightSection = ({
             <FallBackImage
               src={party?.image_src ?? ''}
               fallback={party?.name?.charAt(0) ?? ''}
+              className={cn(party?.name?.includes('ENCRYPTED') && 'blur-sm')}
             />
             <article>
-              <Text title={party?.name} className="!text-lg font-medium" />
-              <Text variant="muted">
+              <Text
+                className={cn(
+                  party?.name?.includes('ENCRYPTED') && 'blur-sm',
+                  '!text-lg font-medium'
+                )}
+                title={party?.name}
+              />
+              <Text
+                className={cn(party?.name?.includes('ENCRYPTED') && 'blur-sm')}
+                variant="muted"
+              >
                 {activeTab} | {party?.mobile}{' '}
                 {party?.email && `| ${party?.email}`}
               </Text>

@@ -8,15 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
 import { useSellStore } from '@/stores/useSellStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import DatePicker from '@/components/common/DatePicker';
 import { DrawerFooter } from '@/components/common/Drawer';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import {
   Form,
   FormItem,
@@ -26,7 +19,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { SellEnum } from '@/enum/sell';
 import { IUserResponse } from '@/types/contact/partyResponse';
 import { createSell } from '@/actions/sell/createSell';
 import {
@@ -164,78 +156,14 @@ const QuickSell = ({
         updated_at: formatDate(DATE_FORMATS.default),
         version: DEFAULT_STARTING_VERSION,
       });
-
-      // closeDrawer({ open: false });
-      // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
     }
     if (responseCreateSell?.error) {
       toast.error('Something went wrong');
     }
-    // if (data.cash_type === 'due') {
-    //   const shop_id = getCookie('shopId') as string;
-    //   console.log('shopId----', shop_id);
-    //   const amount = data.due
-    //     ? Number(data.due.due_amount) - Number(data.amount)
-    //     : -Number(data.amount);
-    //   const payload = {
-    //     shop_id: Number(shop_id),
-    //     amount: amount,
-    //     unique_id: data.due ? data.due.unique_id : generateUlid(),
-    //     due_left: amount,
-    //     version: data.due
-    //       ? Number(data.due.version) + 1
-    //       : DEFAULT_STARTING_VERSION,
-    //     updated_at: formatDate(DATE_FORMATS.default),
-    //     created_at: formatDate(DATE_FORMATS.default),
-    //     message: data.details,
-    //     contact_mobile: data.number,
-    //     contact_type: 'CUSTOMER',
-    //     contact_name: data.customer,
-    //     // sms: data.sms ?? false,
-    //     transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
-    //   };
 
-    //   const dueRes = await createDue(payload);
-    //   console.log('dueRes----', dueRes);
-
-    //   if (!dueRes?.success) {
-    //     console.log(dueRes?.error);
-    //     toast.error('Something went wrong');
-    //   }
-
-    //   if (dueRes?.success) {
-    //     const payload = {
-    //       amount: -Number(data.amount),
-    //       unique_id: generateUlid(),
-    //       due_left: -Number(data.amount),
-    //       version: DEFAULT_STARTING_VERSION,
-    //       updated_at: formatDate(DATE_FORMATS.default),
-    //       created_at: formatDate(DATE_FORMATS.default),
-    //       message: data.details,
-    //       contact_mobile: data.number,
-    //       contact_type: 'CUSTOMER',
-    //       contact_name: data.customer,
-    //       // sms: data.sms ?? false,
-    //       transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
-    //       due_unique_id: dueRes?.data.due.unique_id,
-    //     };
-
-    //     console.log('---', payload);
-
-    //     const res = await createDueItem(payload);
-
-    //     console.log('res----', res);
-    //   }
-    // }
-    // setCalculatedProducts({
-    //   ...calculatedProducts,
-    //   paymentAmount: -Number(data.amount),
-    //   date: formatDate(DATE_FORMATS.default, data.date),
-    // });
     setLoading(false);
     closeDrawer({ open: false });
     toast.success('Quick Sell Added SuccessFully');
-    // openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
   }
 
   useEffect(() => {
@@ -370,7 +298,10 @@ const QuickSell = ({
                   <Input
                     type="text"
                     placeholder=" Enter your name here"
-                    className="pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent" // Add additional styling as needed
+                    className={cn(
+                      field.value.includes('ENCRYPTED') && 'blur-sm',
+                      'pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent'
+                    )}
                     {...field}
                   />
 
@@ -414,8 +345,22 @@ const QuickSell = ({
                                     )}
                                   />
                                   <div className="flex flex-col">
-                                    <p>{customer.name}</p>
-                                    <p>{customer.mobile}</p>
+                                    <p
+                                      className={cn(
+                                        customer.name.includes('ENCRYPTED') &&
+                                          'blur-sm'
+                                      )}
+                                    >
+                                      {customer.name}
+                                    </p>
+                                    <p
+                                      className={cn(
+                                        customer.name.includes('ENCRYPTED') &&
+                                          'blur-sm'
+                                      )}
+                                    >
+                                      {customer.mobile}
+                                    </p>
                                   </div>
                                   {/* {supplier.mobile} */}
                                 </CommandItem>
@@ -443,7 +388,11 @@ const QuickSell = ({
                 Mobile Number <span className="text-error-100">*</span>{' '}
               </FormLabel>
               <FormControl>
-                <Input placeholder="Number" {...field} />
+                <Input
+                  className={cn(field.value.includes('ENCRYPTED') && 'blur-sm')}
+                  placeholder="Number"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

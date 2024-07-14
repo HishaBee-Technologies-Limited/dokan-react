@@ -26,6 +26,7 @@ import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import Pagination from '@/components/common/CustomPagination';
 import NoDataCard from '@/components/common/no-data-card';
 import { IProductSellPayload } from '@/types/sell';
+import { cn } from '@/lib/utils';
 
 const HistoryTable = ({
   transactions,
@@ -100,7 +101,13 @@ const HistoryTable = ({
                 >
                   <TableCell>{transaction.id}</TableCell>
                   <TableCell>{transaction.total_item}</TableCell>
-                  <TableCell className="max-w-[400px]">
+                  <TableCell
+                    className={cn(
+                      transaction.customer_name?.includes('ENCRYPTED') &&
+                        'blur-sm',
+                      'max-w-[400px]'
+                    )}
+                  >
                     {transaction.customer_name}
                   </TableCell>
                   <TableCell>{transaction.total_price}</TableCell>

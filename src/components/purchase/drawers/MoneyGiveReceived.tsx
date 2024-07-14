@@ -477,7 +477,10 @@ const MoneyGiveReceived = () => {
                     <Input
                       type="text"
                       placeholder=" Enter your comment here"
-                      className="pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent" // Add additional styling as needed
+                      className={cn(
+                        field.value?.includes('ENCRYPTED') && 'blur-sm',
+                        'pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent'
+                      )}
                       {...field}
                     />
 
@@ -527,8 +530,24 @@ const MoneyGiveReceived = () => {
                                         )}
                                       />
                                       <div className="flex flex-col">
-                                        <p>{supplier.name}</p>
-                                        <p>{supplier.mobile}</p>
+                                        <p
+                                          className={cn(
+                                            supplier.name.includes(
+                                              'ENCRYPTED'
+                                            ) && 'blur-sm'
+                                          )}
+                                        >
+                                          {supplier.name}
+                                        </p>
+                                        <p
+                                          className={cn(
+                                            supplier.name.includes(
+                                              'ENCRYPTED'
+                                            ) && 'blur-sm'
+                                          )}
+                                        >
+                                          {supplier.mobile}
+                                        </p>
                                       </div>
                                       {/* {supplier.mobile} */}
                                     </CommandItem>
@@ -563,7 +582,13 @@ const MoneyGiveReceived = () => {
                   Number <span className="text-error-100">*</span>{' '}
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Number" {...field} />
+                  <Input
+                    placeholder="Number"
+                    className={cn(
+                      field.value?.includes('ENCRYPTED') && 'blur-sm'
+                    )}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
