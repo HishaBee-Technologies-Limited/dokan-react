@@ -19,6 +19,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { IProduct } from '@/types/product';
 import { cn } from '@/lib/utils';
 import ProductPagination from '@/components/product/ProductPagination';
+import { Package } from 'lucide-react';
 
 type ProductTableProps = { productData: any; isStatusShow?: boolean };
 
@@ -55,7 +56,17 @@ export const ProductTable = ({
             <TableRow key={product?.id} onClick={() => handleRowClick(product)}>
               <TableCell>
                 <div className="gap-space8 flex items-center">
-                  <img src={product?.image_url} alt="" height={40} width={40} />
+                  {/* <img src={product?.image_url} alt="" height={40} width={40} /> */}
+                  {!!product?.image_url && product?.image_url !== 'null' ? (
+                    <Image
+                      src={product?.image_url}
+                      height={40}
+                      width={40}
+                      alt=""
+                    />
+                  ) : (
+                    <Package size={40} />
+                  )}
 
                   <Text title={product.name} className="text-sm" />
                 </div>
