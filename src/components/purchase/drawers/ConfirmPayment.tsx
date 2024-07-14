@@ -406,8 +406,22 @@ const ConfirmPayment = () => {
                                       )}
                                     />
                                     <div className="flex flex-col">
-                                      <p>{supplier.name}</p>
-                                      <p>{supplier.mobile}</p>
+                                      <p
+                                        className={cn(
+                                          supplier.name.includes('ENCRYPTED') &&
+                                            'blur-sm'
+                                        )}
+                                      >
+                                        {supplier.name}
+                                      </p>
+                                      <p
+                                        className={cn(
+                                          supplier.name.includes('ENCRYPTED') &&
+                                            'blur-sm'
+                                        )}
+                                      >
+                                        {supplier.mobile}
+                                      </p>
                                     </div>
                                   </CommandItem>
                                 ))

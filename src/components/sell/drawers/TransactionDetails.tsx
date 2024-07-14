@@ -12,7 +12,7 @@ import {
   EditIcon,
   ExpandMoreIcon,
 } from '@/components/common/icons';
-import { calculateTotal } from '@/lib/utils';
+import { calculateTotal, cn } from '@/lib/utils';
 import { PAYMENT_STATUS } from '@/lib/constants/common';
 import { getTransactionItems } from '@/actions/sell/getTransactionItems';
 import { IProducts, IPurchaseProducts } from '@/types/purchase';
@@ -80,11 +80,16 @@ const TransactionDetails = () => {
           title={`Total Item: ${totalItems ?? 0}`}
           className="font-semibold"
         />
-
         {currentPurchase?.customer_name && (
           <div className="flex items-center gap-space8">
             <Text title="Customer" />
-            <div className="max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color">
+            <div
+              className={cn(
+                currentPurchase.customer_name?.includes('ENCRYPTED') &&
+                  'blur-sm',
+                '"max-w-max py-space6 pl-space6 pr-space8 rounded-full flex items-center bg-white dark:bg-primary-90 border border-color"'
+              )}
+            >
               <FallBackImage
                 src=""
                 fallback="M"
@@ -107,7 +112,6 @@ const TransactionDetails = () => {
             </div>
           </div>
         )}
-
         <Text
           title={`Transaction date  ${currentPurchase?.created_at} `}
           className="font-semibold"

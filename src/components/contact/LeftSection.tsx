@@ -13,6 +13,7 @@ import WrapperOddList from '@/components/common/WrapperOddList';
 import { IUserResponse } from '@/types/contact/partyResponse';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import CardWithSideIndicator from '@/components/common/CardWithSideIndicator';
+import { cn } from '@/lib/utils';
 
 const tabData = [
   {
@@ -122,10 +123,21 @@ export const LeftSection = ({
                 <FallBackImage
                   src={item.image_src ?? ''}
                   fallback={item.name.charAt(0)}
+                  className={cn(item.name.includes('ENCRYPTED') && 'blur-sm')}
                 />
                 <article>
-                  <Text title={item.name} className="!text-md font-medium" />
-                  <Text title={item.mobile} variant="muted" />
+                  <Text
+                    className={cn(
+                      item.name.includes('ENCRYPTED') && 'blur-sm',
+                      '!text-md font-medium'
+                    )}
+                    title={item.name}
+                  />
+                  <Text
+                    className={cn(item.name.includes('ENCRYPTED') && 'blur-sm')}
+                    title={item.mobile}
+                    variant="muted"
+                  />
                 </article>
               </div>
             </CardWithSideIndicator>

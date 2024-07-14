@@ -16,6 +16,7 @@ import { useDueStore } from '@/stores/useDueStore';
 import { useInView } from 'react-intersection-observer';
 import { useDuePagination } from '@/hooks/useDuePagination';
 import { Input } from '../ui/input';
+import { cn } from '@/lib/utils';
 
 const tabData = [
   {
@@ -174,15 +175,28 @@ export const LeftSection = () => {
                     <FallBackImage
                       src={''}
                       fallback={item.contact_name.charAt(0)}
+                      className={cn(
+                        item.contact_name.includes('ENCRYPTED') && 'blur-sm'
+                      )}
                     />
 
                     <div className="w-full flex items-center justify-between gap-space12">
                       <article>
                         <Text
                           title={item.contact_name}
-                          className="!text-md font-medium  w-24"
+                          className={cn(
+                            item.contact_name.includes('ENCRYPTED') &&
+                              'blur-sm',
+                            '!text-md font-medium  w-24'
+                          )}
                         />
-                        <Text title={item.contact_mobile} variant="muted" />
+                        <Text
+                          title={item.contact_mobile}
+                          className={cn(
+                            item.contact_name.includes('ENCRYPTED') && 'blur-sm'
+                          )}
+                          variant="muted"
+                        />
                       </article>
 
                       {item.due_amount !== 0 && (

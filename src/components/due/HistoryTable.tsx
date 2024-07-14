@@ -20,6 +20,7 @@ import { ICommonGetResponse } from '@/types/common';
 import Pagination from '@/components/common/CustomPagination';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import { cn } from '@/lib/utils';
 
 const HistoryTable = ({
   dueList,
@@ -80,12 +81,27 @@ const HistoryTable = ({
                   <FallBackImage
                     src={item.image ?? ''}
                     fallback={item.contact_name.charAt(0)}
+                    className={cn(
+                      item.contact_name.includes('ENCRYPTED') && 'blur-sm'
+                    )}
                   />
 
-                  <Text title={item.contact_name} className="text-sm" />
+                  <Text
+                    title={item.contact_name}
+                    className={cn(
+                      item.contact_name.includes('ENCRYPTED') && 'blur-sm',
+                      'text-sm'
+                    )}
+                  />
                 </div>
               </TableCell>
-              <TableCell>{item.contact_mobile}</TableCell>
+              <TableCell
+                className={cn(
+                  item.contact_name.includes('ENCRYPTED') && 'blur-sm'
+                )}
+              >
+                {item.contact_mobile}
+              </TableCell>
               <TableCell>{item.contact_type}</TableCell>
               <TableCell>৳ {Math.abs(item.amount)}</TableCell>
               <TableCell className="text-center">

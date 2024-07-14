@@ -11,6 +11,7 @@ import { IDueItemsResponse } from '@/types/due/dueResponse';
 import FallBackImage from '@/components/common/FallBackImage';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import { cn } from '@/lib/utils';
 
 interface IProps {
   dueItems: IDueItemsResponse[];
@@ -62,13 +63,26 @@ export const RightSection = ({ dueItems, totalValues }: IProps) => {
             <FallBackImage
               src={''}
               fallback={dueItems && dueItems[0]?.due.contact_name.charAt(0)}
+              className={cn(
+                dueItems[0]?.due.contact_name.includes('ENCRYPTED') && 'blur-sm'
+              )}
             />
             <article>
               <Text
                 title={dueItems && dueItems[0]?.due.contact_name}
-                className="!text-lg font-medium"
+                className={cn(
+                  dueItems[0]?.due.contact_name.includes('ENCRYPTED') &&
+                    'blur-sm',
+                  '!text-lg font-medium'
+                )}
               />
-              <Text variant="muted">
+              <Text
+                variant="muted"
+                className={cn(
+                  dueItems[0]?.due.contact_name.includes('ENCRYPTED') &&
+                    'blur-sm'
+                )}
+              >
                 {dueItems && dueItems[0]?.due.contact_type} |{' '}
                 {dueItems && dueItems[0]?.due.contact_mobile}
               </Text>

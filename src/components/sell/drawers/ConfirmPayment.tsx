@@ -377,7 +377,10 @@ const ConfirmPayment = () => {
                         <Input
                           type="text"
                           placeholder="Enter name..."
-                          className="pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent" // Add additional styling as needed
+                          className={cn(
+                            field.value.includes('ENCRYPTED') && 'blur-sm',
+                            ' pl-3 pr-20 text-md w-full border border-gray-300  shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6E23DD] focus:border-transparent'
+                          )} // Add additional styling as needed
                           {...field}
                         />
 
@@ -427,8 +430,24 @@ const ConfirmPayment = () => {
                                             )}
                                           />
                                           <div className="flex flex-col">
-                                            <p>{customer.name}</p>
-                                            <p>{customer.mobile}</p>
+                                            <p
+                                              className={cn(
+                                                customer.name.includes(
+                                                  'ENCRYPTED'
+                                                ) && 'blur-sm'
+                                              )}
+                                            >
+                                              {customer.name}
+                                            </p>
+                                            <p
+                                              className={cn(
+                                                customer.name.includes(
+                                                  'ENCRYPTED'
+                                                ) && 'blur-sm'
+                                              )}
+                                            >
+                                              {customer.mobile}
+                                            </p>
                                           </div>
                                           {/* {supplier.mobile} */}
                                         </CommandItem>
@@ -465,7 +484,13 @@ const ConfirmPayment = () => {
                       Customer Number <span className="text-error-100">*</span>{' '}
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Number" className="" {...field} />
+                      <Input
+                        placeholder="Number"
+                        className={cn(
+                          field.value?.includes('ENCRYPTED') && 'blur-sm'
+                        )}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
