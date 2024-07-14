@@ -29,6 +29,8 @@ import { ReloadIcon } from '@radix-ui/react-icons';
 import { createDueItem } from '@/actions/due/createDueItem';
 import { createDue } from '@/actions/due/createDue';
 import { getDueByTransactionId } from '@/actions/due/getDueByTransactionId';
+import { AlertDialog, AlertDialogContent } from '../ui/alert-dialog';
+import { BounceLoader } from 'react-spinners';
 
 export const RightSection = () => {
   const handleSellDrawer = useSellStore((state) => state.setSellDrawerState);
@@ -375,6 +377,11 @@ export const RightSection = () => {
           </Card>
         </div>
       </form>
+      <AlertDialog open={loading}>
+        <AlertDialogContent>
+          <BounceLoader color="#FFC600" />
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 };

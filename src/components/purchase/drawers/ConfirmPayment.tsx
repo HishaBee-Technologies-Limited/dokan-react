@@ -153,7 +153,7 @@ const ConfirmPayment = () => {
       supplier_mobile: data.supplier_number,
       supplier_name: data.supplier,
       total_item: totalItems,
-      total_price: Number(data.amount),
+      total_price: calculatedProducts.totalPrice!,
       unique_id: uniqueId,
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,

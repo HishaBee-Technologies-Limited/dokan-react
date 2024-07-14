@@ -144,7 +144,7 @@ const MoneyGiveReceived = () => {
       supplier_mobile: data.number,
       supplier_name: data.name,
       total_item: totalItems,
-      total_price: Number(data.amount),
+      total_price: calculatedProducts.totalPrice!,
       unique_id: uniqueId,
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,

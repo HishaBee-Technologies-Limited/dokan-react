@@ -11,6 +11,7 @@ import TransactionDelete from '@/components/sell/dialogs/TransactionDelete';
 const SellDialogs = () => {
   const dialogState = useSellStore((state) => state.sellDialogState);
   const handleClose = useSellStore((state) => state.setSellDialogState);
+  const clearProductArray = useSellStore((state) => state.setProducts);
 
   const renderedDrawers = (activeDialog: string | undefined) => {
     if (SellEnum.QR_CODE === activeDialog) {
@@ -26,7 +27,10 @@ const SellDialogs = () => {
     <Dialog
       open={dialogState.open}
       header={dialogState.header}
-      onClose={(open) => handleClose({ open })}
+      onClose={(open) => {
+        handleClose({ open });
+        clearProductArray([]);
+      }}
     >
       {renderedDrawers(dialogState.header)}
     </Dialog>
