@@ -101,7 +101,7 @@ const HistoryTable = ({
                 <TableCell>{purchase.total_item}</TableCell>
                 <TableCell
                   className={cn(
-                    purchase.supplier_name.includes('ENCRYPTED') && 'blur-sm'
+                    purchase.supplier_name?.includes('ENCRYPTED') && 'blur-sm'
                   )}
                 >
                   {purchase.supplier_name}
