@@ -70,6 +70,8 @@ const HistoryTable = ({
     }
   };
 
+  console.log(purchaseHistory);
+
   return (
     <ScrollArea className="pb-space8">
       {purchaseHistory?.data.length === 0 ? (

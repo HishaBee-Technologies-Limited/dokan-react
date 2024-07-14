@@ -63,6 +63,8 @@ import { IDueListResponse } from '@/types/due/dueResponse';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { getUserDue } from '@/actions/due/getUserDue';
 import { SELL_SMS } from '@/lib/sms-text';
+import { AlertDialog, AlertDialogContent } from '@/components/ui/alert-dialog';
+import { BounceLoader } from 'react-spinners';
 
 const partyList = ['customer', 'supplier'];
 
@@ -169,7 +171,7 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
       customer_name: data.name,
       customer_address: data.customer_address,
       total_item: totalItems,
-      total_price: Number(data.amount),
+      total_price: calculatedProducts.totalPrice!,
       unique_id: generateUlid(),
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
@@ -182,8 +184,8 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
     });
 
     if (responseCreateSell?.success) {
-      calculatedProducts.products.forEach(async (product) => {
-        sellItemCreate({
+      const apiCalls = async (product: any) => {
+        const res = sellItemCreate({
           created_at: formatDate(DATE_FORMATS.default, data.date),
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
@@ -204,87 +206,98 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
           updated_at: formatDate(DATE_FORMATS.default),
           version: DEFAULT_STARTING_VERSION,
         });
-      });
+        return res;
+      };
+      const promises = calculatedProducts.products.map(apiCalls);
+      const res = await Promise.all(promises);
+      const isItemsCreated = !res.some((response) => !response?.success);
+
+      if (isItemsCreated) {
+        const shop_id = getCookie('shopId') as string;
+        const amount = data.due
+          ? Number(data.due.due_amount) + Number(data.amount)
+          : Number(data.amount);
+        const payload = {
+          shop_id: Number(shop_id),
+          amount: amount,
+          unique_id: data.due ? data.due.unique_id : generateUlid(),
+          due_left: amount,
+          version: data.due
+            ? Number(data.due.version) + 1
+            : DEFAULT_STARTING_VERSION,
+          updated_at: formatDate(DATE_FORMATS.default),
+          created_at: formatDate(DATE_FORMATS.default),
+          message: data.details,
+          contact_mobile: data.number,
+          contact_type: 'CUSTOMER',
+          contact_name: data.name,
+          // sms: data.sms ?? false,
+          transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
+        };
+
+        const dueRes = await createDue(payload);
+        if (!dueRes?.success) return toast.error('Something went wrong');
+        if (dueRes?.success) {
+          const payload = {
+            amount: Number(calculatedProducts.totalPrice),
+            unique_id: generateUlid(),
+            due_left: Number(data.amount),
+            version: DEFAULT_STARTING_VERSION,
+            updated_at: formatDate(DATE_FORMATS.default),
+            created_at: formatDate(DATE_FORMATS.default),
+            message: data.details,
+            contact_mobile: data.number,
+            contact_type: 'CUSTOMER',
+            contact_name: data.name,
+            // sms: data.sms ?? false,
+            transaction_unique_id:
+              responseCreateSell?.data.transaction.unique_id,
+            due_unique_id: dueRes?.data.due.unique_id,
+          };
+
+          const payloadForPaymentAmount = {
+            amount: paymentAmount * -1,
+            unique_id: generateUlid(),
+            due_left: 0,
+            version: DEFAULT_STARTING_VERSION,
+            updated_at: formatDate(DATE_FORMATS.default),
+            created_at: formatDate(DATE_FORMATS.default),
+            message: data.details,
+            contact_mobile: data.number,
+            contact_type: 'CUSTOMER',
+            contact_name: data.name,
+            // sms: data.sms ?? false,
+            transaction_unique_id: null,
+            due_unique_id: dueRes?.data.due.unique_id,
+          };
+
+          const res = await createDueItem(payload);
+          if (Number(data.amount) !== Number(calculatedProducts.totalPrice)) {
+            const res = await createDueItem(payloadForPaymentAmount);
+          }
+          // const resAmount = await createDueItem(payloadForPaymentAmount);
+        }
+        setCalculatedProducts({
+          ...calculatedProducts,
+          paymentAmount:
+            Number(data.amount) === Number(calculatedProducts.totalPrice)
+              ? 0
+              : Number(calculatedProducts.totalPrice) - Number(data.amount),
+          date: formatDate(DATE_FORMATS.default, data.date),
+          user: { name: data.name, mobile: data.number },
+        });
+        setLoading(false);
+
+        handleSellDrawer({ open: false });
+        openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+      } else {
+        setLoading(false);
+        toast.error('Something went wrong');
+      }
     }
     if (responseCreateSell?.error) {
       toast.error('Something went wrong');
     }
-    const shop_id = getCookie('shopId') as string;
-    const amount = data.due
-      ? Number(data.due.due_amount) + Number(data.amount)
-      : Number(data.amount);
-    const payload = {
-      shop_id: Number(shop_id),
-      amount: amount,
-      unique_id: data.due ? data.due.unique_id : generateUlid(),
-      due_left: amount,
-      version: data.due
-        ? Number(data.due.version) + 1
-        : DEFAULT_STARTING_VERSION,
-      updated_at: formatDate(DATE_FORMATS.default),
-      created_at: formatDate(DATE_FORMATS.default),
-      message: data.details,
-      contact_mobile: data.number,
-      contact_type: 'CUSTOMER',
-      contact_name: data.name,
-      // sms: data.sms ?? false,
-      transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
-    };
-
-    const dueRes = await createDue(payload);
-    if (!dueRes?.success) return toast.error('Something went wrong');
-    if (dueRes?.success) {
-      const payload = {
-        amount: Number(calculatedProducts.totalPrice),
-        unique_id: generateUlid(),
-        due_left: Number(data.amount),
-        version: DEFAULT_STARTING_VERSION,
-        updated_at: formatDate(DATE_FORMATS.default),
-        created_at: formatDate(DATE_FORMATS.default),
-        message: data.details,
-        contact_mobile: data.number,
-        contact_type: 'CUSTOMER',
-        contact_name: data.name,
-        // sms: data.sms ?? false,
-        transaction_unique_id: responseCreateSell?.data.transaction.unique_id,
-        due_unique_id: dueRes?.data.due.unique_id,
-      };
-
-      const payloadForPaymentAmount = {
-        amount: paymentAmount * -1,
-        unique_id: generateUlid(),
-        due_left: 0,
-        version: DEFAULT_STARTING_VERSION,
-        updated_at: formatDate(DATE_FORMATS.default),
-        created_at: formatDate(DATE_FORMATS.default),
-        message: data.details,
-        contact_mobile: data.number,
-        contact_type: 'CUSTOMER',
-        contact_name: data.name,
-        // sms: data.sms ?? false,
-        transaction_unique_id: null,
-        due_unique_id: dueRes?.data.due.unique_id,
-      };
-
-      const res = await createDueItem(payload);
-      if (Number(data.amount) !== Number(calculatedProducts.totalPrice)) {
-        const res = await createDueItem(payloadForPaymentAmount);
-      }
-      // const resAmount = await createDueItem(payloadForPaymentAmount);
-    }
-    setCalculatedProducts({
-      ...calculatedProducts,
-      paymentAmount:
-        Number(data.amount) === Number(calculatedProducts.totalPrice)
-          ? 0
-          : Number(calculatedProducts.totalPrice) - Number(data.amount),
-      date: formatDate(DATE_FORMATS.default, data.date),
-      user: { name: data.name, mobile: data.number },
-    });
-    setLoading(false);
-
-    handleSellDrawer({ open: false });
-    openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
   }
 
   const activeCashColor = (active: string): string => {
@@ -638,6 +651,11 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
           </DrawerFooter>
         </form>
       </Form>
+      <AlertDialog open={loading}>
+        <AlertDialogContent>
+          <BounceLoader color="#FFC600" />
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

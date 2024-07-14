@@ -7,10 +7,12 @@ import QRCode from '@/components/purchase/dialogs/QRCode';
 import Successful from '@/components/purchase/dialogs/Successful';
 import TransactionDelete from '@/components/purchase/dialogs/TransactionDelete';
 import { PurchaseEnum } from '@/enum/purchase';
+import { usePurchase } from '@/stores/usePurchaseStore';
 
 const PurchaseDialogs = () => {
   const dialogState = usePurchaseStore((state) => state.dialogState);
   const handleClose = usePurchaseStore((state) => state.setDialogState);
+  const clearProductArray = usePurchase((state) => state.setProducts);
 
   const renderedDrawers = (activeDialog: string | undefined) => {
     if (PurchaseEnum.QR_CODE === activeDialog) {
@@ -26,7 +28,10 @@ const PurchaseDialogs = () => {
     <Dialog
       open={dialogState.open}
       header={dialogState.header}
-      onClose={(open) => handleClose({ open })}
+      onClose={(open) => {
+        handleClose({ open });
+        clearProductArray([]);
+      }}
     >
       {renderedDrawers(dialogState.header)}
     </Dialog>

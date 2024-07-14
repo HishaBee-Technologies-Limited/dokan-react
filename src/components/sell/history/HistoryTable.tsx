@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
 import { useSellStore } from '@/stores/useSellStore';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { DeleteIcon, EditIcon, MoreVertIcon } from '@/components/common/icons';
+import { DeleteIcon, MoreVertIcon } from '@/components/common/icons';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,13 +16,11 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
 import { ICommonGetResponse } from '@/types/common';
-import { IPurchaseHistoryResponse } from '@/types/purchase';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
 import Pagination from '@/components/common/CustomPagination';
@@ -36,7 +34,6 @@ const HistoryTable = ({
 }) => {
   const handleDialogOpen = useSellStore((state) => state.setSellDialogState);
   const handleDrawerOpen = useSellStore((state) => state.setSellDrawerState);
-  const setSellDetails = useSellStore((state) => state.setSellDetails);
   const pathname = usePathname();
   const router = useRouter();
   const { setQueryString } = useCreateQueryString();
@@ -76,6 +73,7 @@ const HistoryTable = ({
       return 'bg-error-20';
     }
   };
+
   return (
     <ScrollArea className="pb-space8">
       {transactions?.data.length === 0 ? (

@@ -30,6 +30,8 @@ import { jwtDecode } from 'jwt-decode';
 import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { getDueByPurchaseId } from '@/actions/due/getDueByPurchaseId';
+import { AlertDialog, AlertDialogContent } from '../ui/alert-dialog';
+import { BounceLoader } from 'react-spinners';
 
 export const RightSection = () => {
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
@@ -355,6 +357,15 @@ export const RightSection = () => {
           </Card>
         </div>
       </form>
+      <AlertDialog open={loading}>
+        <AlertDialogContent>
+          <BounceLoader color="#FFC600" />
+          {/* <Text
+            title="Please wait ..."
+            className="text-lg text-slate-50 mr-4"
+          /> */}
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 };

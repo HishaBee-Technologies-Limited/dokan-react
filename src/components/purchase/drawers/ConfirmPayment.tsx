@@ -1,23 +1,15 @@
 import { z } from 'zod';
 import React, { useEffect, useMemo, useState } from 'react';
-import { SellEnum } from '@/enum/sell';
-import { useForm, useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Icon from '@/components/common/Icon';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/common/text';
 import { Switch } from '@/components/ui/switch';
 import { zodResolver } from '@hookform/resolvers/zod';
-import DatePicker from '@/components/common/DatePicker';
 import { usePurchaseStore } from '@/stores/usePurchase';
 import { DrawerFooter } from '@/components/common/Drawer';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import {
   Form,
   FormItem,
@@ -51,7 +43,6 @@ import { createItemPurchase } from '@/actions/purchase/createItemPurchase';
 import { toast } from 'sonner';
 import { PurchaseEnum } from '@/enum/purchase';
 import { jwtDecode } from 'jwt-decode';
-// import { logger } from '../../../../Pino';
 import { PURCHASE_SMS } from '@/lib/sms-text';
 import { Check, UserSearch } from 'lucide-react';
 import {
@@ -62,8 +53,10 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { getUserDue } from '@/actions/due/getUserDue';
 import { Skeleton } from '@/components/ui/skeleton';
+import { BounceLoader } from 'react-spinners';
+
+import { AlertDialog, AlertDialogContent } from '@/components/ui/alert-dialog';
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -160,7 +153,7 @@ const ConfirmPayment = () => {
       supplier_mobile: data.supplier_number,
       supplier_name: data.supplier,
       total_item: totalItems,
-      total_price: Number(data.amount),
+      total_price: calculatedProducts.totalPrice!,
       unique_id: uniqueId,
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
@@ -168,8 +161,8 @@ const ConfirmPayment = () => {
       sms: sms,
     });
     if (responseCreatePurchase?.success) {
-      calculatedProducts.products.forEach(async (product) => {
-        createItemPurchase({
+      const apiCalls = async (product: any) => {
+        const res = createItemPurchase({
           created_at: formatDate(DATE_FORMATS.default, data.date),
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
@@ -186,15 +179,27 @@ const ConfirmPayment = () => {
           updated_at: formatDate(DATE_FORMATS.default),
           version: DEFAULT_STARTING_VERSION,
         });
-      });
-      setCalculatedProducts({
-        ...calculatedProducts,
-        paymentAmount: Number(data.amount),
-        date: formatDate(DATE_FORMATS.default, data.date),
-        user: { name: data.supplier, mobile: data.supplier_number! },
-      });
-      closeDrawer({ open: false });
-      openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
+        return res;
+      };
+      const promises = calculatedProducts.products.map(apiCalls);
+      const res = await Promise.all(promises);
+      const isItemsCreated = !res.some((response) => !response?.success);
+
+      if (isItemsCreated) {
+        setLoading(false);
+
+        setCalculatedProducts({
+          ...calculatedProducts,
+          paymentAmount: Number(data.amount),
+          date: formatDate(DATE_FORMATS.default, data.date),
+          user: { name: data.supplier, mobile: data.supplier_number! },
+        });
+        closeDrawer({ open: false });
+        openSuccessDialog({ open: true, header: PurchaseEnum.SUCCESSFUL });
+      } else {
+        setLoading(false);
+        toast.error('Something went wrong');
+      }
     }
     if (responseCreatePurchase?.error) {
       toast.error('Something went wrong');
@@ -213,8 +218,6 @@ const ConfirmPayment = () => {
       }, 0),
     [calculatedProducts]
   );
-
-  // logger.info('Total items', shop);
 
   useEffect(() => {
     const fetchSuppliersAndEmployees = async () => {
@@ -237,12 +240,6 @@ const ConfirmPayment = () => {
     };
     fetchSuppliersAndEmployees();
   }, []);
-
-  // useEffect(() => {
-  //   const fetchDue = async () => {
-  //     const res = await getUserDue();
-  //   };
-  // }, []);
 
   return (
     <Form {...form}>
@@ -376,7 +373,6 @@ const ConfirmPayment = () => {
                               !field.value && 'text-muted-foreground'
                             )}
                           >
-                            {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
                             <UserSearch className="  shrink-0" />
                           </Button>
                         </FormControl>
@@ -413,7 +409,6 @@ const ConfirmPayment = () => {
                                       <p>{supplier.name}</p>
                                       <p>{supplier.mobile}</p>
                                     </div>
-                                    {/* {supplier.mobile} */}
                                   </CommandItem>
                                 ))
                               ) : (
@@ -453,9 +448,6 @@ const ConfirmPayment = () => {
             </FormItem>
           )}
         />
-        {/* </div>
-          </div>
-        </div> */}
 
         <DrawerFooter height="14rem" className="flex-col !gap-space12">
           <div className="flex items-center gap-space8 justify-center">
@@ -488,6 +480,12 @@ const ConfirmPayment = () => {
           </Button>
         </DrawerFooter>
       </form>
+
+      <AlertDialog open={loading}>
+        <AlertDialogContent>
+          <BounceLoader color="#FFC600" />
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 };

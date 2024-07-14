@@ -62,6 +62,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SELL_SMS } from '@/lib/sms-text';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AlertDialog, AlertDialogContent } from '@/components/ui/alert-dialog';
+import { BounceLoader } from 'react-spinners';
 
 const formSchema = z.object({
   amount: z.string(),
@@ -156,7 +158,7 @@ const ConfirmPayment = () => {
       customer_name: data.customer,
       customer_address: data.customer_address,
       total_item: totalItems,
-      total_price: Number(data.amount),
+      total_price: calculatedProducts.totalPrice!,
       unique_id: generateUlid(),
       updated_at: formatDate(DATE_FORMATS.default),
       user_id: tkn ? Number(jwtDecode(tkn).sub) : 0,
@@ -172,8 +174,8 @@ const ConfirmPayment = () => {
       return toast.error('Something went wrong');
 
     if (responseCreateSell?.success) {
-      calculatedProducts.products.forEach(async (product) => {
-        sellItemCreate({
+      const apiCalls = async (product: any) => {
+        const res = sellItemCreate({
           created_at: formatDate(DATE_FORMATS.default),
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
@@ -193,18 +195,27 @@ const ConfirmPayment = () => {
           updated_at: formatDate(DATE_FORMATS.default),
           version: DEFAULT_STARTING_VERSION,
         });
-      });
+        return res;
+      };
+      const promises = calculatedProducts.products.map(apiCalls);
+      const res = await Promise.all(promises);
+      const isItemsCreated = !res.some((response) => !response?.success);
 
-      setCalculatedProducts({
-        ...calculatedProducts,
-        paymentAmount: Number(data.amount),
-        date: formatDate(DATE_FORMATS.default, data.date),
-        user: { name: data.customer, mobile: data.customer_number! },
-      });
-      setLoading(false);
+      if (isItemsCreated) {
+        setCalculatedProducts({
+          ...calculatedProducts,
+          paymentAmount: Number(data.amount),
+          date: formatDate(DATE_FORMATS.default, data.date),
+          user: { name: data.customer, mobile: data.customer_number! },
+        });
 
-      closeDrawer({ open: false });
-      openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+        setLoading(false);
+        closeDrawer({ open: false });
+        openSuccessDialog({ open: true, header: SellEnum.SUCCESSFUL });
+      } else {
+        setLoading(false);
+        toast.error('Something went wrong');
+      }
     }
     if (responseCreateSell?.error) {
       toast.error('Something went wrong');
@@ -587,6 +598,11 @@ const ConfirmPayment = () => {
           </Button>
         </DrawerFooter>
       </form>
+      <AlertDialog open={loading}>
+        <AlertDialogContent>
+          <BounceLoader color="#FFC600" />
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 };
