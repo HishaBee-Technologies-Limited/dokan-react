@@ -3,14 +3,13 @@ import { ICommonGetResponse } from '@/types/common';
 
 import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
-import { IDueListResponse } from '@/types/due/dueResponse';
-import { IPurchaseHistoryResponse } from '@/types/purchase';
 import { format, sub } from 'date-fns';
 import { DATE_FORMATS } from '@/lib/constants/common';
 import { formatDate } from '@/lib/utils';
 import { IProductSellPayload } from '@/types/sell';
+import { IStockResponse } from '@/types/stock';
 
-export const getSellHistory = async (
+export const getStockHistory = async (
   page?: number,
   startDate?: string,
   endDate?: string
@@ -18,7 +17,7 @@ export const getSellHistory = async (
   const pageCount = page ? page : 1;
   try {
     const shopId = cookies().get('shopId')?.value;
-    const DEFAULT_PAGE_ITEMS = '20';
+    const DEFAULT_PAGE_ITEMS = '100';
 
     // const params = `shop_id=${shopId}&per_page=${pageCount}`;
     const params = new URLSearchParams({
@@ -31,7 +30,7 @@ export const getSellHistory = async (
       perPage: DEFAULT_PAGE_ITEMS,
       exclude_deleted: String(true),
     });
-    const res = await authApi.get(`/transaction/all?${params}`);
+    const res = await authApi.get(`/stock_history?${params}`);
     const data = await res.json();
 
     if (res.ok) {
@@ -39,7 +38,7 @@ export const getSellHistory = async (
         success: true,
         message: data.message,
         status_code: data.status_code,
-        data: data as ICommonGetResponse<IProductSellPayload>,
+        data: data as ICommonGetResponse<IStockResponse>,
       };
     }
     if (!res.ok) {

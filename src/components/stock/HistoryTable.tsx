@@ -12,8 +12,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { ICommonGetResponse } from '@/types/common';
+import { IStockResponse } from '@/types/stock';
+import ProductPagination from '../product/ProductPagination';
 
-const HistoryTable = () => {
+const HistoryTable = ({
+  stocks,
+}: {
+  stocks: ICommonGetResponse<IStockResponse> | undefined;
+}) => {
+  console.log(stocks);
   return (
     <ScrollArea className="pb-space8">
       <Table wrapperClass="rounded-md border border-color !min-w-[90rem]">
@@ -24,45 +32,51 @@ const HistoryTable = () => {
             <TableHead>Stock Price</TableHead>
             <TableHead>Previous Stock</TableHead>
             <TableHead>Stock Adjustment</TableHead>
-            <TableHead className="text-end">Current Stock</TableHead>
+            <TableHead className="text-end">After Stock</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {Array(10)
-            .fill(0)
-            .map((item, i) => (
-              <TableRow key={item.number}>
-                <TableCell>
-                  <div className="flex items-center gap-space8">
-                    <Image src="" alt="" height={40} width={40} />
+          {stocks?.data.map((item, i) => (
+            <TableRow key={item.id}>
+              <TableCell>
+                <div className="flex items-center gap-space8">
+                  <Image src="" alt="" height={40} width={40} />
 
-                    <Text
-                      title={`Nestle Nescafe Classic Instant`}
-                      className="text-sm"
-                    />
-                  </div>
-                </TableCell>
-                <TableCell>Aug 09, 2024 08:45 PM</TableCell>
-                <TableCell>৳ 200</TableCell>
-                <TableCell>20</TableCell>
-                <TableCell>
-                  <Text title="+20" variant="success" />
-                </TableCell>
-                <TableCell className="text-end">20</TableCell>
-              </TableRow>
-            ))}
+                  <Text title={item.name} className="text-sm" />
+                </div>
+              </TableCell>
+              <TableCell>{item.created_at}</TableCell>
+              <TableCell>৳ {item.stock_value}</TableCell>
+              <TableCell>{item.before_stock}</TableCell>
+              <TableCell>
+                <Text
+                  title={`${!!item.increase ? '+' : '-'}${Number(item.quantity)}`}
+                  variant="success"
+                />
+              </TableCell>
+              <TableCell className="text-end">{item.after_stock}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
 
         <TableFooter>
           <TableRow>
             <TableCell colSpan={6} className="text-center">
-              Showing 10 of 100 Transactions
+              Showing 20 of {stocks?.total} Transactions
             </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
       <ScrollBar orientation="horizontal" />
+
+      <div className="my-10">
+        <ProductPagination
+          pageCount={Math.ceil(stocks?.total! / stocks?.per_page!)}
+          currentPage={stocks?.current_page ?? 0}
+          lastPage={stocks?.last_page ?? 0}
+        />
+      </div>
     </ScrollArea>
   );
 };

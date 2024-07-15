@@ -10,18 +10,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import ProductSearching from '../product/ProductSearching';
+import ProductListSorting from '../product/ProductListSorting';
 
 export const StockQueries = () => {
   return (
     <div className="flex flex-wrap justify-between items-center gap-space16">
       <div className="flex gap-space12 order-2 lg:order-1 grow">
-        <Search
-          onChange={() => {}}
-          placeholder="Search by product name"
-          wrapperClasses={`max-w-[36rem] lg:w-[37rem]`}
-        />
+        <ProductSearching />
 
-        <Select onValueChange={() => {}} defaultValue={''}>
+        {/* <Select onValueChange={() => {}} defaultValue={''}>
           <SelectTrigger className="max-w-max gap-space8 border-color">
             <FilterIcon />
             <SelectValue placeholder="Filter by" />
@@ -33,10 +31,11 @@ export const StockQueries = () => {
               <SelectItem value="m@support.com">m@support.com</SelectItem>
             </div>
           </SelectContent>
-        </Select>
+        </Select> */}
+        <ProductListSorting />
       </div>
 
-      <article className="xl:max-w-[46rem] min-w-[32rem] flex gap-space12 order-1 lg:order-2 grow">
+      {/* <article className="xl:max-w-[46rem] min-w-[32rem] flex gap-space12 order-1 lg:order-2 grow">
         <article className="bg-primary-10 rounded-md w-full py-space8 px-space12 space-y-space4">
           <Text
             title="buying price"
@@ -53,7 +52,7 @@ export const StockQueries = () => {
           />
           <Text title="111" className="text-semibold" />
         </article>
-      </article>
+      </article> */}
     </div>
   );
 };
