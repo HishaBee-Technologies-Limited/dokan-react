@@ -14,6 +14,7 @@ import { useProductStore } from '@/stores/useProductStore';
 import { ProductEnum } from '@/enum/product';
 import { toast } from 'sonner';
 import { useCreateQueryString } from '@/hooks/useCreateQueryString';
+import { Package } from 'lucide-react';
 
 export const UpdateStock = ({ product }: { product: IProductPayload }) => {
   const form = useForm<{ stock: IProductPayload['stock'] }>({
@@ -77,12 +78,16 @@ export const UpdateStock = ({ product }: { product: IProductPayload }) => {
   return (
     <div className="space-y-space16 pt-space16">
       <div className="gap-space8 px-space16 md:px-space32 flex items-center">
-        <Image src={product.image} alt="" height={40} width={40} />
+        {!!product?.image_url && product?.image_url !== 'null' ? (
+          <Image src={product?.image_url} height={40} width={40} alt="" />
+        ) : (
+          <Package size={40} />
+        )}
 
         <article className="space-y-space4">
           <Text title={product.name} className="text-sm font-semibold" />
           <Text
-            title={String(product.selling_price ?? '')}
+            title={String(product.cost_price ?? '')}
             variant="secondary"
             className="text-sm font-semibold"
           />
