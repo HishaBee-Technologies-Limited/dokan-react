@@ -3,6 +3,7 @@
 import { authApi } from '@/lib/api';
 import { cookies } from 'next/headers';
 import { IProductPayload } from '@/types/product';
+import { revalidatePath } from 'next/cache';
 
 export const createProductOrUpdate = async ({
   unique_id,
@@ -75,7 +76,7 @@ export const createProductOrUpdate = async ({
 
     const res = await authApi.post(`/product`, payload);
     const data = await res.json();
-
+    // revalidatePath('/stock/update');
     if (res.ok) {
       return {
         success: true,

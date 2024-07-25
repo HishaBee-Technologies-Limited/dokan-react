@@ -21,24 +21,59 @@ import { StockQueries } from './StockQueries';
 import { Package } from 'lucide-react';
 import { format } from 'util';
 import { createProductOrUpdate } from '@/actions/product/createProductOrUpdate';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 const UpdateStockTable = ({
   products,
 }: {
   products: ICommonGetResponse<IProductPayload>;
 }) => {
-  const [stockValue, setStockValue] = useState<number>(0);
   const [updatedProducts, setUpdatedProducts] = useState<IProductPayload[]>();
-  const [changedProducts, setChangedProducts] = useState<IProductPayload[]>([]);
+  const [formValues, setFormValues] = useState<any>({});
+  const router = useRouter();
+
+  const handleInputChange = (event: any) => {
+    setFormValues({
+      ...formValues,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   useEffect(() => {
     setUpdatedProducts(products.data);
   }, []);
 
-  console.log(changedProducts);
+  console.log(formValues, products);
 
   const saveChangedStock = async () => {
-    changedProducts.map(async (product) => {
+    const products = updatedProducts
+      ?.filter((prod) => Object.keys(formValues).includes(String(prod.id)))
+      .filter((prod) => {
+        const valueEntry = Object.entries(formValues).find(
+          (en) => en[0] === String(prod.id)
+        );
+        if (valueEntry![1] !== prod.stock) {
+          return prod;
+        }
+      })
+      .map((prod) => {
+        const valueEntry = Object.entries(formValues).find(
+          (en) => en[0] === String(prod.id)
+        );
+        if (valueEntry?.length) {
+          return {
+            ...prod,
+            stock: valueEntry[1],
+          };
+        } else {
+          return prod;
+        }
+      });
+
+    console.log(products);
+
+    const apiCall = async (product: any) => {
       const res = await createProductOrUpdate({
         stock: product.stock,
         unique_id: product?.unique_id,
@@ -64,8 +99,20 @@ const UpdateStockTable = ({
         vat_percent: Number(product.vat_percent),
         unit: Number(product.unit),
       });
-      console.log(res);
-    });
+
+      return res;
+    };
+
+    const promises = products?.map(apiCall);
+    const res = await Promise.all(promises!);
+    const isUpdated = !res.some((response) => !response?.success);
+
+    if (isUpdated) {
+      location.reload();
+      setFormValues({});
+    } else {
+      toast.error('Something Went wrong');
+    }
   };
 
   return (
@@ -77,7 +124,7 @@ const UpdateStockTable = ({
           <Button
             variant={'secondary'}
             className="sm:px-space40"
-            onClick={() => setUpdatedProducts(products.data)}
+            onClick={() => setFormValues({})}
           >
             <CloseIcon />
             Cancel
@@ -85,7 +132,7 @@ const UpdateStockTable = ({
           <Button
             className="sm:px-space40"
             onClick={() => saveChangedStock()}
-            disabled={!changedProducts.length}
+            disabled={!Object.keys(formValues).length}
           >
             <SaveIcon />
             Save
@@ -132,70 +179,78 @@ const UpdateStockTable = ({
                       variant={'danger'}
                       className="!font-bold !text-xl"
                       onClick={() => {
-                        const changedProduct = updatedProducts.map((prod) => {
-                          if (prod.id === product.id) {
-                            return {
-                              ...prod,
-                              stock: Number(prod.stock) - 1,
-                            };
-                          } else {
-                            return prod;
-                          }
-                        });
-                        setUpdatedProducts(changedProduct);
-
-                        const isStockEqual =
-                          products.data.find((prod) => prod.id === product.id)
-                            ?.stock ===
-                          changedProduct.find((prod) => prod.id === product.id)
-                            ?.stock;
-                        if (!isStockEqual) {
-                          const index = changedProducts.findIndex(
-                            (prod) => prod.id === product.id
-                          );
-                          if (index === -1) {
-                            setChangedProducts((prev) => [
-                              ...prev,
-                              ...changedProduct.filter(
-                                (prod) => prod.id === product.id
-                              ),
-                            ]);
-                          } else {
-                            setChangedProducts((prev) => [
-                              ...changedProducts.map((prod) => {
-                                if (prod.id === product.id) {
-                                  return {
-                                    ...prod,
-                                    stock: Number(prod.stock) - 1,
-                                  };
-                                } else {
-                                  return prod;
-                                }
-                              }),
-                            ]);
-                          }
+                        if (
+                          Object.keys(formValues).some(
+                            (prodId) => prodId === String(product.id)
+                          )
+                        ) {
+                          setFormValues({
+                            ...formValues,
+                            [String(product.id)]:
+                              Number(formValues[String(product.id)]) - 1,
+                          });
+                        } else {
+                          setFormValues({
+                            ...formValues,
+                            [String(product.id)]: product.stock! - 1,
+                          });
                         }
+                        // const changedProduct = updatedProducts.map((prod) => {
+                        //   if (prod.id === product.id) {
+                        //     return {
+                        //       ...prod,
+                        //       stock: Number(prod.stock) - 1,
+                        //     };
+                        //   } else {
+                        //     return prod;
+                        //   }
+                        // });
+                        // setUpdatedProducts(changedProduct);
+
+                        // const isStockEqual =
+                        //   products.data.find((prod) => prod.id === product.id)
+                        //     ?.stock ===
+                        //   changedProduct.find((prod) => prod.id === product.id)
+                        //     ?.stock;
+                        // if (!isStockEqual) {
+                        //   const index = changedProducts.findIndex(
+                        //     (prod) => prod.id === product.id
+                        //   );
+                        //   if (index === -1) {
+                        //     setChangedProducts((prev) => [
+                        //       ...prev,
+                        //       ...changedProduct.filter(
+                        //         (prod) => prod.id === product.id
+                        //       ),
+                        //     ]);
+                        //   } else {
+                        //     setChangedProducts((prev) => [
+                        //       ...changedProducts.map((prod) => {
+                        //         if (prod.id === product.id) {
+                        //           return {
+                        //             ...prod,
+                        //             stock: Number(prod.stock) - 1,
+                        //           };
+                        //         } else {
+                        //           return prod;
+                        //         }
+                        //       }),
+                        //     ]);
+                        //   }
+                        // }
                       }}
                     >
                       -
                     </Button>
                     <input
                       type="number"
-                      value={Number(product.stock)}
-                      onChange={(e) => {
-                        const changedProduct = updatedProducts.map((prod) => {
-                          if (prod.id === product.id) {
-                            return {
-                              ...prod,
-                              stock: Number(e.target.value),
-                            };
-                          } else {
-                            return prod;
-                          }
-
-                          setUpdatedProducts(changedProduct);
-                        });
-                      }}
+                      value={
+                        formValues[String(product.id)] === undefined
+                          ? product.stock
+                          : formValues[String(product.id)] || ''
+                      }
+                      name={String(product.id)}
+                      onChange={handleInputChange}
                       className=" h-[3.6rem] border-b-[.4rem] bg-transparent border-[#0C66E4] text-[#0C66E4] text-md font-medium py-space12 min-w-[10rem] max-w-[14rem] text-center focus:outline-none"
                     />
                     <Button
@@ -203,49 +258,66 @@ const UpdateStockTable = ({
                       variant={'success'}
                       className="!font-bold !text-xl"
                       onClick={() => {
-                        const changedProduct = updatedProducts.map((prod) => {
-                          if (prod.id === product.id) {
-                            return {
-                              ...prod,
-                              stock: Number(prod.stock) + 1,
-                            };
-                          } else {
-                            return prod;
-                          }
-                        });
-                        const isStockEqual =
-                          products.data.find((prod) => prod.id === product.id)
-                            ?.stock ===
-                          changedProduct.find((prod) => prod.id === product.id)
-                            ?.stock;
-
-                        if (!isStockEqual) {
-                          const index = changedProducts.findIndex(
-                            (prod) => prod.id === product.id
-                          );
-                          if (index === -1) {
-                            setChangedProducts((prev) => [
-                              ...prev,
-                              ...changedProduct.filter(
-                                (prod) => prod.id === product.id
-                              ),
-                            ]);
-                          } else {
-                            setChangedProducts((prev) => [
-                              ...changedProducts.map((prod) => {
-                                if (prod.id === product.id) {
-                                  return {
-                                    ...prod,
-                                    stock: Number(prod.stock) + 1,
-                                  };
-                                } else {
-                                  return prod;
-                                }
-                              }),
-                            ]);
-                          }
+                        if (
+                          Object.keys(formValues).some(
+                            (prodId) => prodId === String(product.id)
+                          )
+                        ) {
+                          setFormValues({
+                            ...formValues,
+                            [String(product.id)]:
+                              Number(formValues[String(product.id)]) + 1,
+                          });
+                        } else {
+                          setFormValues({
+                            ...formValues,
+                            [String(product.id)]: product.stock! + 1,
+                          });
                         }
-                        setUpdatedProducts(changedProduct);
+
+                        // const changedProduct = updatedProducts.map((prod) => {
+                        //   if (prod.id === product.id) {
+                        //     return {
+                        //       ...prod,
+                        //       stock: Number(prod.stock) + 1,
+                        //     };
+                        //   } else {
+                        //     return prod;
+                        //   }
+                        // });
+                        // const isStockEqual =
+                        //   products.data.find((prod) => prod.id === product.id)
+                        //     ?.stock ===
+                        //   changedProduct.find((prod) => prod.id === product.id)
+                        //     ?.stock;
+
+                        // if (!isStockEqual) {
+                        //   const index = changedProducts.findIndex(
+                        //     (prod) => prod.id === product.id
+                        //   );
+                        //   if (index === -1) {
+                        //     setChangedProducts((prev) => [
+                        //       ...prev,
+                        //       ...changedProduct.filter(
+                        //         (prod) => prod.id === product.id
+                        //       ),
+                        //     ]);
+                        //   } else {
+                        //     setChangedProducts((prev) => [
+                        //       ...changedProducts.map((prod) => {
+                        //         if (prod.id === product.id) {
+                        //           return {
+                        //             ...prod,
+                        //             stock: Number(prod.stock) + 1,
+                        //           };
+                        //         } else {
+                        //           return prod;
+                        //         }
+                        //       }),
+                        //     ]);
+                        //   }
+                        // }
+                        // setUpdatedProducts(changedProduct);
                       }}
                     >
                       +
