@@ -22,7 +22,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { PurchaseEnum } from '@/enum/purchase';
-import { useProductTable } from '@/hooks/useProductTable';
 import Pagination from '@/components/common/CustomPagination';
 import { IPurchaseHistoryResponse } from '@/types/purchase';
 import { ICommonGetResponse } from '@/types/common';
@@ -40,7 +39,6 @@ const HistoryTable = ({
 }) => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
-  const { updateQueryParams, queryParams } = useProductTable();
   const pathname = usePathname();
   const router = useRouter();
   const { setQueryString } = useCreateQueryString();
@@ -71,8 +69,6 @@ const HistoryTable = ({
     }
   };
 
-  console.log(purchaseHistory);
-
   return (
     <ScrollArea className="pb-space8">
       {purchaseHistory?.data.length === 0 ? (
@@ -101,7 +97,7 @@ const HistoryTable = ({
                 <TableCell>{purchase.total_item}</TableCell>
                 <TableCell
                   className={cn(
-                    purchase.supplier_name.includes('ENCRYPTED') && 'blur-sm'
+                    purchase.supplier_name?.includes('ENCRYPTED') && 'blur-sm'
                   )}
                 >
                   {purchase.supplier_name}

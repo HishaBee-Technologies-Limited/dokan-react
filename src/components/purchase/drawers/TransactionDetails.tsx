@@ -173,8 +173,27 @@ const TransactionDetails = () => {
           <div
             className="cursor-pointer bg-black text-white rounded-sm w-1/4 text-center right-14 absolute mt-4"
             onClick={() => {
+              console.log(
+                purchaseProducts.map((purchase) => {
+                  return {
+                    ...purchase.product!,
+                    calculatedAmount: {
+                      quantity: purchase.quantity,
+                      unit_cost: purchase.unit_cost,
+                    },
+                  };
+                })
+              );
               setProducts(
-                purchaseProducts.map((purchase) => purchase.product!)
+                purchaseProducts.map((purchase) => {
+                  return {
+                    ...purchase.product!,
+                    calculatedAmount: {
+                      quantity: purchase.quantity,
+                      unit_cost: purchase.unit_cost,
+                    },
+                  };
+                })
               );
               setPurchase(purchaseProducts!);
               router.push(`/purchase`);

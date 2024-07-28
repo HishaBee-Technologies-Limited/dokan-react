@@ -128,6 +128,10 @@ const ProductFiledRow = (props: IProps) => {
         shouldDirty: true,
         shouldTouch: true,
       });
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.unit_cost`,
+        String(props.data?.calculatedAmount?.unit_cost)
+      );
       props.form.setValue('discount_type', currentPurchase?.discount_type);
       props.form.setFocus(`discount`);
       props.form.setFocus(`discount_type`);

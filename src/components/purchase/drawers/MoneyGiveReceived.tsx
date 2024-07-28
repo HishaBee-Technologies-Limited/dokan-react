@@ -36,7 +36,7 @@ import { getCookie } from 'cookies-next';
 import { DEFAULT_STARTING_VERSION } from '@/lib/constants/product';
 import { DATE_FORMATS, PAYMENT_METHODS } from '@/lib/constants/common';
 import { usePurchase } from '@/stores/usePurchaseStore';
-import { format } from 'date-fns';
+import { addSeconds, format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { PAYMENT_STATUS } from '@/lib/constants/purchase';
 import { createPurchase } from '@/actions/purchase/createPurchase';
@@ -159,7 +159,7 @@ const MoneyGiveReceived = () => {
           name: product.name,
           quantity: product.calculatedAmount?.quantity,
           unit_price: product.selling_price,
-          unit_cost: product.cost_price,
+          unit_cost: product.calculatedAmount?.unit_cost,
           purchase_id: responseCreatePurchase.data.purchase.id,
 
           purchase_unique_id: responseCreatePurchase.data.purchase.unique_id,
@@ -222,8 +222,14 @@ const MoneyGiveReceived = () => {
           unique_id: generateUlid(),
           due_left: 0,
           version: DEFAULT_STARTING_VERSION,
-          updated_at: formatDate(DATE_FORMATS.default),
-          created_at: formatDate(DATE_FORMATS.default),
+          updated_at: formatDate(
+            DATE_FORMATS.default,
+            addSeconds(formatDate(DATE_FORMATS.default), 1)
+          ),
+          created_at: formatDate(
+            DATE_FORMATS.default,
+            addSeconds(formatDate(DATE_FORMATS.default), 1)
+          ),
           message: data.details,
           contact_mobile: data.number,
           contact_type: 'SUPPLIER',

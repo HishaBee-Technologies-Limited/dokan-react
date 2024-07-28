@@ -41,7 +41,7 @@ import { sellItemCreate } from '@/actions/sell/sellItemCreate';
 import { toast } from 'sonner';
 import { createSell } from '@/actions/sell/createSell';
 import { jwtDecode } from 'jwt-decode';
-import { format } from 'date-fns';
+import { addSeconds, format } from 'date-fns';
 import {
   Popover,
   PopoverContent,
@@ -260,8 +260,14 @@ const MoneyGiveReceived = ({ customers }: { customers?: IUserResponse[] }) => {
             unique_id: generateUlid(),
             due_left: 0,
             version: DEFAULT_STARTING_VERSION,
-            updated_at: formatDate(DATE_FORMATS.default),
-            created_at: formatDate(DATE_FORMATS.default),
+            updated_at: formatDate(
+              DATE_FORMATS.default,
+              addSeconds(formatDate(DATE_FORMATS.default), 1)
+            ),
+            created_at: formatDate(
+              DATE_FORMATS.default,
+              addSeconds(formatDate(DATE_FORMATS.default), 1)
+            ),
             message: data.details,
             contact_mobile: data.number,
             contact_type: 'CUSTOMER',

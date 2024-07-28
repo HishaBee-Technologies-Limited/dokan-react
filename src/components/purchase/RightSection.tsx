@@ -71,6 +71,7 @@ export const RightSection = () => {
         };
       }
     });
+    console.log(updatedProducts);
     if (!updatedProducts.length) {
       toast.warning('No Product Selected or Total is 0');
     }
