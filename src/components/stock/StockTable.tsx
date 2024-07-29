@@ -75,7 +75,8 @@ export const StockTable = ({
         <TableFooter>
           <TableRow>
             <TableCell colSpan={5} className="text-center">
-              Showing 20 of {products.total} Products
+              Showing from {products.from} to {products.from + 19} of{' '}
+              {products.total} products
             </TableCell>
           </TableRow>
         </TableFooter>
