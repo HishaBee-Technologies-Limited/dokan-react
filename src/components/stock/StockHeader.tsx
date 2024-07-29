@@ -8,9 +8,11 @@ import { AddIcon } from '@/components/common/icons';
 import { PageTitle } from '@/components/common/text';
 import { useProductStore } from '@/stores/useProductStore';
 import { HistoryIcon } from '@/components/common/icons/HistoryIcon';
+import { useRouter } from 'next/navigation';
 
 export const StockHeader = () => {
   const handleDrawerOpen = useProductStore((state) => state.setDrawerState);
+  const router = useRouter();
 
   return (
     <div className="flex flex-wrap gap-space16 justify-between items-center">
@@ -32,9 +34,10 @@ export const StockHeader = () => {
 
         <Button
           className="grow"
-          onClick={() =>
-            handleDrawerOpen({ open: true, header: ProductEnum.ADD_PRODUCT })
-          }
+          onClick={() => {
+            router.push('/product');
+            handleDrawerOpen({ open: true, header: ProductEnum.ADD_PRODUCT });
+          }}
         >
           <AddIcon />
           <span>Add new product</span>

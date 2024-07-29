@@ -163,15 +163,15 @@ const TransactionDetails = () => {
           <ExpandMoreIcon />
         </div> */}
         <Text title="Buy Products" className="text-lg font-medium" />
-        <div className={`grid 'grid-rows-[1fr]'`}>
+        <div className={`grid grid-rows-[1fr]`}>
           {purchaseProducts &&
             purchaseProducts.map((product) => (
               <ProductListCard key={product.unique_id} product={product} />
             ))}
         </div>
-        {purchaseProducts && !!purchaseProducts.length && (
+        {/* {purchaseProducts && !!purchaseProducts.length && (
           <div
-            className="cursor-pointer bg-black text-white rounded-sm w-1/4 text-center right-14 absolute mt-4"
+            className="cursor-pointer bg-black text-white rounded-sm w-1/4 text-center float-right mt-4 mb-10"
             onClick={() => {
               console.log(
                 purchaseProducts.map((purchase) => {
@@ -205,8 +205,47 @@ const TransactionDetails = () => {
           >
             Edit Products
           </div>
-        )}
+        )} */}
       </section>
+      {purchaseProducts && !!purchaseProducts.length && (
+        <div className="h-96">
+          <div
+            className="cursor-pointer bg-black text-white rounded-sm w-1/4 text-center float-right mt-4 mb-10"
+            onClick={() => {
+              console.log(
+                purchaseProducts.map((purchase) => {
+                  return {
+                    ...purchase.product!,
+                    calculatedAmount: {
+                      quantity: purchase.quantity,
+                      unit_cost: purchase.unit_cost,
+                    },
+                  };
+                })
+              );
+              setProducts(
+                purchaseProducts.map((purchase) => {
+                  return {
+                    ...purchase.product!,
+                    calculatedAmount: {
+                      quantity: purchase.quantity,
+                      unit_cost: purchase.unit_cost,
+                    },
+                  };
+                })
+              );
+              setPurchase(purchaseProducts!);
+              router.push(`/purchase`);
+              handleDrawerOpen({
+                open: false,
+                header: PurchaseEnum.TRANSACTION_DETAILS,
+              });
+            }}
+          >
+            Edit Products
+          </div>
+        </div>
+      )}
       {currentPurchase?.note && (
         <article className="space-y-space8">
           <Text title="Notes" />
