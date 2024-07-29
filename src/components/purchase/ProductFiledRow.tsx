@@ -17,7 +17,12 @@ import { DEFAULT_PRODUCT_QUANTITY } from '@/lib/constants/purchase';
 import { usePurchase } from '@/stores/usePurchaseStore';
 
 export interface IProductPurchase extends IProduct {
-  calculatedAmount?: { quantity: number; total: number; unit_price: number };
+  calculatedAmount?: {
+    quantity: number;
+    total: number;
+    unit_cost: number;
+    unit_price?: number;
+  };
 }
 type IProps = {
   form: UseFormReturn<any>;
@@ -109,10 +114,17 @@ const ProductFiledRow = (props: IProps) => {
           )
         : DEFAULT_PRODUCT_QUANTITY
     );
-    props.form.setValue(
-      `products.${props.index}.product-${props.data?.id}.unit_cost`,
-      String(props.data?.cost_price)
-    );
+    if (props.data?.calculatedAmount?.unit_cost) {
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.unit_cost`,
+        String(props.data?.calculatedAmount?.unit_cost)
+      );
+    } else {
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.unit_cost`,
+        String(props.data?.cost_price)
+      );
+    }
 
     setTimeout(() => {
       props.form.setFocus(
@@ -128,10 +140,10 @@ const ProductFiledRow = (props: IProps) => {
         shouldDirty: true,
         shouldTouch: true,
       });
-      props.form.setValue(
-        `products.${props.index}.product-${props.data?.id}.unit_cost`,
-        String(props.data?.calculatedAmount?.unit_cost)
-      );
+      // props.form.setValue(
+      //   `products.${props.index}.product-${props.data?.id}.unit_cost`,
+      //   String(props.data?.calculatedAmount?.unit_cost)
+      // );
       props.form.setValue('discount_type', currentPurchase?.discount_type);
       props.form.setFocus(`discount`);
       props.form.setFocus(`discount_type`);

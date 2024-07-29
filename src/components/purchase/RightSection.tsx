@@ -71,7 +71,7 @@ export const RightSection = () => {
         };
       }
     });
-    console.log(updatedProducts);
+    console.log(updatedProducts, purchase);
     if (!updatedProducts.length) {
       toast.warning('No Product Selected or Total is 0');
     }
@@ -119,8 +119,8 @@ export const RightSection = () => {
               created_at: formatDate(DATE_FORMATS.default),
               name: product.product.name,
               quantity: product.product.calculatedAmount?.quantity,
-              unit_price: product.product.calculatedAmount?.unit_price,
-              unit_cost: product.product.cost_price,
+              selling_price: product.product.selling_price,
+              unit_cost: product.product.calculatedAmount?.unit_cost,
               transaction_unique_id: currentPurchase?.unique_id!,
               profit:
                 product.product.calculatedAmount?.quantity! *
@@ -148,8 +148,8 @@ export const RightSection = () => {
                 created_at: formatDate(DATE_FORMATS.default),
                 name: product.name,
                 quantity: product.calculatedAmount?.quantity,
-                unit_price: product.calculatedAmount?.unit_price,
-                unit_cost: product.cost_price,
+                selling_price: product.selling_price,
+                unit_cost: product.calculatedAmount?.unit_cost,
                 purchase_id: responseCreatePurchase.data.purchase.id,
                 purchase_unique_id:
                   responseCreatePurchase.data.purchase.unique_id,

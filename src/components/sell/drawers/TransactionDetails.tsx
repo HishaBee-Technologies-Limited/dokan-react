@@ -223,9 +223,17 @@ const TransactionDetails = () => {
                 className="cursor-pointer bg-black text-white rounded-sm w-1/4 text-center right-14 absolute mt-4"
                 onClick={() => {
                   setProducts(
-                    purchaseProducts.map(
-                      (purchase) => purchase.shop_product_by_uniqueid!
-                    )
+                    purchaseProducts.map((purchase) => {
+                      console.log(purchase);
+                      return {
+                        ...purchase.shop_product_by_uniqueid!,
+                        calculatedAmount: {
+                          quantity: purchase.quantity,
+                          unit_price: purchase.unit_price,
+                          total: purchase,
+                        },
+                      };
+                    })
                   );
                   setTransaction(purchaseProducts);
                   router.push(`/sell`);
