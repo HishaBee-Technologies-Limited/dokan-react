@@ -22,7 +22,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { PurchaseEnum } from '@/enum/purchase';
-import { useProductTable } from '@/hooks/useProductTable';
 import Pagination from '@/components/common/CustomPagination';
 import { IPurchaseHistoryResponse } from '@/types/purchase';
 import { ICommonGetResponse } from '@/types/common';
@@ -40,7 +39,6 @@ const HistoryTable = ({
 }) => {
   const handleDialogOpen = usePurchaseStore((state) => state.setDialogState);
   const handleDrawerOpen = usePurchaseStore((state) => state.setDrawerState);
-  const { updateQueryParams, queryParams } = useProductTable();
   const pathname = usePathname();
   const router = useRouter();
   const { setQueryString } = useCreateQueryString();
@@ -70,8 +68,6 @@ const HistoryTable = ({
       return 'bg-success-20 ';
     }
   };
-
-  console.log(purchaseHistory);
 
   return (
     <ScrollArea className="pb-space8">

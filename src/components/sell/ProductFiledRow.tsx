@@ -21,8 +21,8 @@ export interface IProductPurchase extends IProduct {
   calculatedAmount?: {
     quantity: number;
     total: number;
-    unit_price: number;
-    unit_cost?: number;
+    unit_price?: number;
+    unit_cost: number;
   };
 }
 type IProps = {
@@ -39,16 +39,61 @@ const ProductFiledRow = (props: IProps) => {
   const currentPurchase = useSellStore((state) => state.currentSell);
 
   const unitPriceWithExtras = useMemo(() => {
-    if (props.data?.selling_price) {
+    if (props.data?.calculatedAmount?.unit_price) {
       if (props.data?.discount_type === 'PERCENT') {
         const priceBeforeVat =
-          props.data?.selling_price -
-          percentage(props.data?.selling_price, props.data.discount);
+          props.data?.calculatedAmount?.unit_price -
+          percentage(
+            props.data?.calculatedAmount?.unit_price,
+            props.data.discount
+          );
         const priceAfterVat =
           priceBeforeVat + percentage(priceBeforeVat, props.data.vat_percent);
         return priceAfterVat;
       } else {
-        const priceBeforeVat = props.data?.selling_price - props.data.discount;
+        const priceBeforeVat =
+          props.data?.calculatedAmount?.unit_price - props.data.discount;
+        const priceAfterVat =
+          priceBeforeVat + percentage(priceBeforeVat, props.data.vat_percent);
+        return priceAfterVat;
+      }
+    } else {
+      if (props.data?.selling_price) {
+        if (props.data?.discount_type === 'PERCENT') {
+          const priceBeforeVat =
+            props.data?.selling_price -
+            percentage(props.data?.selling_price, props.data.discount);
+          const priceAfterVat =
+            priceBeforeVat + percentage(priceBeforeVat, props.data.vat_percent);
+          return priceAfterVat;
+        } else {
+          const priceBeforeVat =
+            props.data?.selling_price - props.data.discount;
+          const priceAfterVat =
+            priceBeforeVat + percentage(priceBeforeVat, props.data.vat_percent);
+          return priceAfterVat;
+        }
+      } else {
+        return 0;
+      }
+    }
+  }, [props.data]);
+
+  const unitPriceWithExtrasEdit = useMemo(() => {
+    if (props.data?.calculatedAmount?.unit_price) {
+      if (props.data?.discount_type === 'PERCENT') {
+        const priceBeforeVat =
+          props.data?.calculatedAmount?.unit_price -
+          percentage(
+            props.data?.calculatedAmount?.unit_price,
+            props.data.discount
+          );
+        const priceAfterVat =
+          priceBeforeVat + percentage(priceBeforeVat, props.data.vat_percent);
+        return priceAfterVat;
+      } else {
+        const priceBeforeVat =
+          props.data?.calculatedAmount?.unit_price - props.data.discount;
         const priceAfterVat =
           priceBeforeVat + percentage(priceBeforeVat, props.data.vat_percent);
         return priceAfterVat;
@@ -80,6 +125,7 @@ const ProductFiledRow = (props: IProps) => {
       );
     }
   }, [totalWatch]);
+
   const handleProductDeleteFromSelections = () => {
     /**
      * unregister product item from the form array to maintain the calculation
@@ -126,6 +172,7 @@ const ProductFiledRow = (props: IProps) => {
         String(unitPriceWithExtras)
       );
     }
+
     if (quantityValue && unitPrice) {
       /**
        * set the total value based on the change of the quantity
@@ -173,25 +220,25 @@ const ProductFiledRow = (props: IProps) => {
           )
         : DEFAULT_PRODUCT_QUANTITY
     );
-    props.form.setValue(
-      `products.${props.index}.product-${props.data?.id}.unit_price`,
-      String(unitPriceWithExtras)
-    );
-    console.log(
-      Number(
-        transaction.find(
-          (transaction) =>
-            transaction.shop_product_by_uniqueid?.id === props.data?.id
-        )?.quantity
-      ),
-      props.data
-    );
+    console.log(props.data, unitPriceWithExtras, unitPriceWithExtrasEdit);
+    if (!!unitPriceWithExtrasEdit) {
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.unit_price`,
+        String(props.data?.calculatedAmount?.unit_price)
+      );
+    } else {
+      props.form.setValue(
+        `products.${props.index}.product-${props.data?.id}.unit_price`,
+        String(unitPriceWithExtras)
+      );
+    }
+
     setTimeout(() => {
       props.form.setFocus(
         `products.${props.index}.product-${props.data?.id}.total`
       );
     }, 50);
-  }, [unitPriceWithExtras, props.form, transaction]);
+  }, [unitPriceWithExtras, props.form, transaction, unitPriceWithExtrasEdit]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -199,6 +246,10 @@ const ProductFiledRow = (props: IProps) => {
         shouldDirty: true,
         shouldTouch: true,
       });
+      // props.form.setValue(
+      //   `products.${props.index}.product-${props.data?.id}.unit_price`,
+      //   String(props.data?.calculatedAmount?.unit_price)
+      // );
       props.form.setValue('discount_type', currentPurchase?.discount_type);
       props.form.setValue('delivery_charge', currentPurchase?.extra_charge);
       // props.form.setFocus(`discount`);

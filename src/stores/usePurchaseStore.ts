@@ -2,7 +2,6 @@ import { IProductPurchase } from '@/components/sell/ProductFiledRow';
 import { IProduct } from '@/types/product';
 import { IProducts, IPurchaseHistoryResponse } from '@/types/purchase';
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
 
 export interface IProductState {
   products: IProductPurchase[];
