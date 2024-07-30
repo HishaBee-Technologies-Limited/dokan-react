@@ -44,6 +44,25 @@ import { useProductStore } from '@/stores/useProductStore';
 import { toast } from 'sonner';
 import { Textarea } from '@/components/ui/textarea';
 
+import { Label } from '@/components/ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { createProductSubCat } from '@/actions/product/createProductSubCat';
+import {
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
 export const AddProduct = ({
   units,
   productCategories,
@@ -82,6 +101,8 @@ export const AddProduct = ({
   const [selectedFiles, setSelectedFiles] = useState<FileList>();
   const [imageUrls, loading] = useFileUpload(selectedFiles);
   const handleClose = useProductStore((state) => state.setDrawerState);
+  const [newSubCat, setNewSubCat] = useState('');
+  const [loadingApi, setLoadingApi] = useState(false);
 
   const shopId = getCookie('shopId');
   const uuid = uuidv4();
@@ -350,14 +371,79 @@ export const AddProduct = ({
                   <SelectContent>
                     <div className="max-h-[24rem] overflow-y-scroll">
                       {subCategory?.map(
-                        (subCategory: { id: number; name: string }) => (
-                          <SelectItem
-                            key={subCategory.id}
-                            value={String(subCategory.id)}
-                          >
-                            {subCategory.name}
-                          </SelectItem>
-                        )
+                        (
+                          subCat: { id: number; name: string },
+                          index: number
+                        ) => {
+                          if (index === subCategory.length - 1) {
+                            return (
+                              <div key={subCat.id}>
+                                <SelectItem value={String(subCat.id)}>
+                                  {subCat.name}
+                                </SelectItem>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button className="w-full">
+                                      Edit Profile
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[425px] p-4">
+                                    <Card className="w-[350px]">
+                                      <CardHeader>
+                                        <CardTitle>
+                                          Create Sub-Category
+                                        </CardTitle>
+                                      </CardHeader>
+                                      <CardContent>
+                                        <form>
+                                          <div className="grid w-full items-center gap-4">
+                                            <div className="flex flex-col space-y-1.5">
+                                              {/* <Label htmlFor="name">Name</Label> */}
+                                              <Input
+                                                id="name"
+                                                placeholder="Subcategory Name"
+                                                onChange={(e) =>
+                                                  setNewSubCat(e.target.value)
+                                                }
+                                              />
+                                            </div>
+                                          </div>
+                                        </form>
+                                      </CardContent>
+                                      <CardFooter className="flex justify-between">
+                                        <Button
+                                          onClick={async () => {
+                                            setLoadingApi(true);
+
+                                            await createProductSubCat({
+                                              name: newSubCat,
+                                              categoryId: selectedCategory!,
+                                            });
+                                            setNewSubCat('');
+                                            setLoadingApi(false);
+                                          }}
+                                          size="sm"
+                                          disabled={loadingApi}
+                                        >
+                                          Save
+                                        </Button>
+                                      </CardFooter>
+                                    </Card>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                            );
+                          } else {
+                            return (
+                              <SelectItem
+                                key={subCat.id}
+                                value={String(subCat.id)}
+                              >
+                                {subCat.name}
+                              </SelectItem>
+                            );
+                          }
+                        }
                       )}
                     </div>
                   </SelectContent>
