@@ -1,6 +1,6 @@
 'use client';
 import { z } from 'zod';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import Card from '@/components/common/Card';
@@ -17,6 +17,8 @@ import {
   ArrowForwardIcon,
   CancelIcon,
 } from '@/components/common/icons';
+import { useContactStore } from '@/stores/useContactStore';
+import { sendSMS } from '@/actions/sms/sendSMS';
 
 const formSchema = z.object({
   number: z.string().max(11).min(11, {
@@ -31,6 +33,9 @@ export const RightSection = () => {
       number: '',
     },
   });
+  const { contacts, removeContact } = useContactStore((state) => state);
+  const [newNumber, setNewNumber] = useState<string[]>([]);
+  const [sms, setSMS] = useState('');
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('data------------', data);
@@ -50,7 +55,20 @@ export const RightSection = () => {
                   render={({ field }) => (
                     <FormItem className="space-y-0 w-full">
                       <FormControl>
-                        <Input placeholder="Mobile Number" {...field} />
+                        <Input
+                          placeholder="Mobile Number"
+                          {...field}
+                          type="number"
+                          maxLength={11}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            if (e.target.value.length <= 11) {
+                              const result = e.target?.value.replace(/\D/g, '');
+                              field.onChange(result);
+                            }
+                          }}
+                          ref={field.ref}
+                          value={field.value}
+                        />
                       </FormControl>
                     </FormItem>
                   )}
@@ -59,14 +77,16 @@ export const RightSection = () => {
                 <Button
                   variant={'secondary'}
                   className="!h-[4.4rem] !px-space12"
+                  onClick={() =>
+                    setNewNumber([...newNumber, form.watch('number')])
+                  }
                 >
                   <AddIcon />
                 </Button>
               </div>
             </form>
           </Form>
-
-          <div className="flex flex-col items-end gap-space4">
+          {/* <div className="flex flex-col items-end gap-space4">
             <Text
               variant="success"
               className="text-sm font-medium flex items-center gap-space4 bg-success-20 dark:bg-primary-80 py-space4 px-space12 rounded-full uppercase"
@@ -79,7 +99,7 @@ export const RightSection = () => {
                 Buy sms <ArrowForwardIcon />
               </Button>
             </Link>
-          </div>
+          </div> */}
         </div>
 
         <ScrollArea className="h-full">
@@ -87,18 +107,36 @@ export const RightSection = () => {
             <Text title="SMS Sending to" className="font-semibold" />
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-space8">
-              {Array(8)
-                .fill(0)
-                .map((_, i) => (
-                  <Card
-                    key={i}
-                    className="px-space12 py-space12 flex justify-center items-center gap-space8"
+              {contacts?.map((contact, i) => (
+                <Card
+                  key={contact.id}
+                  className="px-space12 py-space12 flex justify-center items-center gap-space8"
+                >
+                  <Text title={contact.mobile} />
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => removeContact(contact)}
                   >
-                    <Text title="017xxxxxxxx" />
-
                     <CancelIcon color="red" />
-                  </Card>
-                ))}
+                  </div>
+                </Card>
+              ))}
+              {newNumber?.map((number, i) => (
+                <Card
+                  key={i + 1}
+                  className="px-space12 py-space12 flex justify-center items-center gap-space8"
+                >
+                  <Text title={number} />
+                  <div
+                    className="cursor-pointer"
+                    onClick={() =>
+                      setNewNumber(newNumber.filter((numb) => number !== numb))
+                    }
+                  >
+                    <CancelIcon color="red" />
+                  </div>
+                </Card>
+              ))}
             </div>
           </div>
 
@@ -109,17 +147,29 @@ export const RightSection = () => {
               <Textarea
                 placeholder="Write your message here"
                 className="resize-none bg-primary-5 h-[14rem]"
+                onChange={(e) => setSMS(e.target.value)}
               />
             </Card>
             <Text
-              title="0 Character  | 1 SMS (160 Character/SMS)"
+              title={`${sms.length} Character  | 1 SMS (160 Character/SMS)`}
               variant="secondary"
             />
           </div>
         </ScrollArea>
       </div>
       <Card className="p-space8 py-space12 rounded-none space-y-space8">
-        <Button size="sm" className="w-full">
+        <Button
+          size="sm"
+          className="w-full"
+          onClick={async () => {
+            const res = await sendSMS({
+              message: sms,
+              sms_count: String(Math.ceil(sms.length / 160)),
+              number: `[${[...newNumber.map((nmb) => `"${nmb}"`), ...contacts?.map((con) => con.mobile)!?.map((numb) => `"${numb}"`)]}]`,
+            });
+            console.log(res);
+          }}
+        >
           Send SMS
         </Button>
       </Card>

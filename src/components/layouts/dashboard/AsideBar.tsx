@@ -89,7 +89,7 @@ const AsideBar = ({ menuOpen, setMenuOpen }: IMenuOpenProps) => {
                 subMenu: boolean
               ) => (
                 <>
-                  {![10, 11, 12, 13, 0].includes(i) && (
+                  {![10, 11, 12, 0].includes(i) && (
                     <Link
                       href={`${menu.link}`}
                       onClick={() => {
