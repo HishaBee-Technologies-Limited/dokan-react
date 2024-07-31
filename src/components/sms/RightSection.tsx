@@ -39,6 +39,7 @@ export const RightSection = () => {
   const [newNumber, setNewNumber] = useState<string[]>([]);
   const [sms, setSMS] = useState('');
   const [smsCount, setSMSCount] = useState(0);
+  const [isEnglish, setIsEnglish] = useState(true);
   const shop = getCookie('shop');
   // console.log('dd', JSON.parse(shop));/
   const [loading, setLoading] = useState(false);
@@ -57,6 +58,10 @@ export const RightSection = () => {
   useEffect(() => {
     fetChSMSCount();
   }, []);
+
+  useEffect(() => {
+    setIsEnglish(!!sms.length ? /^[a-zA-Z]+$/.test(sms) : true);
+  }, [sms]);
 
   return (
     <div className="lg:pl-space12 lg:border-l border-color h-full lg:w-8/12 flex flex-col gap-space16 justify-between">
@@ -169,7 +174,7 @@ export const RightSection = () => {
             </Card>
           </div>
           <Text
-            title={`${`${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length} Character  | 1 SMS (160 Character/SMS)`}
+            title={`${isEnglish ? `${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length : `${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length * 2} Character  | 1 SMS (160 Character/SMS)`}
             variant="secondary"
           />
 
@@ -194,8 +199,13 @@ export const RightSection = () => {
                 message: `${sms} - ${JSON.parse(shop!).name}, ${JSON.parse(shop!).number}`,
                 sms_count: String(
                   Math.ceil(
-                    `${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
-                      .length / 160
+                    isEnglish
+                      ? `${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
+                          .length / 160
+                      : (`${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
+                          .length *
+                          2) /
+                          160
                   )
                 ),
                 number: `[${[...newNumber.map((nmb) => `"${nmb}"`), ...contacts?.map((con) => con.mobile)!?.map((numb) => `"${numb}"`)]}]`,
