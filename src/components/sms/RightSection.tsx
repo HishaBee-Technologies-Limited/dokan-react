@@ -19,6 +19,7 @@ import {
 } from '@/components/common/icons';
 import { useContactStore } from '@/stores/useContactStore';
 import { sendSMS } from '@/actions/sms/sendSMS';
+import { getCookie } from 'cookies-next';
 
 const formSchema = z.object({
   number: z.string().max(11).min(11, {
@@ -36,6 +37,9 @@ export const RightSection = () => {
   const { contacts, removeContact } = useContactStore((state) => state);
   const [newNumber, setNewNumber] = useState<string[]>([]);
   const [sms, setSMS] = useState('');
+  const shop = getCookie('shop');
+  // console.log('dd', JSON.parse(shop));/
+  const [loading, setLoading] = useState(false);
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('data------------', data);
@@ -150,9 +154,18 @@ export const RightSection = () => {
                 onChange={(e) => setSMS(e.target.value)}
               />
             </Card>
+
             <Text
-              title={`${sms.length} Character  | 1 SMS (160 Character/SMS)`}
+              title={`${`${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length} Character  | 1 SMS (160 Character/SMS)`}
               variant="secondary"
+            />
+          </div>
+
+          <div className=" h-24 w-80 float-right mt-[-105px] mr-[15px] flex items-center justify-center">
+            <Text
+              title={`- ${shop && JSON.parse(shop).name}, ${shop && JSON.parse(shop).number}`}
+              variant="secondary"
+              className=""
             />
           </div>
         </ScrollArea>
@@ -161,13 +174,24 @@ export const RightSection = () => {
         <Button
           size="sm"
           className="w-full"
+          disabled={loading || (!!!newNumber.length && !!!contacts?.length)}
           onClick={async () => {
-            const res = await sendSMS({
-              message: sms,
-              sms_count: String(Math.ceil(sms.length / 160)),
-              number: `[${[...newNumber.map((nmb) => `"${nmb}"`), ...contacts?.map((con) => con.mobile)!?.map((numb) => `"${numb}"`)]}]`,
-            });
-            console.log(res);
+            if (shop) {
+              setLoading(true);
+              const res = await sendSMS({
+                message: `${sms} - ${JSON.parse(shop!).name}, ${JSON.parse(shop!).number}`,
+                sms_count: String(
+                  Math.ceil(
+                    `${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
+                      .length / 160
+                  )
+                ),
+                number: `[${[...newNumber.map((nmb) => `"${nmb}"`), ...contacts?.map((con) => con.mobile)!?.map((numb) => `"${numb}"`)]}]`,
+              });
+              console.log(res);
+              setLoading(false);
+              setSMS('');
+            }
           }}
         >
           Send SMS
