@@ -108,7 +108,7 @@ export const RightSection = () => {
               </div>
             </form>
           </Form>
-          <div className="flex flex-col items-end gap-space4">
+          <div className="flex flex-col items-end gap-space8">
             <Text
               variant="success"
               className="text-sm font-medium flex items-center gap-space4 bg-success-20 dark:bg-primary-80 py-space4 px-space12 rounded-full uppercase"
@@ -116,11 +116,21 @@ export const RightSection = () => {
               <Icon icon="material-symbols:sms" />
               SMS Balance {smsCount}
             </Text>
-            <Link href="/sms/packages">
-              <Button variant={'secondary'} size={'sm'}>
-                Buy sms <ArrowForwardIcon />
-              </Button>
-            </Link>
+            <div className="flex gap-4">
+              <Link href="/sms/packages">
+                <div
+                  // variant={'secondary'}
+                  className="bg-orange-400 hover:bg-opacity-75 px-8 py-2 rounded-sm flex items-center gap-2"
+                >
+                  <p>Buy SMS</p> <ArrowForwardIcon />
+                </div>
+              </Link>
+              <Link href="/sms-list">
+                <div className="bg-blue-200  hover:bg-opacity-75 px-8 py-2 rounded-sm flex items-center gap-2">
+                  <p>All Sent SMS</p> <ArrowForwardIcon />
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
 
