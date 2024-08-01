@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import FallBackImage from '@/components/common/FallBackImage';
 import BreadCum from '@/components/layouts/dashboard/BreadCum';
 import { IMenuOpenProps } from '@/components/layouts/dashboard';
-import AppSearch from '@/components/layouts/dashboard/AppSearch';
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -16,7 +15,7 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { logout } from '@/actions/logout';
-import { getCookie, getCookies } from 'cookies-next';
+import { getCookie } from 'cookies-next';
 import { checkSubscription } from '@/actions/subscription/checkShopSubscription';
 import { useShop } from '@/stores/useShopStore';
 
@@ -85,7 +84,7 @@ const Header = ({ setMenuOpen, menuOpen, session }: IMenuOpenProps) => {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/settings/lang" className="w-full cursor-pointer">
+                <Link href="/settings/shop" className="w-full cursor-pointer">
                   Settings
                 </Link>
               </DropdownMenuItem>

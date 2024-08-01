@@ -17,6 +17,6 @@ export const settingLinks = [
   },
   {
     title: 'Feedback',
-    link: '/settings/#',
+    link: 'https://hishabee.business/nps/?source=app',
   },
 ];

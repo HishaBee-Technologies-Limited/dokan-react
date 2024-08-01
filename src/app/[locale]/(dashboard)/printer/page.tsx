@@ -21,7 +21,10 @@ const GuidePage = () => {
 
         <div className="flex gap-space16 items-center">
           <Text title="Download link:" className="font-semibold" />
-          <Link href={`/#`} className="font-semibold text-blue-700 underline">
+          <Link
+            href={`https://cutt.ly/oJ62Iof`}
+            className="font-semibold text-blue-700 underline"
+          >
             Click here
           </Link>
         </div>
