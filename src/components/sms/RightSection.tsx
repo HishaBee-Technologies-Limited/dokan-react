@@ -1,6 +1,6 @@
 'use client';
 import { z } from 'zod';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import Card from '@/components/common/Card';
@@ -20,6 +20,7 @@ import {
 import { useContactStore } from '@/stores/useContactStore';
 import { sendSMS } from '@/actions/sms/sendSMS';
 import { getCookie } from 'cookies-next';
+import { getSmsCount } from '@/actions/sms/getSmsCount';
 
 const formSchema = z.object({
   number: z.string().max(11).min(11, {
@@ -37,6 +38,8 @@ export const RightSection = () => {
   const { contacts, removeContact } = useContactStore((state) => state);
   const [newNumber, setNewNumber] = useState<string[]>([]);
   const [sms, setSMS] = useState('');
+  const [smsCount, setSMSCount] = useState(0);
+  const [isEnglish, setIsEnglish] = useState(true);
   const shop = getCookie('shop');
   // console.log('dd', JSON.parse(shop));/
   const [loading, setLoading] = useState(false);
@@ -44,6 +47,21 @@ export const RightSection = () => {
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('data------------', data);
   }
+
+  const fetChSMSCount = async () => {
+    const res = await getSmsCount();
+    console.log(res);
+
+    setSMSCount(res?.data.sms_count);
+  };
+
+  useEffect(() => {
+    fetChSMSCount();
+  }, []);
+
+  useEffect(() => {
+    setIsEnglish(!!sms.length ? /^[a-zA-Z]+$/.test(sms) : true);
+  }, [sms]);
 
   return (
     <div className="lg:pl-space12 lg:border-l border-color h-full lg:w-8/12 flex flex-col gap-space16 justify-between">
@@ -90,20 +108,30 @@ export const RightSection = () => {
               </div>
             </form>
           </Form>
-          {/* <div className="flex flex-col items-end gap-space4">
+          <div className="flex flex-col items-end gap-space8">
             <Text
               variant="success"
               className="text-sm font-medium flex items-center gap-space4 bg-success-20 dark:bg-primary-80 py-space4 px-space12 rounded-full uppercase"
             >
               <Icon icon="material-symbols:sms" />
-              SMS Balance 27
+              SMS Balance {smsCount}
             </Text>
-            <Link href="/sms/packages">
-              <Button variant={'secondary'} size={'sm'}>
-                Buy sms <ArrowForwardIcon />
-              </Button>
-            </Link>
-          </div> */}
+            <div className="flex gap-4">
+              {/* <Link href="/sms/packages">
+                <div
+                  // variant={'secondary'}
+                  className="bg-orange-400 hover:bg-opacity-75 px-8 py-2 rounded-sm flex items-center gap-2"
+                >
+                  <p>Buy SMS</p> <ArrowForwardIcon />
+                </div>
+              </Link> */}
+              <Link href="/sms-list">
+                <div className="bg-sky-400  hover:bg-opacity-75 px-8 py-2 rounded-sm flex items-center gap-2">
+                  <p>All Sent SMS</p> <ArrowForwardIcon />
+                </div>
+              </Link>
+            </div>
+          </div>
         </div>
 
         <ScrollArea className="h-full">
@@ -154,12 +182,11 @@ export const RightSection = () => {
                 onChange={(e) => setSMS(e.target.value)}
               />
             </Card>
-
-            <Text
-              title={`${`${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length} Character  | 1 SMS (160 Character/SMS)`}
-              variant="secondary"
-            />
           </div>
+          <Text
+            title={`${isEnglish ? `${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length : `${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length * 2} Character  | 1 SMS (160 Character/SMS)`}
+            variant="secondary"
+          />
 
           <div className=" h-24 w-80 float-right mt-[-105px] mr-[15px] flex items-center justify-center">
             <Text
@@ -182,14 +209,20 @@ export const RightSection = () => {
                 message: `${sms} - ${JSON.parse(shop!).name}, ${JSON.parse(shop!).number}`,
                 sms_count: String(
                   Math.ceil(
-                    `${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
-                      .length / 160
+                    isEnglish
+                      ? `${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
+                          .length / 160
+                      : (`${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
+                          .length *
+                          2) /
+                          160
                   )
                 ),
                 number: `[${[...newNumber.map((nmb) => `"${nmb}"`), ...contacts?.map((con) => con.mobile)!?.map((numb) => `"${numb}"`)]}]`,
               });
               console.log(res);
               setLoading(false);
+              fetChSMSCount();
               setSMS('');
             }
           }}

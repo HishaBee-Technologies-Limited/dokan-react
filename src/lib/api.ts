@@ -23,6 +23,27 @@ export const fetchAPI = (
   });
 };
 
+export const paymentFetchAPI = (
+  url: string,
+  method: string,
+  payload: any,
+  tags?: string[],
+  cache?: boolean
+) => {
+  return fetch(`https://payment.hishabee.business/api/${url}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      Platform: 'WEB',
+    },
+    ...(method === 'POST' && {
+      body: JSON.stringify({
+        ...payload,
+      }),
+    }),
+  });
+};
+
 export const authFetchAPI = (
   url: string,
   method: string,
@@ -110,4 +131,11 @@ export const uploadApi = {
   put: (url: string, payload: any, tags?: string[]) =>
     uploadFetchApi(url, 'PUT', payload, tags),
   delete: (url: string, tags?: string[]) => uploadFetchApi(url, 'DELETE', tags),
+};
+
+export const paymentApi = {
+  get: async (url: string, tags?: string[]) =>
+    await paymentFetchAPI(url, 'GET', tags),
+  post: (url: string, payload?: any, tags?: string[]) =>
+    paymentFetchAPI(url, 'POST', payload, tags),
 };
