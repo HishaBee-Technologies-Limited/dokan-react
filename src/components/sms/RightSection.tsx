@@ -1,6 +1,6 @@
 'use client';
 import { z } from 'zod';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import Card from '@/components/common/Card';
@@ -40,18 +40,49 @@ export const RightSection = () => {
   const [sms, setSMS] = useState('');
   const [smsCount, setSMSCount] = useState(0);
   const [isEnglish, setIsEnglish] = useState(true);
+  const [error, setError] = useState('');
+  const [shopInfo, setShopInfo] = useState('');
   const shop = getCookie('shop');
   // console.log('dd', JSON.parse(shop));/
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (shop) {
+      setShopInfo(` ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`);
+    }
+  }, [shop]);
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('data------------', data);
   }
 
+  const handleMessageSent = async () => {
+    if (shop) {
+      setLoading(true);
+      const res = await sendSMS({
+        message: `${sms} - ${JSON.parse(shop!).name}, ${JSON.parse(shop!).number}`,
+        sms_count: String(smsCont),
+        number: `[${[...newNumber.map((nmb) => `"${nmb}"`), ...contacts?.map((con) => con.mobile)!?.map((numb) => `"${numb}"`)]}]`,
+      });
+      setLoading(false);
+      contacts?.length && contacts.map((con) => removeContact(con));
+      setNewNumber([]);
+      fetChSMSCount();
+      setSMS('');
+    }
+  };
+
+  const smsCont = useMemo(() => {
+    return isEnglish
+      ? Math.ceil((sms.length + shopInfo.length) / 160) *
+          [...newNumber, ...contacts?.map((con) => con.mobile)!].length
+      : Math.ceil(((sms.length + shopInfo.length) * 2) / 160) *
+          [...newNumber, ...contacts?.map((con) => con.mobile)!].length;
+  }, [sms]);
+
   const fetChSMSCount = async () => {
     const res = await getSmsCount();
-    console.log(res);
-
     setSMSCount(res?.data.sms_count);
   };
 
@@ -60,7 +91,18 @@ export const RightSection = () => {
   }, []);
 
   useEffect(() => {
-    setIsEnglish(!!sms.length ? /^[a-zA-Z]+$/.test(sms) : true);
+    if (!!sms.length) {
+      sms.split('').map((ch) => {
+        if (
+          /[\u0985-\u0994\u0995-\u09a7-\u09a8-\u09ce\u0981\u0982\u0983\u09e6-\u09ef-]/.test(
+            ch
+          )
+        ) {
+          setIsEnglish(false);
+          return ch;
+        }
+      });
+    }
   }, [sms]);
 
   return (
@@ -99,9 +141,10 @@ export const RightSection = () => {
                 <Button
                   variant={'secondary'}
                   className="!h-[4.4rem] !px-space12"
-                  onClick={() =>
-                    setNewNumber([...newNumber, form.watch('number')])
-                  }
+                  onClick={() => {
+                    setNewNumber([...newNumber, form.watch('number')]);
+                    form.setValue('number', '');
+                  }}
                 >
                   <AddIcon />
                 </Button>
@@ -180,11 +223,12 @@ export const RightSection = () => {
                 placeholder="Write your message here"
                 className="resize-none bg-primary-5 h-[14rem]"
                 onChange={(e) => setSMS(e.target.value)}
+                value={sms}
               />
             </Card>
           </div>
           <Text
-            title={`${isEnglish ? `${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length : `${sms} - ${shop && JSON.parse(shop).name} ${shop && JSON.parse(shop).number}`.length * 2} Character  | 1 SMS (160 Character/SMS)`}
+            title={`Bangla Character Count As Double Character  | ${smsCont} SMS (160 Character/SMS)`}
             variant="secondary"
           />
 
@@ -201,31 +245,12 @@ export const RightSection = () => {
         <Button
           size="sm"
           className="w-full"
-          disabled={loading || (!!!newNumber.length && !!!contacts?.length)}
-          onClick={async () => {
-            if (shop) {
-              setLoading(true);
-              const res = await sendSMS({
-                message: `${sms} - ${JSON.parse(shop!).name}, ${JSON.parse(shop!).number}`,
-                sms_count: String(
-                  Math.ceil(
-                    isEnglish
-                      ? `${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
-                          .length / 160
-                      : (`${sms} ${JSON.parse(shop!).name} ${JSON.parse(shop!).number}`
-                          .length *
-                          2) /
-                          160
-                  )
-                ),
-                number: `[${[...newNumber.map((nmb) => `"${nmb}"`), ...contacts?.map((con) => con.mobile)!?.map((numb) => `"${numb}"`)]}]`,
-              });
-              console.log(res);
-              setLoading(false);
-              fetChSMSCount();
-              setSMS('');
-            }
-          }}
+          disabled={
+            loading ||
+            (!!!newNumber.length && !!!contacts?.length) ||
+            !!!sms.length
+          }
+          onClick={handleMessageSent}
         >
           Send SMS
         </Button>
