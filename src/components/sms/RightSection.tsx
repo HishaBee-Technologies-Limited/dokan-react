@@ -117,16 +117,16 @@ export const RightSection = () => {
               SMS Balance {smsCount}
             </Text>
             <div className="flex gap-4">
-              <Link href="/sms/packages">
+              {/* <Link href="/sms/packages">
                 <div
                   // variant={'secondary'}
                   className="bg-orange-400 hover:bg-opacity-75 px-8 py-2 rounded-sm flex items-center gap-2"
                 >
                   <p>Buy SMS</p> <ArrowForwardIcon />
                 </div>
-              </Link>
+              </Link> */}
               <Link href="/sms-list">
-                <div className="bg-blue-200  hover:bg-opacity-75 px-8 py-2 rounded-sm flex items-center gap-2">
+                <div className="bg-sky-400  hover:bg-opacity-75 px-8 py-2 rounded-sm flex items-center gap-2">
                   <p>All Sent SMS</p> <ArrowForwardIcon />
                 </div>
               </Link>
