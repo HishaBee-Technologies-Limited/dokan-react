@@ -1,31 +1,31 @@
-'use client';
-import React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
+import { cn } from '@/lib/utils';
+
 const buttonVariants = cva(
-  'inline-flex gap-space8 items-center justify-center whitespace-nowrap rounded-lg text-sm sm:text-md font-semibold ring-offset-primary-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300',
   {
     variants: {
       variant: {
         default:
-          'bg-primary-90 dark:bg-primary-100 text-white dark:text-text300 hover:bg-primary-100 shadow-sm hover:shadow-lg',
-        transparent:
-          'bg-transparent text-text500 dark:text-text300 hover:bg-transparent',
-        danger:
-          'bg-error-90 dark:bg-error-100 text-white hover:bg-error-100 shadow-sm shadow-error-100 hover:shadow-md',
-        success:
-          'bg-success-90 dark:bg-success-100 text-white hover:bg-success-100 shadow-sm shadow-success-100 hover:shadow-md',
-        secondary:
-          'bg-white dark:bg-primary-90 dark:text-text400 text-text500 hover:bg-white border border-color shadow-sm hover:shadow-md',
+          'bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90',
+        destructive:
+          'bg-red-500 text-neutral-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-neutral-50 dark:hover:bg-red-900/90',
         outline:
-          'border border-color bg-transparent hover:bg-white dark:hover:bg-primary-90 text-text500 dark:text-text400 shadow-sm hover:shadow-md',
+          'border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800 dark:hover:text-neutral-50',
+        secondary:
+          'bg-neutral-100 text-neutral-900 hover:bg-neutral-100/80 dark:bg-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-800/80',
+        ghost:
+          'hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50',
+        link: 'text-neutral-900 underline-offset-4 hover:underline dark:text-neutral-50',
       },
       size: {
-        default: 'h-[4.8rem] px-space12 sm:px-space24 py-space8',
-        icon: 'rounded-full',
-        sm: 'h-[3.6rem] px-space8 sm:px-space16 py-space6',
+        default: 'h-10 px-4 py-2',
+        sm: 'h-9 rounded-md px-3',
+        lg: 'h-11 rounded-md px-8',
+        icon: 'h-10 w-10',
       },
     },
     defaultVariants: {
