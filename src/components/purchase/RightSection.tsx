@@ -303,7 +303,7 @@ export const RightSection = () => {
                 <Button
                   size="sm"
                   type="submit"
-                  className="w-full"
+                  className="w-full p-8"
                   onClick={() => {
                     setSellType('cash');
                   }}
@@ -317,7 +317,7 @@ export const RightSection = () => {
                 <Button
                   size="sm"
                   type="submit"
-                  className="w-full"
+                  className="w-full p-8 "
                   onClick={() => {
                     setSellType('due');
                   }}
@@ -340,7 +340,7 @@ export const RightSection = () => {
                 <Button
                   size="sm"
                   type="submit"
-                  className="w-full"
+                  className="w-full p-8"
                   // onClick={() =>
                   //   handleSellDialog({ open: true, header: SellEnum.QR_CODE })
                   // }

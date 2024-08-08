@@ -664,7 +664,7 @@ const MoneyGiveReceived = () => {
               </Text>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full">
+            <Button type="submit" disabled={loading} className="w-full p-8">
               {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
               Save
             </Button>

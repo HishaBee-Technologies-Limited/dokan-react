@@ -164,6 +164,8 @@ export const EditProduct = ({
     // product?.gallery && saveImageUrls(JSON.parse(product?.gallery));
   }, [product, category]);
 
+  console.log(product);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-space12">

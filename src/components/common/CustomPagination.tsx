@@ -32,7 +32,7 @@ const Pagination = ({
           size="sm"
           onClick={() => onChanage(currentPage - 1)}
           disabled={currentPage === 1}
-          className="cursor-pointer"
+          className="cursor-pointer rounded-sm"
         />
       </PaginationItem>
 
@@ -51,6 +51,7 @@ const Pagination = ({
               size="sm"
               isActive={currentPage === item}
               onClick={() => onChanage(Number(item))}
+              className="px-6 py-4 rounded-sm"
             >
               {item}
             </PaginationButton>
@@ -63,6 +64,7 @@ const Pagination = ({
           size="sm"
           onClick={() => onChanage(currentPage + 1)}
           disabled={lastPage === currentPage}
+          className="px-6 rounded-sm"
         />
       </PaginationItem>
     </PaginationContent>

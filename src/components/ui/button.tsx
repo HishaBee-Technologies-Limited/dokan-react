@@ -20,6 +20,12 @@ const buttonVariants = cva(
         ghost:
           'hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50',
         link: 'text-neutral-900 underline-offset-4 hover:underline dark:text-neutral-50',
+        transparent:
+          'bg-transparent text-text500 dark:text-text300 hover:bg-transparent',
+        success:
+          'bg-success-90 dark:bg-success-100 text-white hover:bg-success-100 shadow-sm shadow-success-100 hover:shadow-md',
+        danger:
+          'bg-error-90 dark:bg-error-100 text-white hover:bg-error-100 shadow-sm shadow-error-100 hover:shadow-md',
       },
       size: {
         default: 'h-10 px-4 py-2',

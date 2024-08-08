@@ -205,7 +205,7 @@ const QuickSellEdit = ({ customers }: { customers?: IUserResponse[] }) => {
         </div>
 
         <DrawerFooter>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full p-8">
             Amount Recieved
           </Button>
         </DrawerFooter>

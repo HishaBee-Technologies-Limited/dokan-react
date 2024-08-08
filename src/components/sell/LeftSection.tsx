@@ -72,6 +72,7 @@ export const LeftSection = ({ productData }: { productData: any }) => {
                   size={'sm'}
                   onClick={() => setProducts([...products, product])}
                   disabled={products.some((prod) => prod.id === product.id)}
+                  className="p-5"
                 >
                   Add
                 </Button>
